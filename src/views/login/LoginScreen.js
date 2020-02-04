@@ -7,6 +7,7 @@ import Loading from '../../support/Loading';
 import {commonStyles} from '../../support/CommonStyles';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 import {strings} from '../../localization/strings';
+import {APIRequest} from '../../api/API';
 
 export default class LoginScreen extends AppScreen {
 
@@ -14,17 +15,17 @@ export default class LoginScreen extends AppScreen {
         loading: false,
         username: 'Eyal.Shalit',
         password: '123',
-    }
+    };
 
     login = async () => {
         this.setState({loading: true});
-        let result = await this.api.login(this.state.username, this.state.password);
+        let result:APIRequest = await this.api.login(this.state.username, this.state.password);
         this.setState({loading: false});
 
-        if (result === true)
-            this.props.navigation.navigate('Tabs')
+        if (result.success)
+            this.props.navigation.navigate('Tabs');
         else
-            alert(result);
+            this.showError(result.data);
     };
 
     render() {
@@ -41,7 +42,7 @@ export default class LoginScreen extends AppScreen {
                             <View style={styles.formItem}>
                                 <TextInput ref={obj => this.usernameInput = obj}
                                            value={this.state.username}
-                                           style={styles.input}
+                                           style={commonStyles.input}
                                            placeholder={strings.Login.username}
                                            autoCapitalize='none'
                                            autoCompleteType='username'
@@ -57,7 +58,7 @@ export default class LoginScreen extends AppScreen {
                             <View style={styles.formItem}>
                                 <TextInput ref={obj => this.passwordInput = obj}
                                            value={this.state.password}
-                                           style={styles.input}
+                                           style={commonStyles.input}
                                            secureTextEntry
                                            autoCompleteType='password'
                                            returnKeyType="go"
@@ -104,11 +105,5 @@ const styles = StyleSheet.create({
     },
     formItem: {
         marginTop: 20,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#CCCCCC',
-        height: 40,
-        padding: 5,
     },
 });

@@ -13,5 +13,11 @@ export const en = {
         tasks: 'Tasks',
         chat: 'Chat',
         settings: 'Settings',
+    },
+    Patients: {
+        title: 'My Patients',
+        search: 'Search',
+        noPatients: 'No data to display',
+        yo: 'Y/O'
     }
 };

@@ -9,10 +9,16 @@ import TasksScreen from './src/views/tasks/TasksScreen';
 import ChatScreen from './src/views/chat/ChatScreen';
 import SettingsScreen from './src/views/settings/SettingsScreen';
 import {strings} from './src/localization/strings';
+import {Utils} from './src/support/Utils';
 
 export default class App extends React.Component {
 
-    api = new RESTAPI();
+    constructor() {
+        super();
+
+        Utils.initialize();
+        this.api = new RESTAPI();
+    }
 
     render() {
         return (
