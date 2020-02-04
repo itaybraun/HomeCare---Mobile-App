@@ -65,6 +65,7 @@ export default class PatientsScreen extends AppScreen {
                            returnKeyType="search"
                            autoCorrect={false}
                            autoCapitalize='none'
+                           placeholderTextColor = "#CCCCCC"
                            placeholder={strings.Patients.search}
                            enablesReturnKeyAutomatically={true}
                            paddingRight={12}

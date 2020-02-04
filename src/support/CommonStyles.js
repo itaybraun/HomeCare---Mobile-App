@@ -8,6 +8,8 @@ export const commonStyles = {
         borderColor: '#CCCCCC',
         height: 40,
         padding: 5,
+        color: '#000000',
+
     },
     emptyScreen: {
         flex: 1,

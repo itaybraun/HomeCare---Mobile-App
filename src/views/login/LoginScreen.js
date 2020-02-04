@@ -49,6 +49,7 @@ export default class LoginScreen extends AppScreen {
                                            returnKeyType="next"
                                            autoCorrect={false}
                                            enablesReturnKeyAutomatically={true}
+                                           placeholderTextColor = "#CCCCCC"
                                            paddingRight={12}
                                            paddingLeft={12}
                                            onChangeText={text => this.setState({username: text})}
@@ -65,6 +66,7 @@ export default class LoginScreen extends AppScreen {
                                            autoCorrect={false}
                                            placeholder={strings.Login.password}
                                            enablesReturnKeyAutomatically={true}
+                                           placeholderTextColor = "#CCCCCC"
                                            paddingRight={12}
                                            paddingLeft={12}
                                            onChangeText={text => this.setState({password: text})}

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {StatusBar} from 'react-native';
 import LoginScreen from './src/views/login/LoginScreen';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
@@ -18,6 +19,8 @@ export default class App extends React.Component {
 
         Utils.initialize();
         this.api = new RESTAPI();
+
+        StatusBar.setBarStyle('dark-content');
     }
 
     render() {
