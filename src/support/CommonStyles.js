@@ -2,7 +2,13 @@ import React from 'react';
 import {View, Platform} from 'react-native';
 
 
+export const appColors = {
+    textColor: '#555555',
+    linkColor: '#5C00EC',
+};
+
 export const commonStyles = {
+
     smallInfoText: {
         fontSize: 12,
         color: '#888888',
@@ -10,23 +16,23 @@ export const commonStyles = {
 
     titleText: {
         fontSize: 18,
-        color: '#000000',
+        color: appColors.textColor,
     },
 
     boldTitleText: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#000000',
+        color: appColors.textColor,
     },
 
     contentText: {
         fontSize: 14,
-        color: '#000000',
+        color: appColors.textColor,
     },
 
     link: {
         textTransform: 'uppercase',
-        color: '#5C00EC',
+        color: appColors.linkColor,
     },
 
     input: {
