@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, FlatList, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
-import AppScreen from '../../support/AppScreen';
-import {Patient} from '../../models/Patient';
-import Loading from '../../support/Loading';
-import {APIRequest} from '../../api/API';
-import {strings} from '../../localization/strings';
+import AppScreen from '../../../../support/AppScreen';
+import {Patient} from '../../../../models/Patient';
+import Loading from '../../../../support/Loading';
+import {APIRequest} from '../../../../api/API';
+import {strings} from '../../../../localization/strings';
 import { Card, Icon, Text } from 'native-base';
-import {commonStyles, renderSeparator} from '../../support/CommonStyles';
+import {commonStyles, renderSeparator} from '../../../../support/CommonStyles';
 
 export default class NotesScreen extends AppScreen {
 

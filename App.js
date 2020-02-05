@@ -12,8 +12,8 @@ import SettingsScreen from './src/views/settings/SettingsScreen';
 import {strings} from './src/localization/strings';
 import {Utils} from './src/support/Utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import NotesScreen from './src/views/patients/NotesScreen';
-import PatientScreen from './src/views/patients/PatientScreen';
+import NotesScreen from './src/views/patients/patient/notes/NotesScreen';
+import PatientScreen from './src/views/patients/patient/PatientScreen';
 
 export default class App extends React.Component {
 
