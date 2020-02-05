@@ -19,5 +19,14 @@ export const en = {
         search: 'Search',
         noPatients: 'No data to display',
         yo: 'Y/O'
-    }
+    },
+    Patient: {
+        title: 'Patient',
+        notes: 'Notes',
+    },
+    Notes: {
+        title: 'Notes',
+        userTitle: '{0} Notes',
+        addNote: 'Add note',
+    },
 };

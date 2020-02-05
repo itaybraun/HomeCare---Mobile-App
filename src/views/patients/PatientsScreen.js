@@ -41,6 +41,10 @@ export default class PatientsScreen extends AppScreen {
         }
     };
 
+    selectPatient = (patient) => {
+        this.props.navigation.navigate('Patient', {patient: patient});
+    };
+
     filterPatients = (text) => {
         if (text.isEmpty()) {
             this.setState({
@@ -86,12 +90,12 @@ export default class PatientsScreen extends AppScreen {
 
     renderItem = ({item}) => {
         return (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this.selectPatient(item)}>
                 <Card style={styles.patientItemContainer}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{flex: 1}}>
-                            <Text style={styles.infoText}>{item.gender?.charAt(0).toUpperCase()}, {item.age} {strings.Patients.yo}</Text>
-                            <Text style={styles.fullNameText}>{item.fullName}</Text>
+                            <Text style={commonStyles.smallInfoText}>{item.gender?.charAt(0).toUpperCase()}, {item.age} {strings.Patients.yo}</Text>
+                            <Text style={commonStyles.titleText}>{item.fullName}</Text>
                         </View>
                         <Icon type="SimpleLineIcons" name="arrow-right" />
                     </View>
@@ -136,13 +140,4 @@ const styles = StyleSheet.create({
         padding: 12,
         paddingRight: 0,
     },
-
-    infoText: {
-        fontSize: 12,
-        color: '#999999',
-    },
-
-    fullNameText: {
-        fontSize: 18
-    }
 });

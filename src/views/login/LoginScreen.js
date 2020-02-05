@@ -53,7 +53,7 @@ export default class LoginScreen extends AppScreen {
                                            paddingRight={12}
                                            paddingLeft={12}
                                            onChangeText={text => this.setState({username: text})}
-                                           onSubmitEditing={_ => this.passwordInput.focus()}
+                                           onSubmitEditing={() => this.passwordInput.focus()}
                                 />
                             </View>
                             <View style={styles.formItem}>
@@ -70,7 +70,7 @@ export default class LoginScreen extends AppScreen {
                                            paddingRight={12}
                                            paddingLeft={12}
                                            onChangeText={text => this.setState({password: text})}
-                                           onSubmitEditing={_ => this.login()}
+                                           onSubmitEditing={() => this.login()}
                                 />
                             </View>
                             <View style={[styles.formItem, {marginTop: 40, alignItems: 'center',}]}>

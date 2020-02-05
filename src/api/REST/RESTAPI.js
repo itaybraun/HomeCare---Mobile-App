@@ -3,6 +3,7 @@ import {delay} from '../../support/Utils';
 import axios from 'axios';
 import {Patient} from '../../models/Patient';
 import moment from 'moment';
+import {Note} from '../../models/Note';
 
 export default class RESTAPI extends API {
     constructor(props) {
@@ -90,4 +91,40 @@ function getPatientFromJSON(json) {
     patient.lastName = json.name?.[0]?.family ?? "";
 
     return patient;
+}
+
+//------------------------------------------------------------
+// Notes
+//------------------------------------------------------------
+
+RESTAPI.prototype.getNotes = async function getNotes(patientId): APIRequest {
+    try {
+        const response = await this.server.get('patientNotes', {
+            params: {
+                patientid: patientId,
+                code: 'NuVjE0iUia52Sumv5YBRHvWY7BzFJl3nv0uydWg1g22jYTp5guaECw=='
+            }
+        });
+        if (response.status === 200) {
+            let notes = response.data.map(json => getNotesFromJSON(json));
+            return new APIRequest(true, notes);
+        } else {
+            return new APIRequest(false, new Error(response.data));
+        }
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
+function getNotesFromJSON(json) {
+    let note = new Note();
+    note.id = json.noteID;
+    note.patientId = json.patientID;
+    note.internal = json.isInternal === 1;
+    note.date = moment(json.insertDate);
+    note.userId = json.addedBy;
+    note.userName = json.userFullName;
+    note.title = json.title;
+    note.text = json.noteText;
+    return note;
 }

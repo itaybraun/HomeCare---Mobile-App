@@ -12,6 +12,8 @@ import SettingsScreen from './src/views/settings/SettingsScreen';
 import {strings} from './src/localization/strings';
 import {Utils} from './src/support/Utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import NotesScreen from './src/views/patients/NotesScreen';
+import PatientScreen from './src/views/patients/PatientScreen';
 
 export default class App extends React.Component {
 
@@ -42,6 +44,8 @@ export default class App extends React.Component {
 
 const PatientsStack = createStackNavigator({
     Patients: PatientsScreen,
+    Patient: PatientScreen,
+    Notes: NotesScreen,
 });
 const TasksStack = createStackNavigator({
     Tasks: TasksScreen,
