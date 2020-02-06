@@ -23,7 +23,7 @@ export const en = {
     Patient: {
         title: 'Patient',
         profile: 'Profile',
-        carePlans: 'Cate Plans',
+        carePlans: 'Care Plans',
         tasks: 'Tasks',
         general: 'General',
         notes: 'Notes',
