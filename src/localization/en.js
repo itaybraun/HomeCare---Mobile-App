@@ -22,7 +22,18 @@ export const en = {
     },
     Patient: {
         title: 'Patient',
+        profile: 'Profile',
+        carePlans: 'Cate Plans',
+        tasks: 'Tasks',
+        general: 'General',
         notes: 'Notes',
+        vital: 'Vital Signs',
+        mental: 'Cognitive & Mental',
+        body: 'Body Sites',
+        quickActions: 'Quick Actions',
+        activity: 'Document Activity',
+        progress: 'Monitor Progress',
+        alert: 'Raise Alert',
     },
     Notes: {
         title: 'Notes',

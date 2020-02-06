@@ -1,10 +1,12 @@
 import React from 'react';
 import {View, Platform} from 'react-native';
+import {Icon} from "native-base";
 
 
 export const appColors = {
     textColor: '#555555',
     linkColor: '#5C00EC',
+    lineColor: '#CCCCCC',
 };
 
 export const commonStyles = {
@@ -57,5 +59,11 @@ export const commonStyles = {
 export const renderSeparator = () => {
     return (
         <View style={commonStyles.listSeparator} />
+    );
+};
+
+export const renderDisclosureIndicator = () => {
+    return (
+        <Icon type="SimpleLineIcons" name="arrow-right" style={{color: appColors.textColor, marginBottom: -4}} />
     );
 };

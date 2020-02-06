@@ -32,9 +32,9 @@ export default class PatientScreen extends AppScreen {
         loading: false,
         index: 0,
         routes: [
-            { key: 'profile', title: 'Profile' },
-            { key: 'care', title: 'Care Plans' },
-            { key: 'tasks', title: 'Tasks' },
+            { key: 'profile', title: strings.Patient.profile },
+            { key: 'care', title: strings.Patient.carePlans },
+            { key: 'tasks', title: strings.Patient.tasks },
         ],
     };
 
@@ -66,6 +66,7 @@ export default class PatientScreen extends AppScreen {
                         return (
                             <TouchableOpacity
                                 activeOpacity={1}
+                                key={route.key}
                                 style={[styles.tabItem, this.state.index === i ? styles.tabItemSelected : {}]}
                                 onPress={() => this.setState({ index: i })}>
                                 <Text style={[styles.tabItemText, this.state.index === i ? styles.tabItemTextSelected : {}]}>{route.title}</Text>

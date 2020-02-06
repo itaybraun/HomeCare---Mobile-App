@@ -6,7 +6,7 @@ import Loading from '../../support/Loading';
 import {APIRequest} from '../../api/API';
 import {strings} from '../../localization/strings';
 import { Card, Icon, Text } from 'native-base';
-import {commonStyles, renderSeparator} from '../../support/CommonStyles';
+import {commonStyles, renderDisclosureIndicator, renderSeparator} from '../../support/CommonStyles';
 
 export default class PatientsScreen extends AppScreen {
 
@@ -97,7 +97,7 @@ export default class PatientsScreen extends AppScreen {
                             <Text style={commonStyles.smallInfoText}>{item.gender?.charAt(0).toUpperCase()}, {item.age} {strings.Patients.yo}</Text>
                             <Text style={commonStyles.titleText}>{item.fullName}</Text>
                         </View>
-                        <Icon type="SimpleLineIcons" name="arrow-right" />
+                        {renderDisclosureIndicator()}
                     </View>
                 </Card>
             </TouchableOpacity>
