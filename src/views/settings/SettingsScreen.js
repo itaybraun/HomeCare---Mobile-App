@@ -1,8 +1,19 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import AppScreen from '../../support/AppScreen';
+import {strings} from '../../localization/strings';
+import MenuButton from '../menu/MenuButton';
 
 export default class SettingsScreen extends AppScreen {
+
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: strings.Settings.title,
+            headerLeft: () =>
+                <MenuButton />
+            ,
+        }
+    };
 
     render() {
         return (

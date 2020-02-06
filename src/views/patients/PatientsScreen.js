@@ -2,6 +2,7 @@ import React from 'react';
 import {View, FlatList, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import AppScreen from '../../support/AppScreen';
 import {Patient} from '../../models/Patient';
+import MenuButton from '../menu/MenuButton';
 import Loading from '../../support/Loading';
 import {APIRequest} from '../../api/API';
 import {strings} from '../../localization/strings';
@@ -10,8 +11,13 @@ import {commonStyles, renderDisclosureIndicator, renderSeparator} from '../../su
 
 export default class PatientsScreen extends AppScreen {
 
-    static navigationOptions = {
-        title: strings.Patients.title,
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: strings.Patients.title,
+            headerLeft: () =>
+                <MenuButton />
+            ,
+        }
     };
 
     state = {

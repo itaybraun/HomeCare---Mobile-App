@@ -40,4 +40,16 @@ export const en = {
         userTitle: '{0} Notes',
         addNote: 'Add note',
     },
+
+    Tasks: {
+        title: 'Tasks',
+    },
+
+    Chat: {
+        title: 'Chat',
+    },
+
+    Settings: {
+        title: 'Settings',
+    },
 };
