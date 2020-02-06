@@ -8,6 +8,7 @@ import {commonStyles} from '../../support/CommonStyles';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 import {strings} from '../../localization/strings';
 import {APIRequest} from '../../api/API';
+import DeviceInfo from 'react-native-device-info';
 
 export default class LoginScreen extends AppScreen {
 
@@ -15,6 +16,24 @@ export default class LoginScreen extends AppScreen {
         loading: false,
         username: 'Eyal.Shalit',
         password: '123',
+        appVersion: null,
+    };
+
+    componentDidMount(): void {
+        super.componentDidMount();
+
+        this.getData();
+    }
+
+    getData = async (refresh = true) => {
+        const version = await this.getAppVersion(refresh);
+        this.setState({...version, loading: false});
+    };
+
+    getAppVersion = () => {
+        return {
+            appVersion: DeviceInfo.getVersion() + "." + DeviceInfo.getBuildNumber()
+        }
     };
 
     login = async () => {
@@ -81,6 +100,9 @@ export default class LoginScreen extends AppScreen {
                         </View>
                     </KeyboardAwareScrollView>
                 </TouchableWithoutFeedback>
+                <View style={styles.appVersion}>
+                    <Text>{this.state.appVersion}</Text>
+                </View>
                 <Loading loading={this.state.loading} />
             </SafeAreaView>
         );
@@ -90,6 +112,10 @@ export default class LoginScreen extends AppScreen {
 const styles = StyleSheet.create({
     container: {
 
+    },
+    appVersion: {
+        alignItems: 'flex-end',
+        padding: 20,
     },
     imageContainer: {
         justifyContent: 'center',

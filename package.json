@@ -17,6 +17,7 @@
     "native-base": "^2.13.8",
     "react": "16.9.0",
     "react-native": "0.61.5",
+    "react-native-device-info": "^5.5.1",
     "react-native-gesture-handler": "^1.5.5",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-localization": "^2.1.6",
