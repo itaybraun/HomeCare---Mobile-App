@@ -1,4 +1,4 @@
-package com.hestia;
+package net.boganov.hestia;
 
 import com.facebook.react.ReactActivity;
 

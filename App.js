@@ -11,7 +11,6 @@ import ChatScreen from './src/views/chat/ChatScreen';
 import SettingsScreen from './src/views/settings/SettingsScreen';
 import {strings} from './src/localization/strings';
 import {Utils} from './src/support/Utils';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import NotesScreen from './src/views/patients/patient/notes/NotesScreen';
 import PatientScreen from './src/views/patients/patient/PatientScreen';
 

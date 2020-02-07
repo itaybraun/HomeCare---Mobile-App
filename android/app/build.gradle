@@ -82,6 +82,8 @@ project.ext.react = [
 
 apply from: "../../node_modules/react-native/react.gradle"
 
+apply plugin: 'com.google.gms.google-services'
+
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -128,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.hestia"
+        applicationId "net.boganov.hestia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 6
