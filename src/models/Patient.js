@@ -7,11 +7,11 @@ export class Patient {
     dateOfBirth: Date;
     gender: String;
 
-    get age() {
+    get age(): Number {
         return moment().diff(this.dateOfBirth, 'years', false);
     }
 
-    get fullName() {
+    get fullName(): String {
         return `${this.firstName} ${this.lastName}`;
     }
 }

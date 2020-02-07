@@ -13,9 +13,9 @@ export default class AppScreen extends React.Component {
 
     showError = (error) => {
         this.showAlert(error.message);
-    }
+    };
 
     showAlert = (message, title = null, buttons = null) => {
         Alert.alert(title, message, buttons);
-    }
+    };
 }
