@@ -116,6 +116,14 @@ RESTAPI.prototype.getNotes = async function getNotes(patientId): APIRequest {
     }
 };
 
+RESTAPI.prototype.addNote = async function addNote(note: Note): APIRequest {
+    return new APIRequest(true, note);
+};
+
+RESTAPI.prototype.deleteNote = async function deleteNote(note: Note): APIRequest {
+    return new APIRequest(true);
+};
+
 function getNotesFromJSON(json) {
     let note = new Note();
     note.id = json.noteID;

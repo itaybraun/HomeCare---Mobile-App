@@ -40,7 +40,6 @@ export const en = {
         title: 'Notes',
         userTitle: '{0} Notes',
         addNote: 'Add note',
-        deleteNote: 'Delete this note?',
     },
 
     Tasks: {

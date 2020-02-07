@@ -1,3 +1,5 @@
+import {Note} from '../models/Note';
+
 export class API {
     constructor(){
 
@@ -28,5 +30,13 @@ API.prototype.getPatients = async function getPatients(userId): APIRequest {
 };
 
 API.prototype.getNotes = async function getNotes(patientId): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+API.prototype.addNote = async function addNote(note: Note): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+API.prototype.deleteNote = async function deleteNote(note: Note): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };

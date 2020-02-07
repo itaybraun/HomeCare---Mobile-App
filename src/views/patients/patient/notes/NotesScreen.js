@@ -7,7 +7,8 @@ import {
     TouchableHighlight,
     Keyboard,
     TouchableWithoutFeedback,
-    Alert
+    Alert,
+    Image
 } from 'react-native';
 import AppScreen from '../../../../support/AppScreen';
 import {Patient} from '../../../../models/Patient';
@@ -71,27 +72,13 @@ export default class NotesScreen extends AppScreen {
     };
 
     deleteNote = async (item, rowMap) => {
-
-        this.showAlert(strings.Notes.deleteNote, null, [
-            {
-                text: strings.Common.cancelButton,
-                style: 'cancel',
-                onPress: () => {
-                    this.closeRow();
-                }
-            },
-            {
-                text: strings.Common.deleteButton,
-                style: 'destructive',
-                onPress: () => {
-                    // TODO: call server
-                    this.setState({
-                        notes: this.state.notes.filter(note => note.id !== item.id)
-                    });
-                },
-
-            }
-        ]);
+        this.setState({
+            notes: this.state.notes.filter(note => note.id !== item.id)
+        });
+        let result = await this.api.deleteNote(item);
+        if (!result.success) {
+            this.showError(result.data);
+        }
     };
 
     closeRow = () => {
@@ -129,14 +116,14 @@ export default class NotesScreen extends AppScreen {
         return (
             <View style={styles.menuContainer}>
                 <TouchableOpacity
-                    style={[styles.itemMenuContainer, {backgroundColor: '#8CE69B'}]}
+                    style={[styles.itemMenuContainer, {backgroundColor: '#8CE69B', opacity: 0,}]}
                     onPress={() => this.editNote(item, rowMap)}>
                     <Icon type="Feather" name="edit"/>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.itemMenuContainer, {backgroundColor: '#DA8EA0'}]}
                     onPress={() => this.deleteNote(item, rowMap)}>
-                    <Icon type="Octicons" name="trashcan"/>
+                    <Image style={styles.menuIcon} source={require('../../../../assets/icons/notes/delete.png')} />
                 </TouchableOpacity>
             </View>
         );
@@ -161,9 +148,9 @@ export default class NotesScreen extends AppScreen {
                     refreshing={this.state.loading}
                     ItemSeparatorComponent={renderSeparator}
                     renderHiddenItem={this.renderHiddenItem}
-                    rightOpenValue={-106}
+                    rightOpenValue={-103}
+                    leftOpenValue={103}
                     disableRightSwipe
-                    disableLeftSwipe
                     closeOnRowBeginSwipe
                     recalculateHiddenLayout
                 />
@@ -196,7 +183,7 @@ const styles = StyleSheet.create({
     menuContainer: {
         marginHorizontal: 14,
         marginVertical: 7,
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         flex: 1,
         flexDirection: 'row',
     },
@@ -204,9 +191,14 @@ const styles = StyleSheet.create({
     itemMenuContainer: {
         marginHorizontal: 1,
         borderWidth: 1,
-        width: 50,
+        width: 100,
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: '#000000',
+    },
+
+    menuIcon: {
+        width: 30,
+        height: 30,
     },
 });
