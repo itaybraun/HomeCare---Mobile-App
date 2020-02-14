@@ -12,16 +12,16 @@ export default class RESTAPI extends API {
         this.server.interceptors.request.use(request => {
             console.log('Starting Request', request)
             return request
-        })
+        });
 
         this.server.interceptors.response.use(response => {
             console.log('Response:', response)
             return response
-        })
+        });
     }
 
     server = axios.create({
-        baseURL: 'https://homecare20200203070819.azurewebsites.net/api/',
+        baseURL: 'https://fhir1.azurewebsites.net',
         timeout: 15000,
         headers: {
             'Accept': '*/*',
@@ -40,19 +40,7 @@ export default class RESTAPI extends API {
 
 RESTAPI.prototype.login = async function login(username, password) {
     try {
-        const response = await this.server.get('Authentication', {
-            params: {
-                username: username,
-                password: password,
-                code: 'cEUemC34TGr/T1XiIRHFSQYvb6v7LBN/pMO/7jg695vXhRW3jbOQXA=='
-            }
-        });
-        if (response.status === 200) {
-            this.userId = response.data.userid;
-            return new APIRequest(true, response.data.userid);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        return new APIRequest(true);
     } catch (error) {
         return new APIRequest(false, error);
     }
@@ -64,15 +52,13 @@ RESTAPI.prototype.login = async function login(username, password) {
 
 RESTAPI.prototype.getPatients = async function getPatients(userId) {
     try {
-        userId = userId ?? this.userId;
-        const response = await this.server.get('MyPatients', {
+        const response = await this.server.get('Patient', {
             params: {
-                userid: userId,
-                code: 'k3EYaGNUQjcUj2FeasyNaXktA1dDw4D/84BRpaovSxXbGuAuVZL/pw=='
+
             }
         });
         if (response.status === 200) {
-            let patients = response.data.map(json => getPatientFromJSON(JSON.parse(json.fhiR_Patient)));
+            let patients = response.data.entry.map(json => getPatientFromFHIR((json)));
             return new APIRequest(true, patients);
         } else {
             return new APIRequest(false, new Error(response.data));
@@ -82,13 +68,16 @@ RESTAPI.prototype.getPatients = async function getPatients(userId) {
     }
 };
 
-function getPatientFromJSON(json) {
+function getPatientFromFHIR(json) {
     let patient = new Patient();
-    patient.id = json.id;
-    patient.gender = json.gender;
-    patient.dateOfBirth = moment(json.birthDate);
-    patient.firstName = json.name?.[0]?.given?.[0] ?? "";
-    patient.lastName = json.name?.[0]?.family ?? "";
+    patient.id = json.resource.id;
+    patient.gender = json.resource.gender;
+    patient.dateOfBirth = moment(json.resource.birthDate);
+    const official = json.resource.name.find(name => {
+        return name.use === 'official';
+    });
+    patient.firstName = official?.given?.join(" ") ?? "";
+    patient.lastName = official?.family ?? "";
 
     return patient;
 }
