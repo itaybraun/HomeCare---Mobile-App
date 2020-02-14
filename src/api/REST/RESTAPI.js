@@ -3,7 +3,7 @@ import {delay} from '../../support/Utils';
 import axios from 'axios';
 import {Patient} from '../../models/Patient';
 import moment from 'moment';
-import {Note} from '../../models/Note';
+import {Flag} from '../../models/Flag';
 
 export default class RESTAPI extends API {
     constructor(props) {
@@ -58,7 +58,7 @@ RESTAPI.prototype.getPatients = async function getPatients(userId) {
             }
         });
         if (response.status === 200) {
-            let patients = response.data.entry.map(json => getPatientFromFHIR((json)));
+            let patients = response.data.entry.map(json => getPatientFromFHIR((json.resource)));
             return new APIRequest(true, patients);
         } else {
             return new APIRequest(false, new Error(response.data));
@@ -70,12 +70,10 @@ RESTAPI.prototype.getPatients = async function getPatients(userId) {
 
 function getPatientFromFHIR(json) {
     let patient = new Patient();
-    patient.id = json.resource.id;
-    patient.gender = json.resource.gender;
-    patient.dateOfBirth = moment(json.resource.birthDate);
-    const official = json.resource.name.find(name => {
-        return name.use === 'official';
-    });
+    patient.id = json.id;
+    patient.gender = json.gender;
+    patient.dateOfBirth = moment(json.birthDate);
+    const official = json.name.find(name => name.use === 'official');
     patient.firstName = official?.given?.join(" ") ?? "";
     patient.lastName = official?.family ?? "";
 
@@ -83,20 +81,19 @@ function getPatientFromFHIR(json) {
 }
 
 //------------------------------------------------------------
-// Notes
+// Flags
 //------------------------------------------------------------
 
-RESTAPI.prototype.getNotes = async function getNotes(patientId): APIRequest {
+RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
     try {
-        const response = await this.server.get('patientNotes', {
+        const response = await this.server.get('Flag', {
             params: {
-                patientid: patientId,
-                code: 'NuVjE0iUia52Sumv5YBRHvWY7BzFJl3nv0uydWg1g22jYTp5guaECw=='
+                Patient: patientId
             }
         });
         if (response.status === 200) {
-            let notes = response.data.map(json => getNotesFromJSON(json));
-            return new APIRequest(true, notes);
+            let flags = response.data.entry.map(json => getFlagFromFHIR(json.resource));
+            return new APIRequest(true, flags);
         } else {
             return new APIRequest(false, new Error(response.data));
         }
@@ -105,23 +102,21 @@ RESTAPI.prototype.getNotes = async function getNotes(patientId): APIRequest {
     }
 };
 
-RESTAPI.prototype.addNote = async function addNote(note: Note): APIRequest {
-    return new APIRequest(true, note);
+RESTAPI.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
+    return new APIRequest(true, flag);
 };
 
-RESTAPI.prototype.deleteNote = async function deleteNote(note: Note): APIRequest {
+RESTAPI.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest {
     return new APIRequest(true);
 };
 
-function getNotesFromJSON(json) {
-    let note = new Note();
-    note.id = json.noteID;
-    note.patientId = json.patientID;
-    note.internal = json.isInternal === 1;
-    note.date = moment(json.insertDate);
-    note.userId = json.addedBy;
-    note.userName = json.userFullName;
-    note.title = json.title;
-    note.text = json.noteText;
-    return note;
+function getFlagFromFHIR(json) {
+    let flag = new Flag();
+    flag.id = json.id;
+    flag.text = json.code?.text;
+    flag.category = json.category?.map(category => category.text).join(",");
+    flag.startDate = moment(json.period?.start);
+    flag.endDate = moment(json.period?.end);
+    flag.internal = json.code.coding?.find(coding => coding.system === "http://copper-serpent.com/valueset/flag-internal")?.code === "1" ?? false;
+    return flag;
 }

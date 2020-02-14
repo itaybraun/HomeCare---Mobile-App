@@ -19,13 +19,13 @@ import { Card, Icon, Text } from 'native-base';
 import {commonStyles, renderDisclosureIndicator, renderSeparator} from '../../../../support/CommonStyles';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-export default class NotesScreen extends AppScreen {
+export default class FlagsScreen extends AppScreen {
 
     static navigationOptions = ({navigation}) => {
         const patient: Patient = navigation.getParam('patient', null);
-        let title = strings.Notes.title;
+        let title = strings.Flags.title;
         if (patient) {
-            title = strings.formatString(strings.Notes.userTitle, patient.fullName)
+            title = strings.formatString(strings.Flags.userTitle, patient.fullName)
         }
 
         return {
@@ -36,7 +36,7 @@ export default class NotesScreen extends AppScreen {
 
     state = {
         loading: false,
-        notes: [],
+        flags: [],
     };
 
     componentDidMount(): void {
@@ -47,35 +47,35 @@ export default class NotesScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         this.setState({loading: true});
-        const notes = await this.getNotes(refresh);
-        this.setState({...notes, loading: false});
+        const flags = await this.getFlags(refresh);
+        this.setState({...flags, loading: false});
     };
 
-    getNotes = async (refresh = true) => {
+    getFlags = async (refresh = true) => {
         const patient: Patient = this.props.navigation.getParam('patient', null);
         if (patient) {
-            let result: APIRequest = await this.api.getNotes(patient.id);
+            let result: APIRequest = await this.api.getFlags(patient.id);
             if (result.success) {
-                return {notes: result.data};
+                return {flags: result.data};
             } else {
                 this.showError(result.data);
             }
         }
     };
 
-    addNote = async () => {
+    addFlag = async () => {
         this.closeRow();
     };
 
-    editNote = async (item, rowMap) => {
+    editFlag= async (item, rowMap) => {
         this.closeRow();
     };
 
-    deleteNote = async (item, rowMap) => {
+    deleteFlag = async (item, rowMap) => {
         this.setState({
-            notes: this.state.notes.filter(note => note.id !== item.id)
+            flags: this.state.flags.filter(flag => flag.id !== item.id)
         });
-        let result = await this.api.deleteNote(item);
+        let result = await this.api.deleteFlag(item);
         if (!result.success) {
             this.showError(result.data);
         }
@@ -89,9 +89,9 @@ export default class NotesScreen extends AppScreen {
         return (
             <TouchableOpacity
                 style={{paddingTop: 6, paddingHorizontal: 8, paddingBottom: 10}}
-                onPress={this.addNote}
+                onPress={this.addFlag}
             >
-                <Text style={commonStyles.link}>{strings.Notes.addNote}</Text>
+                <Text style={commonStyles.link}>{strings.Flags.addFlag}</Text>
             </TouchableOpacity>
         );
     };
@@ -102,9 +102,12 @@ export default class NotesScreen extends AppScreen {
                 style={styles.itemContainer}
                 underlayColor='#FFFFFFFF'
                 activeOpacity={0.3}
-                onPress={() => this.editNote(item, rowMap)}>
-                <Card style={[styles.noteItemContainer, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
-                    <Text style={commonStyles.smallInfoText}>{item.date.format("MMM Do YYYY")}</Text>
+                onPress={() => this.editFlag(item, rowMap)}>
+                <Card style={[styles.flagItemContainer, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
+                    <View style={styles.flagInfoContainer}>
+                        <Text style={commonStyles.smallInfoText}>{item.startDate?.format("MMM Do YYYY") ?? ''}</Text>
+                        <Text style={commonStyles.smallInfoText}>{item.category}</Text>
+                    </View>
                     <Text style={[commonStyles.boldTitleText, {marginVertical: 6}]}>{item.title}</Text>
                     <Text style={commonStyles.contentText}>{item.text}</Text>
                 </Card>
@@ -117,13 +120,13 @@ export default class NotesScreen extends AppScreen {
             <View style={styles.menuContainer}>
                 <TouchableOpacity
                     style={[styles.itemMenuContainer, {backgroundColor: '#8CE69B', opacity: 0,}]}
-                    onPress={() => this.editNote(item, rowMap)}>
+                    onPress={() => this.editFlag(item, rowMap)}>
                     <Icon type="Feather" name="edit"/>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.itemMenuContainer, {backgroundColor: '#DA8EA0'}]}
-                    onPress={() => this.deleteNote(item, rowMap)}>
-                    <Image style={styles.menuIcon} source={require('../../../../assets/icons/notes/delete.png')} />
+                    onPress={() => this.deleteFlag(item, rowMap)}>
+                    <Image style={styles.menuIcon} source={require('../../../../assets/icons/flags/delete.png')} />
                 </TouchableOpacity>
             </View>
         );
@@ -131,7 +134,7 @@ export default class NotesScreen extends AppScreen {
 
     render() {
 
-        const notes = this.state.notes;
+        const flags = this.state.flags;
 
         return (
             <View style={styles.container}>
@@ -140,7 +143,7 @@ export default class NotesScreen extends AppScreen {
                         this.list = list;
                     }}
                     style={styles.list}
-                    data={notes}
+                    data={flags}
                     renderItem={this.renderItem}
                     ListHeaderComponent={this.renderListHeader}
                     keyExtractor={item => item.id.toString()}
@@ -174,10 +177,15 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
 
-    noteItemContainer: {
+    flagItemContainer: {
         padding: 12,
         borderRadius: 4,
         overflow: 'hidden',
+    },
+
+    flagInfoContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
 
     menuContainer: {

@@ -27,7 +27,7 @@ export const en = {
         carePlans: 'Care Plans',
         tasks: 'Tasks',
         general: 'General',
-        notes: 'Notes',
+        flags: 'Flags',
         vital: 'Vital Signs',
         mental: 'Cognitive & Mental',
         body: 'Body Sites',
@@ -36,10 +36,10 @@ export const en = {
         progress: 'Monitor Progress',
         alert: 'Raise Alert',
     },
-    Notes: {
-        title: 'Notes',
-        userTitle: '{0} Notes',
-        addNote: 'Add note',
+    Flags: {
+        title: 'Flags',
+        userTitle: '{0} Flags',
+        addFlag: 'Add flag',
     },
 
     Tasks: {

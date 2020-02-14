@@ -11,7 +11,7 @@ import ChatScreen from './src/views/chat/ChatScreen';
 import SettingsScreen from './src/views/settings/SettingsScreen';
 import {strings} from './src/localization/strings';
 import {Utils} from './src/support/Utils';
-import NotesScreen from './src/views/patients/patient/notes/NotesScreen';
+import FlagsScreen from './src/views/patients/patient/flags/FlagsScreen';
 import PatientScreen from './src/views/patients/patient/PatientScreen';
 
 export default class App extends React.Component {
@@ -44,7 +44,7 @@ export default class App extends React.Component {
 const PatientsStack = createStackNavigator({
     Patients: PatientsScreen,
     Patient: PatientScreen,
-    Notes: NotesScreen,
+    Flags: FlagsScreen,
 });
 const TasksStack = createStackNavigator({
     Tasks: TasksScreen,

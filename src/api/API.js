@@ -1,4 +1,4 @@
-import {Note} from '../models/Note';
+import {Flag} from '../models/Flag';
 
 export class API {
     constructor(){
@@ -29,14 +29,14 @@ API.prototype.getPatients = async function getPatients(userId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
-API.prototype.getNotes = async function getNotes(patientId): APIRequest {
+API.prototype.getFlags = async function getFlags(patientId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
-API.prototype.addNote = async function addNote(note: Note): APIRequest {
+API.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
-API.prototype.deleteNote = async function deleteNote(note: Note): APIRequest {
+API.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
