@@ -42,7 +42,20 @@ export const en = {
         title: 'Flags',
         userTitle: '{0} Flags',
         addFlag: 'Add flag',
-        deleteFlag: 'You are about to delete a flag. Are you sure?'
+        newFlag: 'New Flag',
+        deleteFlag: 'You are about to delete a flag. Are you sure?',
+        category: 'Category',
+        text: 'Text',
+        internal: 'Internal',
+        startDate: 'Start Date',
+        endDate: 'End Date',
+        admin: 'Admin',
+        behavioral: 'Behavioral',
+        clinical: 'Clinical',
+        contact: 'Contact',
+        drug: 'Drug',
+        lab: 'Lab',
+        safety: 'Safety',
     },
 
     Tasks: {

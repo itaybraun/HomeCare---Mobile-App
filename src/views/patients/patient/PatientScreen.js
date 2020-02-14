@@ -49,9 +49,9 @@ export default class PatientScreen extends AppScreen {
         this.setState({loading: false});
     };
 
-    navigateTo = (view) => {
+    navigateToView = (view) => {
         const patient: Patient = this.props.navigation.getParam('patient', null);
-        this.props.navigation.navigate(view, {patient: patient});
+        this.navigateTo(view, {patient: patient});
     };
 
     handleTabIndexChange = index => {
@@ -81,7 +81,7 @@ export default class PatientScreen extends AppScreen {
     renderScene = ({ route }) => {
         switch (route.key) {
             case 'profile':
-                return <PatientProfile navigateTo={this.navigateTo} />;
+                return <PatientProfile navigateTo={this.navigateToView} />;
             case 'care':
                 return <PatientCarePlans />;
             case 'tasks':

@@ -18,4 +18,8 @@ export default class AppScreen extends React.Component {
     showAlert = (message, title = null, buttons = null) => {
         Alert.alert(title, message, buttons);
     };
+
+    navigateTo = (view, params) => {
+        this.props.navigation.navigate(view, params);
+    };
 }

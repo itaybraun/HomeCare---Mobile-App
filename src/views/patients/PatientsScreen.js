@@ -48,7 +48,7 @@ export default class PatientsScreen extends AppScreen {
     };
 
     selectPatient = (patient) => {
-        this.props.navigation.navigate('Patient', {patient: patient});
+        this.navigateTo('Patient', {patient: patient});
     };
 
     filterPatients = (text) => {

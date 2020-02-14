@@ -64,10 +64,14 @@ export default class FlagsScreen extends AppScreen {
     };
 
     addFlag = async () => {
+        const patient: Patient = this.props.navigation.getParam('patient', null);
+        if (patient) {
+            this.navigateTo('AddFlag', {patient: patient});
+        }
         this.closeRow();
     };
 
-    editFlag= async (item, rowMap) => {
+    editFlag = async (item, rowMap) => {
         this.closeRow();
     };
 
@@ -103,12 +107,13 @@ export default class FlagsScreen extends AppScreen {
 
     renderListHeader = () => {
         return (
-            <TouchableOpacity
-                style={{paddingTop: 6, paddingHorizontal: 8, paddingBottom: 10}}
-                onPress={this.addFlag}
-            >
-                <Text style={commonStyles.link}>{strings.Flags.addFlag}</Text>
-            </TouchableOpacity>
+            <View style={{height: 12}} />
+        );
+    };
+
+    renderListFooter = () => {
+        return (
+            <View style={{height: 74}} />
         );
     };
 
@@ -162,7 +167,8 @@ export default class FlagsScreen extends AppScreen {
                     data={flags}
                     renderItem={this.renderItem}
                     ListHeaderComponent={this.renderListHeader}
-                    keyExtractor={item => item.id.toString()}
+                    ListFooterComponent={this.renderListFooter}
+                    keyExtractor={item => item.id+Math.random().toString()}
                     onRefresh={this.getData}
                     refreshing={this.state.loading}
                     ItemSeparatorComponent={renderSeparator}
@@ -173,6 +179,12 @@ export default class FlagsScreen extends AppScreen {
                     closeOnRowBeginSwipe
                     recalculateHiddenLayout
                 />
+                <TouchableOpacity
+                    style={styles.addFlagButton}
+                    onPress={this.addFlag}
+                >
+                    <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -206,7 +218,7 @@ const styles = StyleSheet.create({
 
     menuContainer: {
         marginHorizontal: 14,
-        marginVertical: 7,
+        marginVertical: 6,
         justifyContent: 'space-between',
         flex: 1,
         flexDirection: 'row',
@@ -225,4 +237,16 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
     },
+
+    addFlagButton: {
+        position: 'absolute',
+        bottom: 12,
+        right: 12,
+        height: 50,
+        width: 50,
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#000000',
+    }
 });

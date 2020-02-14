@@ -42,7 +42,7 @@ export default class LoginScreen extends AppScreen {
         this.setState({loading: false});
 
         if (result.success)
-            this.props.navigation.navigate('Tabs');
+            this.navigateTo('Tabs');
         else
             this.showError(result.data);
     };
