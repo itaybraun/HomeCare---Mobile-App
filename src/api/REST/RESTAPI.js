@@ -107,7 +107,16 @@ RESTAPI.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
 };
 
 RESTAPI.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest {
-    return new APIRequest(true);
+    try {
+        const response = await this.server.delete('Flag/'+flag.id);
+        if (response.status === 200) {
+            return new APIRequest(true);
+        } else {
+            return new APIRequest(false, new Error(response.data));
+        }
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
 };
 
 function getFlagFromFHIR(json) {

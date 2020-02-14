@@ -3,6 +3,8 @@ export const en = {
     Common: {
         deleteButton: 'Delete',
         cancelButton: 'Cancel',
+        noButton: 'No',
+        yesButton: 'Yes',
     },
     Login: {
         username: 'Username',
@@ -40,6 +42,7 @@ export const en = {
         title: 'Flags',
         userTitle: '{0} Flags',
         addFlag: 'Add flag',
+        deleteFlag: 'You are about to delete a flag. Are you sure?'
     },
 
     Tasks: {

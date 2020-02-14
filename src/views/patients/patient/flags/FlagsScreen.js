@@ -72,13 +72,29 @@ export default class FlagsScreen extends AppScreen {
     };
 
     deleteFlag = async (item, rowMap) => {
-        this.setState({
-            flags: this.state.flags.filter(flag => flag.id !== item.id)
-        });
-        let result = await this.api.deleteFlag(item);
-        if (!result.success) {
-            this.showError(result.data);
-        }
+        this.showAlert(strings.Flags.deleteFlag, null, [
+            {
+                text: strings.Common.noButton,
+                style: 'cancel',
+                onPress: () => {
+                    this.closeRow();
+                }
+            },
+            {
+                text: strings.Common.yesButton,
+                style: 'destructive',
+                onPress: async () => {
+                    this.setState({
+                        flags: this.state.flags.filter(flag => flag.id !== item.id)
+                    });
+
+                    const result = await this.api.deleteFlag(item);
+                    if (!result.success) {
+                        this.showError(result.data);
+                    }
+                },
+            }
+        ]);
     };
 
     closeRow = () => {
