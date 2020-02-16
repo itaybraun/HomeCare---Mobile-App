@@ -122,7 +122,7 @@ export default class PatientsScreen extends AppScreen {
                           ListHeaderComponent={this.renderListHeader}
                           keyExtractor={item => item.id}
                           onRefresh={this.getData}
-                          refreshing={false}
+                          refreshing={this.state.loading}
                           ItemSeparatorComponent={renderSeparator}
                           ListEmptyComponent={this.renderListEmpty}
                 />

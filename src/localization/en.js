@@ -1,6 +1,7 @@
 
 export const en = {
     Common: {
+        submitButton: 'Submit',
         deleteButton: 'Delete',
         cancelButton: 'Cancel',
         noButton: 'No',
@@ -9,7 +10,7 @@ export const en = {
     Login: {
         username: 'Username',
         password: 'Password',
-        login: 'LOGIN',
+        login: 'Login',
     },
     Tabs: {
         patients: 'Patients',
@@ -43,6 +44,7 @@ export const en = {
         userTitle: '{0} Flags',
         addFlag: 'Add flag',
         newFlag: 'New Flag',
+        noFlags: 'No data to display',
         deleteFlag: 'You are about to delete a flag. Are you sure?',
         category: 'Category',
         text: 'Text',

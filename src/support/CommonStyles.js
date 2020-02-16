@@ -7,6 +7,7 @@ export const appColors = {
     textColor: '#555555',
     linkColor: '#5C00EC',
     lineColor: '#CCCCCC',
+    yellowColor: '#DEBB4A',
 };
 
 export const commonStyles = {

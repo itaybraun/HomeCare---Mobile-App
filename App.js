@@ -14,6 +14,7 @@ import {Utils} from './src/support/Utils';
 import FlagsScreen from './src/views/patients/patient/flags/FlagsScreen';
 import PatientScreen from './src/views/patients/patient/PatientScreen';
 import AddFlagScreen from './src/views/patients/patient/flags/AddFlagScreen';
+import {appColors} from './src/support/CommonStyles';
 
 export default class App extends React.Component {
 
@@ -92,7 +93,7 @@ const Tabs = createBottomTabNavigator({
             fontSize: 10,
         },
         style: {
-            backgroundColor: 'rgba(229, 197, 92, 1)',
+            backgroundColor: appColors.yellowColor,
         }
     }
 });

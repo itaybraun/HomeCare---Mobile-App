@@ -18,6 +18,7 @@ import {strings} from '../../../../localization/strings';
 import { Card, Icon, Text } from 'native-base';
 import {commonStyles, renderDisclosureIndicator, renderSeparator} from '../../../../support/CommonStyles';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import moment from 'moment';
 
 export default class FlagsScreen extends AppScreen {
 
@@ -41,6 +42,10 @@ export default class FlagsScreen extends AppScreen {
 
     componentDidMount(): void {
         super.componentDidMount();
+    }
+
+    willFocus() {
+        super.didFocus();
 
         this.getData();
     }
@@ -126,7 +131,7 @@ export default class FlagsScreen extends AppScreen {
                 onPress={() => this.editFlag(item, rowMap)}>
                 <Card style={[styles.flagItemContainer, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
                     <View style={styles.flagInfoContainer}>
-                        <Text style={commonStyles.smallInfoText}>{item.startDate?.format("MMM Do YYYY") ?? ''}</Text>
+                        <Text style={commonStyles.smallInfoText}>{moment(item.startDate).format("MMM Do YYYY") ?? ''}</Text>
                         <Text style={commonStyles.smallInfoText}>{item.category}</Text>
                     </View>
                     <Text style={[commonStyles.boldTitleText, {marginVertical: 6}]}>{item.title}</Text>
@@ -153,6 +158,14 @@ export default class FlagsScreen extends AppScreen {
         );
     };
 
+    renderListEmpty = () => {
+        return (
+            <View style={commonStyles.emptyScreen}>
+                <Text>{strings.Flags.noFlags}</Text>
+            </View>
+        )
+    };
+
     render() {
 
         const flags = this.state.flags;
@@ -173,11 +186,13 @@ export default class FlagsScreen extends AppScreen {
                     refreshing={this.state.loading}
                     ItemSeparatorComponent={renderSeparator}
                     renderHiddenItem={this.renderHiddenItem}
+                    ListEmptyComponent={this.renderListEmpty}
                     rightOpenValue={-103}
                     leftOpenValue={103}
                     disableRightSwipe
                     closeOnRowBeginSwipe
                     recalculateHiddenLayout
+
                 />
                 <TouchableOpacity
                     style={styles.addFlagButton}

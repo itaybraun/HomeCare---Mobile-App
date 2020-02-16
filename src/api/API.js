@@ -1,4 +1,6 @@
 import {Flag} from '../models/Flag';
+import {Request} from '../support/Utils';
+import {Patient} from '../models/Patient';
 
 export class API {
     constructor(){
@@ -6,15 +8,11 @@ export class API {
     }
 }
 
-export class APIRequest {
+export class APIRequest extends Request {
 
     constructor(success, data = null) {
-        this.data = data;
-        this.success = success;
+        super(success, data)
     }
-
-    data: Object;
-    success: boolean;
 
     toString = () => {
         return `Request success is ${this.success}, data is ${this.data}`;
@@ -33,7 +31,7 @@ API.prototype.getFlags = async function getFlags(patientId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
-API.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
+API.prototype.addFlag = async function addFlag(flag: Flag, patient: Patient): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 

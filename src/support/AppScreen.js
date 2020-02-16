@@ -8,6 +8,24 @@ export default class AppScreen extends React.Component {
     }
 
     componentDidMount(): void {
+        this.willFocusListener = this.props.navigation.addListener("willFocus", () => {
+            this.willFocus();
+        });
+        this.didFocusListener = this.props.navigation.addListener("didFocus", () => {
+            this.didFocus();
+        });
+    }
+
+    componentWillUnmount() {
+        this.willFocusListener.remove();
+        this.didFocusListener.remove();
+    }
+
+    willFocus() {
+
+    }
+
+    didFocus() {
 
     }
 
@@ -22,4 +40,8 @@ export default class AppScreen extends React.Component {
     navigateTo = (view, params) => {
         this.props.navigation.navigate(view, params);
     };
+
+    pop = () => {
+        this.props.navigation.pop();
+    }
 }

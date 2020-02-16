@@ -94,7 +94,7 @@ export default class LoginScreen extends AppScreen {
                             </View>
                             <View style={[styles.formItem, {marginTop: 40, alignItems: 'center',}]}>
                                 <Button warning style={{paddingHorizontal: 40,}} onPress={this.login}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Login.login}</Text>
+                                    <Text style={{fontWeight: 'bold'}}>{strings.Login.login.toUpperCase()}</Text>
                                 </Button>
                             </View>
                         </View>

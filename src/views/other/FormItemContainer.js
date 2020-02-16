@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, KeyboardAvoidingView} from 'react-native';
 import {appColors} from '../../support/CommonStyles';
 
 
@@ -7,7 +7,7 @@ export default class FormItemContainer extends Component {
 
     render() {
         return (
-            <View style={[styles.container, {...this.props.style}]}>
+            <KeyboardAvoidingView style={[styles.container, {...this.props.style}]}>
                 {this.props.children}
                 {
                     this.props.title &&
@@ -17,7 +17,7 @@ export default class FormItemContainer extends Component {
 
                         </View>
                 }
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }
