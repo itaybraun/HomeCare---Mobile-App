@@ -13,7 +13,7 @@ import {strings} from './src/localization/strings';
 import {Utils} from './src/support/Utils';
 import FlagsScreen from './src/views/patients/patient/flags/FlagsScreen';
 import PatientScreen from './src/views/patients/patient/PatientScreen';
-import AddFlagScreen from './src/views/patients/patient/flags/AddFlagScreen';
+import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import {appColors} from './src/support/CommonStyles';
 
 export default class App extends React.Component {
@@ -47,7 +47,7 @@ const PatientsStack = createStackNavigator({
     Patients: PatientsScreen,
     Patient: PatientScreen,
     Flags: FlagsScreen,
-    AddFlag: AddFlagScreen,
+    Flag: FlagScreen,
 });
 const TasksStack = createStackNavigator({
     Tasks: TasksScreen,

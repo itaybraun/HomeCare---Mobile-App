@@ -19,6 +19,7 @@ import { Card, Icon, Text } from 'native-base';
 import {commonStyles, renderDisclosureIndicator, renderSeparator} from '../../../../support/CommonStyles';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import moment from 'moment';
+import {Flag} from '../../../../models/Flag';
 
 export default class FlagsScreen extends AppScreen {
 
@@ -71,12 +72,16 @@ export default class FlagsScreen extends AppScreen {
     addFlag = async () => {
         const patient: Patient = this.props.navigation.getParam('patient', null);
         if (patient) {
-            this.navigateTo('AddFlag', {patient: patient});
+            this.navigateTo('Flag', {patient: patient, flag: null});
         }
         this.closeRow();
     };
 
     editFlag = async (item, rowMap) => {
+        const patient: Patient = this.props.navigation.getParam('patient', null);
+        if (patient) {
+            this.navigateTo('Flag', {patient: patient, flag: item});
+        }
         this.closeRow();
     };
 
@@ -145,7 +150,7 @@ export default class FlagsScreen extends AppScreen {
         return (
             <View style={styles.menuContainer}>
                 <TouchableOpacity
-                    style={[styles.itemMenuContainer, {backgroundColor: '#8CE69B', opacity: 0,}]}
+                    style={[styles.itemMenuContainer, {backgroundColor: '#8CE69B'}]}
                     onPress={() => this.editFlag(item, rowMap)}>
                     <Icon type="Feather" name="edit"/>
                 </TouchableOpacity>
@@ -189,7 +194,6 @@ export default class FlagsScreen extends AppScreen {
                     ListEmptyComponent={this.renderListEmpty}
                     rightOpenValue={-103}
                     leftOpenValue={103}
-                    disableRightSwipe
                     closeOnRowBeginSwipe
                     recalculateHiddenLayout
 

@@ -101,7 +101,6 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
 
 RESTAPI.prototype.addFlag = async function addFlag(flag: Flag, patient: Patient): APIRequest {
     try {
-
         const data = {
             resourceType: 'Flag',
             status: 'active',
@@ -142,6 +141,60 @@ RESTAPI.prototype.addFlag = async function addFlag(flag: Flag, patient: Patient)
 
         const response = await this.server.post('Flag', JSON.stringify(data));
         if (response.status === 201) {
+            let flag = getFlagFromFHIR(response.data);
+            return new APIRequest(true, flag);
+        } else {
+            return new APIRequest(false, new Error(response.data));
+        }
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
+RESTAPI.prototype.editFlag = async function editFlag(flag: Flag, patient: Patient): APIRequest {
+    try {
+
+        const data = {
+            resourceType: 'Flag',
+            id: flag.id,
+            status: 'active',
+            category: [
+                {
+                    coding: [
+                        {
+                            system: 'http://terminology.hl7.org/CodeSystem/flag-category',
+                            code: flag.category,
+                            display: flag.category,
+                        },
+                    ],
+                    text: flag.category,
+                },
+            ],
+            code: {
+                coding: [
+                    {
+                        system: 'http://copper-serpent.com/valueset/flag-internal',
+                        code: flag.internal ? "1" : "0",
+                        display: 'Internal',
+                    },
+                ],
+                text: flag.text
+            },
+            subject: {
+                reference: `Patient/${patient.id}`,
+            },
+            period: {
+                start: moment(flag.startDate).format('YYYY-MM-DD'),
+                end: moment(flag.endDate).format('YYYY-MM-DD'),
+            },
+            author: {
+                reference: 'Practitioner/8cba6c16-4f07-42de-9b06-b5af4f05f23c',
+                display: 'Florence Nightingale',
+            },
+        };
+
+        const response = await this.server.put('Flag/' + flag.id, JSON.stringify(data));
+        if (response.status === 200) {
             let flag = getFlagFromFHIR(response.data);
             return new APIRequest(true, flag);
         } else {

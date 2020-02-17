@@ -44,6 +44,7 @@ export const en = {
         userTitle: '{0} Flags',
         addFlag: 'Add flag',
         newFlag: 'New Flag',
+        editFlag: 'Edit Flag',
         noFlags: 'No data to display',
         deleteFlag: 'You are about to delete a flag. Are you sure?',
         category: 'Category',
