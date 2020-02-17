@@ -135,6 +135,11 @@ export default class FlagScreen extends AppScreen {
     };
 
     submit = async () => {
+
+        await this.setState({
+            errors: {},
+        });
+
         let validationResult: Request = this.validate();
 
         if (validationResult.success) {
