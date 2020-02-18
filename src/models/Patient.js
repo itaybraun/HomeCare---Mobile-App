@@ -6,6 +6,7 @@ export class Patient {
     lastName: String;
     dateOfBirth: Date;
     gender: String;
+    address: String;
 
     get age(): Number {
         return moment().diff(this.dateOfBirth, 'years', false);
@@ -13,5 +14,20 @@ export class Patient {
 
     get fullName(): String {
         return `${this.firstName} ${this.lastName}`;
+    }
+
+    get simpleAddress(): String {
+        if (!this.address) {return null}
+
+        let result = [];
+
+        if (this.address.line)
+            result.push(this.address.line);
+
+        if (this.address.city) {
+            result.push(this.address.city);
+        }
+
+        return result.join(", ");
     }
 }

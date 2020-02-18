@@ -23,9 +23,17 @@ API.prototype.login = async function login(username, password): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
+
+
 API.prototype.getPatients = async function getPatients(userId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
+
+API.prototype.getPatient = async function getPatient(patientId): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+
 
 API.prototype.getFlags = async function getFlags(patientId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
@@ -36,5 +44,11 @@ API.prototype.addFlag = async function addFlag(flag: Flag, patient: Patient): AP
 };
 
 API.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+
+
+API.prototype.getTasks = async function getTasks(userId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };

@@ -93,7 +93,7 @@ const Tabs = createBottomTabNavigator({
             fontSize: 10,
         },
         style: {
-            backgroundColor: appColors.yellowColor,
+            backgroundColor: appColors.backgroundYellowColor,
         }
     }
 });

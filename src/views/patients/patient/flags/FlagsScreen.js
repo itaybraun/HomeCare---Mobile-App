@@ -16,7 +16,12 @@ import Loading from '../../../../support/Loading';
 import {APIRequest} from '../../../../api/API';
 import {strings} from '../../../../localization/strings';
 import { Card, Icon, Text } from 'native-base';
-import {commonStyles, renderDisclosureIndicator, renderSeparator} from '../../../../support/CommonStyles';
+import {
+    commonStyles,
+    renderDisclosureIndicator,
+    renderLoading,
+    renderSeparator,
+} from '../../../../support/CommonStyles';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import moment from 'moment';
 import {Flag} from '../../../../models/Flag';
@@ -136,7 +141,7 @@ export default class FlagsScreen extends AppScreen {
                 onPress={() => this.editFlag(item, rowMap)}>
                 <Card style={[styles.flagItemContainer, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
                     <View style={styles.flagInfoContainer}>
-                        <Text style={commonStyles.smallInfoText}>{moment(item.startDate).format("MMM Do YYYY") ?? ''}</Text>
+                        <Text style={commonStyles.smallInfoText}>{item.startDate ? moment(item.startDate).format("MMM Do YYYY") : ''}</Text>
                         <Text style={commonStyles.smallInfoText}>{item.category}</Text>
                     </View>
                     <Text style={[commonStyles.boldTitleText, {marginVertical: 6}]}>{item.title}</Text>
@@ -176,47 +181,43 @@ export default class FlagsScreen extends AppScreen {
         const flags = this.state.flags;
 
         return (
-            <View style={styles.container}>
+            <View style={commonStyles.screenContainer}>
                 <SwipeListView
                     ref={(list) => {
                         this.list = list;
                     }}
                     style={styles.list}
+                    contentContainerStyle={{ flexGrow: 1 }}
                     data={flags}
+                    keyExtractor={item => item.id}
                     renderItem={this.renderItem}
+                    renderHiddenItem={this.renderHiddenItem}
+                    ItemSeparatorComponent={renderSeparator}
+                    ListEmptyComponent={this.renderListEmpty}
                     ListHeaderComponent={this.renderListHeader}
                     ListFooterComponent={this.renderListFooter}
-                    keyExtractor={item => item.id+Math.random().toString()}
                     onRefresh={this.getData}
-                    refreshing={this.state.loading}
-                    ItemSeparatorComponent={renderSeparator}
-                    renderHiddenItem={this.renderHiddenItem}
-                    ListEmptyComponent={this.renderListEmpty}
+                    refreshing={false}
                     rightOpenValue={-103}
                     leftOpenValue={103}
                     closeOnRowBeginSwipe
                     recalculateHiddenLayout
-
                 />
                 <TouchableOpacity
-                    style={styles.addFlagButton}
+                    style={commonStyles.blackButtonContainer}
                     onPress={this.addFlag}
                 >
                     <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
                 </TouchableOpacity>
+                {renderLoading(this.state.loading)}
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-
     list: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
     },
 
     itemContainer: {
@@ -256,16 +257,4 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
     },
-
-    addFlagButton: {
-        position: 'absolute',
-        bottom: 12,
-        right: 12,
-        height: 50,
-        width: 50,
-        borderRadius: 25,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#000000',
-    }
 });

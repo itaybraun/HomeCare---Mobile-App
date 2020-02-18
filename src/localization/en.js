@@ -63,6 +63,8 @@ export const en = {
 
     Tasks: {
         title: 'Tasks',
+        noTasks: 'No data to display',
+        noSchedule: 'No Schedule',
     },
 
     Chat: {

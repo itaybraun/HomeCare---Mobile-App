@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Platform} from 'react-native';
+import {View, Platform, ActivityIndicator, Text} from 'react-native';
 import {Icon} from "native-base";
 
 
@@ -7,7 +7,8 @@ export const appColors = {
     textColor: '#555555',
     linkColor: '#5C00EC',
     lineColor: '#CCCCCC',
-    yellowColor: '#DEBB4A',
+    yellowColor: '#FEC260',
+    backgroundYellowColor: '#DEBB4A',
 };
 
 export const commonStyles = {
@@ -28,6 +29,11 @@ export const commonStyles = {
         color: appColors.textColor,
     },
 
+    yellowTitle: {
+        fontSize: 24,
+        color: appColors.yellowColor,
+    },
+
     contentText: {
         fontSize: 14,
         color: appColors.textColor,
@@ -46,6 +52,12 @@ export const commonStyles = {
         color: '#000000',
 
     },
+
+    screenContainer: {
+        flex: 1,
+        backgroundColor: '#FFFFFF',
+    },
+
     emptyScreen: {
         flex: 1,
         justifyContent: 'center',
@@ -55,6 +67,28 @@ export const commonStyles = {
     listSeparator: {
         height: 10,
     },
+
+    loadingContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    blackButtonContainer: {
+        position: 'absolute',
+        bottom: 12,
+        right: 12,
+        height: 50,
+        width: 50,
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#000000',
+    }
 };
 
 export const renderSeparator = () => {
@@ -62,6 +96,14 @@ export const renderSeparator = () => {
         <View style={commonStyles.listSeparator} />
     );
 };
+
+export const renderLoading = (loading)  => {
+    return ( loading &&
+        <View style={commonStyles.loadingContainer}>
+            <ActivityIndicator size="large" />
+        </View>
+    );
+}
 
 export const renderDisclosureIndicator = () => {
     return (

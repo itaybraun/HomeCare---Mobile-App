@@ -93,7 +93,7 @@ export default class PatientScreen extends AppScreen {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={commonStyles.screenContainer}>
                 <TabView
                     navigationState={this.state}
                     onIndexChange={this.handleTabIndexChange}
@@ -106,10 +106,6 @@ export default class PatientScreen extends AppScreen {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-    },
     tabBar: {
         flexDirection: 'row',
     },

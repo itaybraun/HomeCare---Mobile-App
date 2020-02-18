@@ -48,7 +48,7 @@ export default class PatientProfile extends Component {
                     <TouchableOpacity
                         style={styles.quickActionsContainer}
                         onPress={() => this.props.navigateTo('QuickActions')}>
-                        <Text style={styles.quickActionsLinkText}>{strings.Patient.quickActions}</Text>
+                        <Text style={[commonStyles.yellowTitle, {marginRight: 30}]}>{strings.Patient.quickActions}</Text>
                         {renderDisclosureIndicator()}
                     </TouchableOpacity>
 
@@ -90,11 +90,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 12,
         marginTop: 16,
-    },
-    quickActionsLinkText: {
-        fontSize: 24,
-        marginRight: 30,
-        color: '#FEC260'
     },
     linkContainer: {
         padding: 12,

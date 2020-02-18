@@ -7,9 +7,13 @@ import Loading from '../../support/Loading';
 import {APIRequest} from '../../api/API';
 import {strings} from '../../localization/strings';
 import { Card, Icon, Text } from 'native-base';
-import {commonStyles, renderDisclosureIndicator, renderSeparator} from '../../support/CommonStyles';
+import {commonStyles, renderDisclosureIndicator, renderLoading, renderSeparator} from '../../support/CommonStyles';
 
 export default class PatientsScreen extends AppScreen {
+
+    //------------------------------------------------------------
+    // Properties
+    //------------------------------------------------------------
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -26,11 +30,19 @@ export default class PatientsScreen extends AppScreen {
         filteredPatients: null,
     };
 
+    //------------------------------------------------------------
+    // Overrides
+    //------------------------------------------------------------
+
     componentDidMount(): void {
         super.componentDidMount();
 
         this.getData();
     }
+
+    //------------------------------------------------------------
+    // Data
+    //------------------------------------------------------------
 
     getData = async (refresh = true) => {
         this.setState({loading: true});
@@ -46,6 +58,10 @@ export default class PatientsScreen extends AppScreen {
             this.showError(result.data);
         }
     };
+
+    //------------------------------------------------------------
+    // Methods
+    //------------------------------------------------------------
 
     selectPatient = (patient) => {
         this.navigateTo('Patient', {patient: patient});
@@ -67,6 +83,10 @@ export default class PatientsScreen extends AppScreen {
             filteredPatients: filteredPatients,
         });
     };
+
+    //------------------------------------------------------------
+    // Render
+    //------------------------------------------------------------
 
     renderListHeader = () => {
         return (
@@ -92,7 +112,7 @@ export default class PatientsScreen extends AppScreen {
                 <Text>{strings.Patients.noPatients}</Text>
             </View>
         )
-    }
+    };
 
     renderItem = ({item}) => {
         return (
@@ -115,30 +135,28 @@ export default class PatientsScreen extends AppScreen {
         const patients = this.state.filteredPatients ?? this.state.patients;
 
         return (
-            <View style={styles.container}>
+            <View style={commonStyles.screenContainer}>
                 <FlatList style={styles.list}
+                          contentContainerStyle={{ flexGrow: 1 }}
                           data={patients}
                           renderItem={this.renderItem}
                           ListHeaderComponent={this.renderListHeader}
                           keyExtractor={item => item.id}
                           onRefresh={this.getData}
-                          refreshing={this.state.loading}
+                          refreshing={false}
                           ItemSeparatorComponent={renderSeparator}
                           ListEmptyComponent={this.renderListEmpty}
                 />
+                {renderLoading(this.state.loading)}
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
 
     list: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
         padding: 10,
     },
 
