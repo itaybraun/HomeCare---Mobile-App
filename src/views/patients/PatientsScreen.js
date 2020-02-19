@@ -117,7 +117,7 @@ export default class PatientsScreen extends AppScreen {
     renderItem = ({item}) => {
         return (
             <TouchableOpacity onPress={() => this.selectPatient(item)}>
-                <Card style={styles.patientItemContainer}>
+                <Card style={commonStyles.cardStyle}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{flex: 1}}>
                             <Text style={commonStyles.smallInfoText}>{item.gender?.charAt(0).toUpperCase()}, {item.age} {strings.Patients.yo}</Text>
@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
     },
 
     patientItemContainer: {
+        borderRadius: 4,
         padding: 12,
         paddingRight: 0,
     },

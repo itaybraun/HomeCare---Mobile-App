@@ -139,7 +139,7 @@ export default class FlagsScreen extends AppScreen {
                 underlayColor='#FFFFFFFF'
                 activeOpacity={0.3}
                 onPress={() => this.editFlag(item, rowMap)}>
-                <Card style={[styles.flagItemContainer, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
+                <Card style={[commonStyles.cardStyle, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
                     <View style={styles.flagInfoContainer}>
                         <Text style={commonStyles.smallInfoText}>{item.startDate ? moment(item.startDate).format("MMM Do YYYY") : ''}</Text>
                         <Text style={commonStyles.smallInfoText}>{item.category}</Text>
@@ -223,12 +223,6 @@ const styles = StyleSheet.create({
     itemContainer: {
         marginHorizontal: 12,
         borderRadius: 4,
-    },
-
-    flagItemContainer: {
-        padding: 12,
-        borderRadius: 4,
-        overflow: 'hidden',
     },
 
     flagInfoContainer: {

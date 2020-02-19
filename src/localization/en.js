@@ -70,11 +70,29 @@ export const en = {
         closed: 'Closed',
     },
 
+    Task: {
+        addTask: 'Add Task',
+        task: 'Task',
+        patient: 'Patient',
+        category: 'Category',
+        priority: 'Priority',
+        requester: 'Opened By',
+        visit: 'Visit',
+        addNewVisit: 'Add New Visit',
+    },
+
     Chat: {
         title: 'Chat',
     },
 
     Settings: {
         title: 'Settings',
+    },
+
+    Priorities: {
+        routine: 'Routine',
+        urgent: 'Urgent',
+        asap: 'ASAP',
+        stat: 'STAT',
     },
 };

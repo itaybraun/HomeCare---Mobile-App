@@ -21,13 +21,10 @@ export class Patient {
 
         let result = [];
 
-        if (this.address.line)
-            result.push(this.address.line);
+        result.push(this.address.line);
+        result.push(this.address.city);
+        result = result.filter(a => a);
 
-        if (this.address.city) {
-            result.push(this.address.city);
-        }
-
-        return result.join(", ");
+        return result.length > 0 ? result.join(", ") : null;
     }
 }

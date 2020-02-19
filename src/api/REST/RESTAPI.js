@@ -3,7 +3,7 @@ import axios from 'axios';
 import {Patient} from '../../models/Patient';
 import moment from 'moment';
 import {Flag} from '../../models/Flag';
-import {Task} from '../../models/Task';
+import {Priorities, Task} from '../../models/Task';
 
 export default class RESTAPI extends API {
     constructor(props) {
@@ -280,7 +280,7 @@ RESTAPI.prototype.getTasks = async function getTasks(userId): APIRequest {
                 if (task.patientId) {
                     let result: APIRequest = await this.getPatient(task.patientId);
                     if (result.success)
-                        task = updateTaskWithPatientDataFromFHIR(task, result.data);
+                        task.patient = result.data;
                 }
 
                 return task;
@@ -300,16 +300,7 @@ function getTaskFromFHIR(json) {
     task.patientId = json.subject?.reference?.replace('Patient/','') ?? null;
     task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
     task.text = json.code?.text;
-    task.priority = json.priority ?? 'routine';
-    return task;
-}
-
-function updateTaskWithPatientDataFromFHIR(task: Task, patient: Patient) {
-    let info = [];
-    info.push(patient.fullName);
-    if (patient.simpleAddress) {
-        info.push(patient.simpleAddress);
-    }
-    task.patientInfo = info.join(', ');
+    task.priority = json.priority ? Priorities.getByString(json.priority) ?? Priorities.ROUTINE : Priorities.ROUTINE;
+    task.requester = json.requester?.display;
     return task;
 }

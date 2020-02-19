@@ -14,6 +14,7 @@ import {
 import {Card, Icon} from 'native-base';
 import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
+import {Task} from '../../models/Task';
 
 export default class TasksScreen extends AppScreen {
 
@@ -125,20 +126,30 @@ export default class TasksScreen extends AppScreen {
     };
 
     renderItem = ({item}) => {
+
+        let task: Task = item;
+
+        let patientInfo = [];
+        if (task.patient) {
+            patientInfo.push(task.patient.fullName);
+            patientInfo.push(task.patient.simpleAddress);
+            patientInfo = patientInfo.filter(i => i)
+        }
+
         return (
             <TouchableOpacity onPress={() => this.selectTask(item)}>
-                <Card style={[styles.patientItemContainer, item.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
-                    <View style={{flex: 1, margin: 8,}}>
+                <Card style={[commonStyles.cardStyle, item.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
+                    <View style={{flex: 1,}}>
                         <Text
                             style={commonStyles.yellowTitle}
                             numberOfLines={3}>
                             {item.text}
                         </Text>
-                        <Text style={[commonStyles.contentText, {paddingTop: 8,}]}>{item.patientInfo}</Text>
+                        <Text style={[commonStyles.contentText, {paddingTop: 8,}]}>{patientInfo.join(', ')}</Text>
                         <Text style={[commonStyles.contentText, {paddingTop: 8, color: '#FF0000'}]}>{strings.Tasks.noSchedule}</Text>
                     </View>
 
-                    <Text style={[commonStyles.smallInfoText, {position: 'absolute', top: 6, right: 6}]}>
+                    <Text style={[commonStyles.smallInfoText, {position: 'absolute', top: 4, right: 12}]}>
                         {item.openDate ? moment(item.openDate).format("MMM-DD-YYYY") : ''}
                     </Text>
                 </Card>
@@ -193,11 +204,5 @@ const styles = StyleSheet.create({
     list: {
         flex: 1,
         padding: 10,
-    },
-
-    patientItemContainer: {
-        padding: 6,
-        borderRadius: 4,
-        overflow: 'hidden',
     },
 });

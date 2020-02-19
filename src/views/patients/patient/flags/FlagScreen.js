@@ -7,13 +7,12 @@ import {
     Keyboard,
     TouchableWithoutFeedback,
     ScrollView,
-    Alert
 } from 'react-native';
 import AppScreen from '../../../../support/AppScreen';
 import {strings} from '../../../../localization/strings';
-import {appColors} from '../../../../support/CommonStyles';
+import {appColors, commonStyles} from '../../../../support/CommonStyles';
 import FormItemContainer from '../../../other/FormItemContainer';
-import {Icon, Form, Input, Picker, Textarea, Text, Button} from 'native-base';
+import {Button, Form, Icon, Text, Textarea} from 'native-base';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ActionSheet from 'react-native-simple-action-sheet';
 import moment from 'moment';
@@ -86,7 +85,7 @@ export default class FlagScreen extends AppScreen {
 
         ActionSheet.showActionSheetWithOptions({
                 options: options,
-                cancelButtonIndex: options.length -1 ,
+                cancelButtonIndex: options.length - 1,
             },
             (buttonIndex) => {
                 if (buttonIndex < this.categories.length) {
@@ -173,7 +172,7 @@ export default class FlagScreen extends AppScreen {
 
     render() {
         return (
-            <View style={styles.container} >
+            <View style={commonStyles.screenContainer} >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <ScrollView
                         style={{flex: 1}}
@@ -198,7 +197,7 @@ export default class FlagScreen extends AppScreen {
                                 error={this.state.errors.text}>
                                 <Textarea
                                     rowSpan={4}
-                                    style={styles.formItem}
+                                    style={commonStyles.formItem}
                                     selectionColor={appColors.linkColor}
                                     autoCorrect={false}
                                     value={this.state.text}
@@ -244,7 +243,7 @@ export default class FlagScreen extends AppScreen {
                                 error={this.state.errors.startDate}>
                                 <TouchableWithoutFeedback
                                     onPress={() => this.setState({showingStartDatePicker: true})}>
-                                    <View style={styles.dateContainer}>
+                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                         <Text style={{flex: 1}}>{this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''}</Text>
                                         <Icon type="Octicons" name="calendar" />
                                     </View>
@@ -258,79 +257,65 @@ export default class FlagScreen extends AppScreen {
                             >
                                 <TouchableWithoutFeedback
                                     onPress={() => this.setState({showingEndDatePicker: true})}>
-                                    <View style={styles.dateContainer}>
+                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                         <Text style={{flex: 1}}>{this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''}</Text>
                                         <Icon type="Octicons" name="calendar" />
                                     </View>
                                 </TouchableWithoutFeedback>
                             </FormItemContainer>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                                <Button success transparent
+                                        onPress={this.submit}>
+                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.submitButton.toUpperCase()}</Text>
+                                </Button>
+                                <Button danger transparent
+                                        onPress={this.cancel}>
+                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.cancelButton.toUpperCase()}</Text>
+                                </Button>
+                            </View>
                         </Form>
-                        <DateTimePickerModal
-                            isVisible={this.state.showingStartDatePicker}
-                            mode="date"
-                            date={this.state.startDate ?? new Date()}
-                            onConfirm={(date) => {
-                                let errors = this.state.errors;
-                                errors.startDate = false;
-                                errors.endDate = false;
-                                this.setState({
-                                    startDate: date,
-                                    endDate: moment(date).add(180, 'd').toDate(),
-                                    showingStartDatePicker: false,
-                                    errors: errors,
-                                })
-                            }}
-                            onCancel={() => this.setState({showingStartDatePicker: false,})}
-                        />
-                        <DateTimePickerModal
-                            isVisible={this.state.showingEndDatePicker}
-                            minimumDate={this.state.startDate}
-                            date={this.state.endDate ?? new Date()}
-                            mode="date"
-                            onConfirm={(date) => {
-                                let errors = this.state.errors;
-                                errors.endDate = false;
-                                this.setState({
-                                    endDate: date,
-                                    showingEndDatePicker: false,
-                                    errors: errors,
-                                })
-                            }}
-                            onCancel={() => this.setState({showingEndDatePicker: false,})}
-                        />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Button transparent success
-                                    onPress={this.submit}>
-                                <Text style={{fontWeight: 'bold'}}>{strings.Common.submitButton.toUpperCase()}</Text>
-                            </Button>
-                            <Button transparent danger
-                                    onPress={this.cancel}>
-                                <Text style={{fontWeight: 'bold'}}>{strings.Common.cancelButton.toUpperCase()}</Text>
-                            </Button>
-                        </View>
                     </ScrollView>
                 </TouchableWithoutFeedback>
+
+                <DateTimePickerModal
+                    isVisible={this.state.showingStartDatePicker}
+                    mode="date"
+                    date={this.state.startDate ?? new Date()}
+                    onConfirm={(date) => {
+                        let errors = this.state.errors;
+                        errors.startDate = false;
+                        errors.endDate = false;
+                        this.setState({
+                            startDate: date,
+                            endDate: moment(date).add(180, 'd').toDate(),
+                            showingStartDatePicker: false,
+                            errors: errors,
+                        })
+                    }}
+                    onCancel={() => this.setState({showingStartDatePicker: false,})}
+                />
+                <DateTimePickerModal
+                    isVisible={this.state.showingEndDatePicker}
+                    minimumDate={this.state.startDate}
+                    date={this.state.endDate ?? new Date()}
+                    mode="date"
+                    onConfirm={(date) => {
+                        let errors = this.state.errors;
+                        errors.endDate = false;
+                        this.setState({
+                            endDate: date,
+                            showingEndDatePicker: false,
+                            errors: errors,
+                        })
+                    }}
+                    onCancel={() => this.setState({showingEndDatePicker: false,})}
+                />
+
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-    },
 
-    formItem: {
-        padding: 0,
-        paddingLeft: 11,
-        paddingRight: 11,
-        fontSize: 16,
-    },
-
-    dateContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
 });

@@ -90,6 +90,19 @@ export const commonStyles = {
         backgroundColor: '#000000',
     },
 
+    cardStyle: {
+        padding: 12,
+        borderRadius: 4,
+        overflow: 'hidden',
+    },
+
+    formItem: {
+        padding: 0,
+        paddingLeft: 11,
+        paddingRight: 11,
+        fontSize: 16,
+    },
+
     tabBar: {
         flexDirection: 'row',
     },

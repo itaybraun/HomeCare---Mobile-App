@@ -1,8 +1,13 @@
 import React from 'react';
 import {View, FlatList, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import AppScreen from '../../support/AppScreen';
+import {commonStyles} from '../support/CommonStyles';
 
 export default class EmptyScreen extends AppScreen {
+
+    //------------------------------------------------------------
+    // Properties
+    //------------------------------------------------------------
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -15,20 +20,38 @@ export default class EmptyScreen extends AppScreen {
         loading: false,
     };
 
+    //------------------------------------------------------------
+    // Overrides
+    //------------------------------------------------------------
+
     componentDidMount(): void {
         super.componentDidMount();
 
         this.getData();
     }
 
+    //------------------------------------------------------------
+    // Data
+    //------------------------------------------------------------
+
     getData = async (refresh = true) => {
         this.setState({loading: true});
         this.setState({loading: false});
     };
 
+    //------------------------------------------------------------
+    // Methods
+    //------------------------------------------------------------
+
+
+
+    //------------------------------------------------------------
+    // Render
+    //------------------------------------------------------------
+
     render() {
         return (
-            <View style={styles.container}>
+            <View style={commonStyles.screenContainer}>
 
             </View>
         );
