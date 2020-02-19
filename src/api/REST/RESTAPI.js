@@ -300,7 +300,7 @@ function getTaskFromFHIR(json) {
     task.patientId = json.subject?.reference?.replace('Patient/','') ?? null;
     task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
     task.text = json.code?.text;
-    task.priority = json.priority?.coding?.code;
+    task.priority = json.priority ?? 'routine';
     return task;
 }
 

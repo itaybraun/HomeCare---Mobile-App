@@ -7,7 +7,7 @@ import Loading from '../../../support/Loading';
 import {APIRequest} from '../../../api/API';
 import {strings} from '../../../localization/strings';
 import { Card, Icon, Text } from 'native-base';
-import {appColors, commonStyles, renderSeparator} from '../../../support/CommonStyles';
+import {appColors, commonStyles, renderSeparator, renderTabBar} from '../../../support/CommonStyles';
 import PatientProfile from './PatientProfile';
 import PatientCarePlans from './PatientCarePlans';
 import PatientTasks from './PatientTasks';
@@ -45,8 +45,8 @@ export default class PatientScreen extends AppScreen {
     }
 
     getData = async (refresh = true) => {
-        this.setState({loading: true});
-        this.setState({loading: false});
+        //this.setState({loading: true});
+        //this.setState({loading: false});
     };
 
     navigateToView = (view) => {
@@ -59,23 +59,7 @@ export default class PatientScreen extends AppScreen {
     };
 
     renderTabBar = (props) => {
-        return (
-            <View style={styles.tabBar}>
-                {
-                    props.navigationState.routes.map((route, i) => {
-                        return (
-                            <TouchableOpacity
-                                activeOpacity={1}
-                                key={route.key}
-                                style={[styles.tabItem, this.state.index === i ? styles.tabItemSelected : {}]}
-                                onPress={() => this.setState({ index: i })}>
-                                <Text style={[styles.tabItemText, this.state.index === i ? styles.tabItemTextSelected : {}]}>{route.title}</Text>
-                            </TouchableOpacity>
-                        );
-                    })
-                }
-            </View>
-        );
+        return renderTabBar(props, this.state.index);
     };
 
     renderScene = ({ route }) => {
@@ -106,24 +90,5 @@ export default class PatientScreen extends AppScreen {
 }
 
 const styles = StyleSheet.create({
-    tabBar: {
-        flexDirection: 'row',
-    },
-    tabItem: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: 2,
-        borderBottomColor: '#88888822',
-    },
-    tabItemText: {
-        textTransform: 'uppercase',
-        color: appColors.textColor,
-    },
-    tabItemSelected: {
-        borderBottomColor: appColors.linkColor,
-    },
-    tabItemTextSelected: {
-        color: appColors.linkColor,
-    },
+
 });

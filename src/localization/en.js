@@ -65,6 +65,9 @@ export const en = {
         title: 'Tasks',
         noTasks: 'No data to display',
         noSchedule: 'No Schedule',
+        open: 'Open',
+        visits: 'Visits',
+        closed: 'Closed',
     },
 
     Chat: {

@@ -4,10 +4,16 @@ import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import MenuButton from '../menu/MenuButton';
 import {APIRequest} from '../../api/API';
-import {commonStyles, renderDisclosureIndicator, renderLoading, renderSeparator} from '../../support/CommonStyles';
+import {
+    commonStyles,
+    renderDisclosureIndicator,
+    renderLoading,
+    renderSeparator,
+    renderTabBar,
+} from '../../support/CommonStyles';
 import {Card, Icon} from 'native-base';
-import {Patient} from '../../models/Patient';
 import moment from 'moment';
+import {TabView} from 'react-native-tab-view';
 
 export default class TasksScreen extends AppScreen {
 
@@ -27,6 +33,13 @@ export default class TasksScreen extends AppScreen {
     state = {
         loading: false,
         tasks: [],
+
+        index: 0,
+        routes: [
+            { key: 'open', title: strings.Tasks.open },
+            { key: 'visits', title: strings.Tasks.visits },
+            { key: 'closed', title: strings.Tasks.closed },
+        ],
     };
 
     //------------------------------------------------------------
@@ -70,9 +83,26 @@ export default class TasksScreen extends AppScreen {
         this.navigateTo('Task', {task: null});
     };
 
+    handleTabIndexChange = index => {
+        this.setState({ index });
+    };
+
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
+
+    // Tabs
+
+    renderTabBar = (props) => {
+        return renderTabBar(props, this.state.index);
+    };
+
+    renderScene = ({ route }) => {
+        return this.renderList();
+    };
+
+
+    //List
 
     renderListHeader = () => {
         return (
@@ -97,7 +127,7 @@ export default class TasksScreen extends AppScreen {
     renderItem = ({item}) => {
         return (
             <TouchableOpacity onPress={() => this.selectTask(item)}>
-                <Card style={[styles.patientItemContainer, item.priority === 'UR' ? {backgroundColor: '#F9E3E6'} : {}]}>
+                <Card style={[styles.patientItemContainer, item.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
                     <View style={{flex: 1, margin: 8,}}>
                         <Text
                             style={commonStyles.yellowTitle}
@@ -116,13 +146,15 @@ export default class TasksScreen extends AppScreen {
         )
     };
 
-    render() {
+    renderList = () => {
+
+        const tasks = this.state.tasks;
 
         return (
             <View style={commonStyles.screenContainer}>
                 <FlatList style={styles.list}
                           contentContainerStyle={{ flexGrow: 1 }}
-                          data={this.state.tasks}
+                          data={tasks}
                           renderItem={this.renderItem}
                           ItemSeparatorComponent={renderSeparator}
                           ListEmptyComponent={this.renderListEmpty}
@@ -139,6 +171,19 @@ export default class TasksScreen extends AppScreen {
                     <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
                 </TouchableOpacity>
                 {renderLoading(this.state.loading)}
+            </View>
+        );
+    };
+
+    render() {
+        return (
+            <View style={commonStyles.screenContainer}>
+                <TabView
+                    navigationState={this.state}
+                    onIndexChange={this.handleTabIndexChange}
+                    renderScene={this.renderScene}
+                    renderTabBar={this.renderTabBar}
+                />
             </View>
         );
     }

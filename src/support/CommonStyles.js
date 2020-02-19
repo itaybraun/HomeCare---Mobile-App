@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Platform, ActivityIndicator, Text} from 'react-native';
+import {View, Platform, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
 import {Icon} from "native-base";
 
 
@@ -88,7 +88,29 @@ export const commonStyles = {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#000000',
-    }
+    },
+
+    tabBar: {
+        flexDirection: 'row',
+    },
+
+    tabItem: {
+        flex: 1,
+        alignItems: 'center',
+        padding: 10,
+        borderBottomWidth: 2,
+        borderBottomColor: '#88888822',
+    },
+    tabItemText: {
+        textTransform: 'uppercase',
+        color: appColors.textColor,
+    },
+    tabItemSelected: {
+        borderBottomColor: appColors.linkColor,
+    },
+    tabItemTextSelected: {
+        color: appColors.linkColor,
+    },
 };
 
 export const renderSeparator = () => {
@@ -108,5 +130,25 @@ export const renderLoading = (loading)  => {
 export const renderDisclosureIndicator = () => {
     return (
         <Icon type="SimpleLineIcons" name="arrow-right" style={{color: appColors.textColor, marginBottom: -4}} />
+    );
+};
+
+export const renderTabBar = (props, selectedIndex) => {
+    return (
+        <View style={commonStyles.tabBar}>
+            {
+                props.navigationState.routes.map((route, i) => {
+                    return (
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            key={route.key}
+                            style={[commonStyles.tabItem, selectedIndex === i ? commonStyles.tabItemSelected : {}]}
+                            onPress={() => this.setState({ index: i })}>
+                            <Text style={[commonStyles.tabItemText, selectedIndex === i ? commonStyles.tabItemTextSelected : {}]}>{route.title}</Text>
+                        </TouchableOpacity>
+                    );
+                })
+            }
+        </View>
     );
 };

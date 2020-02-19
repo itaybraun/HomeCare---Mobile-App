@@ -8,4 +8,8 @@ export class Task {
     patientInfo: String;
     schedule: Date;
     priority: String;
+
+    get isPriorityImportant(): Boolean {
+        return this.priority !== 'routine';
+    }
 }
