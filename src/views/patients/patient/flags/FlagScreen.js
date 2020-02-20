@@ -186,7 +186,7 @@ export default class FlagScreen extends AppScreen {
                                 <TouchableOpacity
                                     style={{flexDirection: 'row', padding: 11, alignItems: 'center'}}
                                     onPress={this.showCategoryPicker}>
-                                    <Text style={{flex: 1,}}>{this.state.category?.label ?? ''}</Text>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.category?.label ?? ''}</Text>
                                     <Icon name="ios-arrow-down" />
                                 </TouchableOpacity>
                             </FormItemContainer>
@@ -197,7 +197,7 @@ export default class FlagScreen extends AppScreen {
                                 error={this.state.errors.text}>
                                 <Textarea
                                     rowSpan={4}
-                                    style={commonStyles.formItem}
+                                    style={[commonStyles.formItem, commonStyles.formItemText]}
                                     selectionColor={appColors.linkColor}
                                     autoCorrect={false}
                                     value={this.state.text}
@@ -241,13 +241,13 @@ export default class FlagScreen extends AppScreen {
                                 style={{padding: 11,}}
                                 title={strings.Flags.startDate}
                                 error={this.state.errors.startDate}>
-                                <TouchableWithoutFeedback
+                                <TouchableOpacity
                                     onPress={() => this.setState({showingStartDatePicker: true})}>
                                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                        <Text style={{flex: 1}}>{this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''}</Text>
+                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''}</Text>
                                         <Icon type="Octicons" name="calendar" />
                                     </View>
-                                </TouchableWithoutFeedback>
+                                </TouchableOpacity>
                             </FormItemContainer>
 
                             <FormItemContainer
@@ -255,13 +255,13 @@ export default class FlagScreen extends AppScreen {
                                 title={strings.Flags.endDate}
                                 error={this.state.errors.endDate}
                             >
-                                <TouchableWithoutFeedback
+                                <TouchableOpacity
                                     onPress={() => this.setState({showingEndDatePicker: true})}>
                                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                        <Text style={[{flex: 1}, commonStyles.contentText]}>{this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''}</Text>
+                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''}</Text>
                                         <Icon type="Octicons" name="calendar" />
                                     </View>
-                                </TouchableWithoutFeedback>
+                                </TouchableOpacity>
                             </FormItemContainer>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <Button success transparent
@@ -287,7 +287,7 @@ export default class FlagScreen extends AppScreen {
                         errors.endDate = false;
                         this.setState({
                             startDate: date,
-                            endDate: moment(date).add(180, 'd').toDate(),
+                            endDate: this.state.endDate ?? moment(date).add(180, 'd').toDate(),
                             showingStartDatePicker: false,
                             errors: errors,
                         })

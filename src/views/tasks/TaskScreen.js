@@ -172,7 +172,7 @@ export default class TaskScreen extends AppScreen {
                             <FormItemContainer
                                 style={{padding: 11,}}
                                 title={strings.Task.visit}>
-                                <TouchableWithoutFeedback
+                                <TouchableOpacity
                                     onPress={() => this.setState({showingVisitDatePicker: true})}>
                                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                         <Text style={[{flex: 1}, commonStyles.formItemText]}>
@@ -186,7 +186,7 @@ export default class TaskScreen extends AppScreen {
                                         </Text>
                                         <Icon type="Octicons" name="calendar" style={{color: appColors.textColor}} />
                                     </View>
-                                </TouchableWithoutFeedback>
+                                </TouchableOpacity>
                             </FormItemContainer>
 
                             <TouchableOpacity style={{paddingVertical: 5,}}

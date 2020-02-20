@@ -41,7 +41,6 @@ export default class VisitScreen extends AppScreen {
         patient: null,
         address: null,
         phone: null,
-        date: null,
         start: null,
         end: null,
     };
@@ -135,41 +134,41 @@ export default class VisitScreen extends AppScreen {
                             <FormItemContainer
                                 style={{padding: 11,}}
                                 title={strings.Visit.date}>
-                                <TouchableWithoutFeedback
+                                <TouchableOpacity
                                     onPress={() => this.setState({showingVisitDatePicker: true})}>
                                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                         <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                            {this.state.date ? moment(this.state.date).format('ddd, MMM Do YYYY') : ''}
+                                            {this.state.start ? moment(this.state.start).format('ddd, MMM Do YYYY') : ''}
                                         </Text>
                                         <Icon type="Octicons" name="calendar" style={{color: appColors.textColor}} />
                                     </View>
-                                </TouchableWithoutFeedback>
+                                </TouchableOpacity>
                             </FormItemContainer>
 
                             <View style={{flexDirection: 'row'}}>
                                 <FormItemContainer
                                     style={{width: 110}}
                                     title={strings.Visit.start}>
-                                    <TouchableWithoutFeedback
+                                    <TouchableOpacity
                                         onPress={() => this.setState({showingVisitStartTimePicker: true})}>
                                         <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
                                             <Text style={[{flex: 1}, commonStyles.formItemText]}>
                                                 {this.state.start ? moment(this.state.start).format(this.state.is24Hour ? 'HH:mm' : 'hh:mm A') : ' '}
                                             </Text>
                                         </View>
-                                    </TouchableWithoutFeedback>
+                                    </TouchableOpacity>
                                 </FormItemContainer>
                                 <FormItemContainer
                                     style={{width: 110, marginLeft: 50}}
                                     title={strings.Visit.end}>
-                                    <TouchableWithoutFeedback
+                                    <TouchableOpacity
                                         onPress={() => this.setState({showingVisitEndTimePicker: true})}>
                                         <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
                                             <Text style={[{flex: 1}, commonStyles.formItemText]}>
                                                 {this.state.end ? moment(this.state.end).format(this.state.is24Hour ? 'HH:mm' : 'hh:mm A') : ' '}
                                             </Text>
                                         </View>
-                                    </TouchableWithoutFeedback>
+                                    </TouchableOpacity>
                                 </FormItemContainer>
                             </View>
 
@@ -207,11 +206,12 @@ export default class VisitScreen extends AppScreen {
 
                 <DateTimePickerModal
                     isVisible={this.state.showingVisitDatePicker}
-                    date={this.state.date ?? new Date()}
+                    date={this.state.start ?? new Date()}
                     mode="date"
                     onConfirm={(date) => {
                         this.setState({
-                            date: date,
+                            start: date,
+                            end: moment(date).add(1, 'h').toDate(),
                             showingVisitDatePicker: false,
                         })
                     }}
@@ -221,11 +221,13 @@ export default class VisitScreen extends AppScreen {
                 <DateTimePickerModal
                     isVisible={this.state.showingVisitStartTimePicker}
                     headerTextIOS={strings.Visit.pickStartTime}
+                    date={this.state.start ?? new Date()}
                     mode="time"
                     is24Hour={this.state.is24Hour}
                     onConfirm={(date) => {
                         this.setState({
                             start: date,
+                            end: moment(date).add(1, 'h').toDate(),
                             showingVisitStartTimePicker: false,
                         })
                     }}
@@ -235,9 +237,26 @@ export default class VisitScreen extends AppScreen {
                 <DateTimePickerModal
                     isVisible={this.state.showingVisitEndTimePicker}
                     headerTextIOS={strings.Visit.pickEndTime}
+                    date={this.state.end ?? new Date()}
                     mode="time"
                     is24Hour={this.state.is24Hour}
                     onConfirm={(date) => {
+                        if (this.state.start) {
+                            // set same day
+                            date = moment(date).set({
+                                day: moment(this.state.start).day(),
+                                month: moment(this.state.start).month(),
+                                year: moment(this.state.start).year()
+                            }).toDate();
+
+                            // set next day if needed
+                            if (moment(date) < moment(this.state.start)) {
+                                date = moment(date).add(1, 'd').toDate()
+                            }
+                        }
+
+                        console.log(date);
+
                         this.setState({
                             end: date,
                             showingVisitEndTimePicker: false,

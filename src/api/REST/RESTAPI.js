@@ -4,6 +4,7 @@ import {Patient} from '../../models/Patient';
 import moment from 'moment';
 import {Flag} from '../../models/Flag';
 import {Priorities, Task} from '../../models/Task';
+import {Visit} from '../../models/Visit';
 
 export default class RESTAPI extends API {
     constructor(props) {
@@ -306,3 +307,65 @@ function getTaskFromFHIR(json) {
     task.requester = json.requester?.display;
     return task;
 }
+
+//------------------------------------------------------------
+// Visits
+//------------------------------------------------------------
+
+RESTAPI.prototype.addVisit = async function addVisit(visit: Visit): APIRequest {
+    try {
+        const data = {
+            resourceType: "Encounter",
+            status: "planned",
+            class: {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+                "code": "AMB",
+                "display": "ambulatory"
+            },
+            type: [
+                {
+                    coding: [
+                        {
+                            system: "http://hl7.org/fhir/ValueSet/encounter-status",
+                            code: "FLD",
+                            display: "Field"
+                        }
+                    ]
+                }
+            ],
+            priority: {
+                coding: [
+                    {
+                        system: "http://terminology.hl7.org/ValueSet/v3-ActPriority",
+                        code: "R",
+                        display: "Routine"
+                    }
+                ]
+            },
+            subject: {
+                reference: "Patient/" + visit.patientId,
+                display: visit.patient?.fullName,
+            },
+            participant: [
+                {
+                    individual:{
+                        reference: "Practitioner/8cba6c16-4f07-42de-9b06-b5af4f05f23c"
+                    }
+                }
+            ],
+            reasonCode: [
+                {
+                    text:visit.reason
+                }
+            ],
+            period: {
+                start: moment(visit.start).toISOString(),
+                end: moment(visit.end).toISOString()
+            }
+        };
+
+        return new APIRequest(true, visit);
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};

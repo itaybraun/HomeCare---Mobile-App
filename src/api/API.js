@@ -1,6 +1,7 @@
 import {Flag} from '../models/Flag';
 import {Request} from '../support/Utils';
 import {Patient} from '../models/Patient';
+import {Visit} from '../models/Visit';
 
 export class API {
     constructor(){
@@ -50,5 +51,11 @@ API.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest {
 
 
 API.prototype.getTasks = async function getTasks(userId): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+
+
+API.prototype.addVisit = async function addVisit(visit: Visit): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
