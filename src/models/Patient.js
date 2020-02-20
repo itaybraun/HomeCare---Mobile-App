@@ -7,6 +7,7 @@ export class Patient {
     dateOfBirth: Date;
     gender: String;
     address: String;
+    phone: String;
 
     get age(): Number {
         return moment().diff(this.dateOfBirth, 'years', false);

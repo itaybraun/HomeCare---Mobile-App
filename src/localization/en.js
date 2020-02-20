@@ -72,6 +72,7 @@ export const en = {
 
     Task: {
         addTask: 'Add Task',
+        taskDetails: 'Task Details',
         task: 'Task',
         patient: 'Patient',
         category: 'Category',
@@ -79,6 +80,10 @@ export const en = {
         requester: 'Opened By',
         visit: 'Visit',
         addNewVisit: 'Add New Visit',
+    },
+
+    Visit: {
+        addNewVisit: 'Add a New Visit',
     },
 
     Chat: {

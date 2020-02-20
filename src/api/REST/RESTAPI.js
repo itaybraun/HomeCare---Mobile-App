@@ -107,6 +107,8 @@ function getPatientFromFHIR(json) {
         country: home.country
     } : null;
 
+    patient.phone = json.telecom?.find(telecom => telecom.system ==='phone')?.value;
+
     return patient;
 }
 

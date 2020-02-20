@@ -258,7 +258,7 @@ export default class FlagScreen extends AppScreen {
                                 <TouchableWithoutFeedback
                                     onPress={() => this.setState({showingEndDatePicker: true})}>
                                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                        <Text style={{flex: 1}}>{this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''}</Text>
+                                        <Text style={[{flex: 1}, commonStyles.contentText]}>{this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''}</Text>
                                         <Icon type="Octicons" name="calendar" />
                                     </View>
                                 </TouchableWithoutFeedback>

@@ -11,7 +11,7 @@ import {
 import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import {Task} from '../../models/Task';
-import {commonStyles} from '../../support/CommonStyles';
+import {appColors, commonStyles} from '../../support/CommonStyles';
 import {Button, Form, Icon, Text} from 'native-base';
 import FormItemContainer from '../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -27,7 +27,7 @@ export default class TaskScreen extends AppScreen {
         const task: Task = navigation.getParam('task', null);
         let title = strings.Task.addTask;
         if (task)
-            title = task.text;
+            title = task ? strings.Task.taskDetails : strings.Task.addTask;
         return {
             title: title,
             headerBackTitle: ' ',
@@ -41,6 +41,7 @@ export default class TaskScreen extends AppScreen {
         title: null,
         patient: null,
         address: null,
+        phone: null,
         priority: null,
         requester: null,
         visit: null,
@@ -69,7 +70,10 @@ export default class TaskScreen extends AppScreen {
             this.setState({
                 title: task.text,
                 patient: task.patient?.fullName,
+                address: task.patient?.simpleAddress,
+                phone: task.patient?.phone,
                 priority: task.priority,
+                requester: task.requester,
             });
         }
     };
@@ -77,6 +81,10 @@ export default class TaskScreen extends AppScreen {
     //------------------------------------------------------------
     // Methods
     //------------------------------------------------------------
+
+    addNewVisit = () => {
+        this.navigateTo('Visit');
+    };
 
     submit = () => {
         this.pop();
@@ -105,9 +113,9 @@ export default class TaskScreen extends AppScreen {
                                 disabled>
                                 <View
                                     style={{flexDirection: 'row', padding: 11, alignItems: 'center'}}>
-                                    <Text style={{flex: 1,}}>{this.state.title}</Text>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.title}</Text>
                                     <TouchableOpacity>
-                                        <Icon type="Feather" name="info"/>
+                                        <Icon type="Feather" name="info" style={{color: appColors.textColor}}/>
                                     </TouchableOpacity>
                                 </View>
                             </FormItemContainer>
@@ -116,32 +124,40 @@ export default class TaskScreen extends AppScreen {
                                 disabled>
                                 <View
                                     style={{flexDirection: 'row', padding: 11, paddingVertical: 18, alignItems: 'center'}}>
-                                    <Text style={{flex: 1,}}>{this.state.patient}</Text>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.patient}</Text>
                                 </View>
                             </FormItemContainer>
                             {
-
+                                this.state.address &&
+                                    <View style={styles.infoContainer}>
+                                        <Icon type="SimpleLineIcons" name="map" style={{color: appColors.textColor}}/>
+                                        <Text style={[{flex: 1, marginLeft: 16,}, commonStyles.formItemText]}>{this.state.address}</Text>
+                                    </View>
                             }
 
                             {
-
+                                this.state.phone &&
+                                <View style={styles.infoContainer}>
+                                    <Icon type="SimpleLineIcons" name="phone" style={{color: appColors.textColor}}/>
+                                    <Text style={[{flex: 1, marginLeft: 16,}, commonStyles.formItemText]}>{this.state.phone}</Text>
+                                </View>
                             }
 
                             <FormItemContainer
-                                title={strings.Task.category}
+                                title={strings.Task.priority}
                                 disabled>
                                 <View
                                     style={{flexDirection: 'row', padding: 11, paddingVertical: 18, alignItems: 'center'}}>
-                                    <Text style={{flex: 1,}}>{this.state.category}</Text>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{strings.Priorities[this.state.priority]}</Text>
                                 </View>
                             </FormItemContainer>
 
                             <FormItemContainer
-                                title={strings.Task.patient}
+                                title={strings.Task.requester}
                                 disabled>
                                 <View
                                     style={{flexDirection: 'row', padding: 11, paddingVertical: 18, alignItems: 'center'}}>
-                                    <Text style={{flex: 1,}}>{strings.Priorities[this.state.priority]}</Text>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.requester}</Text>
                                 </View>
                             </FormItemContainer>
 
@@ -151,17 +167,18 @@ export default class TaskScreen extends AppScreen {
                                 <TouchableWithoutFeedback
                                     onPress={() => this.setState({showingVisitDatePicker: true})}>
                                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                        <Text style={{flex: 1}}>{this.state.visit ? moment(this.state.visit).format('ddd, MMM Do YYYY HH:mm') : ''}</Text>
-                                        <Icon type="Octicons" name="calendar" />
+                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.visit ? moment(this.state.visit).format('ddd, MMM Do YYYY HH:mm') : ''}</Text>
+                                        <Icon type="Octicons" name="calendar" style={{color: appColors.textColor}} />
                                     </View>
                                 </TouchableWithoutFeedback>
                             </FormItemContainer>
 
-                            <TouchableOpacity style={{paddingBottom: 20,}}>
+                            <TouchableOpacity style={{paddingVertical: 5,}}
+                                              onPress={this.addNewVisit}>
                                 <Text style={commonStyles.link}>{strings.Task.addNewVisit.toUpperCase()}</Text>
                             </TouchableOpacity>
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
                                 <Button success transparent
                                         onPress={this.submit}>
                                     <Text style={{fontWeight: 'bold'}}>{strings.Common.submitButton.toUpperCase()}</Text>
@@ -195,8 +212,10 @@ export default class TaskScreen extends AppScreen {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
+    infoContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+        marginHorizontal: 10,
     },
 });

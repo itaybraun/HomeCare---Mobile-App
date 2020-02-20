@@ -4,7 +4,7 @@ import {Icon} from "native-base";
 
 
 export const appColors = {
-    textColor: '#555555',
+    textColor: '#333333',
     linkColor: '#5C00EC',
     lineColor: '#CCCCCC',
     yellowColor: '#FEC260',
@@ -101,6 +101,11 @@ export const commonStyles = {
         paddingLeft: 11,
         paddingRight: 11,
         fontSize: 16,
+    },
+
+    formItemText: {
+        fontSize: 18,
+        color: appColors.textColor,
     },
 
     tabBar: {
