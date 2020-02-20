@@ -37,6 +37,7 @@ target 'Hestia' do
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 
+
   target 'HestiaTests' do
     inherit! :search_paths
     # Pods for testing

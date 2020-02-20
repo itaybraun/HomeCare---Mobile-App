@@ -84,6 +84,13 @@ export const en = {
 
     Visit: {
         addNewVisit: 'Add a New Visit',
+        patient: 'Patient',
+        date: 'Date',
+        start: 'Start',
+        end: 'End',
+        pickStartTime: 'Pick a start time',
+        pickEndTime: 'Pick an end time',
+        reason: 'Reason',
     },
 
     Chat: {

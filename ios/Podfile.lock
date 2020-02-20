@@ -229,6 +229,8 @@ PODS:
     - React
   - RNGestureHandler (1.5.5):
     - React
+  - RNLocalize (1.3.3):
+    - React
   - RNReanimated (1.7.0):
     - React
   - RNScreens (2.0.0-alpha.33):
@@ -271,6 +273,7 @@ DEPENDENCIES:
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -341,6 +344,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -382,11 +387,12 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 1e20e91177ab5e885aa645666c5490ad99e9a839
   RNDeviceInfo: 6812ed7e578d4344bf4e77102f014b5adf0b5c28
   RNGestureHandler: d2270608171c868581b840cfc692f2962c05cd17
+  RNLocalize: 7ea191e47e1755d2ad48614a2e9d07d290abc58e
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNScreens: 1c7fd499b915c77c21e8e6c327890c5af9b4cf7e
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: a5a2539326482d049378cca6cb40e743b829efe0
+PODFILE CHECKSUM: b5f9b6e4efeb21d946268138e4363df1f98bb25c
 
 COCOAPODS: 1.6.1

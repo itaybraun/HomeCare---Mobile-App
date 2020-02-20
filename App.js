@@ -16,6 +16,7 @@ import PatientScreen from './src/views/patients/patient/PatientScreen';
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import {appColors} from './src/support/CommonStyles';
 import TaskScreen from './src/views/tasks/TaskScreen';
+import VisitScreen from './src/views/tasks/VisitScreen';
 
 export default class App extends React.Component {
 
@@ -53,6 +54,7 @@ const PatientsStack = createStackNavigator({
 const TasksStack = createStackNavigator({
     Tasks: TasksScreen,
     Task: TaskScreen,
+    Visit: VisitScreen,
 });
 const ChatStack = createStackNavigator({
     Chat: ChatScreen,
