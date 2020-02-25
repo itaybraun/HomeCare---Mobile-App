@@ -197,11 +197,11 @@ export default class TaskScreen extends AppScreen {
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
                                 <Button success transparent
                                         onPress={this.submit}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.submitButton.toUpperCase()}</Text>
+                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.submitButton?.toUpperCase()}</Text>
                                 </Button>
                                 <Button danger transparent
                                         onPress={this.cancel}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.cancelButton.toUpperCase()}</Text>
+                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.cancelButton?.toUpperCase()}</Text>
                                 </Button>
                             </View>
 

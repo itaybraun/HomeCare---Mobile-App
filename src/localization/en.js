@@ -61,6 +61,14 @@ export const en = {
         safety: 'Safety',
     },
 
+    Work: {
+        title: 'My Work',
+        tasks: 'Tasks',
+        flags: 'Flags',
+        map: 'Map',
+        calendar: 'Calendar',
+    },
+
     Tasks: {
         title: 'Tasks',
         noTasks: 'No data to display',

@@ -59,7 +59,7 @@ export default class PatientScreen extends AppScreen {
     };
 
     renderTabBar = (props) => {
-        return renderTabBar(props, this.state.index);
+        return renderTabBar(props, this.state.index, (index) => this.setState({index: index}));
     };
 
     renderScene = ({ route }) => {

@@ -7,11 +7,11 @@ import {APIRequest} from '../../api/API';
 import {
     commonStyles,
     renderDisclosureIndicator,
-    renderLoading,
+    renderLoading, renderNavigationHeaderButton,
     renderSeparator,
     renderTabBar,
 } from '../../support/CommonStyles';
-import {Card, Icon} from 'native-base';
+import {Card, Icon, Button, Text as NativeText, Container} from 'native-base';
 import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
 import {Task} from '../../models/Task';
@@ -24,10 +24,16 @@ export default class WorkScreen extends AppScreen {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: strings.Tasks.title,
+            title: strings.Work.title,
             headerLeft: () =>
                 <MenuButton />
             ,
+            headerRight: () =>  (
+                renderNavigationHeaderButton(
+                    <Icon type="Feather" name="filter" style={{fontSize: 24}} />,
+                    navigation.getParam('showFilter')
+                )
+            )
         }
     };
 
@@ -37,9 +43,8 @@ export default class WorkScreen extends AppScreen {
 
         index: 0,
         routes: [
-            { key: 'open', title: strings.Tasks.open },
-            { key: 'visits', title: strings.Tasks.visits },
-            { key: 'closed', title: strings.Tasks.closed },
+            { key: 'tasks', title: strings.Work.tasks },
+            { key: 'flags', title: strings.Work.flags },
         ],
     };
 
@@ -51,6 +56,8 @@ export default class WorkScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
+        this.props.navigation.setParams({ showFilter: this.showFilter });
     }
 
     //------------------------------------------------------------
@@ -60,13 +67,23 @@ export default class WorkScreen extends AppScreen {
     getData = async (refresh = true) => {
         this.setState({loading: true});
         const tasks = await this.getTasks(refresh);
-        this.setState({...tasks, loading: false});
+        const flags = await this.getFlags(refresh);
+        this.setState({...tasks, ...flags, loading: false});
     };
 
     getTasks = async (refresh = true) => {
         let result: APIRequest = await this.api.getTasks();
         if (result.success) {
             return {tasks: result.data};
+        } else {
+            this.showError(result.data);
+        }
+    };
+
+    getFlags = async (refresh = true) => {
+        let result: APIRequest = await this.api.getFlags();
+        if (result.success) {
+            return {flags: result.data};
         } else {
             this.showError(result.data);
         }
@@ -80,12 +97,16 @@ export default class WorkScreen extends AppScreen {
         this.navigateTo('Task', {task: task});
     };
 
-    addTask = async () => {
+    addTask = () => {
         this.navigateTo('Task', {task: null});
     };
 
     handleTabIndexChange = index => {
         this.setState({ index });
+    };
+
+    showFilter = () => {
+
     };
 
     //------------------------------------------------------------
@@ -95,13 +116,20 @@ export default class WorkScreen extends AppScreen {
     // Tabs
 
     renderTabBar = (props) => {
-        return renderTabBar(props, this.state.index);
+        return renderTabBar(props, this.state.index, (index) => this.setState({index: index}));
     };
 
     renderScene = ({ route }) => {
-        return this.renderList();
-    };
+        switch (route.key) {
+            case 'tasks':
+                return this.renderTasks();
+            case 'flags':
+                return this.renderFlags();
+            default:
+                return null;
+        }
 
+    };
 
     //List
 
@@ -125,39 +153,29 @@ export default class WorkScreen extends AppScreen {
         )
     };
 
-    renderItem = ({item}) => {
+    renderTask = ({item}) => {
 
         let task: Task = item;
-
-        let patientInfo = [];
-        if (task.patient) {
-            patientInfo.push(task.patient.fullName);
-            patientInfo.push(task.patient.simpleAddress);
-            patientInfo = patientInfo.filter(i => i)
-        }
 
         return (
             <TouchableOpacity onPress={() => this.selectTask(item)}>
                 <Card style={[commonStyles.cardStyle, item.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
+                    <Text style={[commonStyles.titleText]}>{task.patient?.fullName}</Text>
                     <View style={{flex: 1,}}>
                         <Text
-                            style={commonStyles.yellowTitle}
-                            numberOfLines={3}>
+                            style={[commonStyles.yellowTitle, {paddingVertical: 10}]}
+                            numberOfLines={2}>
                             {item.text}
                         </Text>
-                        <Text style={[commonStyles.contentText, {paddingTop: 8,}]}>{patientInfo.join(', ')}</Text>
-                        <Text style={[commonStyles.contentText, {paddingTop: 8, color: '#FF0000'}]}>{strings.Tasks.noSchedule}</Text>
-                    </View>
 
-                    <Text style={[commonStyles.smallInfoText, {position: 'absolute', top: 4, right: 12}]}>
-                        {item.openDate ? moment(item.openDate).format("MMM-DD-YYYY") : ''}
-                    </Text>
+                        <Text style={[commonStyles.contentText, {color: '#FF0000'}]}>{strings.Tasks.noSchedule}</Text>
+                    </View>
                 </Card>
             </TouchableOpacity>
         )
     };
 
-    renderList = () => {
+    renderTasks = () => {
 
         const tasks = this.state.tasks;
 
@@ -166,7 +184,7 @@ export default class WorkScreen extends AppScreen {
                 <FlatList style={styles.list}
                           contentContainerStyle={{ flexGrow: 1 }}
                           data={tasks}
-                          renderItem={this.renderItem}
+                          renderItem={this.renderTask}
                           ItemSeparatorComponent={renderSeparator}
                           ListEmptyComponent={this.renderListEmpty}
                           ListHeaderComponent={this.renderListHeader}
@@ -175,13 +193,36 @@ export default class WorkScreen extends AppScreen {
                           onRefresh={this.getData}
                           refreshing={false}
                 />
-                <TouchableOpacity
-                    style={commonStyles.blackButtonContainer}
-                    onPress={this.addTask}
-                >
-                    <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
-                </TouchableOpacity>
+                <View style={{ flexDirection: 'row', padding: 10, alignItems: 'center'}}>
+                    <View style={{flexDirection: 'row', flex: 1, justifyContent: 'space-evenly'}}>
+                        <Button block
+                            style={{backgroundColor: '#CCF4C9', width: 120,}}
+                            onPress={this.navigateTo('Map')}>
+                            <NativeText style={{color: '#32C02B', fontWeight: 'bold'}}>{strings.Work.map?.toUpperCase()}</NativeText>
+                        </Button>
+                        <Button block
+                                style={{backgroundColor: '#EBC7F2', width: 120,}}
+                                onPress={this.navigateTo('Calendar')}>
+                            <NativeText style={{color: '#AB1FBD', fontWeight: 'bold'}}>{strings.Work.calendar?.toUpperCase()}</NativeText>
+                        </Button>
+                    </View>
+                    <TouchableOpacity
+                        style={commonStyles.blackButtonContainer}
+                        onPress={this.addTask}
+                    >
+                        <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
+                    </TouchableOpacity>
+                </View>
+
                 {renderLoading(this.state.loading)}
+            </View>
+        );
+    };
+
+    renderFlags = () => {
+        return (
+            <View style={commonStyles.screenContainer}>
+                <Text>Flags</Text>
             </View>
         );
     };

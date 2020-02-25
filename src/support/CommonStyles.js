@@ -79,9 +79,6 @@ export const commonStyles = {
     },
 
     blackButtonContainer: {
-        position: 'absolute',
-        bottom: 12,
-        right: 12,
         height: 50,
         width: 50,
         borderRadius: 25,
@@ -129,6 +126,10 @@ export const commonStyles = {
     tabItemTextSelected: {
         color: appColors.linkColor,
     },
+
+    headerButtonContainer: {
+        marginRight: 15,
+    },
 };
 
 export const renderSeparator = () => {
@@ -151,7 +152,7 @@ export const renderDisclosureIndicator = () => {
     );
 };
 
-export const renderTabBar = (props, selectedIndex) => {
+export const renderTabBar = (props, selectedIndex, onIndexChange) => {
     return (
         <View style={commonStyles.tabBar}>
             {
@@ -161,7 +162,7 @@ export const renderTabBar = (props, selectedIndex) => {
                             activeOpacity={1}
                             key={route.key}
                             style={[commonStyles.tabItem, selectedIndex === i ? commonStyles.tabItemSelected : {}]}
-                            onPress={() => this.setState({ index: i })}>
+                            onPress={() => onIndexChange && onIndexChange(i)}>
                             <Text style={[commonStyles.tabItemText, selectedIndex === i ? commonStyles.tabItemTextSelected : {}]}>{route.title}</Text>
                         </TouchableOpacity>
                     );
@@ -170,3 +171,12 @@ export const renderTabBar = (props, selectedIndex) => {
         </View>
     );
 };
+
+export const renderNavigationHeaderButton = (component, onPress) => {
+
+    return (
+        <TouchableOpacity style={commonStyles.headerButtonContainer} onPress={onPress}>
+            {component}
+        </TouchableOpacity>
+    );
+}
