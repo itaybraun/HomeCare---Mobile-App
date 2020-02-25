@@ -13,8 +13,8 @@ export const en = {
         login: 'Login',
     },
     Tabs: {
+        work: 'My Work',
         patients: 'Patients',
-        tasks: 'Tasks',
         chat: 'Chat',
         settings: 'Settings',
     },

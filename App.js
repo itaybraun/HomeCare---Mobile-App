@@ -6,8 +6,8 @@ import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import RESTAPI from './src/api/REST/RESTAPI';
 import PatientsScreen from './src/views/patients/PatientsScreen';
-import TasksScreen from './src/views/tasks/TasksScreen';
-import ChatScreen from './src/views/chat/ChatScreen';
+import WorkScreen from './src/views/work/WorkScreen';
+import MessagesScreen from './src/views/messages/MessagesScreen';
 import SettingsScreen from './src/views/settings/SettingsScreen';
 import {strings} from './src/localization/strings';
 import {Utils} from './src/support/Utils';
@@ -15,8 +15,8 @@ import FlagsScreen from './src/views/patients/patient/flags/FlagsScreen';
 import PatientScreen from './src/views/patients/patient/PatientScreen';
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import {appColors} from './src/support/CommonStyles';
-import TaskScreen from './src/views/tasks/TaskScreen';
-import VisitScreen from './src/views/tasks/VisitScreen';
+import TaskScreen from './src/views/work/TaskScreen';
+import VisitScreen from './src/views/work/VisitScreen';
 
 export default class App extends React.Component {
 
@@ -51,27 +51,32 @@ const PatientsStack = createStackNavigator({
     Flags: FlagsScreen,
     Flag: FlagScreen,
 });
-const TasksStack = createStackNavigator({
-    Tasks: TasksScreen,
+const WorkStack = createStackNavigator({
+    Work: WorkScreen,
     Task: TaskScreen,
     Visit: VisitScreen,
 });
-const ChatStack = createStackNavigator({
-    Chat: ChatScreen,
+const MessagesStack = createStackNavigator({
+    Messages: MessagesScreen,
 });
 const SettingsStack = createStackNavigator({
     Settings: SettingsScreen,
 });
 
 const Tabs = createBottomTabNavigator({
+    Work: {
+        screen: WorkStack,
+        navigationOptions: {
+            tabBarLabel: strings.Tabs.work,
+        },
+    },
     Patients: {
         screen: PatientsStack,
         navigationOptions: {
             tabBarLabel: strings.Tabs.patients,
         },
     },
-    Tasks: TasksStack,
-    Chat: ChatStack,
+    Messages: MessagesStack,
     Settings: SettingsStack,
 }, {
     defaultNavigationOptions: ({navigation}) => ({
@@ -79,13 +84,13 @@ const Tabs = createBottomTabNavigator({
             const {routeName} = navigation.state;
             let tabStyle = {tintColor: tintColor};
             if (routeName === 'Patients') {
-                return <Image source={require('./src/assets/icons/tabs/patients.png')} style={tabStyle}/>
-            } else if (routeName === 'Tasks') {
-                return <Image source={require('./src/assets/icons/tabs/tasks.png')} style={tabStyle}/>
-            } else if (routeName === 'Chat') {
-                return <Image source={require('./src/assets/icons/tabs/chat.png')} style={tabStyle}/>
+                return <Image source={require('./src/assets/icons/tabs/patients.png')} style={tabStyle}/>;
+            } else if (routeName === 'Work') {
+                return <Image source={require('./src/assets/icons/tabs/work.png')} style={tabStyle}/>;
+            } else if (routeName === 'Messages') {
+                return <Image source={require('./src/assets/icons/tabs/chat.png')} style={tabStyle}/>;
             } else if (routeName === 'Settings') {
-                return <Image source={require('./src/assets/icons/tabs/settings.png')} style={tabStyle}/>
+                return <Image source={require('./src/assets/icons/tabs/settings.png')} style={tabStyle}/>;
             }
         },
     }),

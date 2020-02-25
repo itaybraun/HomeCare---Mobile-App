@@ -4,7 +4,7 @@ import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import MenuButton from '../menu/MenuButton';
 
-export default class ChatScreen extends AppScreen {
+export default class MessagesScreen extends AppScreen {
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -18,7 +18,7 @@ export default class ChatScreen extends AppScreen {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Chat</Text>
+                <Text>Messages</Text>
             </View>
         );
     }

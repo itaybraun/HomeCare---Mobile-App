@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export class Logger {
     static init = () => {
@@ -11,7 +11,7 @@ export class Logger {
         message += '\n';
         storeMessages([message]);
         console.log(message);
-    }
+    };
 
     info = (message) => {
         if (!message) return;

@@ -16,7 +16,7 @@ import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
 import {Task} from '../../models/Task';
 
-export default class TasksScreen extends AppScreen {
+export default class WorkScreen extends AppScreen {
 
     //------------------------------------------------------------
     // Properties
