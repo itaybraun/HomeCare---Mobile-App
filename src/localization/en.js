@@ -6,6 +6,7 @@ export const en = {
         cancelButton: 'Cancel',
         noButton: 'No',
         yesButton: 'Yes',
+        okButton: 'OK',
     },
     Login: {
         username: 'Username',
@@ -84,15 +85,17 @@ export const en = {
         task: 'Task',
         patient: 'Patient',
         category: 'Category',
-        priority: 'Priority',
         requester: 'Opened By',
+        subject: 'Subject',
+        when: 'When',
         visit: 'Visit',
-        addNewVisit: 'Add New Visit',
+        addToExistingVisit: 'Add to existing visit',
     },
 
     Visit: {
-        addNewVisit: 'Add a New Visit',
+        selectAVisit: 'Select a Visit',
         patient: 'Patient',
+        newVisit: 'Schedule a New Visit',
         date: 'Date',
         start: 'Start',
         end: 'End',

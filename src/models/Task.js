@@ -1,14 +1,26 @@
 import {Patient} from './Patient';
+import {Practitioner} from './Practitioner';
+import {BaseModel} from './BaseModel';
+import {Visit} from './Visit';
 
-export class Task {
+export class Task extends BaseModel {
     id: String;
-    patientId: String;
-    patient: Patient;
     openDate: Date;
     text: String;
     schedule: Date;
     priority: Priorities;
-    requester: String;
+
+    patientId: String;
+    patient: Patient;
+
+    requesterId: String;
+    requester: Practitioner;
+
+    performerId: String;
+    performer: Practitioner;
+
+    visitId: String;
+    visit: Visit;
 
     get isPriorityImportant(): Boolean {
         return [

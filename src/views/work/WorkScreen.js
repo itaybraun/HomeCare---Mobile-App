@@ -98,7 +98,7 @@ export default class WorkScreen extends AppScreen {
     };
 
     addTask = () => {
-        this.navigateTo('Task', {task: null});
+
     };
 
     handleTabIndexChange = index => {
@@ -181,18 +181,21 @@ export default class WorkScreen extends AppScreen {
 
         return (
             <View style={commonStyles.screenContainer}>
-                <FlatList style={styles.list}
-                          contentContainerStyle={{ flexGrow: 1 }}
-                          data={tasks}
-                          renderItem={this.renderTask}
-                          ItemSeparatorComponent={renderSeparator}
-                          ListEmptyComponent={this.renderListEmpty}
-                          ListHeaderComponent={this.renderListHeader}
-                          ListFooterComponent={this.renderListFooter}
-                          keyExtractor={item => item.id}
-                          onRefresh={this.getData}
-                          refreshing={false}
-                />
+                <View style={{flex: 1,}}>
+                    <FlatList style={styles.list}
+                              contentContainerStyle={{ flexGrow: 1 }}
+                              data={tasks}
+                              renderItem={this.renderTask}
+                              ItemSeparatorComponent={renderSeparator}
+                              ListEmptyComponent={this.renderListEmpty}
+                              ListHeaderComponent={this.renderListHeader}
+                              ListFooterComponent={this.renderListFooter}
+                              keyExtractor={item => item.id}
+                              onRefresh={this.getData}
+                              refreshing={false}
+                    />
+                    {renderLoading(this.state.loading)}
+                </View>
                 <View style={{ flexDirection: 'row', padding: 10, alignItems: 'center'}}>
                     <View style={{flexDirection: 'row', flex: 1, justifyContent: 'space-evenly'}}>
                         <Button block
@@ -214,7 +217,7 @@ export default class WorkScreen extends AppScreen {
                     </TouchableOpacity>
                 </View>
 
-                {renderLoading(this.state.loading)}
+
             </View>
         );
     };

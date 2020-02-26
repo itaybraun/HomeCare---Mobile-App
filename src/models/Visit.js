@@ -1,6 +1,7 @@
 import {Patient} from './Patient';
+import {BaseModel} from './BaseModel';
 
-export class Visit {
+export class Visit extends BaseModel {
     id: Number;
     start: Date;
     end: Date;

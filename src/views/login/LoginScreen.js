@@ -23,6 +23,7 @@ export default class LoginScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+        this.login();
     }
 
     getData = async (refresh = true) => {
@@ -48,6 +49,9 @@ export default class LoginScreen extends AppScreen {
     };
 
     render() {
+        return (
+            <Loading loading={this.state.loading} />
+        );
         return (
             <SafeAreaView style={{flex: 1}}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

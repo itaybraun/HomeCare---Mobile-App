@@ -6,17 +6,19 @@ import {
     TouchableOpacity,
     TextInput,
     TouchableWithoutFeedback,
-    Keyboard, ScrollView,
+    Keyboard, ScrollView, Linking
 } from 'react-native';
 import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import {Task} from '../../models/Task';
-import {appColors, commonStyles} from '../../support/CommonStyles';
-import {Button, Form, Icon, Text} from 'native-base';
+import {appColors, commonStyles, renderLoading} from '../../support/CommonStyles';
+import {Button, Form, Icon, Card, Text} from 'native-base';
 import FormItemContainer from '../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import * as RNLocalize from "react-native-localize";
+import {APIRequest} from '../../api/API';
+import {Visit} from '../../models/Visit';
 
 export default class TaskScreen extends AppScreen {
 
@@ -37,18 +39,9 @@ export default class TaskScreen extends AppScreen {
 
     state = {
         loading: false,
-        showingVisitDatePicker: false,
         is24Hour: false,
-
-        title: null,
-        patient: null,
-        address: null,
-        phone: null,
-        priority: null,
-        requester: null,
+        task: null,
         visit: null,
-
-        errors: {}
     };
 
     //------------------------------------------------------------
@@ -66,36 +59,86 @@ export default class TaskScreen extends AppScreen {
     //------------------------------------------------------------
 
     getData = async (refresh = true) => {
-        const task: Task = this.props.navigation.getParam('task', null);
+        this.setState({loading: true});
         const is24Hour = RNLocalize.uses24HourClock();
+        const task = await this.getTask();
+        this.setState({
+            ...task,
+            is24Hour: is24Hour,
+            loading: false,
+        })
+    };
 
-        if (task) {
-            this.setState({
-                title: task.text,
-                patient: task.patient?.fullName,
-                address: task.patient?.simpleAddress,
-                phone: task.patient?.phone,
-                priority: task.priority,
-                requester: task.requester,
-                is24Hour: is24Hour,
-            });
-        } else {
-            this.setState({
-                is24Hour: is24Hour,
-            });
+    getTask = async () => {
+        let task: Task = this.props.navigation.getParam('task', null);
+        let visit: Visit = null;
+        let result: APIRequest = await this.api.getTask(task.id);
+
+        if (result.success) {
+            task = result.data;
+            visit = task.visit;
         }
+
+        return {
+            task: task,
+            visit: visit,
+        };
     };
 
     //------------------------------------------------------------
     // Methods
     //------------------------------------------------------------
 
-    addNewVisit = () => {
-        this.navigateTo('Visit', {task: this.props.navigation.getParam('task', null)});
+    selectVisit = () => {
+        this.navigateTo('Visit', {
+            task: this.props.navigation.getParam('task', null),
+            submitVisit: this.submitVisit,
+            selectedVisit: this.state.visit,
+        });
     };
 
-    submit = () => {
-        this.pop();
+    addNewVisit = () => {
+        this.navigateTo('Visit', {
+            task: this.props.navigation.getParam('task', null),
+            submitVisit: this.submitVisit,
+            newVisit: true,
+            selectedVisit: this.state.visit,
+        });
+    };
+
+    submitVisit = (visit) => {
+        this.setState({
+            visit: visit,
+        })
+    }
+
+    submit = async () => {
+        let task: Task = this.state.task;
+        let visit: Visit = this.state.visit;
+        if (!visit) {
+            this.pop();
+            return;
+        }
+        if (!visit.id) {
+            let result: APIRequest = await this.api.addVisit(visit);
+            if (result.success) {
+                visit = result.data;
+            } else {
+                this.showError(result.data);
+                return;
+            }
+
+            //TODO: remove this
+            alert('New visit is not working yet');
+            return;
+        }
+        task.visit = visit;
+        let result: APIRequest = await this.api.updateTask(task);
+        if (result.success) {
+            this.pop();
+        } else {
+            this.showError(result.data);
+        }
     };
 
     cancel = () => {
@@ -107,6 +150,11 @@ export default class TaskScreen extends AppScreen {
     //------------------------------------------------------------
 
     render() {
+
+        if (this.state.loading) {
+            return renderLoading(this.state.loading)
+        }
+
         return (
             <View style={commonStyles.screenContainer}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -116,71 +164,76 @@ export default class TaskScreen extends AppScreen {
                         bounces={false}
                         automaticallyAdjustContentInsets={false}>
                         <Form>
-                            <FormItemContainer
-                                title={strings.Task.task}
-                                disabled>
-                                <View
-                                    style={{flexDirection: 'row', padding: 11, alignItems: 'center'}}>
-                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.title}</Text>
-                                    <TouchableOpacity>
-                                        <Icon type="Feather" name="info" style={{color: appColors.textColor}}/>
+                            <Text style={commonStyles.yellowText}>{strings.Task.task}</Text>
+                            <Card style={{padding: 15, marginBottom: 15,}}>
+                                <Text style={commonStyles.titleText}>{this.state.task?.text}</Text>
+                                <Text style={[commonStyles.contentText, {marginTop: 10,}]}>{strings.Priorities[this.state.task?.priority]}</Text>
+                                <Text style={[commonStyles.infoText, {marginTop: 15}]}>{strings.Task.requester}:</Text>
+                                <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+                                    {
+                                        this.state.task?.requester?.phone &&
+                                        <View>
+                                            <TouchableOpacity onPress={() => Linking.openURL(`tel:${this.state.task.requester.phone}`) }>
+                                                <Icon type="Feather" name="phone" style={{fontSize: 24, color: appColors.textColor}}/>
+                                            </TouchableOpacity>
+                                        </View>
+                                    }
+                                    {
+                                        this.state.task?.patient?.address &&
+                                        <View style={{marginLeft: 10}}>
+                                            <TouchableOpacity>
+                                                <Icon type="Feather" name="mail" style={{fontSize: 24,color: appColors.textColor}}/>
+                                            </TouchableOpacity>
+                                        </View>
+                                    }
+                                    <Text style={[commonStyles.contentText, {marginLeft: 10,}]}>{this.state.task?.requester?.fullName}</Text>
+                                </View>
+                            </Card>
+
+
+                            <Text style={commonStyles.yellowText}>{strings.Task.subject}</Text>
+                            <Card style={{padding: 15, marginBottom: 15,}}>
+                                <Text style={[commonStyles.titleText]}>{this.state.task?.patient?.fullName}</Text>
+                                <Text style={[commonStyles.contentText, {marginTop: 5,}]}>
+                                    {this.state.task?.patient?.gender?.charAt(0).toUpperCase()}, {this.state.task?.patient?.age} {strings.Patients.yo}
+                                </Text>
+                                {
+                                    this.state.task?.patient?.phone &&
+                                    <TouchableOpacity
+                                        style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}
+                                        onPress={() => Linking.openURL(`tel:${this.state.task.patient.phone}`) }
+                                    >
+                                        <Icon type="Feather" name="phone" style={{fontSize: 24, color: appColors.textColor}}/>
+                                        <Text style={[{flex: 1, marginLeft: 10,}, commonStyles.contentText]}>{this.state.task?.patient?.phone}</Text>
                                     </TouchableOpacity>
-                                </View>
-                            </FormItemContainer>
-                            <FormItemContainer
-                                title={strings.Task.patient}
-                                disabled>
-                                <View
-                                    style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
-                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.patient}</Text>
-                                </View>
-                            </FormItemContainer>
-                            {
-                                this.state.address &&
-                                    <View style={styles.infoContainer}>
-                                        <Icon type="SimpleLineIcons" name="map" style={{color: appColors.textColor}}/>
-                                        <Text style={[{flex: 1, marginLeft: 16,}, commonStyles.formItemText]}>{this.state.address}</Text>
+                                }
+                                {
+                                    this.state.task?.patient?.address &&
+                                    <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+                                        <Icon type="Feather" name="map" style={{fontSize: 24, color: appColors.textColor}}/>
+                                        <Text style={[{flex: 1, marginLeft: 10,}, commonStyles.contentText]}>{this.state.task?.patient?.simpleAddress}</Text>
                                     </View>
-                            }
+                                }
+                            </Card>
 
-                            {
-                                this.state.phone &&
-                                <View style={styles.infoContainer}>
-                                    <Icon type="SimpleLineIcons" name="phone" style={{color: appColors.textColor}}/>
-                                    <Text style={[{flex: 1, marginLeft: 16,}, commonStyles.formItemText]}>{this.state.phone}</Text>
-                                </View>
-                            }
 
+                            <Text style={commonStyles.yellowText}>{strings.Task.when}</Text>
                             <FormItemContainer
-                                title={strings.Task.priority}
-                                disabled>
-                                <View
-                                    style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
-                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{strings.Priorities[this.state.priority]}</Text>
-                                </View>
-                            </FormItemContainer>
-
-                            <FormItemContainer
-                                title={strings.Task.requester}
-                                disabled>
-                                <View
-                                    style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
-                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.requester}</Text>
-                                </View>
-                            </FormItemContainer>
-
-                            <FormItemContainer
-                                style={{padding: 11,}}
+                                style={{padding: 11, marginTop: 12}}
                                 title={strings.Task.visit}>
                                 <TouchableOpacity
-                                    onPress={() => this.setState({showingVisitDatePicker: true})}>
+                                    onPress={this.addNewVisit}>
                                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                         <Text style={[{flex: 1}, commonStyles.formItemText]}>
                                             {
-                                                this.state.visit ?
-                                                    moment(this.state.visit).format(
-                                                        this.state.is24Hour ? 'ddd, MMM Do YYYY HH:mm' : 'ddd, MMM Do YYYY hh:mm A'
+                                                this.state.visit && this.state.visit.start && this.state.visit.end ?
+                                                    moment(this.state.visit.start).format(
+                                                        this.state.is24Hour ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
+                                                    ) +
+                                                    moment(this.state.visit.end).format(
+                                                        this.state.is24Hour ? ' - HH:mm' : ' - hh:mm A'
                                                     )
+
                                                     : ''
                                             }
                                         </Text>
@@ -189,39 +242,27 @@ export default class TaskScreen extends AppScreen {
                                 </TouchableOpacity>
                             </FormItemContainer>
 
-                            <TouchableOpacity style={{paddingVertical: 5,}}
-                                              onPress={this.addNewVisit}>
-                                <Text style={commonStyles.link}>{strings.Task.addNewVisit.toUpperCase()}</Text>
+                            <TouchableOpacity style={{}}
+                                              onPress={this.selectVisit}>
+                                <Text style={commonStyles.link}>{strings.Task.addToExistingVisit.toUpperCase()}</Text>
                             </TouchableOpacity>
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
-                                <Button success transparent
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10, marginTop: 30}}>
+                                <Button block
+                                        style={{backgroundColor: '#CCF4C9', width: 120,}}
                                         onPress={this.submit}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.submitButton?.toUpperCase()}</Text>
+                                    <Text style={{color: '#32C02B', fontWeight: 'bold'}}>{strings.Common.submitButton?.toUpperCase()}</Text>
                                 </Button>
-                                <Button danger transparent
+                                <Button block
+                                        style={{backgroundColor: '#F5BEC0', width: 120,}}
                                         onPress={this.cancel}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.cancelButton?.toUpperCase()}</Text>
+                                    <Text style={{color: '#EC1A31', fontWeight: 'bold'}}>{strings.Common.cancelButton?.toUpperCase()}</Text>
                                 </Button>
                             </View>
 
                         </Form>
                     </ScrollView>
                 </TouchableWithoutFeedback>
-
-                <DateTimePickerModal
-                    isVisible={this.state.showingVisitDatePicker}
-                    date={this.state.visit ?? new Date()}
-                    mode="datetime"
-                    onConfirm={(date) => {
-                        this.setState({
-                            visit: date,
-                            showingVisitDatePicker: false,
-                        })
-                    }}
-                    onCancel={() => this.setState({showingVisitDatePicker: false,})}
-                />
-
             </View>
         );
     }
@@ -229,9 +270,6 @@ export default class TaskScreen extends AppScreen {
 
 const styles = StyleSheet.create({
     infoContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-        marginHorizontal: 10,
+
     },
 });

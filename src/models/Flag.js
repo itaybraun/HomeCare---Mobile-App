@@ -1,5 +1,6 @@
+import {BaseModel} from './BaseModel';
 
-export class Flag {
+export class Flag extends BaseModel{
     id: Number;
     startDate: Date;
     endDate: Date;

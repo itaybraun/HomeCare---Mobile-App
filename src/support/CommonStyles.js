@@ -18,6 +18,11 @@ export const commonStyles = {
         color: '#888888',
     },
 
+    infoText: {
+        fontSize: 16,
+        color: '#888888',
+    },
+
     titleText: {
         fontSize: 18,
         color: appColors.textColor,
@@ -31,6 +36,11 @@ export const commonStyles = {
 
     yellowTitle: {
         fontSize: 24,
+        color: appColors.yellowColor,
+    },
+
+    yellowText: {
+        fontSize: 18,
         color: appColors.yellowColor,
     },
 
