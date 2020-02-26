@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>13</string>
+	<string>14</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true />
 	<key>NSAppTransportSecurity</key>
@@ -73,18 +73,18 @@
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
-  <key>CFBundleURLTypes</key>
-  <array>
-      <dict>
-          <key>CFBundleTypeRole</key>
-          <string>None</string>
-          <key>CFBundleURLName</key>
-          <string>AzureAuth</string>
-          <key>CFBundleURLSchemes</key>
-          <array>
-              <string>msal8a597862-04f8-4607-a34c-1d90024773b4</string>
-          </array>
-      </dict>
-  </array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>CFBundleURLName</key>
+			<string>AzureAuth</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>msal8a597862-04f8-4607-a34c-1d90024773b4</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
