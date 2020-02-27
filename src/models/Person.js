@@ -14,6 +14,7 @@ export class Person extends BaseModel {
     gender: String;
     address: Address;
     phone: String;
+    email: String;
 
     get age(): Number {
         return moment().diff(moment(this.dateOfBirth), 'years', false);

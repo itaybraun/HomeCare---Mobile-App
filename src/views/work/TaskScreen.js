@@ -136,6 +136,8 @@ export default class TaskScreen extends AppScreen {
         task.visit = visit;
         let result: APIRequest = await this.api.updateTask(task);
         if (result.success) {
+            const refresh = this.props.navigation.getParam('refresh', null)
+            refresh && refresh();
             this.pop();
         } else {
             this.showError(result.data);
@@ -157,6 +159,7 @@ export default class TaskScreen extends AppScreen {
         }
 
         return (
+
             <View style={commonStyles.screenContainer}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <ScrollView
@@ -173,19 +176,19 @@ export default class TaskScreen extends AppScreen {
                                 <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
                                     {
                                         this.state.task?.requester?.phone &&
-                                        <View>
-                                            <TouchableOpacity onPress={() => Linking.openURL(`tel:${this.state.task.requester.phone}`) }>
-                                                <Icon type="Feather" name="phone" style={{fontSize: 24, color: appColors.textColor}}/>
-                                            </TouchableOpacity>
-                                        </View>
+                                        <TouchableOpacity
+                                            onPress={() => Linking.openURL(`tel:${this.state.task.requester.phone}`)}>
+                                            <Icon type="Feather" name="phone"
+                                                  style={{fontSize: 24, color: appColors.textColor}}/>
+                                        </TouchableOpacity>
                                     }
                                     {
-                                        this.state.task?.patient?.address &&
-                                        <View style={{marginLeft: 10}}>
-                                            <TouchableOpacity>
-                                                <Icon type="Feather" name="mail" style={{fontSize: 24,color: appColors.textColor}}/>
-                                            </TouchableOpacity>
-                                        </View>
+                                        this.state.task?.requester?.email &&
+                                        <TouchableOpacity style={{marginLeft: 10}}
+                                                          onPress={() => Linking.openURL(`mailto:${this.state.task.requester.email}`)}>
+                                            <Icon type="Feather" name="mail"
+                                                  style={{fontSize: 24, color: appColors.textColor}}/>
+                                        </TouchableOpacity>
                                     }
                                     <Text style={[commonStyles.contentText, {marginLeft: 10,}]}>{this.state.task?.requester?.fullName}</Text>
                                 </View>

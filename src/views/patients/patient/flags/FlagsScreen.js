@@ -50,12 +50,6 @@ export default class FlagsScreen extends AppScreen {
         super.componentDidMount();
     }
 
-    willFocus() {
-        super.didFocus();
-
-        this.getData();
-    }
-
     getData = async (refresh = true) => {
         this.setState({loading: true});
         const flags = await this.getFlags(refresh);

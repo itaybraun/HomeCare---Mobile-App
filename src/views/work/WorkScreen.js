@@ -97,7 +97,10 @@ export default class WorkScreen extends AppScreen {
     //------------------------------------------------------------
 
     selectTask = (task) => {
-        this.navigateTo('Task', {task: task});
+        this.navigateTo('Task', {
+            task: task,
+            refresh: this.getData,
+        });
     };
 
     addTask = () => {
