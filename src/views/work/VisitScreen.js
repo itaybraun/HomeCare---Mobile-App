@@ -108,7 +108,7 @@ export default class VisitScreen extends AppScreen {
                 start = selectedVisit.start;
                 end = selectedVisit.end;
             }
-        } else {
+        } else if (newVisit) {
             selectedVisitIndex = visits.length;
         }
         return {
@@ -204,7 +204,7 @@ export default class VisitScreen extends AppScreen {
 
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {this.renderRadioButton(this.state.selectedVisitIndex === index)}
-                    <Text style={{marginLeft: 10}}>{item.id}{moment(item.start).format('ddd, MMM Do YYYY')}</Text>
+                    <Text style={{marginLeft: 10}}>{moment(item.start).format('ddd, MMM Do YYYY')}</Text>
                 </View>
             </TouchableOpacity>
         )

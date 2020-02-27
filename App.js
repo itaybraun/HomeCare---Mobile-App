@@ -4,7 +4,6 @@ import LoginScreen from './src/views/login/LoginScreen';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-import RESTAPI from './src/api/REST/RESTAPI';
 import PatientsScreen from './src/views/patients/PatientsScreen';
 import WorkScreen from './src/views/work/WorkScreen';
 import MessagesScreen from './src/views/messages/MessagesScreen';
@@ -17,6 +16,15 @@ import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import {appColors} from './src/support/CommonStyles';
 import TaskScreen from './src/views/work/TaskScreen';
 import VisitScreen from './src/views/work/VisitScreen';
+import RESTAPI from './src/api/REST/RESTAPI';
+
+// TODO: find a way to move this to RESTAPI
+import './src/api/REST/RESTAPI+Tasks';
+import './src/api/REST/RESTAPI+Login';
+import './src/api/REST/RESTAPI+Flags';
+import './src/api/REST/RESTAPI+Patients';
+import './src/api/REST/RESTAPI+Practitioners';
+import './src/api/REST/RESTAPI+Visits';
 
 export default class App extends React.Component {
 

@@ -15,6 +15,7 @@ import {Card, Icon, Button, Text as NativeText, Container} from 'native-base';
 import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
 import {Task} from '../../models/Task';
+import * as RNLocalize from "react-native-localize";
 
 export default class WorkScreen extends AppScreen {
 
@@ -46,6 +47,7 @@ export default class WorkScreen extends AppScreen {
             { key: 'tasks', title: strings.Work.tasks },
             { key: 'flags', title: strings.Work.flags },
         ],
+        is24Hour: false,
     };
 
     //------------------------------------------------------------
@@ -68,7 +70,8 @@ export default class WorkScreen extends AppScreen {
         this.setState({loading: true});
         const tasks = await this.getTasks(refresh);
         const flags = await this.getFlags(refresh);
-        this.setState({...tasks, ...flags, loading: false});
+        const is24Hour = RNLocalize.uses24HourClock();
+        this.setState({...tasks, ...flags, is24Hour: is24Hour, loading: false});
     };
 
     getTasks = async (refresh = true) => {
@@ -167,8 +170,19 @@ export default class WorkScreen extends AppScreen {
                             numberOfLines={2}>
                             {item.text}
                         </Text>
+                        {
+                            item.visit ?
+                                <Text style={[commonStyles.contentText]}>
+                                    {
+                                        moment(item.visit.start).format(
+                                            this.state.is24Hour ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
+                                        )
+                                    }
+                                </Text>
+                                :
+                                <Text style={[commonStyles.contentText, {color: '#FF0000'}]}>{strings.Tasks.noSchedule}</Text>
+                        }
 
-                        <Text style={[commonStyles.contentText, {color: '#FF0000'}]}>{strings.Tasks.noSchedule}</Text>
                     </View>
                 </Card>
             </TouchableOpacity>
