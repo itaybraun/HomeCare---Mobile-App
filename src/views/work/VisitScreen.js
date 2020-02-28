@@ -204,7 +204,16 @@ export default class VisitScreen extends AppScreen {
 
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {this.renderRadioButton(this.state.selectedVisitIndex === index)}
-                    <Text style={{marginLeft: 10}}>{moment(item.start).format('ddd, MMM Do YYYY')}</Text>
+                    <Text style={{marginLeft: 10}}>
+                        {
+                            moment(item.start).format(
+                            this.state.is24Hour ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
+                            ) +
+                            moment(item.end).format(
+                            this.state.is24Hour ? ' - HH:mm' : ' - hh:mm A'
+                            )
+                        }
+                    </Text>
                 </View>
             </TouchableOpacity>
         )
