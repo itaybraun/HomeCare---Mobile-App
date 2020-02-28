@@ -8,11 +8,11 @@ import moment from 'moment';
 // Visits
 //------------------------------------------------------------
 
-RESTAPI.prototype.getVisits = async function getVisits(patient: Patient): APIRequest {
+RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
     try {
         const response = await this.server.get('Encounter', {
             params: {
-                subject: patient.id
+                subject: patientId
             },
         });
         if (response.status === 200) {

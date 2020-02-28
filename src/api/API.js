@@ -71,7 +71,7 @@ API.prototype.updateTask = async function updateTask(task: Task): APIRequest {
 
 
 
-API.prototype.getVisits = async function getVisits(patient: Patient): APIRequest {
+API.prototype.getVisits = async function getVisits(patientId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
