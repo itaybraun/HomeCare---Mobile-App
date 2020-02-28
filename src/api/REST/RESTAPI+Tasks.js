@@ -11,10 +11,11 @@ import RESTAPI from './RESTAPI';
 
 RESTAPI.prototype.getTasks = async function getTasks(userId): APIRequest {
     try {
-        if (!userId) userId = this.userId;
+        if (!userId) userId = '8cba6c16-4f07-42de-9b06-b5af4f05f23c';
         const response = await this.server.get('ServiceRequest', {
             params: {
-                performer: userId
+                performer: userId,
+                status: 'active',
             },
         });
         if (response.status === 200) {
