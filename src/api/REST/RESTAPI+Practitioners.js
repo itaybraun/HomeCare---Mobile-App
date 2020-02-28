@@ -37,7 +37,8 @@ function getPractitionerFromFHIR(json) {
     const usual = json.name?.find(name => name.use === 'usual');
     practitioner.fullName = usual?.text;
 
-    practitioner.phone = json.telecom?.find(telecom => telecom.system ==='phone')?.value;
+    practitioner.phone = json.telecom?.find(t => t.system ==='phone')?.value;
+    practitioner.email = json.telecom?.find(t => t.system === 'email')?.value;
 
     const work = json.address?.find(address => address.use === 'work');
     practitioner.address = work ? new Address({
