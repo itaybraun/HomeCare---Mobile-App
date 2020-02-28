@@ -50,6 +50,12 @@ export default class FlagsScreen extends AppScreen {
         super.componentDidMount();
     }
 
+    willFocus() {
+        super.willFocus();
+
+        this.getData();
+    }
+
     getData = async (refresh = true) => {
         this.setState({loading: true});
         const flags = await this.getFlags(refresh);
@@ -197,12 +203,14 @@ export default class FlagsScreen extends AppScreen {
                     closeOnRowBeginSwipe
                     recalculateHiddenLayout
                 />
-                <TouchableOpacity
-                    style={commonStyles.blackButtonContainer}
-                    onPress={this.addFlag}
-                >
-                    <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
-                </TouchableOpacity>
+                <View style={{position: 'absolute', right: 10, bottom: 10}}>
+                    <TouchableOpacity
+                        style={commonStyles.blackButtonContainer}
+                        onPress={this.addFlag}
+                    >
+                        <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
+                    </TouchableOpacity>
+                </View>
                 {renderLoading(this.state.loading)}
             </View>
         );
