@@ -169,7 +169,7 @@ export default class TaskScreen extends AppScreen {
                         automaticallyAdjustContentInsets={false}>
                         <Form>
                             <Text style={commonStyles.yellowText}>{strings.Task.task}</Text>
-                            <Card style={{padding: 15, marginBottom: 15,}}>
+                            <Card style={[{padding: 15, marginBottom: 15,}, this.state.task?.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
                                 <Text style={commonStyles.titleText}>{this.state.task?.text}</Text>
                                 <Text style={[commonStyles.contentText, {marginTop: 10,}]}>{strings.Priorities[this.state.task?.priority]}</Text>
                                 <Text style={[commonStyles.infoText, {marginTop: 15}]}>{strings.Task.requester}:</Text>
