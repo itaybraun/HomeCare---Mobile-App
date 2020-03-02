@@ -29,12 +29,6 @@ export default class WorkScreen extends AppScreen {
             headerLeft: () =>
                 <MenuButton />
             ,
-            headerRight: () =>  (
-                renderNavigationHeaderButton(
-                    <Icon type="Feather" name="filter" style={{fontSize: 24}} />,
-                    navigation.getParam('showFilter')
-                )
-            )
         }
     };
 
@@ -110,11 +104,7 @@ export default class WorkScreen extends AppScreen {
     handleTabIndexChange = index => {
         this.setState({ index });
     };
-
-    showFilter = () => {
-
-    };
-
+    
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
@@ -147,7 +137,7 @@ export default class WorkScreen extends AppScreen {
 
     renderListFooter = () => {
         return (
-            <View style={{height: 74}} />
+            <View style={{height: 12}} />
         );
     };
 
