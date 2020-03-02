@@ -209,25 +209,17 @@ export default class WorkScreen extends AppScreen {
                     />
                     {renderLoading(this.state.loading)}
                 </View>
-                <View style={{ flexDirection: 'row', padding: 10, alignItems: 'center'}}>
-                    <View style={{flexDirection: 'row', flex: 1, justifyContent: 'space-evenly'}}>
-                        <Button block
-                            style={{backgroundColor: '#CCF4C9', width: 120,}}
-                            onPress={this.navigateTo('Map')}>
-                            <NativeText style={{color: '#32C02B', fontWeight: 'bold'}}>{strings.Work.map?.toUpperCase()}</NativeText>
-                        </Button>
-                        <Button block
-                                style={{backgroundColor: '#EBC7F2', width: 120,}}
-                                onPress={this.navigateTo('Calendar')}>
-                            <NativeText style={{color: '#AB1FBD', fontWeight: 'bold'}}>{strings.Work.calendar?.toUpperCase()}</NativeText>
-                        </Button>
-                    </View>
-                    <TouchableOpacity
-                        style={commonStyles.blackButtonContainer}
-                        onPress={this.addTask}
-                    >
-                        <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
-                    </TouchableOpacity>
+                <View style={{ flexDirection: 'row', padding: 10, alignItems: 'center', justifyContent: 'space-evenly'}}>
+                    <Button block
+                        style={{backgroundColor: '#CCF4C9', width: 120,}}
+                        onPress={this.navigateTo('Map')}>
+                        <NativeText style={{color: '#32C02B', fontWeight: 'bold'}}>{strings.Work.map?.toUpperCase()}</NativeText>
+                    </Button>
+                    <Button block
+                            style={{backgroundColor: '#EBC7F2', width: 120,}}
+                            onPress={this.navigateTo('Calendar')}>
+                        <NativeText style={{color: '#AB1FBD', fontWeight: 'bold'}}>{strings.Work.calendar?.toUpperCase()}</NativeText>
+                    </Button>
                 </View>
 
 
