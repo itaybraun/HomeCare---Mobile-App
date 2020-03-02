@@ -23,6 +23,8 @@ export const en = {
         title: 'My Patients',
         search: 'Search',
         noPatients: 'No data to display',
+        maleShort: 'M',
+        femaleShort: 'F',
         yo: 'Y/O'
     },
     Patient: {

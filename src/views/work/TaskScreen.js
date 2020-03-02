@@ -144,6 +144,14 @@ export default class TaskScreen extends AppScreen {
             return renderLoading(this.state.loading)
         }
 
+
+        let patientGenderAndAge = [];
+        if (this.state.task?.patient?.gender)
+            patientGenderAndAge.push(this.state.task.patient.gender.charAt(0).toUpperCase());
+        if (this.state.task?.patient?.age)
+            patientGenderAndAge.push(this.state.task.patient.age + ' ' + strings.Patients.yo);
+        patientGenderAndAge = patientGenderAndAge.join(", ");
+
         return (
 
             <View style={commonStyles.screenContainer} onPress={Keyboard.dismiss}>
@@ -182,9 +190,12 @@ export default class TaskScreen extends AppScreen {
                         <Text style={commonStyles.yellowText}>{strings.Task.patient}</Text>
                         <Card style={{padding: 15, marginBottom: 15,}}>
                             <Text style={[commonStyles.titleText]}>{this.state.task?.patient?.fullName}</Text>
-                            <Text style={[commonStyles.contentText, {marginTop: 5,}]}>
-                                {this.state.task?.patient?.gender?.charAt(0).toUpperCase()}, {this.state.task?.patient?.age} {strings.Patients.yo}
-                            </Text>
+                            {
+                                !patientGenderAndAge.isEmpty() &&
+                                <Text style={[commonStyles.contentText, {marginTop: 5,}]}>
+                                    {patientGenderAndAge}
+                                </Text>
+                            }
                             {
                                 this.state.task?.patient?.phone &&
                                 <TouchableOpacity

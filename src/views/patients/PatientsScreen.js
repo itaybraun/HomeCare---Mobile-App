@@ -115,12 +115,23 @@ export default class PatientsScreen extends AppScreen {
     };
 
     renderItem = ({item}) => {
+
+        let patientGenderAndAge = [];
+        if (item.gender)
+            patientGenderAndAge.push(item.gender.charAt(0).toUpperCase());
+        if (item.age)
+            patientGenderAndAge.push(item.age + ' ' + strings.Patients.yo);
+        patientGenderAndAge = patientGenderAndAge.join(", ");
+
         return (
             <TouchableOpacity onPress={() => this.selectPatient(item)}>
                 <Card style={commonStyles.cardStyle}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{flex: 1}}>
-                            <Text style={commonStyles.smallInfoText}>{item.gender?.charAt(0).toUpperCase()}, {item.age} {strings.Patients.yo}</Text>
+                            {
+                                !patientGenderAndAge.isEmpty() &&
+                                <Text style={commonStyles.smallInfoText}>{patientGenderAndAge}</Text>
+                            }
                             <Text style={commonStyles.titleText}>{item.fullName}</Text>
                         </View>
                         {renderDisclosureIndicator()}
