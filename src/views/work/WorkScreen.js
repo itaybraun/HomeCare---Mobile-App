@@ -104,7 +104,7 @@ export default class WorkScreen extends AppScreen {
     handleTabIndexChange = index => {
         this.setState({ index });
     };
-    
+
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------

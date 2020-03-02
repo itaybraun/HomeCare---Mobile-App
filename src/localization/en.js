@@ -89,7 +89,6 @@ export const en = {
         subject: 'Subject',
         when: 'When',
         visit: 'Visit',
-        addToExistingVisit: 'Add to existing visit',
     },
 
     Visit: {

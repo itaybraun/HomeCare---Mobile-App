@@ -99,17 +99,14 @@ export default class VisitScreen extends AppScreen {
         let start: Date = null;
         let end: Date = null;
         const selectedVisit: Visit = this.props.navigation.getParam('selectedVisit', null);
-        const newVisit = this.props.navigation.getParam('newVisit', false);
         if (selectedVisit) {
             if (selectedVisit.id) {
                 selectedVisitIndex = visits.findIndex(visit => visit.id === selectedVisit.id)
-            } else if (newVisit) {
+            } else {
                 selectedVisitIndex = visits.length;
                 start = selectedVisit.start;
                 end = selectedVisit.end;
             }
-        } else if (newVisit) {
-            selectedVisitIndex = visits.length;
         }
         return {
             selectedVisitIndex: selectedVisitIndex,

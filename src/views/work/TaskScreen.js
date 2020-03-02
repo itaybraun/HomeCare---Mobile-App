@@ -92,18 +92,8 @@ export default class TaskScreen extends AppScreen {
     selectVisit = () => {
         this.navigateTo('Visit', {
             task: this.props.navigation.getParam('task', null),
-            submitVisit: this.submitVisit,
-            newVisit: false,
             selectedVisit: this.state.visit,
-        });
-    };
-
-    addNewVisit = () => {
-        this.navigateTo('Visit', {
-            task: this.props.navigation.getParam('task', null),
             submitVisit: this.submitVisit,
-            newVisit: true,
-            selectedVisit: this.state.visit,
         });
     };
 
@@ -222,7 +212,7 @@ export default class TaskScreen extends AppScreen {
                                 style={{padding: 11, marginTop: 12}}
                                 title={strings.Task.visit}>
                                 <TouchableOpacity
-                                    onPress={this.addNewVisit}>
+                                    onPress={this.selectVisit}>
                                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                         <Text style={[{flex: 1}, commonStyles.formItemText]}>
                                             {
@@ -241,11 +231,6 @@ export default class TaskScreen extends AppScreen {
                                     </View>
                                 </TouchableOpacity>
                             </FormItemContainer>
-
-                            <TouchableOpacity style={{}}
-                                              onPress={this.selectVisit}>
-                                <Text style={commonStyles.link}>{strings.Task.addToExistingVisit.toUpperCase()}</Text>
-                            </TouchableOpacity>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10, marginTop: 30}}>
                                 <Button block
