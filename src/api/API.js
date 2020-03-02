@@ -1,6 +1,5 @@
 import {Flag} from '../models/Flag';
 import {Request} from '../support/Utils';
-import {Patient} from '../models/Patient';
 import {Visit} from '../models/Visit';
 import {Task} from '../models/Task';
 
@@ -47,7 +46,11 @@ API.prototype.getFlags = async function getFlags(patientId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
-API.prototype.addFlag = async function addFlag(flag: Flag, patient: Patient): APIRequest {
+API.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+API.prototype.editFlag = async function editFlag(flag: Flag): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 

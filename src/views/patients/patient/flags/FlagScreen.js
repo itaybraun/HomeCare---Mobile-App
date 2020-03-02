@@ -148,11 +148,13 @@ export default class FlagScreen extends AppScreen {
             if (!patient)
                 return; // this should never happen!
 
+            validationResult.data.patientId = patient.id;
+
             if (flag) {
                 validationResult.data.id = flag.id;
-                result = await this.api.editFlag(validationResult.data, patient);
+                result = await this.api.editFlag(validationResult.data);
             } else {
-                result = await this.api.addFlag(validationResult.data, patient);
+                result = await this.api.addFlag(validationResult.data);
             }
             if (result.success) {
                 this.pop();

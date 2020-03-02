@@ -128,10 +128,6 @@ export default class TaskScreen extends AppScreen {
                 this.showError(result.data);
                 return;
             }
-
-            //TODO: remove this
-            alert('New visit is not working yet');
-            return;
         }
         task.visit = visit;
         let result: APIRequest = await this.api.updateTask(task);

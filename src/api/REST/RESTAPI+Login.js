@@ -10,8 +10,16 @@ RESTAPI.prototype.login = async function login(username, password): APIRequest {
 
         return new APIRequest(true);
 
-        const credentials = null; // await Keychain.getGenericPassword();
         let tokens = null;
+
+        tokens = await this.auth0.webAuth.authorize({scope: 'openid email profile'});
+        console.log(tokens);
+
+
+        return new APIRequest(true);
+
+        const credentials = null; // await Keychain.getGenericPassword();
+
         if (credentials && credentials.username) {
             //tokens = await this.azureAuth.auth.acquireTokenSilent({scope: 'Mail.Read', userId: credentials.username});
         }

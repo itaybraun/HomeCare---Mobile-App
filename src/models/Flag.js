@@ -7,4 +7,5 @@ export class Flag extends BaseModel{
     category: String;
     text: String;
     internal: boolean;
+    patientId: String;
 }

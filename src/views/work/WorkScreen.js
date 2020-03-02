@@ -177,9 +177,15 @@ export default class WorkScreen extends AppScreen {
                             item.visit ?
                                 <Text style={[commonStyles.contentText]}>
                                     {
-                                        moment(item.visit.start).format(
-                                            this.state.is24Hour ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
-                                        )
+                                        item.visit && item.visit.start && item.visit.end ?
+                                            moment(item.visit.start).format(
+                                                this.state.is24Hour ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
+                                            ) +
+                                            moment(item.visit.end).format(
+                                                this.state.is24Hour ? ' - HH:mm' : ' - hh:mm A'
+                                            )
+
+                                            : ''
                                     }
                                 </Text>
                                 :
