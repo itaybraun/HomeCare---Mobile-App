@@ -209,7 +209,7 @@ export default class WorkScreen extends AppScreen {
                     />
                     {renderLoading(this.state.loading)}
                 </View>
-                <View style={{ flexDirection: 'row', padding: 10, alignItems: 'center', justifyContent: 'space-evenly'}}>
+                <View style={{ flexDirection: 'row', padding: 30, paddingTop: 0, alignItems: 'center', justifyContent: 'space-between'}}>
                     <Button block
                         style={{backgroundColor: '#CCF4C9', width: 120,}}
                         onPress={this.navigateTo('Map')}>

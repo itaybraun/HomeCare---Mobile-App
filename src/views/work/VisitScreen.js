@@ -87,7 +87,8 @@ export default class VisitScreen extends AppScreen {
     getVisits = async (patientId) => {
         let result: APIRequest = await this.api.getVisits(patientId);
         if (result.success) {
-            return {visits: result.data};
+            let visits = result.data;
+            return {visits: visits};
         } else {
             this.showError(result.data);
             return {visits: []};
@@ -220,7 +221,7 @@ export default class VisitScreen extends AppScreen {
         let index = this.state.visits.length;
         return (
             <TouchableOpacity
-                style={{paddingHorizontal: 20,}}
+                style={{paddingHorizontal: 20}}
                 onPress={() => this.selectVisit(index)}>
                 {renderSeparator()}
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -296,20 +297,17 @@ export default class VisitScreen extends AppScreen {
         }
 
         return (
-            <View style={commonStyles.screenContainer}>
-                <View onPress={Keyboard.dismiss}>
-                    <FlatList style={styles.list}
-                              contentContainerStyle={{ flexGrow: 1 }}
-                              data={this.state.visits}
-                              renderItem={this.renderVisit}
-                              ListHeaderComponent={this.renderListHeader}
-                              ListFooterComponent={this.renderListFooter}
-                              keyExtractor={item => item.id}
-                              ItemSeparatorComponent={renderSeparator}
-                    />
-                </View>
+            <View style={commonStyles.screenContainer} onPress={Keyboard.dismiss}>
+                <FlatList contentContainerStyle={{ flexGrow: 1 }}
+                          data={this.state.visits}
+                          renderItem={this.renderVisit}
+                          ListHeaderComponent={this.renderListHeader}
+                          ListFooterComponent={this.renderListFooter}
+                          keyExtractor={item => item.id}
+                          ItemSeparatorComponent={renderSeparator}
+                />
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 30, marginTop: 30}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 30, marginTop: 10,}}>
                     <Button block
                             style={{backgroundColor: '#CCF4C9', width: 120,}}
                             onPress={this.submit}>
