@@ -86,7 +86,6 @@ export const en = {
         patient: 'Patient',
         category: 'Category',
         requester: 'Opened By',
-        subject: 'Subject',
         when: 'When',
         visit: 'Visit',
     },

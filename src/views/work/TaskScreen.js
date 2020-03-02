@@ -181,7 +181,7 @@ export default class TaskScreen extends AppScreen {
                             </Card>
 
 
-                            <Text style={commonStyles.yellowText}>{strings.Task.subject}</Text>
+                            <Text style={commonStyles.yellowText}>{strings.Task.patient}</Text>
                             <Card style={{padding: 15, marginBottom: 15,}}>
                                 <Text style={[commonStyles.titleText]}>{this.state.task?.patient?.fullName}</Text>
                                 <Text style={[commonStyles.contentText, {marginTop: 5,}]}>
