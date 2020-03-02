@@ -87,34 +87,7 @@ RESTAPI.prototype.getTask = async function getTasks(taskId): APIRequest {
 
 RESTAPI.prototype.updateTask = async function updateTask(task: Task): APIRequest {
     try {
-
-        const data = {
-            resourceType: "ServiceRequest",
-            id: task.id,
-            status: "active",
-            intent: "original-order",
-            priority: task.priority,
-            code: {
-                coding: [
-                    {
-                        system: "http://loinc.org",
-                        code: "51990-0"
-                    }
-                ],
-                text: task.text
-            },
-            subject: {
-                reference: "Patient/" + task.patientId,
-            },
-            requester: {
-                reference: "Practitioner/" + task.requesterId,
-                display: task.requester?.fullName,
-            },
-            encounter: {
-                reference: "Encounter/" + task.visit.id,
-            }
-        };
-
+        const data = getJsonFromTask(task);
         const response = await this.server.put('ServiceRequest/' + task.id, JSON.stringify(data));
         if (response.status === 200) {
             let task = getTaskFromFHIR(response.data);
@@ -127,7 +100,6 @@ RESTAPI.prototype.updateTask = async function updateTask(task: Task): APIRequest
     }
 };
 
-
 function getTaskFromFHIR(json) {
     let task = new Task();
     task.id = json.id;
@@ -135,10 +107,50 @@ function getTaskFromFHIR(json) {
     task.patient = new Patient({fullName: json.subject?.display});
     task.requesterId = json.requester?.reference?.replace('Practitioner/','') ?? null;
     task.requester = new Practitioner({fullName: json.requester?.display});
+    task.performerIds = json.performer?.map(performer => performer.reference?.replace('Practitioner/',''));
     task.visitId = json.encounter?.reference?.replace('Encounter/','') ?? null;
     task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
     task.text = json.code?.text;
     // TODO: I don't like this priority thing...
     task.priority = json.priority ? Priorities.getByString(json.priority) ?? Priorities.ROUTINE : Priorities.ROUTINE;
     return task;
+}
+
+function getJsonFromTask(task: Task) {
+    const data = {
+        resourceType: "ServiceRequest",
+        id: task.id,
+        status: "active",
+        intent: "original-order",
+        priority: task.priority,
+        code: {
+            coding: [
+                {
+                    system: "http://loinc.org",
+                    code: "51990-0"
+                }
+            ],
+            text: task.text
+        },
+        subject: {
+            reference: "Patient/" + task.patientId,
+        },
+        requester: {
+            reference: "Practitioner/" + task.requesterId,
+        },
+        encounter: {
+            reference: "Encounter/" + task.visit.id,
+        },
+        performer: {
+            reference: 'Practitioner/' + task.performerId,
+        }
+    };
+
+    data.performer = task.performerIds?.map(id => {
+        return {
+            reference: 'Practitioner/' + id,
+        }
+    });
+
+    return data;
 }
