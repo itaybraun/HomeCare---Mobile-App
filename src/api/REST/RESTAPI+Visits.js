@@ -33,10 +33,11 @@ RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
             } else {
                 const patientsIDs = visits.map(visit => visit.patientId).filter((value, index, self) => self.indexOf(value) === index);
                 patients = await Promise.all(patientsIDs.map(async id => {
-                    let result: APIRequest = await this.getPatient(id);
-                    if (result.success)
-                        return result.data;
-
+                    if (id) {
+                        let result: APIRequest = await this.getPatient(id);
+                        if (result.success)
+                            return result.data;
+                    }
                     return null;
                 }));
                 patients = patients.filter(p => p);

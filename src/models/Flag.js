@@ -1,4 +1,5 @@
 import {BaseModel} from './BaseModel';
+import {Patient} from './Patient';
 
 export class Flag extends BaseModel{
     id: Number;
@@ -8,4 +9,5 @@ export class Flag extends BaseModel{
     text: String;
     internal: boolean;
     patientId: String;
+    patient: Patient;
 }

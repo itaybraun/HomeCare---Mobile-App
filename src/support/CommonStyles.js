@@ -14,7 +14,7 @@ export const appColors = {
 export const commonStyles = {
 
     smallInfoText: {
-        fontSize: 12,
+        fontSize: 14,
         color: '#888888',
     },
 
@@ -45,12 +45,17 @@ export const commonStyles = {
     },
 
     contentText: {
-        fontSize: 14,
+        fontSize: 16,
         color: appColors.textColor,
     },
 
     link: {
         textTransform: 'uppercase',
+        color: appColors.linkColor,
+    },
+
+    purpleTitleText: {
+        fontSize: 18,
         color: appColors.linkColor,
     },
 

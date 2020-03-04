@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, FlatList, SectionList, TouchableOpacity, TouchableHighlight} from 'react-native';
 import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import MenuButton from '../menu/MenuButton';
@@ -16,6 +16,7 @@ import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
 import {Task} from '../../models/Task';
 import {uses24HourClock} from "react-native-localize";
+import {Flag} from '../../models/Flag';
 
 export default class WorkScreen extends AppScreen {
 
@@ -35,7 +36,8 @@ export default class WorkScreen extends AppScreen {
     state = {
         loading: false,
         tasks: [],
-
+        flags: [],
+        sortedFlags: [],
         index: 0,
         routes: [
             { key: 'tasks', title: strings.Work.tasks },
@@ -80,7 +82,21 @@ export default class WorkScreen extends AppScreen {
     getFlags = async (refresh = true) => {
         let result: APIRequest = await this.api.getFlags();
         if (result.success) {
-            return {flags: result.data};
+
+            let sortedFlags = result.data.reduce((array, flag: Flag) => {
+                let userArray = array.find(o => o.title === flag.patient.fullName);
+                if (userArray)
+                    userArray.data.push(flag);
+                else {
+                    array.push({
+                        title: flag.patient.fullName,
+                        data: [flag],
+                    })
+                }
+                return array;
+            }, []);
+
+            return {flags: result.data, sortedFlags: sortedFlags};
         } else {
             this.showError(result.data);
         }
@@ -144,10 +160,12 @@ export default class WorkScreen extends AppScreen {
     renderListEmpty = () => {
         return (
             <View style={commonStyles.emptyScreen}>
-                <Text>{strings.Tasks.noTasks}</Text>
+                <Text>{strings.Work.noData}</Text>
             </View>
         )
     };
+
+    // Tasks
 
     renderTask = ({item}) => {
 
@@ -207,7 +225,6 @@ export default class WorkScreen extends AppScreen {
                               onRefresh={this.getData}
                               refreshing={false}
                     />
-                    {renderLoading(this.state.loading)}
                 </View>
                 <View style={{ flexDirection: 'row', padding: 20, paddingTop: 10, alignItems: 'center', justifyContent: 'space-evenly'}}>
                     <Button block
@@ -216,16 +233,57 @@ export default class WorkScreen extends AppScreen {
                         <NativeText style={{color: '#AB1FBD', fontWeight: 'bold'}}>{strings.Work.calendar?.toUpperCase()}</NativeText>
                     </Button>
                 </View>
-
-
             </View>
         );
     };
 
+    // Flags
+
+    renderFlag = ({item}) => {
+        const flag: Flag = item;
+        return (
+            <TouchableHighlight
+                style={styles.itemContainer}
+                underlayColor='#FFFFFFFF'
+                activeOpacity={0.3}
+                onPress={() => {}}>
+                <Card style={[commonStyles.cardStyle, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
+                    <View style={styles.flagInfoContainer}>
+                        <Text style={commonStyles.smallInfoText}>{item.startDate ? moment(item.startDate).format("MMM Do YYYY") : ''}</Text>
+                        <Text style={commonStyles.smallInfoText}>{item.category}</Text>
+                    </View>
+                    <Text style={[commonStyles.boldTitleText, {marginVertical: 6}]}>{item.title}</Text>
+                    <Text style={commonStyles.contentText}>{item.text}</Text>
+                </Card>
+            </TouchableHighlight>
+        )
+    };
+
     renderFlags = () => {
+
         return (
             <View style={commonStyles.screenContainer}>
-                <Text>Flags</Text>
+                <View style={{flex: 1,}}>
+                    <SectionList style={styles.list}
+                                 keyExtractor={item => item.id}
+                                 contentContainerStyle={{flexGrow: 1}}
+                                 sections={this.state.sortedFlags}
+                                 renderItem={this.renderFlag}
+                                 stickySectionHeadersEnabled={false}
+                                 ItemSeparatorComponent={() => renderSeparator({height: 0})}
+                                 ListEmptyComponent={this.renderListEmpty}
+                                 ListHeaderComponent={this.renderListHeader}
+                                 ListFooterComponent={this.renderListFooter}
+                                 renderSectionHeader={({section: {title}}) => (
+                                     <View style={{marginBottom: 5, marginLeft: 1,}}>
+                                        <Text style={commonStyles.purpleTitleText}>{title}</Text>
+                                     </View>
+                                 )}
+                                 renderSectionFooter={() => renderSeparator({height: 24})}
+                                 onRefresh={this.getData}
+                                 refreshing={false}
+                    />
+                </View>
             </View>
         );
     };
@@ -239,6 +297,7 @@ export default class WorkScreen extends AppScreen {
                     renderScene={this.renderScene}
                     renderTabBar={this.renderTabBar}
                 />
+                {renderLoading(this.state.loading)}
             </View>
         );
     }
@@ -248,5 +307,10 @@ const styles = StyleSheet.create({
     list: {
         flex: 1,
         padding: 10,
+    },
+
+    flagInfoContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
 });

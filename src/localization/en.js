@@ -67,6 +67,7 @@ export const en = {
     Work: {
         title: 'My Work',
         tasks: 'Tasks',
+        noData: 'No data to display',
         flags: 'Flags',
         map: 'Map',
         calendar: 'Calendar',
@@ -74,7 +75,6 @@ export const en = {
 
     Tasks: {
         title: 'Tasks',
-        noTasks: 'No data to display',
         noSchedule: 'No Schedule',
         open: 'Open',
         visits: 'Visits',
