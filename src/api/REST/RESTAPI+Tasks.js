@@ -9,13 +9,21 @@ import RESTAPI from './RESTAPI';
 // Tasks
 //------------------------------------------------------------
 
-RESTAPI.prototype.getTasks = async function getTasks(): APIRequest {
+RESTAPI.prototype.getTasks = async function getTasks(patientId): APIRequest {
     try {
-        const response = await this.server.get('ServiceRequest', {
-            params: {
-                performer: this.userId,
-                status: 'active',
-            },
+
+        let params = {};
+        let url = 'ServiceRequest';
+        if (patientId) {
+            params.subject = patientId;
+            url += `/?subject=Patient/${patientId}`;
+        } else {
+            params.performer = this.userId;
+            params.active = true;
+        }
+
+        const response = await this.server.get(url, {
+            params: params,
         });
         if (response.status === 200) {
             let tasks = response.data.entry?.map(json => getTaskFromFHIR(json.resource)) || [];
@@ -108,7 +116,8 @@ function getTaskFromFHIR(json) {
     task.requester = new Practitioner({fullName: json.requester?.display});
     task.performerIds = json.performer?.map(performer => performer.reference?.replace('Practitioner/',''));
     task.visitId = json.encounter?.reference?.replace('Encounter/','') || null;
-    task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
+    //task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
+    task.openDate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;
     task.text = json.code?.text;
     // TODO: I don't like this priority thing...
     task.priority = json.priority ? Priorities.getByString(json.priority) || Priorities.ROUTINE : Priorities.ROUTINE;

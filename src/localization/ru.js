@@ -1,5 +1,5 @@
 
-export const en = {
+export const ru = {
     Common: {
         submitButton: 'Submit',
         deleteButton: 'Delete',
@@ -15,17 +15,17 @@ export const en = {
     },
     Tabs: {
         work: 'My Work',
-        patients: 'Patients',
-        chat: 'Chat',
-        settings: 'Settings',
+        patients: 'Пациенты',
+        chat: 'Чат',
+        settings: 'Настройки',
     },
     Patients: {
         title: 'My Patients',
-        search: 'Search',
-        noPatients: 'No data to display',
-        maleShort: 'M',
-        femaleShort: 'F',
-        yo: 'Y/O'
+        search: 'Поиск',
+        noPatients: 'Нет данных',
+        maleShort: 'М',
+        femaleShort: 'Ж',
+        yo: 'лет'
     },
     Patient: {
         title: 'Patient',
@@ -41,7 +41,7 @@ export const en = {
         activity: 'Document Activity',
         progress: 'Monitor Progress',
         alert: 'Raise Alert',
-        created: 'Created {0}',
+        created: 'Создан {0}',
     },
     Flags: {
         title: 'Flags',
@@ -70,8 +70,7 @@ export const en = {
         tasks: 'Tasks',
         noData: 'No data to display',
         flags: 'Flags',
-        map: 'Map',
-        calendar: 'Calendar',
+        calendar: 'Календарь',
     },
 
     Tasks: {

@@ -48,7 +48,7 @@ export default class VisitScreen extends AppScreen {
         showingVisitDatePicker: false,
         showingVisitStartTimePicker: false,
         showingVisitEndTimePicker: false,
-        is24Hour: false,
+
 
         start: null,
         end: null,
@@ -72,14 +72,12 @@ export default class VisitScreen extends AppScreen {
     getData = async (refresh = true) => {
         this.setState({loading: true});
         const task: Task = this.props.navigation.getParam('task', null);
-        const is24Hour = uses24HourClock();
         const visits = task && task.patient ? await this.getVisits(task.patient.id) : null;
         const selectedVisit = this.getSelectedVisit(visits.visits);
         this.setState({
             ...visits,
             ...selectedVisit,
             task: task,
-            is24Hour: is24Hour,
             loading: false,
         });
     };
@@ -205,10 +203,10 @@ export default class VisitScreen extends AppScreen {
                     <Text style={{marginLeft: 10}}>
                         {
                             moment(item.start).format(
-                            this.state.is24Hour ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
+                            uses24HourClock() ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
                             ) +
                             moment(item.end).format(
-                            this.state.is24Hour ? ' - HH:mm' : ' - hh:mm A'
+                            uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
                             )
                         }
                     </Text>
@@ -255,7 +253,7 @@ export default class VisitScreen extends AppScreen {
                                     onPress={() => this.setState({showingVisitStartTimePicker: true})}>
                                     <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
                                         <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                            {this.state.start ? moment(this.state.start).format(this.state.is24Hour ? 'HH:mm' : 'hh:mm A') : ' '}
+                                            {this.state.start ? moment(this.state.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
@@ -268,7 +266,7 @@ export default class VisitScreen extends AppScreen {
                                     onPress={() => this.setState({showingVisitEndTimePicker: true})}>
                                     <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
                                         <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                            {this.state.end ? moment(this.state.end).format(this.state.is24Hour ? 'HH:mm' : 'hh:mm A') : ' '}
+                                            {this.state.end ? moment(this.state.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
@@ -343,7 +341,7 @@ export default class VisitScreen extends AppScreen {
                     headerTextIOS={strings.Visit.pickStartTime}
                     date={this.state.start ?? new Date()}
                     mode="time"
-                    is24Hour={this.state.is24Hour}
+                    is24Hour={uses24HourClock()}
                     onConfirm={(date) => {
                         let errors = this.state.errors;
                         errors.start = false;
@@ -363,7 +361,7 @@ export default class VisitScreen extends AppScreen {
                     headerTextIOS={strings.Visit.pickEndTime}
                     date={this.state.end ?? new Date()}
                     mode="time"
-                    is24Hour={this.state.is24Hour}
+                    is24Hour={uses24HourClock()}
                     onConfirm={(date) => {
                         if (this.state.start) {
                             // set same day

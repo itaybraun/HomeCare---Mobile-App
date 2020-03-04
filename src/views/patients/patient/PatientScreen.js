@@ -7,13 +7,17 @@ import Loading from '../../../support/Loading';
 import {APIRequest} from '../../../api/API';
 import {strings} from '../../../localization/strings';
 import { Card, Icon, Text } from 'native-base';
-import {appColors, commonStyles, renderSeparator, renderTabBar} from '../../../support/CommonStyles';
+import {appColors, commonStyles, renderLoading, renderSeparator, renderTabBar} from '../../../support/CommonStyles';
 import PatientProfile from './PatientProfile';
 import PatientCarePlans from './PatientCarePlans';
 import PatientTasks from './PatientTasks';
 
 
 export default class PatientScreen extends AppScreen {
+
+    //------------------------------------------------------------
+    // Properties
+    //------------------------------------------------------------
 
     static navigationOptions = ({ navigation }) => {
         const patient: Patient = navigation.getParam('patient', null);
@@ -36,7 +40,13 @@ export default class PatientScreen extends AppScreen {
             { key: 'care', title: strings.Patient.carePlans },
             { key: 'tasks', title: strings.Patient.tasks },
         ],
+
+        tasks: [],
     };
+
+    //------------------------------------------------------------
+    // Overrides
+    //------------------------------------------------------------
 
     componentDidMount(): void {
         super.componentDidMount();
@@ -44,10 +54,31 @@ export default class PatientScreen extends AppScreen {
         this.getData();
     }
 
+    //------------------------------------------------------------
+    // Data
+    //------------------------------------------------------------
+
     getData = async (refresh = true) => {
-        //this.setState({loading: true});
-        //this.setState({loading: false});
+        this.setState({loading: true});
+        const tasks = await this.getTasks(refresh);
+        this.setState({...tasks, loading: false});
     };
+
+    getTasks = async (refresh = true) => {
+        const patient: Patient = this.props.navigation.getParam('patient', null);
+        if (patient) {
+            let result: APIRequest = await this.api.getTasks(patient.id);
+            if (result.success) {
+                return {tasks: result.data};
+            } else {
+                this.showError(result.data);
+            }
+        }
+    };
+
+    //------------------------------------------------------------
+    // Methods
+    //------------------------------------------------------------
 
     navigateToView = (view) => {
         const patient: Patient = this.props.navigation.getParam('patient', null);
@@ -57,6 +88,10 @@ export default class PatientScreen extends AppScreen {
     handleTabIndexChange = index => {
         this.setState({ index });
     };
+
+    //------------------------------------------------------------
+    // Render
+    //------------------------------------------------------------
 
     renderTabBar = (props) => {
         return renderTabBar(props, this.state.index, (index) => this.setState({index: index}));
@@ -69,7 +104,7 @@ export default class PatientScreen extends AppScreen {
             case 'care':
                 return <PatientCarePlans />;
             case 'tasks':
-                return <PatientTasks />;
+                return <PatientTasks tasks={this.state.tasks} navigateTo={this.navigateToView} />;
             default:
                 return null;
         }
@@ -84,6 +119,7 @@ export default class PatientScreen extends AppScreen {
                     renderScene={this.renderScene}
                     renderTabBar={this.renderTabBar}
                 />
+                {renderLoading(this.state.loading)}
             </View>
         );
     }

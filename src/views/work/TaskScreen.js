@@ -39,7 +39,6 @@ export default class TaskScreen extends AppScreen {
 
     state = {
         loading: false,
-        is24Hour: false,
         task: null,
         visit: null,
     };
@@ -60,11 +59,9 @@ export default class TaskScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         this.setState({loading: true});
-        const is24Hour = uses24HourClock();
         const task = await this.getTask();
         this.setState({
             ...task,
-            is24Hour: is24Hour,
             loading: false,
         })
     };
@@ -227,10 +224,10 @@ export default class TaskScreen extends AppScreen {
                                         {
                                             this.state.visit && this.state.visit.start && this.state.visit.end ?
                                                 moment(this.state.visit.start).format(
-                                                    this.state.is24Hour ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
+                                                    uses24HourClock() ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
                                                 ) +
                                                 moment(this.state.visit.end).format(
-                                                    this.state.is24Hour ? ' - HH:mm' : ' - hh:mm A'
+                                                    uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
                                                 )
 
                                                 : ''

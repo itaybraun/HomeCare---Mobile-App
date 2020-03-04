@@ -43,7 +43,7 @@ export default class WorkScreen extends AppScreen {
             { key: 'tasks', title: strings.Work.tasks },
             { key: 'flags', title: strings.Work.flags },
         ],
-        is24Hour: false,
+
     };
 
     //------------------------------------------------------------
@@ -66,8 +66,7 @@ export default class WorkScreen extends AppScreen {
         this.setState({loading: true});
         const tasks = await this.getTasks(refresh);
         const flags = await this.getFlags(refresh);
-        const is24Hour = uses24HourClock();
-        this.setState({...tasks, ...flags, is24Hour: is24Hour, loading: false});
+        this.setState({...tasks, ...flags, loading: false});
     };
 
     getTasks = async (refresh = true) => {
@@ -187,10 +186,10 @@ export default class WorkScreen extends AppScreen {
                                     {
                                         item.visit && item.visit.start && item.visit.end ?
                                             moment(item.visit.start).format(
-                                                this.state.is24Hour ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
+                                                uses24HourClock() ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
                                             ) +
                                             moment(item.visit.end).format(
-                                                this.state.is24Hour ? ' - HH:mm' : ' - hh:mm A'
+                                                uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
                                             )
 
                                             : ''
@@ -228,7 +227,7 @@ export default class WorkScreen extends AppScreen {
                 </View>
                 <View style={{ flexDirection: 'row', padding: 20, paddingTop: 10, alignItems: 'center', justifyContent: 'space-evenly'}}>
                     <Button block
-                            style={{backgroundColor: '#EBC7F2', width: 120,}}
+                            style={{backgroundColor: '#EBC7F2', width: 140,}}
                             onPress={() => this.navigateTo('Calendar')}>
                         <NativeText style={{color: '#AB1FBD', fontWeight: 'bold'}}>{strings.Work.calendar?.toUpperCase()}</NativeText>
                     </Button>

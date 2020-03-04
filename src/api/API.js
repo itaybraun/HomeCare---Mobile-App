@@ -60,7 +60,7 @@ API.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest {
 
 
 
-API.prototype.getTasks = async function getTasks(): APIRequest {
+API.prototype.getTasks = async function getTasks(patientId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 

@@ -29,7 +29,6 @@ export default class CalendarScreen extends AppScreen {
         loading: false,
         visits: [],
         tasks: [],
-        is24Hour: false,
         selectedDate: moment(new Date()).format('YYYY-MM-DD'),
     };
 
@@ -49,13 +48,11 @@ export default class CalendarScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         this.setState({loading: true});
-        const is24Hour = uses24HourClock();
         const visits = await this.getVisits();
         const tasks = await this.getTasksForVisits(visits.visits);
         this.setState({
             ...visits,
             ...tasks,
-            is24Hour: is24Hour,
             loading: false,
         });
     };
@@ -172,17 +169,17 @@ export default class CalendarScreen extends AppScreen {
     renderVisit = ({item}) => {
         let visit: Visit = item;
         let task: Task = visit.taskIds?.length > 0 ? this.state.tasks.find(task => task.id === visit.taskIds[0]) : null;
-        const width = this.state.is24Hour ? 45 : 75;
+        const width = uses24HourClock() ? 45 : 75;
         return (
             <TouchableOpacity style={styles.visitContainer}>
                 <Card style={commonStyles.cardStyle}>
                     <View style={{flexDirection: 'row'}}>
                         <View style={{width: width}}>
                             <Text style={styles.timeStyle}>
-                                {moment(visit.start).format(this.state.is24Hour ? 'HH:mm' : 'hh:mm A')}
+                                {moment(visit.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}
                             </Text>
                             <Text style={styles.timeStyle}>
-                                {moment(visit.end).format(this.state.is24Hour ? 'HH:mm' : 'hh:mm A')}
+                                {moment(visit.end).format(uses24HourClock()  ? 'HH:mm' : 'hh:mm A')}
                             </Text>
                         </View>
                         <View style={styles.separator} />
