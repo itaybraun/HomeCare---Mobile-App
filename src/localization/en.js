@@ -118,4 +118,10 @@ export const en = {
         asap: 'ASAP',
         stat: 'STAT',
     },
+
+    Calendar: {
+        myCalendar: 'My Calendar',
+        noVisits: 'No visits on {0}',
+        noTask: 'No Task',
+    }
 };

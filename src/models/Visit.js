@@ -8,4 +8,5 @@ export class Visit extends BaseModel {
     patientId: String;
     patient: Patient;
     reason: String;
+    taskIds: [String];
 }

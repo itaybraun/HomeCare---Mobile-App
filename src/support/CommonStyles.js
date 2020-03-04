@@ -142,9 +142,9 @@ export const commonStyles = {
     },
 };
 
-export const renderSeparator = () => {
+export const renderSeparator = (style = null) => {
     return (
-        <View style={commonStyles.listSeparator} />
+        <View style={style ? style : commonStyles.listSeparator} />
     );
 };
 

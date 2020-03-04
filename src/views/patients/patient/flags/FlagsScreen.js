@@ -192,7 +192,7 @@ export default class FlagsScreen extends AppScreen {
                     keyExtractor={item => item.id}
                     renderItem={this.renderItem}
                     renderHiddenItem={this.renderHiddenItem}
-                    ItemSeparatorComponent={renderSeparator}
+                    ItemSeparatorComponent={() => renderSeparator()}
                     ListEmptyComponent={this.renderListEmpty}
                     ListHeaderComponent={this.renderListHeader}
                     ListFooterComponent={this.renderListFooter}

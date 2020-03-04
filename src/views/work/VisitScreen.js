@@ -22,7 +22,7 @@ import FormItemContainer from '../other/FormItemContainer';
 import {Task} from '../../models/Task';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import * as RNLocalize from "react-native-localize";
+import {uses24HourClock} from "react-native-localize";
 import {APIRequest} from '../../api/API';
 import {Visit} from '../../models/Visit';
 import {Request} from '../../support/Utils';
@@ -72,7 +72,7 @@ export default class VisitScreen extends AppScreen {
     getData = async (refresh = true) => {
         this.setState({loading: true});
         const task: Task = this.props.navigation.getParam('task', null);
-        const is24Hour = RNLocalize.uses24HourClock();
+        const is24Hour = uses24HourClock();
         const visits = task && task.patient ? await this.getVisits(task.patient.id) : null;
         const selectedVisit = this.getSelectedVisit(visits.visits);
         this.setState({
@@ -304,10 +304,10 @@ export default class VisitScreen extends AppScreen {
                           ListHeaderComponent={this.renderListHeader}
                           ListFooterComponent={this.renderListFooter}
                           keyExtractor={item => item.id}
-                          ItemSeparatorComponent={renderSeparator}
+                          ItemSeparatorComponent={() => renderSeparator()}
                 />
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 30, marginTop: 10,}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: 10,}}>
                     <Button block
                             style={{backgroundColor: '#CCF4C9', width: 120,}}
                             onPress={this.submit}>
@@ -322,7 +322,7 @@ export default class VisitScreen extends AppScreen {
 
                 <DateTimePickerModal
                     isVisible={this.state.showingVisitDatePicker}
-                    date={this.state.start ?? new Date()}
+                    date={this.state.start || new Date()}
                     mode="date"
                     onConfirm={(date) => {
                         let errors = this.state.errors;

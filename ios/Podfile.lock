@@ -1,8 +1,6 @@
 PODS:
   - A0Auth0 (2.3.0):
     - React
-  - AzureAuth (1.0.0):
-    - React
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
@@ -249,7 +247,6 @@ PODS:
 
 DEPENDENCIES:
   - A0Auth0 (from `../node_modules/react-native-auth0/ios`)
-  - AzureAuth (from `../node_modules/react-native-azure-auth/ios`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
@@ -298,8 +295,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   A0Auth0:
     :path: "../node_modules/react-native-auth0/ios"
-  AzureAuth:
-    :path: "../node_modules/react-native-azure-auth/ios"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -377,7 +372,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   A0Auth0: 802f5f5add8ac5265cfeea125caa2720dafccfa6
-  AzureAuth: 7c03371febdadf2f4cc5419f4593034754f31402
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f

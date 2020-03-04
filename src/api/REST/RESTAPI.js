@@ -1,7 +1,7 @@
 import {API, APIRequest} from '../API';
 import axios from 'axios';
 import moment from 'moment';
-import AzureAuth from 'react-native-azure-auth';
+import Auth0 from 'react-native-auth0';
 import * as Keychain from 'react-native-keychain';
 
 export default class RESTAPI extends API {
@@ -17,11 +17,13 @@ export default class RESTAPI extends API {
             console.log(`${moment().format('YYYY-MM-DD HH:mm:ss.sss')} Response:`, response);
             return response;
         });
+
+
     }
 
-    azureAuth = new AzureAuth({
-        clientId: '8a597862-04f8-4607-a34c-1d90024773b4',
-        redirectUri: 'msal8a597862-04f8-4607-a34c-1d90024773b4://auth',
+    auth0 = new Auth0({
+        domain: 'https://login.microsoftonline.com/334dfb98-c6db-4e3b-834a-001a3e268e92/oauth2/v2.0/',
+        clientId: '6b1d9c3b-df12-4a15-9a66-0e299f9a9bd2',
     });
 
     server = axios.create({
@@ -37,4 +39,6 @@ export default class RESTAPI extends API {
             return true;
         },
     });
+
+    userId: String;
 };

@@ -8,15 +8,23 @@ import moment from 'moment';
 // Visits
 //------------------------------------------------------------
 
+
 RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
     try {
-        const response = await this.server.get('Encounter', {
-            params: {
-                subject: patientId
-            },
+
+        let params = {};
+        let url = 'Encounter';
+        if (patientId) {
+            params.subject = patientId;
+        } else {
+            url += '?Practitioner=' + this.userId;
+        }
+
+        const response = await this.server.get(url, {
+            params: params,
         });
         if (response.status === 200) {
-            const visits = response.data.entry?.map(json => getVisitFromFHIR((json.resource))) ?? [];
+            const visits = response.data.entry?.map(json => getVisitFromFHIR((json.resource))) || [];
             return new APIRequest(true, visits);
         } else {
             return new APIRequest(false, new Error(response.data));
@@ -60,9 +68,10 @@ RESTAPI.prototype.addVisit = async function addVisit(visit: Visit): APIRequest {
 function getVisitFromFHIR(json) {
     let visit = new Visit();
     visit.id = json.id;
-    visit.patientId = json.subject?.reference?.replace('Patient/','') ?? null;
+    visit.patientId = json.subject?.reference?.replace('Patient/','') || null;
     visit.patient = new Patient({fullName: json.subject?.display});
     visit.reason = json.reasonCode?.text;
+    visit.taskIds = json.basedOn?.map(task => task.reference?.replace("ServiceRequest/", ''));
     if (json.period) {
         visit.start = json.period.start ? moment(json.period.start).toDate() : null;
         visit.end = json.period.end ? moment(json.period.end).toDate() : null;

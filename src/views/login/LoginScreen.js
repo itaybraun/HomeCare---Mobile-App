@@ -14,8 +14,8 @@ export default class LoginScreen extends AppScreen {
 
     state = {
         loading: false,
-        username: 'Eyal.Shalit',
-        password: '123',
+        username: 'user1@itaybraunhotmail.onmicrosoft.com',
+        password: 'Kuju0746987',
         appVersion: null,
     };
 
@@ -23,6 +23,7 @@ export default class LoginScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
         this.login();
     }
 
@@ -49,9 +50,7 @@ export default class LoginScreen extends AppScreen {
     };
 
     render() {
-        return (
-            <Loading loading={this.state.loading} />
-        );
+
         return (
             <SafeAreaView style={{flex: 1}}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

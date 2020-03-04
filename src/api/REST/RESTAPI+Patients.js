@@ -15,7 +15,7 @@ RESTAPI.prototype.getPatients = async function getPatients(): APIRequest {
             headers: { Authorization: `Bearer ${this.token} ` }
         });
         if (response.status === 200) {
-            const patients = response.data.entry?.map(json => getPatientFromFHIR((json.resource))) ?? [];
+            const patients = response.data.entry?.map(json => getPatientFromFHIR((json.resource))) || [];
             return new APIRequest(true, patients);
         } else {
             return new APIRequest(false, new Error(response.data));
@@ -51,8 +51,8 @@ function getPatientFromFHIR(json) {
     patient.dateOfBirth = moment(json.birthDate).toDate();
 
     const official = json.name?.find(name => name.use === 'official');
-    const firstName = official?.given?.join(' ') ?? '';
-    const lastName = official?.family ?? '';
+    const firstName = official?.given?.join(' ') || '';
+    const lastName = official?.family || '';
     patient.fullName = `${firstName} ${lastName}`;
 
     const home = json.address?.find(address => address.use === 'home');

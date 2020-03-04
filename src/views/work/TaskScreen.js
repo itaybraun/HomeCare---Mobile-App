@@ -16,7 +16,7 @@ import {Button, Form, Icon, Card, Text} from 'native-base';
 import FormItemContainer from '../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import * as RNLocalize from "react-native-localize";
+import {uses24HourClock} from "react-native-localize";
 import {APIRequest} from '../../api/API';
 import {Visit} from '../../models/Visit';
 
@@ -60,7 +60,7 @@ export default class TaskScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         this.setState({loading: true});
-        const is24Hour = RNLocalize.uses24HourClock();
+        const is24Hour = uses24HourClock();
         const task = await this.getTask();
         this.setState({
             ...task,
@@ -242,7 +242,7 @@ export default class TaskScreen extends AppScreen {
                         </FormItemContainer>
                     </Form>
                 </ScrollView>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 30, marginTop: 10,}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: 10,}}>
                     <Button block
                             style={{backgroundColor: '#CCF4C9', width: 120,}}
                             onPress={this.submit}>

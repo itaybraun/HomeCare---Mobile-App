@@ -15,7 +15,7 @@ import {Card, Icon, Button, Text as NativeText, Container} from 'native-base';
 import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
 import {Task} from '../../models/Task';
-import * as RNLocalize from "react-native-localize";
+import {uses24HourClock} from "react-native-localize";
 
 export default class WorkScreen extends AppScreen {
 
@@ -64,7 +64,7 @@ export default class WorkScreen extends AppScreen {
         this.setState({loading: true});
         const tasks = await this.getTasks(refresh);
         const flags = await this.getFlags(refresh);
-        const is24Hour = RNLocalize.uses24HourClock();
+        const is24Hour = uses24HourClock();
         this.setState({...tasks, ...flags, is24Hour: is24Hour, loading: false});
     };
 
@@ -199,7 +199,7 @@ export default class WorkScreen extends AppScreen {
                               contentContainerStyle={{ flexGrow: 1 }}
                               data={tasks}
                               renderItem={this.renderTask}
-                              ItemSeparatorComponent={renderSeparator}
+                              ItemSeparatorComponent={() => renderSeparator()}
                               ListEmptyComponent={this.renderListEmpty}
                               ListHeaderComponent={this.renderListHeader}
                               ListFooterComponent={this.renderListFooter}
@@ -209,15 +209,10 @@ export default class WorkScreen extends AppScreen {
                     />
                     {renderLoading(this.state.loading)}
                 </View>
-                <View style={{ flexDirection: 'row', padding: 30, paddingTop: 0, alignItems: 'center', justifyContent: 'space-between'}}>
-                    <Button block
-                        style={{backgroundColor: '#CCF4C9', width: 120,}}
-                        onPress={this.navigateTo('Map')}>
-                        <NativeText style={{color: '#32C02B', fontWeight: 'bold'}}>{strings.Work.map?.toUpperCase()}</NativeText>
-                    </Button>
+                <View style={{ flexDirection: 'row', padding: 20, paddingTop: 10, alignItems: 'center', justifyContent: 'space-evenly'}}>
                     <Button block
                             style={{backgroundColor: '#EBC7F2', width: 120,}}
-                            onPress={this.navigateTo('Calendar')}>
+                            onPress={() => this.navigateTo('Calendar')}>
                         <NativeText style={{color: '#AB1FBD', fontWeight: 'bold'}}>{strings.Work.calendar?.toUpperCase()}</NativeText>
                     </Button>
                 </View>

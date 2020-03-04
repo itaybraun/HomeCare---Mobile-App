@@ -143,7 +143,7 @@ export default class PatientsScreen extends AppScreen {
 
     render() {
 
-        const patients = this.state.filteredPatients ?? this.state.patients;
+        const patients = this.state.filteredPatients || this.state.patients;
 
         return (
             <View style={commonStyles.screenContainer}>
@@ -155,7 +155,7 @@ export default class PatientsScreen extends AppScreen {
                           keyExtractor={item => item.id}
                           onRefresh={this.getData}
                           refreshing={false}
-                          ItemSeparatorComponent={renderSeparator}
+                          ItemSeparatorComponent={() => renderSeparator()}
                           ListEmptyComponent={this.renderListEmpty}
                 />
                 {renderLoading(this.state.loading)}

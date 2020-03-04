@@ -16,7 +16,7 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
             },
         });
         if (response.status === 200) {
-            const flags = response.data.entry?.map(json => getFlagFromFHIR(json.resource)) ?? [];
+            const flags = response.data.entry?.map(json => getFlagFromFHIR(json.resource)) || [];
             return new APIRequest(true, flags);
         } else {
             return new APIRequest(false, new Error(response.data));
@@ -76,8 +76,8 @@ function getFlagFromFHIR(json) {
     flag.category = json.category?.map(category => category.text).join(',');
     flag.startDate = moment(json.period?.start).toDate();
     flag.endDate = moment(json.period?.end).toDate();
-    flag.patientId = json.subject?.reference?.replace('Patient/','') ?? null;
-    flag.internal = json.code.coding?.find(coding => coding.system === 'http://copper-serpent.com/valueset/flag-internal')?.code === '1' ?? false;
+    flag.patientId = json.subject?.reference?.replace('Patient/','') || null;
+    flag.internal = json.code.coding?.find(coding => coding.system === 'http://copper-serpent.com/valueset/flag-internal')?.code === '1' || false;
     return flag;
 }
 

@@ -9,17 +9,16 @@ import RESTAPI from './RESTAPI';
 // Tasks
 //------------------------------------------------------------
 
-RESTAPI.prototype.getTasks = async function getTasks(userId): APIRequest {
+RESTAPI.prototype.getTasks = async function getTasks(): APIRequest {
     try {
-        if (!userId) userId = '8cba6c16-4f07-42de-9b06-b5af4f05f23c';
         const response = await this.server.get('ServiceRequest', {
             params: {
-                performer: userId,
+                performer: this.userId,
                 status: 'active',
             },
         });
         if (response.status === 200) {
-            let tasks = response.data.entry?.map(json => getTaskFromFHIR(json.resource)) ?? [];
+            let tasks = response.data.entry?.map(json => getTaskFromFHIR(json.resource)) || [];
 
             // get all needed patients
             const patientsIDs = tasks.map(task => task.patientId).filter((value, index, self) => self.indexOf(value) === index);
@@ -52,7 +51,7 @@ RESTAPI.prototype.getTasks = async function getTasks(userId): APIRequest {
     }
 };
 
-RESTAPI.prototype.getTask = async function getTasks(taskId): APIRequest {
+RESTAPI.prototype.getTask = async function getTask(taskId): APIRequest {
     try {
         const response = await this.server.get('ServiceRequest/'+taskId, {
         });
@@ -103,16 +102,16 @@ RESTAPI.prototype.updateTask = async function updateTask(task: Task): APIRequest
 function getTaskFromFHIR(json) {
     let task = new Task();
     task.id = json.id;
-    task.patientId = json.subject?.reference?.replace('Patient/','') ?? null;
+    task.patientId = json.subject?.reference?.replace('Patient/','') || null;
     task.patient = new Patient({fullName: json.subject?.display});
-    task.requesterId = json.requester?.reference?.replace('Practitioner/','') ?? null;
+    task.requesterId = json.requester?.reference?.replace('Practitioner/','') || null;
     task.requester = new Practitioner({fullName: json.requester?.display});
     task.performerIds = json.performer?.map(performer => performer.reference?.replace('Practitioner/',''));
-    task.visitId = json.encounter?.reference?.replace('Encounter/','') ?? null;
+    task.visitId = json.encounter?.reference?.replace('Encounter/','') || null;
     task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
     task.text = json.code?.text;
     // TODO: I don't like this priority thing...
-    task.priority = json.priority ? Priorities.getByString(json.priority) ?? Priorities.ROUTINE : Priorities.ROUTINE;
+    task.priority = json.priority ? Priorities.getByString(json.priority) || Priorities.ROUTINE : Priorities.ROUTINE;
     return task;
 }
 

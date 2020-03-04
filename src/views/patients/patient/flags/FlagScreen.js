@@ -188,7 +188,7 @@ export default class FlagScreen extends AppScreen {
                                 <TouchableOpacity
                                     style={{flexDirection: 'row', padding: 11, alignItems: 'center'}}
                                     onPress={this.showCategoryPicker}>
-                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.category?.label ?? ''}</Text>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.category?.label || ''}</Text>
                                     <Icon name="ios-arrow-down" />
                                 </TouchableOpacity>
                             </FormItemContainer>
@@ -282,14 +282,14 @@ export default class FlagScreen extends AppScreen {
                 <DateTimePickerModal
                     isVisible={this.state.showingStartDatePicker}
                     mode="date"
-                    date={this.state.startDate ?? new Date()}
+                    date={this.state.startDate || new Date()}
                     onConfirm={(date) => {
                         let errors = this.state.errors;
                         errors.startDate = false;
                         errors.endDate = false;
                         this.setState({
                             startDate: date,
-                            endDate: this.state.endDate ?? moment(date).add(180, 'd').toDate(),
+                            endDate: this.state.endDate || moment(date).add(180, 'd').toDate(),
                             showingStartDatePicker: false,
                             errors: errors,
                         })
@@ -299,7 +299,7 @@ export default class FlagScreen extends AppScreen {
                 <DateTimePickerModal
                     isVisible={this.state.showingEndDatePicker}
                     minimumDate={this.state.startDate}
-                    date={this.state.endDate ?? new Date()}
+                    date={this.state.endDate || new Date()}
                     mode="date"
                     onConfirm={(date) => {
                         let errors = this.state.errors;
