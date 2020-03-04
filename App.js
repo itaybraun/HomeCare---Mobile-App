@@ -25,6 +25,7 @@ import './src/api/REST/RESTAPI+Flags';
 import './src/api/REST/RESTAPI+Patients';
 import './src/api/REST/RESTAPI+Practitioners';
 import './src/api/REST/RESTAPI+Visits';
+import CalendarScreen from './src/views/work/calendar/CalendarScreen';
 
 export default class App extends React.Component {
 
@@ -63,6 +64,7 @@ const WorkStack = createStackNavigator({
     Work: WorkScreen,
     Task: TaskScreen,
     Visit: VisitScreen,
+    Calendar: CalendarScreen,
 });
 const MessagesStack = createStackNavigator({
     Messages: MessagesScreen,

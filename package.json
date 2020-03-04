@@ -21,7 +21,7 @@
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-auth0": "^2.3.0",
-    "react-native-azure-auth": "^1.5.0",
+    "react-native-calendars": "^1.264.0",
     "react-native-device-info": "^5.5.1",
     "react-native-gesture-handler": "^1.5.5",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
