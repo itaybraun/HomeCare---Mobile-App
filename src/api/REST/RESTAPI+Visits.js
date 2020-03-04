@@ -25,6 +25,29 @@ RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
         });
         if (response.status === 200) {
             const visits = response.data.entry?.map(json => getVisitFromFHIR((json.resource))) || [];
+            let patients = [];
+            if (patientId) {
+                let result: APIRequest = await this.getPatient(patientId);
+                if (result.success)
+                    patients.push(result.data);
+            } else {
+                const patientsIDs = visits.map(visit => visit.patientId).filter((value, index, self) => self.indexOf(value) === index);
+                patients = await Promise.all(patientsIDs.map(async id => {
+                    let result: APIRequest = await this.getPatient(id);
+                    if (result.success)
+                        return result.data;
+
+                    return null;
+                }));
+                patients = patients.filter(p => p);
+            }
+
+            for (const visit: Visit of visits) {
+                if (visit.patientId) {
+                    visit.patient = patients.find(patient => patient.id === visit.patientId);
+                }
+            }
+
             return new APIRequest(true, visits);
         } else {
             return new APIRequest(false, new Error(response.data));
@@ -34,12 +57,17 @@ RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
     }
 };
 
-RESTAPI.prototype.getVisit = async function addVisit(visitId): APIRequest {
+RESTAPI.prototype.getVisit = async function getVisit(visitId): APIRequest {
     try {
         const response = await this.server.get('Encounter/'+visitId, {
         });
         if (response.status === 200) {
             const visit = getVisitFromFHIR(response.data);
+            if (visit.patientId) {
+                let result: APIRequest = await this.getPatient(visit.patientId);
+                if (result.success)
+                    visit.patient = result.data;
+            }
             return new APIRequest(true, visit);
         } else {
             return new APIRequest(false, new Error(response.data));

@@ -191,8 +191,8 @@ export default class CalendarScreen extends AppScreen {
                                 {task?.text || strings.Calendar.noTask}
                             </Text>
                             {
-                                task?.patient?.fullName &&
-                                <Text style={commonStyles.contentText}>{task.patient.fullName}</Text>
+                                visit?.patient?.fullName &&
+                                <Text style={commonStyles.contentText}>{visit.patient.fullName}</Text>
                             }
 
                         </View>
