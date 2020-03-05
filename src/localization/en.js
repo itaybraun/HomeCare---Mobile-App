@@ -111,6 +111,7 @@ export const en = {
 
     Settings: {
         title: 'Settings',
+        qa: 'QA Mode',
     },
 
     Priorities: {
@@ -124,5 +125,5 @@ export const en = {
         myCalendar: 'My Calendar',
         noVisits: 'No visits on {0}',
         noTask: 'No Task',
-    }
+    },
 };

@@ -11,6 +11,7 @@ import moment from 'moment';
 import {Visit} from '../../../models/Visit';
 import {Card, Icon} from 'native-base';
 import {Task} from '../../../models/Task';
+import { Tooltip } from 'react-native-elements';
 
 export default class CalendarScreen extends AppScreen {
 
@@ -115,6 +116,10 @@ export default class CalendarScreen extends AppScreen {
         });
     };
 
+    addVisit = () => {
+        //this.updateSettings('qaMode', !this.settings.qaMode);
+    };
+
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
@@ -193,6 +198,36 @@ export default class CalendarScreen extends AppScreen {
                             }
 
                         </View>
+                        {
+                            this.settings.qaMode &&
+                            <View style={{justifyContent: 'center', alignSelf: 'stretch'}}>
+                                <Tooltip
+                                    overlayColor={'#FFFFFF00'}
+                                    backgroundColor={'#EEEEEEEE'}
+                                    height={200}
+                                    width={320}
+                                    popover={
+                                             <View>
+                                                 <Text>Encounter ID:</Text>
+                                                 <Text>{visit.id}</Text>
+                                                 {
+                                                     visit.taskIds &&
+                                                         <View>
+                                                             <Text> </Text>
+                                                             <Text>ServiceRequest IDs: </Text>
+                                                             <Text>{visit.taskIds.join(", ")}</Text>
+                                                         </View>
+                                                 }
+                                                 <Text> </Text>
+                                                 <Text>Patient ID:</Text>
+                                                 <Text>{visit.patientId}</Text>
+
+                                             </View>
+                                         }>
+                                    <Icon type='AntDesign' name='infocirlceo' />
+                                </Tooltip>
+                            </View>
+                        }
                     </View>
                 </Card>
             </TouchableOpacity>
@@ -218,7 +253,7 @@ export default class CalendarScreen extends AppScreen {
                 <View style={{position: 'absolute', right: 10, bottom: 10}}>
                     <TouchableOpacity
                         style={commonStyles.blackButtonContainer}
-                        onPress={this.addFlag}
+                        onPress={this.addVisit}
                     >
                         <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
                     </TouchableOpacity>

@@ -26,27 +26,61 @@ import './src/api/REST/RESTAPI+Patients';
 import './src/api/REST/RESTAPI+Practitioners';
 import './src/api/REST/RESTAPI+Visits';
 import CalendarScreen from './src/views/work/calendar/CalendarScreen';
+import {Settings} from './src/models/Settings';
+import AsyncStorage from '@react-native-community/async-storage';
+import {Consts} from './src/support/Consts';
+import EventEmitter from 'eventemitter3';
 
 export default class App extends React.Component {
 
     constructor() {
         super();
+    }
 
+    state = {
+        loading: true,
+    };
+
+    componentDidMount(): void {
+        this.getData();
+    }
+
+    getData = async () => {
+        this.setState({loading: true});
         Utils.initialize();
+        this.eventEmitter = new EventEmitter();
         this.api = new RESTAPI();
+
+        let settings = new Settings();
+        try {
+            const savedSettings = await AsyncStorage.getItem(Consts.STORAGE_SETTINGS);
+            if (savedSettings) {
+                settings = JSON.parse(savedSettings);
+            }
+        } catch (error) {console.log(error)}
+        this.settings = settings;
 
         if (Platform.OS === 'ios')
             StatusBar.setBarStyle('dark-content');
         else
             StatusBar.setBarStyle('light-content');
-    }
+
+        this.setState({loading: false});
+    };
 
     render() {
+
+        if (this.state.loading) {
+            return <View />
+        }
+
         return (
             <AppNavigator
                 screenProps={
                     {
                         api: this.api,
+                        settings: this.settings,
+                        eventEmitter: this.eventEmitter,
                     }
                 }
             />

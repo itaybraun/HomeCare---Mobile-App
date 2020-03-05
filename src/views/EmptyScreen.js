@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, FlatList, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
-import AppScreen from '../../support/AppScreen';
+import AppScreen from '../support/AppScreen';
 import {commonStyles} from '../support/CommonStyles';
 
 export default class EmptyScreen extends AppScreen {
