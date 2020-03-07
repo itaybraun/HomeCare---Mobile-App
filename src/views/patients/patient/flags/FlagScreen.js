@@ -157,6 +157,8 @@ export default class FlagScreen extends AppScreen {
                 result = await this.api.addFlag(validationResult.data);
             }
             if (result.success) {
+                const refresh = this.props.navigation.getParam('refresh', null);
+                refresh && refresh();
                 this.pop();
             } else {
                 this.showError(result.data);

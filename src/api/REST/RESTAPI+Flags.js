@@ -3,6 +3,9 @@ import RESTAPI from './RESTAPI';
 import {Flag} from '../../models/Flag';
 import moment from 'moment';
 import {Patient} from '../../models/Patient';
+import {getTaskFromJson} from './RESTAPI+Tasks';
+import {getPatientFromJson} from './RESTAPI+Patients';
+import {getVisitFromJson} from './RESTAPI+Visits';
 
 //------------------------------------------------------------
 // Flags
@@ -14,46 +17,18 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
         let params = {};
         let url = 'Flag';
         if (patientId) {
-            params.subject = patientId;
+            url += `/?subject=Patient/${patientId}`;
         } else {
             url += '?Practitioner=' + this.userId;
         }
+        params.pageLimit = 0;
+        params.flat = true;
+        params.resolveReferences = ["subject"];
 
-        const response = await this.server.get(url, {
-            params: params
-        });
-        if (response.status === 200) {
-            const flags = response.data.entry?.map(json => getFlagFromFHIR(json.resource)) || [];
-
-            let patients = [];
-            if (patientId) {
-                let result: APIRequest = await this.getPatient(patientId);
-                if (result.success)
-                    patients.push(result.data);
-            } else {
-                const patientsIDs = flags.map(flags => flags.patientId).filter((value, index, self) => self.indexOf(value) === index);
-                patients = await Promise.all(patientsIDs.map(async id => {
-                    if (id) {
-                        let result: APIRequest = await this.getPatient(id);
-                        if (result.success)
-                            return result.data;
-                    }
-
-                    return null;
-                }));
-                patients = patients.filter(p => p);
-            }
-
-            for (const flag: Flag of flags) {
-                if (flag.patientId) {
-                    flag.patient = patients.find(patient => patient.id === flag.patientId);
-                }
-            }
-
-            return new APIRequest(true, flags);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        const result = await this.server.request(this.createUrl(url), params);
+        console.log(result);
+        let flags = result.map(json => getFlagFromJson(json)) || [];
+        return new APIRequest(true, flags);
     } catch (error) {
         return new APIRequest(false, error);
     }
@@ -62,13 +37,10 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
 RESTAPI.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
     try {
         const data = getJsonFromFlag(flag);
-        const response = await this.server.post('Flag', JSON.stringify(data));
-        if (response.status === 201) {
-            let flag = getFlagFromFHIR(response.data);
-            return new APIRequest(true, flag);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        const result = await this.server.create(data);
+        console.log('addFlag', result);
+        flag = getFlagFromJson(result);
+        return new APIRequest(true, flag);
     } catch (error) {
         return new APIRequest(false, error);
     }
@@ -77,13 +49,10 @@ RESTAPI.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
 RESTAPI.prototype.editFlag = async function editFlag(flag: Flag): APIRequest {
     try {
         const data = getJsonFromFlag(flag);
-        const response = await this.server.put('Flag/' + flag.id, JSON.stringify(data));
-        if (response.status === 200) {
-            let flag = getFlagFromFHIR(response.data);
-            return new APIRequest(true, flag);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        const result = await this.server.update(data);
+        console.log('addFlag', result);
+        flag = getFlagFromJson(result);
+        return new APIRequest(true, flag);
     } catch (error) {
         return new APIRequest(false, error);
     }
@@ -102,15 +71,15 @@ RESTAPI.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest
     }
 };
 
-function getFlagFromFHIR(json) {
+function getFlagFromJson(json) {
     let flag = new Flag();
     flag.id = json.id;
     flag.text = json.code?.text;
     flag.category = json.category?.map(category => category.text).join(',');
     flag.startDate = moment(json.period?.start).toDate();
     flag.endDate = moment(json.period?.end).toDate();
-    flag.patientId = json.subject?.reference?.replace('Patient/','') || null;
-    flag.patient = new Patient({fullName: json.subject?.display});
+    flag.patientId = json.subject?.id || null;
+    flag.patient = json.subject ? getPatientFromJson(json.subject) : null;
     flag.internal = json.code.coding?.find(coding => coding.system === 'http://copper-serpent.com/valueset/flag-internal')?.code === '1' || false;
     return flag;
 }

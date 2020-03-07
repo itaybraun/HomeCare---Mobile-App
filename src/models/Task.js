@@ -16,8 +16,8 @@ export class Task extends BaseModel {
     requesterId: String;
     requester: Practitioner;
 
-    performerIds: [String];
-    performers: [Practitioner];
+    performerId: String;
+    performers: Practitioner;
 
     visitId: String;
     visit: Visit;

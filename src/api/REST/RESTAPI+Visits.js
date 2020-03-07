@@ -3,6 +3,9 @@ import RESTAPI from './RESTAPI';
 import {Patient} from '../../models/Patient';
 import {Visit} from '../../models/Visit';
 import moment from 'moment';
+import {getPatientFromJson} from './RESTAPI+Patients';
+import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
+import {getTaskFromJson} from './RESTAPI+Tasks';
 
 //------------------------------------------------------------
 // Visits
@@ -11,68 +14,37 @@ import moment from 'moment';
 
 RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
     try {
-
-        let params = {};
         let url = 'Encounter';
         if (patientId) {
-            params.subject = patientId;
+            url += '?subject=' + patientId;
         } else {
-            url += '?Practitioner=' + this.userId;
+
         }
+        let params = {};
+        params.pageLimit = 0;
+        params.flat = true;
+        params.resolveReferences = ["subject", "basedOn"];
+        const result = await this.server.request(this.createUrl(url), params);
+        console.log(result);
 
-        const response = await this.server.get(url, {
-            params: params,
-        });
-        if (response.status === 200) {
-            const visits = response.data.entry?.map(json => getVisitFromFHIR((json.resource))) || [];
-            let patients = [];
-            if (patientId) {
-                let result: APIRequest = await this.getPatient(patientId);
-                if (result.success)
-                    patients.push(result.data);
-            } else {
-                const patientsIDs = visits.map(visit => visit.patientId).filter((value, index, self) => self.indexOf(value) === index);
-                patients = await Promise.all(patientsIDs.map(async id => {
-                    if (id) {
-                        let result: APIRequest = await this.getPatient(id);
-                        if (result.success)
-                            return result.data;
-                    }
-                    return null;
-                }));
-                patients = patients.filter(p => p);
-            }
+        let visits = result.map(json => getVisitFromJson(json)) || [];
 
-            for (const visit: Visit of visits) {
-                if (visit.patientId) {
-                    visit.patient = patients.find(patient => patient.id === visit.patientId);
-                }
-            }
-
-            return new APIRequest(true, visits);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        return new APIRequest(true, visits);
     } catch (error) {
+        console.log(error);
         return new APIRequest(false, error);
     }
 };
 
 RESTAPI.prototype.getVisit = async function getVisit(visitId): APIRequest {
     try {
-        const response = await this.server.get('Encounter/'+visitId, {
-        });
-        if (response.status === 200) {
-            const visit = getVisitFromFHIR(response.data);
-            if (visit.patientId) {
-                let result: APIRequest = await this.getPatient(visit.patientId);
-                if (result.success)
-                    visit.patient = result.data;
-            }
-            return new APIRequest(true, visit);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        let url = 'Encounter/'+visitId;
+        let params = {};
+        params.resolveReferences = ["subject", "basedOn"];
+        const result = await this.server.request(this.createUrl(url), params);
+        console.log(result);
+        const visit = getVisitFromJson(result);
+        return new APIRequest(true, visit);
     } catch (error) {
         return new APIRequest(false, error);
     }
@@ -80,27 +52,38 @@ RESTAPI.prototype.getVisit = async function getVisit(visitId): APIRequest {
 
 RESTAPI.prototype.addVisit = async function addVisit(visit: Visit): APIRequest {
     try {
-
         const data = getJsonFromVisit(visit);
-        const response = await this.server.post('Encounter', JSON.stringify(data));
-        if (response.status === 201) {
-            let visit = getVisitFromFHIR(response.data);
-            return new APIRequest(true, visit);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        const result = await this.server.create(data);
+        console.log('addVisit', result);
+        visit = getVisitFromJson(result);
+        // HACK!
+        return await this.getVisit(visit.id);
     } catch (error) {
         return new APIRequest(false, error);
     }
 };
 
-function getVisitFromFHIR(json) {
+RESTAPI.prototype.updateVisit = async function updateVisit(visit: Visit): APIRequest {
+    try {
+        const data = getJsonFromVisit(visit);
+        const result = await this.server.update(data);
+        console.log('updateVisit', result);
+        visit = getVisitFromJson(result);
+        // HACK!
+        return await this.getVisit(visit.id);
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
+export function getVisitFromJson(json) {
     let visit = new Visit();
     visit.id = json.id;
-    visit.patientId = json.subject?.reference?.replace('Patient/','') || null;
-    visit.patient = new Patient({fullName: json.subject?.display});
+    visit.patientId = json.subject?.id || null;
+    visit.patient = json.subject ? getPatientFromJson(json.subject) : null;
     visit.reason = json.reasonCode?.text;
-    visit.taskIds = json.basedOn?.map(task => task.reference?.replace("ServiceRequest/", ''));
+    visit.taskIds = json.basedOn?.map(task => task.id);
+    visit.tasks = json.basedOn?.map(task => getTaskFromJson(task));
     if (json.period) {
         visit.start = json.period.start ? moment(json.period.start).toDate() : null;
         visit.end = json.period.end ? moment(json.period.end).toDate() : null;
@@ -157,6 +140,16 @@ function getJsonFromVisit(visit: Visit) {
             end: moment(visit.end).toISOString()
         }
     };
+
+    if (visit.id) {
+        data.id = visit.id;
+    }
+
+    data.basedOn = visit.taskIds?.map(id => {
+        return {
+            reference: 'ServiceRequest/' + id,
+        }
+    });
 
     return data;
 }

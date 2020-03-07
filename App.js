@@ -17,6 +17,11 @@ import {appColors} from './src/support/CommonStyles';
 import TaskScreen from './src/views/work/TaskScreen';
 import VisitScreen from './src/views/work/VisitScreen';
 import RESTAPI from './src/api/REST/RESTAPI';
+import CalendarScreen from './src/views/work/calendar/CalendarScreen';
+import {Settings} from './src/models/Settings';
+import AsyncStorage from '@react-native-community/async-storage';
+import {Consts} from './src/support/Consts';
+import EventEmitter from 'eventemitter3';
 
 // TODO: find a way to move this to RESTAPI
 import './src/api/REST/RESTAPI+Tasks';
@@ -25,11 +30,6 @@ import './src/api/REST/RESTAPI+Flags';
 import './src/api/REST/RESTAPI+Patients';
 import './src/api/REST/RESTAPI+Practitioners';
 import './src/api/REST/RESTAPI+Visits';
-import CalendarScreen from './src/views/work/calendar/CalendarScreen';
-import {Settings} from './src/models/Settings';
-import AsyncStorage from '@react-native-community/async-storage';
-import {Consts} from './src/support/Consts';
-import EventEmitter from 'eventemitter3';
 
 export default class App extends React.Component {
 

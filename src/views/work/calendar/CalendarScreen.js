@@ -50,10 +50,8 @@ export default class CalendarScreen extends AppScreen {
     getData = async (refresh = true) => {
         this.setState({loading: true});
         const visits = await this.getVisits();
-        const tasks = await this.getTasksForVisits(visits.visits);
         this.setState({
             ...visits,
-            ...tasks,
             loading: false,
         });
     };
@@ -67,24 +65,6 @@ export default class CalendarScreen extends AppScreen {
             this.showError(result.data);
             return {visits: []};
         }
-    };
-
-    getTasksForVisits = async (visits) => {
-        let taskIds = visits.reduce((array, visit) => {
-            return visit.taskIds ? array.concat(visit.taskIds) : array;
-        }, []);
-        taskIds = taskIds.filter((value, index, self) => self.indexOf(value) === index);
-        const tasks = [];
-        for (const id of taskIds) {
-            let result: APIRequest = await this.api.getTask(id);
-            if (result.success) {
-                tasks.push(result.data)
-            } else {
-                this.showError(result.data);
-                continue;
-            }
-        }
-        return {tasks: tasks};
     };
 
     //------------------------------------------------------------
@@ -117,7 +97,7 @@ export default class CalendarScreen extends AppScreen {
     };
 
     addVisit = () => {
-        //this.updateSettings('qaMode', !this.settings.qaMode);
+
     };
 
     //------------------------------------------------------------
@@ -173,13 +153,12 @@ export default class CalendarScreen extends AppScreen {
 
     renderVisit = ({item}) => {
         let visit: Visit = item;
-        let task: Task = visit.taskIds?.length > 0 ? this.state.tasks.find(task => task.id === visit.taskIds[0]) : null;
         const width = uses24HourClock() ? 45 : 75;
         return (
             <TouchableOpacity style={styles.visitContainer}>
                 <Card style={commonStyles.cardStyle}>
                     <View style={{flexDirection: 'row'}}>
-                        <View style={{width: width}}>
+                        <View style={{width: width, justifyContent: 'center'}}>
                             <Text style={styles.timeStyle}>
                                 {moment(visit.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}
                             </Text>
@@ -189,8 +168,8 @@ export default class CalendarScreen extends AppScreen {
                         </View>
                         <View style={styles.separator} />
                         <View style={{flex: 1, justifyContent: 'center'}}>
-                            <Text style={task ? commonStyles.yellowText : commonStyles.titleText}>
-                                {task?.text || strings.Calendar.noTask}
+                            <Text style={visit.tasks && visit.tasks.length > 0 ? commonStyles.yellowText : commonStyles.titleText}>
+                                {visit.tasks?.[0]?.text || strings.Calendar.noTask}
                             </Text>
                             {
                                 visit?.patient?.fullName &&

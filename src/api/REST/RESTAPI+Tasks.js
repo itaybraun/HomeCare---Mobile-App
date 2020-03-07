@@ -4,6 +4,9 @@ import moment from 'moment';
 import {Priorities, Task} from '../../models/Task';
 import {Practitioner} from '../../models/Practitioner';
 import RESTAPI from './RESTAPI';
+import {getPatientFromJson} from './RESTAPI+Patients';
+import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
+import {getVisitFromJson} from './RESTAPI+Visits';
 
 //------------------------------------------------------------
 // Tasks
@@ -21,39 +24,15 @@ RESTAPI.prototype.getTasks = async function getTasks(patientId): APIRequest {
             params.performer = this.userId;
             params.active = true;
         }
+        params.pageLimit = 0;
+        params.flat = true;
+        params.resolveReferences = ["subject", "requester", "performer.0", "encounter"];
 
-        const response = await this.server.get(url, {
-            params: params,
-        });
-        if (response.status === 200) {
-            let tasks = response.data.entry?.map(json => getTaskFromFHIR(json.resource)) || [];
+        const result = await this.server.request(this.createUrl(url), params);
+        console.log(result);
+        let tasks = result.map(json => getTaskFromJson(json)) || [];
 
-            // get all needed patients
-            const patientsIDs = tasks.map(task => task.patientId).filter((value, index, self) => self.indexOf(value) === index);
-            let patients = await Promise.all(patientsIDs.map(async id => {
-                    let result: APIRequest = await this.getPatient(id);
-                    if (result.success)
-                        return result.data;
-
-                return null;
-            }));
-            patients = patients.filter(p => p);
-
-            for (const task: Task of tasks) {
-                if (task.patientId) {
-                    task.patient = patients.find(patient => patient.id === task.patientId);
-                }
-
-                if (task.visitId) {
-                    let result: APIRequest = await this.getVisit(task.visitId);
-                    if (result.success)
-                        task.visit = result.data;
-                }
-            }
-            return new APIRequest(true, tasks);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        return new APIRequest(true, tasks);
     } catch (error) {
         return new APIRequest(false, error);
     }
@@ -61,32 +40,15 @@ RESTAPI.prototype.getTasks = async function getTasks(patientId): APIRequest {
 
 RESTAPI.prototype.getTask = async function getTask(taskId): APIRequest {
     try {
-        const response = await this.server.get('ServiceRequest/'+taskId, {
-        });
-        if (response.status === 200) {
-            const task = getTaskFromFHIR(response.data);
-            if (task.patientId) {
-                let result: APIRequest = await this.getPatient(task.patientId);
-                if (result.success)
-                    task.patient = result.data;
-            }
-            if (task.requesterId) {
-                let result: APIRequest = await this.getPractitioner(task.requesterId);
-                if (result.success)
-                    task.requester = result.data;
-            }
+        let params = {};
+        let url = 'ServiceRequest/'+taskId;
+        params.flat = true;
+        params.resolveReferences = ["subject", "requester", "performer.0", "encounter"];
+        const result = await this.server.request(this.createUrl(url), params);
+        console.log(result);
+        const task = getTaskFromJson(result);
 
-            if (task.visitId) {
-                let result: APIRequest = await this.getVisit(task.visitId);
-                if (result.success) {
-                    task.visit = result.data;
-                }
-            }
-
-            return new APIRequest(true, task);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        return new APIRequest(true, task);
     } catch (error) {
         return new APIRequest(false, error);
     }
@@ -95,27 +57,25 @@ RESTAPI.prototype.getTask = async function getTask(taskId): APIRequest {
 RESTAPI.prototype.updateTask = async function updateTask(task: Task): APIRequest {
     try {
         const data = getJsonFromTask(task);
-        const response = await this.server.put('ServiceRequest/' + task.id, JSON.stringify(data));
-        if (response.status === 200) {
-            let task = getTaskFromFHIR(response.data);
-            return new APIRequest(true, task);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        const result = await this.server.update(data);
+        task = getTaskFromJson(result);
+        return new APIRequest(true, task);
     } catch (error) {
         return new APIRequest(false, error);
     }
 };
 
-function getTaskFromFHIR(json) {
+export function getTaskFromJson(json) {
     let task = new Task();
     task.id = json.id;
-    task.patientId = json.subject?.reference?.replace('Patient/','') || null;
-    task.patient = new Patient({fullName: json.subject?.display});
-    task.requesterId = json.requester?.reference?.replace('Practitioner/','') || null;
-    task.requester = new Practitioner({fullName: json.requester?.display});
-    task.performerIds = json.performer?.map(performer => performer.reference?.replace('Practitioner/',''));
-    task.visitId = json.encounter?.reference?.replace('Encounter/','') || null;
+    task.patientId = json.subject?.id || null;
+    task.patient = json.subject ? getPatientFromJson(json.subject) : null;
+    task.requesterId = json.requester?.id || null;
+    task.requester = json.requester ? getPractitionerFromJSON(json.requester) : null;
+    task.performerId = json.performer?.id || null;
+    task.performers = json.performer ? getPractitionerFromJSON(json.performer) : null;
+    task.visitId = json.encounter?.id || null;
+    task.visit = json.encounter ? getVisitFromJson(json.encounter) : null
     //task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
     task.openDate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;
     task.text = json.code?.text;
@@ -124,7 +84,7 @@ function getTaskFromFHIR(json) {
     return task;
 }
 
-function getJsonFromTask(task: Task) {
+export function getJsonFromTask(task: Task) {
     const data = {
         resourceType: "ServiceRequest",
         id: task.id,

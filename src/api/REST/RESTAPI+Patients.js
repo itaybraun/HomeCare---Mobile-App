@@ -10,16 +10,14 @@ import {Address} from '../../models/Person';
 
 RESTAPI.prototype.getPatients = async function getPatients(): APIRequest {
     try {
-        const response = await this.server.get('Patient', {
-            params: {},
-            headers: { Authorization: `Bearer ${this.token} ` }
-        });
-        if (response.status === 200) {
-            const patients = response.data.entry?.map(json => getPatientFromFHIR((json.resource))) || [];
-            return new APIRequest(true, patients);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        let url = 'Patient';
+        let params = {};
+        params.pageLimit = 0;
+        params.flat = true;
+        const result = await this.server.request(this.createUrl(url), params);
+        console.log(result);
+        const patients = result.map(json => getPatientFromJson((json))) || [];
+        return new APIRequest(true, patients);
     } catch (error) {
         return new APIRequest(false, error);
     }
@@ -30,21 +28,18 @@ RESTAPI.prototype.getPatient = async function getPatient(patientId: String): API
         if (!patientId) {
             return new APIRequest(true, null);
         }
-        const response = await this.server.get('Patient/'+patientId, {
-            params: {},
-        });
-        if (response.status === 200) {
-            const patient = getPatientFromFHIR(response.data);
-            return new APIRequest(true, patient);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+
+        let url = 'Patient/'+patientId;
+        const result = await this.server.request(this.createUrl(url));
+        console.log(result);
+        const patient = getPatientFromJson(result);
+        return new APIRequest(true, patient);
     } catch (error) {
         return new APIRequest(false, error);
     }
 };
 
-function getPatientFromFHIR(json) {
+export function getPatientFromJson(json) {
     let patient = new Patient();
     patient.id = json.id;
     patient.gender = json.gender;

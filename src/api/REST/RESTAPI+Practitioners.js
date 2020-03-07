@@ -18,7 +18,7 @@ RESTAPI.prototype.getPractitioner = async function getPractitioner(practitionerI
             params: {},
         });
         if (response.status === 200) {
-            const patient = getPractitionerFromFHIR(response.data);
+            const patient = getPractitionerFromJSON(response.data);
             return new APIRequest(true, patient);
         } else {
             return new APIRequest(false, new Error(response.data));
@@ -28,7 +28,7 @@ RESTAPI.prototype.getPractitioner = async function getPractitioner(practitionerI
     }
 };
 
-function getPractitionerFromFHIR(json) {
+export function getPractitionerFromJSON(json) {
     let practitioner = new Practitioner();
     practitioner.id = json.id;
     practitioner.gender = json.gender;

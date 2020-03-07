@@ -78,10 +78,14 @@ API.prototype.getVisits = async function getVisits(patientId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
-API.prototype.getVisit = async function addVisit(visitId): APIRequest {
+API.prototype.getVisit = async function getVisit(visitId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
 API.prototype.addVisit = async function addVisit(visit: Visit): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+API.prototype.updateVisit = async function updateVisit(visit: Visit): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };

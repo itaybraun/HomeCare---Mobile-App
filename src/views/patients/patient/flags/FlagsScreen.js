@@ -48,12 +48,11 @@ export default class FlagsScreen extends AppScreen {
 
     componentDidMount(): void {
         super.componentDidMount();
+        this.getData();
     }
 
     willFocus() {
         super.willFocus();
-
-        this.getData();
     }
 
     getData = async (refresh = true) => {
@@ -77,7 +76,11 @@ export default class FlagsScreen extends AppScreen {
     addFlag = async () => {
         const patient: Patient = this.props.navigation.getParam('patient', null);
         if (patient) {
-            this.navigateTo('Flag', {patient: patient, flag: null});
+            this.navigateTo('Flag', {
+                patient: patient,
+                flag: null,
+                refresh: this.getData,
+            });
         }
         this.closeRow();
     };
@@ -85,7 +88,11 @@ export default class FlagsScreen extends AppScreen {
     editFlag = async (item, rowMap) => {
         const patient: Patient = this.props.navigation.getParam('patient', null);
         if (patient) {
-            this.navigateTo('Flag', {patient: patient, flag: item});
+            this.navigateTo('Flag', {
+                patient: patient,
+                flag: item,
+                refresh: this.getData,
+            });
         }
         this.closeRow();
     };
