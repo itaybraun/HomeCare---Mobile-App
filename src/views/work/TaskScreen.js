@@ -101,6 +101,11 @@ export default class TaskScreen extends AppScreen {
     }
 
     submit = async () => {
+
+        this.setState({
+            loading: true,
+        });
+
         let task: Task = this.state.task;
         let visit: Visit = this.state.visit;
         if (!visit) {
@@ -119,13 +124,18 @@ export default class TaskScreen extends AppScreen {
             }
         }
 
-        // remove task from old visit
+        // remove task from old visit. CRAZY!
         if (task.visit) {
-            task.visit.removeTaskId(task.id);
-            let result: APIRequest = await this.api.updateVisit(task.visit);
-            if (!result.success) {
+            let result: APIRequest = await this.api.getVisit(task.visit.id);
+            if (result.success) {
+                let visit: Visit = result.data;
+                visit.removeTaskId(task.id);
+                result = await this.api.updateVisit(visit);
+                if (!result.success) {
+                    this.showError(result.data);
+                }
+            } else {
                 this.showError(result.data);
-                return;
             }
         }
         // add task to new visit
@@ -136,6 +146,7 @@ export default class TaskScreen extends AppScreen {
             return;
         }
 
+        // update task
         task.visit = visit;
         result = await this.api.updateTask(task);
         if (result.success) {
@@ -156,12 +167,7 @@ export default class TaskScreen extends AppScreen {
     //------------------------------------------------------------
 
     render() {
-
-        if (this.state.loading) {
-            return renderLoading(this.state.loading)
-        }
-
-
+        
         let patientGenderAndAge = [];
         if (this.state.task?.patient?.gender)
             patientGenderAndAge.push(this.state.task.patient.gender.charAt(0).toUpperCase());
@@ -271,6 +277,7 @@ export default class TaskScreen extends AppScreen {
                         <Text style={{color: '#EC1A31', fontWeight: 'bold'}}>{strings.Common.cancelButton?.toUpperCase()}</Text>
                     </Button>
                 </View>
+                {renderLoading(this.state.loading)}
             </View>
         );
     }

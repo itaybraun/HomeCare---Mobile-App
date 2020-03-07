@@ -25,9 +25,10 @@ RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
         params.flat = true;
         params.resolveReferences = ["subject", "basedOn"];
         const result = await this.server.request(this.createUrl(url), params);
-        console.log(result);
+        console.log('getVisits1', result);
 
         let visits = result.map(json => getVisitFromJson(json)) || [];
+        console.log('getVisits2', visits);
 
         return new APIRequest(true, visits);
     } catch (error) {
@@ -42,7 +43,7 @@ RESTAPI.prototype.getVisit = async function getVisit(visitId): APIRequest {
         let params = {};
         params.resolveReferences = ["subject", "basedOn"];
         const result = await this.server.request(this.createUrl(url), params);
-        console.log(result);
+        console.log('getVisit', result);
         const visit = getVisitFromJson(result);
         return new APIRequest(true, visit);
     } catch (error) {
@@ -66,8 +67,9 @@ RESTAPI.prototype.addVisit = async function addVisit(visit: Visit): APIRequest {
 RESTAPI.prototype.updateVisit = async function updateVisit(visit: Visit): APIRequest {
     try {
         const data = getJsonFromVisit(visit);
+        console.log('updateVisit1', data);
         const result = await this.server.update(data);
-        console.log('updateVisit', result);
+        console.log('updateVisit2', result);
         visit = getVisitFromJson(result);
         // HACK!
         return await this.getVisit(visit.id);
