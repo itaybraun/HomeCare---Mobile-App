@@ -167,7 +167,7 @@ export default class TaskScreen extends AppScreen {
     //------------------------------------------------------------
 
     render() {
-        
+
         let patientGenderAndAge = [];
         if (this.state.task?.patient?.gender)
             patientGenderAndAge.push(this.state.task.patient.gender.charAt(0).toUpperCase());
