@@ -26,7 +26,7 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
         params.resolveReferences = ["subject"];
 
         const result = await this.server.request(this.createUrl(url), params);
-        console.log(result);
+        console.log('getFlags', result);
         let flags = result.map(json => getFlagFromJson(json)) || [];
         return new APIRequest(true, flags);
     } catch (error) {
@@ -50,7 +50,7 @@ RESTAPI.prototype.editFlag = async function editFlag(flag: Flag): APIRequest {
     try {
         const data = getJsonFromFlag(flag);
         const result = await this.server.update(data);
-        console.log('addFlag', result);
+        console.log('editFlag', result);
         flag = getFlagFromJson(result);
         return new APIRequest(true, flag);
     } catch (error) {
@@ -60,12 +60,9 @@ RESTAPI.prototype.editFlag = async function editFlag(flag: Flag): APIRequest {
 
 RESTAPI.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest {
     try {
-        const response = await this.server.delete('Flag/' + flag.id);
-        if (response.status === 204) {
-            return new APIRequest(true);
-        } else {
-            return new APIRequest(false, new Error(response.data));
-        }
+        const result = await this.server.delete('Flag/' + flag.id);
+        console.log('deleteFlag', result);
+        return new APIRequest(true);
     } catch (error) {
         return new APIRequest(false, error);
     }

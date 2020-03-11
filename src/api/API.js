@@ -2,6 +2,7 @@ import {Flag} from '../models/Flag';
 import {Request} from '../support/Utils';
 import {Visit} from '../models/Visit';
 import {Task} from '../models/Task';
+import {Questionnaire} from '../models/Questionnaire';
 
 export class API {
     constructor(){
@@ -87,5 +88,15 @@ API.prototype.addVisit = async function addVisit(visit: Visit): APIRequest {
 };
 
 API.prototype.updateVisit = async function updateVisit(visit: Visit): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+
+
+API.prototype.getQuestionnaire = async function getQuestionnaire(id: String): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+API.prototype.submitQuestionnaire = async function submitQuestionnaire(answers: Object, questionnaire: Questionnaire): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };

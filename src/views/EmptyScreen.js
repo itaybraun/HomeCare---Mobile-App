@@ -59,8 +59,5 @@ export default class EmptyScreen extends AppScreen {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-    },
+
 });

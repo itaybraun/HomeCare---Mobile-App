@@ -42,6 +42,7 @@ export const en = {
         progress: 'Monitor Progress',
         alert: 'Raise Alert',
         created: 'Created {0}',
+        executeTask: 'Execute Task',
     },
     Flags: {
         title: 'Flags',
@@ -126,4 +127,15 @@ export const en = {
         noVisits: 'No visits on {0}',
         noTask: 'No Task',
     },
+
+    Questionnaire :{
+        general: 'General',
+        basedOnTask: 'Based on Task',
+        patient: 'Patient',
+        practitioner: 'Practitioner',
+        fillDate: 'Fill Date',
+        upTo3Images: 'Up to 3 images',
+        submit: 'Submit',
+        submitText: 'You are about to submit the form',
+    }
 };

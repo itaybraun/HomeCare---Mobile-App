@@ -30,6 +30,8 @@ import './src/api/REST/RESTAPI+Flags';
 import './src/api/REST/RESTAPI+Patients';
 import './src/api/REST/RESTAPI+Practitioners';
 import './src/api/REST/RESTAPI+Visits';
+import './src/api/REST/RESTAPI+Questionnaire';
+import QuestionnaireScreen from './src/views/patients/patient/questionnaire/QuestionnaireScreen';
 
 export default class App extends React.Component {
 
@@ -93,6 +95,7 @@ const PatientsStack = createStackNavigator({
     Patient: PatientScreen,
     Flags: FlagsScreen,
     Flag: FlagScreen,
+    Questionnaire: QuestionnaireScreen,
 });
 const WorkStack = createStackNavigator({
     Work: WorkScreen,

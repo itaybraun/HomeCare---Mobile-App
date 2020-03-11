@@ -44,6 +44,10 @@ export default class PatientScreen extends AppScreen {
         tasks: [],
     };
 
+    get patient(): Patient {
+        return this.props.navigation.getParam('patient', null);
+    }
+
     //------------------------------------------------------------
     // Overrides
     //------------------------------------------------------------
@@ -65,9 +69,8 @@ export default class PatientScreen extends AppScreen {
     };
 
     getTasks = async (refresh = true) => {
-        const patient: Patient = this.props.navigation.getParam('patient', null);
-        if (patient) {
-            let result: APIRequest = await this.api.getTasks(patient.id);
+        if (this.patient) {
+            let result: APIRequest = await this.api.getTasks(this.patient.id);
             if (result.success) {
                 return {tasks: result.data};
             } else {
@@ -79,11 +82,6 @@ export default class PatientScreen extends AppScreen {
     //------------------------------------------------------------
     // Methods
     //------------------------------------------------------------
-
-    navigateToView = (view) => {
-        const patient: Patient = this.props.navigation.getParam('patient', null);
-        this.navigateTo(view, {patient: patient});
-    };
 
     handleTabIndexChange = index => {
         this.setState({ index });
@@ -100,11 +98,11 @@ export default class PatientScreen extends AppScreen {
     renderScene = ({ route }) => {
         switch (route.key) {
             case 'profile':
-                return <PatientProfile navigateTo={this.navigateToView} />;
+                return <PatientProfile patient={this.patient} navigateTo={this.navigateTo} />;
             case 'care':
-                return <PatientCarePlans />;
+                return <PatientCarePlans patient={this.patient} navigateTo={this.navigateTo}  />;
             case 'tasks':
-                return <PatientTasks tasks={this.state.tasks} navigateTo={this.navigateToView} />;
+                return <PatientTasks patient={this.patient} tasks={this.state.tasks} navigateTo={this.navigateTo} />;
             default:
                 return null;
         }

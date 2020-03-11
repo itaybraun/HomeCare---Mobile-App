@@ -26,7 +26,7 @@ RESTAPI.prototype.getTasks = async function getTasks(patientId): APIRequest {
         }
         params.pageLimit = 0;
         params.flat = true;
-        params.resolveReferences = ["subject", "requester", "performer.0", "encounter"];
+        params.resolveReferences = ["subject", "requester", "performer.0", "encounter", "basedOn.0"];
 
         const result = await this.server.request(this.createUrl(url), params);
         console.log(result);
@@ -43,7 +43,7 @@ RESTAPI.prototype.getTask = async function getTask(taskId): APIRequest {
         let params = {};
         let url = 'ServiceRequest/'+taskId;
         params.flat = true;
-        params.resolveReferences = ["subject", "requester", "performer.0", "encounter"];
+        params.resolveReferences = ["subject", "requester", "performer.0", "encounter", "basedOn.0"];
         const result = await this.server.request(this.createUrl(url), params);
         console.log(result);
         const task = getTaskFromJson(result);
@@ -73,7 +73,7 @@ export function getTaskFromJson(json) {
     task.requesterId = json.requester?.id || null;
     task.requester = json.requester ? getPractitionerFromJSON(json.requester) : null;
     task.performerId = json.performer?.id || null;
-    task.performers = json.performer ? getPractitionerFromJSON(json.performer) : null;
+    task.performer = json.performer ? getPractitionerFromJSON(json.performer) : null;
     task.visitId = json.encounter?.id || null;
     task.visit = json.encounter ? getVisitFromJson(json.encounter) : null
     //task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
@@ -81,6 +81,7 @@ export function getTaskFromJson(json) {
     task.text = json.code?.text;
     // TODO: I don't like this priority thing...
     task.priority = json.priority ? Priorities.getByString(json.priority) || Priorities.ROUTINE : Priorities.ROUTINE;
+    task.questionnaireId = json.basedOn?.[0].relatedArtifact?.[0].resource?.replace('Questionnaire/', '') || null;
     return task;
 }
 

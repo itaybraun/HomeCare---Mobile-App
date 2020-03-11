@@ -13,7 +13,7 @@ import {
     appColors,
     commonStyles,
     renderDisclosureIndicator,
-    renderLoading,
+    renderLoading, renderRadioButton,
     renderSeparator,
 } from '../../support/CommonStyles';
 import {strings} from '../../localization/strings';
@@ -199,7 +199,7 @@ export default class VisitScreen extends AppScreen {
                 onPress={() => this.selectVisit(index)}>
 
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    {this.renderRadioButton(this.state.selectedVisitIndex === index)}
+                    {renderRadioButton(this.state.selectedVisitIndex === index)}
                     <Text style={{marginLeft: 10}}>
                         {
                             moment(item.start).format(
@@ -223,7 +223,7 @@ export default class VisitScreen extends AppScreen {
                 onPress={() => this.selectVisit(index)}>
                 {renderSeparator()}
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    {this.renderRadioButton(this.state.selectedVisitIndex === index)}
+                    {renderRadioButton(this.state.selectedVisitIndex === index)}
                     <Text style={{marginLeft: 10}}>{strings.Visit.newVisit}</Text>
                 </View>
                 {
@@ -276,16 +276,6 @@ export default class VisitScreen extends AppScreen {
                 }
             </TouchableOpacity>
         );
-    };
-
-    renderRadioButton = (selected) => {
-        return (
-            <View style={[styles.radioButton, selected ? styles.radioButtonSelected : {}]}>
-                {
-                    selected && <View style={styles.radioButtonInner} />
-                }
-            </View>
-        )
     };
 
     render() {
@@ -401,24 +391,4 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginHorizontal: 10,
     },
-    radioButton: {
-        height: 24,
-        width: 24,
-        borderRadius: 12,
-        borderWidth: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: '#999999',
-    },
-
-    radioButtonSelected: {
-        borderColor: '#0F7152',
-    },
-
-    radioButtonInner: {
-        height: 14,
-        width: 14,
-        backgroundColor: '#0F7152',
-        borderRadius: 7,
-    }
 });

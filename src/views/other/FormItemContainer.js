@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, StyleSheet, Text, KeyboardAvoidingView, Animated} from 'react-native';
 import {appColors} from '../../support/CommonStyles';
 import PropTypes from 'prop-types';
+import {strings} from '../../localization/strings';
 
 
 export default class FormItemContainer extends Component {
@@ -39,7 +40,7 @@ export default class FormItemContainer extends Component {
             color = appColors.textColor;
 
         return (
-            <KeyboardAvoidingView>
+            <KeyboardAvoidingView style={{marginBottom: 20,}}>
                 <Animated.View style={[
                     styles.container,
                     {...this.props.style},
@@ -52,10 +53,13 @@ export default class FormItemContainer extends Component {
                         <View style={styles.titleContainer}>
                             <View style={styles.borderEraser}/>
                             <Text style={[styles.titleText, {color: color}]}>{this.props.title}</Text>
-
                         </View>
                     }
                 </Animated.View>
+                {
+                    this.props.bottomInfo &&
+                    <Text style={{fontSize: 12, marginLeft: 12, marginTop: 3, color: appColors.linkColor}}>{this.props.bottomInfo}</Text>
+                }
             </KeyboardAvoidingView>
         );
     }
@@ -65,6 +69,7 @@ FormItemContainer.propTypes = {
     title: PropTypes.string.isRequired,
     disabled: PropTypes.bool,
     error: PropTypes.bool,
+    bottomInfo: PropTypes.string,
 };
 
 const styles = StyleSheet.create({
@@ -72,7 +77,6 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderWidth: 2,
         overflow: 'visible',
-        marginBottom: 20,
     },
 
     titleContainer: {

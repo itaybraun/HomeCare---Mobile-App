@@ -9,6 +9,7 @@ export const appColors = {
     lineColor: '#CCCCCC',
     yellowColor: '#FEC260',
     backgroundYellowColor: '#DEBB4A',
+    pinkColor: '#F1A5BD',
 };
 
 export const commonStyles = {
@@ -120,6 +121,8 @@ export const commonStyles = {
         color: appColors.textColor,
     },
 
+
+
     tabBar: {
         flexDirection: 'row',
     },
@@ -142,9 +145,52 @@ export const commonStyles = {
         color: appColors.linkColor,
     },
 
+
+
     headerButtonContainer: {
         marginRight: 15,
     },
+
+
+
+    radioButton: {
+        height: 24,
+        width: 24,
+        borderRadius: 12,
+        borderWidth: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#999999',
+    },
+
+    radioButtonSelected: {
+        borderColor: '#0F7152',
+    },
+
+    radioButtonInner: {
+        height: 14,
+        width: 14,
+        backgroundColor: '#0F7152',
+        borderRadius: 7,
+    },
+
+
+
+    pinkHeader:{
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: appColors.pinkColor,
+        marginBottom: 5,
+    },
+
+    pinkHeaderText: {
+        color: '#FFFFFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+
+
+
 };
 
 export const renderSeparator = (style = null) => {
@@ -194,4 +240,14 @@ export const renderNavigationHeaderButton = (component, onPress) => {
             {component}
         </TouchableOpacity>
     );
-}
+};
+
+export const renderRadioButton = (selected) => {
+    return (
+        <View style={[commonStyles.radioButton, selected ? commonStyles.radioButtonSelected : {}]}>
+            {
+                selected && <View style={commonStyles.radioButtonInner} />
+            }
+        </View>
+    );
+};

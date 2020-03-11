@@ -4,6 +4,7 @@ import {strings} from '../../../localization/strings';
 import PropTypes from 'prop-types';
 import {appColors, commonStyles, renderDisclosureIndicator} from '../../../support/CommonStyles';
 import {Icon} from "native-base";
+import {Patient} from '../../../models/Patient';
 
 
 export default class PatientProfile extends Component {
@@ -13,7 +14,7 @@ export default class PatientProfile extends Component {
             <TouchableOpacity
                 activeOpacity={disabled ? 0.5 : 0.2}
                 style={{opacity: disabled ? 0.5 : 1}}
-                onPress={() => this.props.navigateTo(route)}>
+                onPress={() => this.props.navigateTo(route, {patient: this.props.patient})}>
                 <View style={styles.sectionContainer}>
                     <Image source={image} style={styles.sectionIcon} />
                     <View style={styles.sectionTextContainer}>
@@ -27,7 +28,7 @@ export default class PatientProfile extends Component {
     renderLinks = (title, route) => {
         return (
             <TouchableOpacity
-                onPress={() => this.props.navigateTo(route)}>
+                onPress={() => this.props.navigateTo(route, {patient: this.props.patient})}>
                 <View style={styles.linkContainer}>
                     <Text style={[commonStyles.link, {fontWeight: '600'}]}>{title}</Text>
                 </View>
@@ -63,6 +64,7 @@ export default class PatientProfile extends Component {
 }
 
 PatientProfile.propTypes = {
+    patient: PropTypes.instanceOf(Patient).isRequired,
     navigateTo: PropTypes.func.isRequired
 };
 

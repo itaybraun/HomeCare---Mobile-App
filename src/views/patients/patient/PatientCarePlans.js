@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
+import PropTypes from 'prop-types';
+import {Patient} from '../../../models/Patient';
 
 
 export default class PatientCarePlans extends Component {
@@ -11,3 +13,8 @@ export default class PatientCarePlans extends Component {
         );
     }
 }
+
+PatientCarePlans.propTypes = {
+    patient: PropTypes.instanceOf(Patient).isRequired,
+    navigateTo: PropTypes.func.isRequired
+};

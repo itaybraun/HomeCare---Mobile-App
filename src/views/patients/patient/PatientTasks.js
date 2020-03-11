@@ -7,9 +7,18 @@ import {Card} from "native-base";
 import moment from 'moment';
 import {strings} from '../../../localization/strings';
 import {uses24HourClock} from "react-native-localize";
+import {Patient} from '../../../models/Patient';
 
 
 export default class PatientTasks extends Component {
+
+    //------------------------------------------------------------
+    // Methods
+    //------------------------------------------------------------
+
+    executeTask = (task: Task) => {
+        this.props.navigateTo('Questionnaire', {task: task});
+    };
 
     //------------------------------------------------------------
     // Render
@@ -42,23 +51,23 @@ export default class PatientTasks extends Component {
 
         return (
             <TouchableOpacity onPress={() => {}}>
-                <Card style={[commonStyles.cardStyle, item.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
+                <Card style={[commonStyles.cardStyle, task.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
                     <Text style={[commonStyles.titleText]}>{created ? strings.formatString(strings.Patient.created, created) : null}</Text>
                     <View style={{flex: 1,}}>
                         <Text
                             style={[commonStyles.yellowTitle, {paddingVertical: 10}]}
                             numberOfLines={2}>
-                            {item.text}
+                            {task.text}
                         </Text>
                         {
-                            item.visit ?
+                            task.visit ?
                                 <Text style={[commonStyles.contentText]}>
                                     {
-                                        item.visit && item.visit.start && item.visit.end ?
-                                            moment(item.visit.start).format(
+                                        task.visit && task.visit.start && task.visit.end ?
+                                            moment(task.visit.start).format(
                                                 uses24HourClock() ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
                                             ) +
-                                            moment(item.visit.end).format(
+                                            moment(task.visit.end).format(
                                                 uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
                                             )
 
@@ -67,6 +76,15 @@ export default class PatientTasks extends Component {
                                 </Text>
                                 :
                                 <Text style={[commonStyles.contentText, {color: '#FF0000'}]}>{strings.Tasks.noSchedule}</Text>
+                        }
+
+                        {
+                            task.questionnaireId &&
+                                <TouchableOpacity style={{marginTop: 15}}
+                                                  onPress={() => this.executeTask(task)}
+                                >
+                                    <Text style={[commonStyles.link, {fontWeight: 'bold'}]}>{strings.Patient.executeTask}</Text>
+                                </TouchableOpacity>
                         }
 
                     </View>
@@ -99,8 +117,9 @@ export default class PatientTasks extends Component {
 }
 
 PatientTasks.propTypes = {
+    patient: PropTypes.instanceOf(Patient).isRequired,
+    navigateTo: PropTypes.func.isRequired,
     tasks: PropTypes.array.isRequired,
-    navigateTo: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

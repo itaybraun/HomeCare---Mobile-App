@@ -17,10 +17,12 @@ export class Task extends BaseModel {
     requester: Practitioner;
 
     performerId: String;
-    performers: Practitioner;
+    performer: Practitioner;
 
     visitId: String;
     visit: Visit;
+
+    questionnaireId: String;
 
     get isPriorityImportant(): Boolean {
         return [
