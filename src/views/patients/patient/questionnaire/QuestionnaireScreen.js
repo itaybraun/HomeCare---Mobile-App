@@ -277,5 +277,6 @@ const styles = StyleSheet.create({
 
     pageText: {
         color: appColors.linkColor,
+        fontSize: 20,
     },
 });

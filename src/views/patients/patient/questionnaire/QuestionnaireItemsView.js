@@ -109,14 +109,14 @@ export default class QuestionnaireItemsView extends Component {
     renderChoice = (item: QuestionnaireItem, depth = 0) => {
         return (
             <View key={item.link} style={{marginHorizontal: 20 * depth, marginTop: 5, marginBottom: 10}}>
-                <Text style={{fontWeight: 'bold'}}>{item.text}</Text>
+                <Text style={[commonStyles.titleText, {fontWeight: 'bold'}]}>{item.text}</Text>
                 {
                     item.options && item.options.map(option => {
                         return (
                             <TouchableOpacity onPress={() => this.updateValues(item.link, option)}>
                                 <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
                                     {renderRadioButton(this.state.values[item.link] === option)}
-                                    <Text style={{marginLeft: 10}}>{option.text}</Text>
+                                    <Text style={[commonStyles.formItemText, {marginLeft: 10}]}>{option.text}</Text>
                                 </View>
                             </TouchableOpacity>
                         )
@@ -129,9 +129,9 @@ export default class QuestionnaireItemsView extends Component {
     renderDecimal = (item: QuestionnaireItem, depth = 0) => {
         return (
             <View key={item.link} style={{marginHorizontal: 20 * depth, marginTop: 5, marginBottom: 10 }}>
-                <Text style={{fontWeight: 'bold'}}>{item.text}</Text>
+                <Text style={[commonStyles.titleText, {fontWeight: 'bold'}]}>{item.text}</Text>
                 <TextInput
-                    style={{borderWidth: 1, height: 30, paddingHorizontal: 5,}}
+                    style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
                     value={this.state.values[item.link]}
                     keyboardType='numeric'
                     onChangeText={text => this.updateValues(item.link, text)}
@@ -143,9 +143,9 @@ export default class QuestionnaireItemsView extends Component {
     renderString = (item: QuestionnaireItem, depth = 0) => {
         return (
             <View key={item.link} style={{marginHorizontal: 20 * depth, marginTop: 5, marginBottom: 10 }}>
-                <Text style={{fontWeight: 'bold'}}>{item.text}</Text>
+                <Text style={[commonStyles.titleText, {fontWeight: 'bold'}]}>{item.text}</Text>
                 <TextInput
-                    style={{borderWidth: 1, height: 30, paddingHorizontal: 5,}}
+                    style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
                     value={this.state.values[item.link]}
                     onChangeText={text => this.updateValues(item.link, text)}
                 />
@@ -156,19 +156,19 @@ export default class QuestionnaireItemsView extends Component {
     renderBoolean = (item: QuestionnaireItem, depth = 0) => {
         return (
             <View key={item.link} style={{marginHorizontal: 20 * depth, marginTop: 5, marginBottom: 10}}>
-                <Text style={{fontWeight: 'bold'}}>{item.text}</Text>
+                <Text style={[commonStyles.titleText, {fontWeight: 'bold'}]}>{item.text}</Text>
 
                 <TouchableOpacity onPress={() => this.updateValues(item.link, true)}>
                     <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
                         {renderRadioButton(this.state.values[item.link] === true)}
-                        <Text style={{marginLeft: 10}}>{strings.Common.yesButton}</Text>
+                        <Text style={[commonStyles.formItemText, {marginLeft: 10}]}>{strings.Common.yesButton}</Text>
                     </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => this.updateValues(item.link, false)}>
                     <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
                         {renderRadioButton(this.state.values[item.link] === false)}
-                        <Text style={{marginLeft: 10}}>{strings.Common.noButton}</Text>
+                        <Text style={[commonStyles.formItemText, {marginLeft: 10}]}>{strings.Common.noButton}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
