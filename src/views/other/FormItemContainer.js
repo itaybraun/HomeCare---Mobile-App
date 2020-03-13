@@ -40,7 +40,7 @@ export default class FormItemContainer extends Component {
             color = appColors.textColor;
 
         return (
-            <KeyboardAvoidingView style={{marginBottom: 20,}}>
+            <View {...this.props} style={{marginBottom: 20,}}>
                 <Animated.View style={[
                     styles.container,
                     {...this.props.style},
@@ -60,16 +60,17 @@ export default class FormItemContainer extends Component {
                     this.props.bottomInfo &&
                     <Text style={{fontSize: 12, marginLeft: 12, marginTop: 3, color: appColors.linkColor}}>{this.props.bottomInfo}</Text>
                 }
-            </KeyboardAvoidingView>
+            </View>
         );
     }
 }
 
 FormItemContainer.propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     disabled: PropTypes.bool,
     error: PropTypes.bool,
     bottomInfo: PropTypes.string,
+    borderless: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({

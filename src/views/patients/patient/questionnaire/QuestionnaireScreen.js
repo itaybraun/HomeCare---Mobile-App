@@ -10,7 +10,7 @@ import {
     Keyboard, TouchableWithoutFeedback, Alert,
 } from 'react-native';
 import AppScreen from '../../../../support/AppScreen';
-import {appColors, commonStyles, renderLoading} from '../../../../support/CommonStyles';
+import {appColors, commonStyles, renderLoading, renderTabBar} from '../../../../support/CommonStyles';
 import {APIRequest} from '../../../../api/API';
 import {Questionnaire, QuestionnaireItem} from '../../../../models/Questionnaire';
 import {Task} from '../../../../models/Task';
@@ -18,6 +18,10 @@ import {strings} from '../../../../localization/strings';
 import QuestionnaireItemsView from './QuestionnaireItemsView';
 import {Content, Button} from 'native-base';
 import {Request} from '../../../../support/Utils';
+import {TabView} from 'react-native-tab-view';
+import PatientProfile from '../PatientProfile';
+import PatientCarePlans from '../PatientCarePlans';
+import PatientTasks from '../PatientTasks';
 
 export default class QuestionnaireScreen extends AppScreen {
 
@@ -36,8 +40,14 @@ export default class QuestionnaireScreen extends AppScreen {
         loading: false,
         questionnaire: null,
         task: null,
-        selectedPageIndex: 0,
+        index: 0,
+        routes: [
+            { key: '1', title: "1" },
+            { key: '2', title: "2" },
+            { key: '3', title: "3" },
+        ],
         values: {},
+        errors: {},
     };
 
     //------------------------------------------------------------
@@ -85,20 +95,24 @@ export default class QuestionnaireScreen extends AppScreen {
     //------------------------------------------------------------
 
     validate = () => {
-        let success = true;
-
+        const errors = {};
         const requiredItems = this.getRequiredItems();
         for (const link of requiredItems) {
-            if (!this.state.values.hasOwnProperty(link)) {
-                success = false;
-                break;
+            if (!this.state.values.hasOwnProperty(link) || this.state.values[link] === null) {
+                errors[link] = true;
             }
         }
 
-        return new Request(success, null);
+        const success = Object.keys(errors).length === 0;
+        return new Request(success, success ? null : errors);
     };
 
     submit = async () => {
+
+        await this.setState({
+            errors: {},
+        });
+
         let validationResult: Request = this.validate();
 
         if (validationResult.success) {
@@ -110,7 +124,10 @@ export default class QuestionnaireScreen extends AppScreen {
                 this.showError(result.data);
             }
         } else {
-            this.showAlert('Not all required questions answered!')
+            this.setState({
+                index: 1,
+                errors: validationResult.data,
+            })
         }
     };
 
@@ -134,20 +151,48 @@ export default class QuestionnaireScreen extends AppScreen {
         return items.map(item => checkItem(item)).flat();
     }
 
+    handleTabIndexChange = index => {
+        this.setState({ index });
+    };
+
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
 
-    renderPage = () => {
-        switch (this.state.selectedPageIndex) {
-            case 0:
+    renderTabBar = (props) => {
+
+        return (
+            <View style={styles.pageButtonsContainer}>
+                {
+                    props.navigationState.routes.map((route, i) => {
+
+                        const selected = this.state.index === i;
+
+                        return (
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                key={route.key}
+                                style={[styles.pageButton, {backgroundColor: selected ? '#CDB9E9' : '#FFFFFF'}]}
+                                onPress={() => this.setState({index: i})}>
+                                <Text style={styles.pageText}>{route.title}</Text>
+                            </TouchableOpacity>
+                        );
+                    })
+                }
+            </View>
+        );
+    };
+
+    renderScene = ({ route }) => {
+        switch (route.key) {
+            case '1':
                 return this.renderPage1();
-            case 1:
+            case '2':
                 return this.renderPage2();
-            case 2:
+            case '3':
                 return this.renderPage3();
-            case 3:
-                return this.renderPage4();
+            default:
+                return null;
         }
     };
 
@@ -160,7 +205,7 @@ export default class QuestionnaireScreen extends AppScreen {
         }
 
         return (
-            <View>
+            <Content enableResetScrollToCoords={false} bounces={false}>
                 <View style={commonStyles.pinkHeader}>
                     <Text style={commonStyles.pinkHeaderText}>{strings.Questionnaire.general}</Text>
                 </View>
@@ -174,7 +219,7 @@ export default class QuestionnaireScreen extends AppScreen {
                     <Text style={[commonStyles.infoText, {marginTop: 10,}]}>{strings.Questionnaire.practitioner}:</Text>
                     <Text style={[commonStyles.titleText, {marginTop: 3, fontWeight: 'bold'}]}>{task.performer?.fullName}</Text>
                 </View>
-            </View>
+            </Content>
         )
     };
 
@@ -189,6 +234,7 @@ export default class QuestionnaireScreen extends AppScreen {
             <QuestionnaireItemsView
                 items={questionnaire.items}
                 values={this.state.values}
+                errors={this.state.errors}
                 valuesUpdate={(values) => this.setState({
                     values: values,
                 })}
@@ -203,7 +249,7 @@ export default class QuestionnaireScreen extends AppScreen {
         }
 
         return (
-            <View>
+            <Content enableResetScrollToCoords={false} bounces={false}>
                 <View style={commonStyles.pinkHeader}>
                     <Text style={commonStyles.pinkHeaderText}>{strings.Questionnaire.submit}</Text>
                 </View>
@@ -213,44 +259,20 @@ export default class QuestionnaireScreen extends AppScreen {
                         onPress={this.submit}>
                     <Text style={{color: '#FFFFFF', fontWeight: 'bold'}}>{strings.Common.submitButton?.toUpperCase()}</Text>
                 </Button>
-            </View>
-        )
-    };
-
-    renderPage4 = () => {
-        return (
-            <View>
-                <Text>4</Text>
-            </View>
-        )
-    };
-
-    renderButton = (index) => {
-
-        const selected = index === this.state.selectedPageIndex;
-
-        return (
-            <TouchableOpacity key={index} style={[styles.pageButton, {backgroundColor: selected ? '#CDB9E9' : '#FFFFFF'}]}
-                onPress={() => this.setState({
-                    selectedPageIndex: index,
-                })}
-            >
-                <Text style={styles.pageText}>{index + 1}</Text>
-            </TouchableOpacity>
+            </Content>
         )
     };
 
     render() {
         return (
             <View style={commonStyles.screenContainer} >
-                <Content enableResetScrollToCoords={false}>
-                    {this.renderPage()}
-                </Content>
-                <View style={styles.pageButtonsContainer}>
-                    {
-                        Array.from({length: 3},((_, i) => this.renderButton(i)))
-                    }
-                </View>
+                <TabView
+                    navigationState={this.state}
+                    onIndexChange={this.handleTabIndexChange}
+                    renderScene={this.renderScene}
+                    renderTabBar={this.renderTabBar}
+                    tabBarPosition="bottom"
+                />
                 {renderLoading(this.state.loading)}
             </View>
         );

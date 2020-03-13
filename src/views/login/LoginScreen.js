@@ -100,10 +100,10 @@ export default class LoginScreen extends AppScreen {
                             <View style={styles.imageContainer}>
                                 <Image style={styles.image} source={require('../../assets/images/logo.png')}/>
                             </View>
-                            <Button warning style={{width: 250}} onPress={this.onDevelopPress}>
+                            <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onDevelopPress}>
                                 <Text style={{fontWeight: 'bold'}}>{strings.Login.develop.toUpperCase()}</Text>
                             </Button>
-                            <Button warning style={{width: 250}} onPress={this.onProdPress}>
+                            <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onProdPress}>
                                 <Text style={{fontWeight: 'bold'}}>{strings.Login.production.toUpperCase()}</Text>
                             </Button>
                         </Form>

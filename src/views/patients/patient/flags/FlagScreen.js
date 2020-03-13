@@ -12,7 +12,7 @@ import AppScreen from '../../../../support/AppScreen';
 import {strings} from '../../../../localization/strings';
 import {appColors, commonStyles} from '../../../../support/CommonStyles';
 import FormItemContainer from '../../../other/FormItemContainer';
-import {Button, Form, Icon, Text, Textarea} from 'native-base';
+import {Button, Content, Form, Icon, Text, Textarea} from 'native-base';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ActionSheet from 'react-native-simple-action-sheet';
 import moment from 'moment';
@@ -178,7 +178,7 @@ export default class FlagScreen extends AppScreen {
         return (
             <View style={commonStyles.screenContainer} >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <ScrollView
+                    <Content
                         style={{flex: 1}}
                         contentContainerStyle={{padding: 20}}
                         bounces={false}
@@ -278,7 +278,7 @@ export default class FlagScreen extends AppScreen {
                                 </Button>
                             </View>
                         </Form>
-                    </ScrollView>
+                    </Content>
                 </TouchableWithoutFeedback>
 
                 <DateTimePickerModal

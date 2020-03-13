@@ -3,10 +3,9 @@ import {QuestionnaireItem, } from '../../../../models/Questionnaire';
 import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {appColors, commonStyles, renderRadioButton, renderSeparator} from '../../../../support/CommonStyles';
 import {strings} from '../../../../localization/strings';
-import PatientProfile from '../PatientProfile';
 import PropTypes from 'prop-types';
 import FormItemContainer from '../../../other/FormItemContainer';
-import {Icon} from "native-base";
+import {Content, Icon} from 'native-base';
 import ImagePicker from 'react-native-image-picker';
 
 export default class QuestionnaireItemsView extends Component {
@@ -17,21 +16,31 @@ export default class QuestionnaireItemsView extends Component {
 
     state = {
         loading: false,
-        values: {},
+        values: this.props.values,
+        errors: this.props.errors,
     };
+
+    items = {};
 
     //------------------------------------------------------------
     // Overrides
     //------------------------------------------------------------
 
-    componentDidMount(): void {
-        this.setState({
-            values: this.props.values || {},
-        });
-    }
+    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+        if (this.props.errors !== prevProps.errors) {
 
-    componentWillUnmount(): void {
-        this.props.valuesUpdate && this.props.valuesUpdate(this.state.values);
+            // set errors and then scroll to the first one
+            await this.setState({
+                errors: this.props.errors,
+            });
+
+            let keys = Object.keys(this.state.errors);
+            if (keys.length > 0) {
+                const layout = this.items[keys[0]];
+                if (layout)
+                    this.scrollView.props.scrollToPosition(0, layout.y, true);
+            }
+        }
     }
 
     //------------------------------------------------------------
@@ -67,7 +76,17 @@ export default class QuestionnaireItemsView extends Component {
     updateValues = (name, value) => {
         let values = this.state.values;
         values[name] = value;
-        this.setState({values: values});
+
+        console.log(name, value);
+
+        let errors = this.state.errors;
+        errors[name] = false;
+        this.setState({
+            values: values,
+            errors: errors,
+        });
+
+        this.props.valuesUpdate && this.props.valuesUpdate(this.state.values);
     };
 
     //------------------------------------------------------------
@@ -95,7 +114,8 @@ export default class QuestionnaireItemsView extends Component {
     renderGroup = (item: QuestionnaireItem, depth = 0) => {
         depth++;
         return (
-            <View key={item.link}>
+            <View key={item.link}
+                  onLayout={({nativeEvent}) => this.items[item.link] = nativeEvent.layout}>
                 <View style={commonStyles.pinkHeader}>
                     <Text style={commonStyles.pinkHeaderText}>{item.text}</Text>
                 </View>
@@ -106,14 +126,29 @@ export default class QuestionnaireItemsView extends Component {
         )
     };
 
+    renderTitle = (item: QuestionnaireItem) => {
+        return (
+            <Text style={[
+                commonStyles.titleText,
+                {fontWeight: 'bold'},
+                this.state.errors[item.link] ? {color: '#FF0000'} : {}]
+            }>
+                {item.text}
+            </Text>
+        );
+    };
+
     renderChoice = (item: QuestionnaireItem, depth = 0) => {
         return (
-            <View key={item.link} style={{marginHorizontal: 20 * depth, marginTop: 5, marginBottom: 10}}>
-                <Text style={[commonStyles.titleText, {fontWeight: 'bold'}]}>{item.text}</Text>
+            <FormItemContainer key={item.link}
+                               onLayout={({nativeEvent}) => this.items[item.link] = nativeEvent.layout}
+                               error={this.state.errors[item.link]}
+                               style={{paddingHorizontal: 20 * depth, borderWidth: 0}}>
+                {this.renderTitle(item)}
                 {
                     item.options && item.options.map(option => {
                         return (
-                            <TouchableOpacity onPress={() => this.updateValues(item.link, option)}>
+                            <TouchableOpacity key={option.id} onPress={() => this.updateValues(item.link, option)}>
                                 <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
                                     {renderRadioButton(this.state.values[item.link] === option)}
                                     <Text style={[commonStyles.formItemText, {marginLeft: 10}]}>{option.text}</Text>
@@ -122,41 +157,56 @@ export default class QuestionnaireItemsView extends Component {
                         )
                     })
                 }
-            </View>
+            </FormItemContainer>
         );
     };
 
     renderDecimal = (item: QuestionnaireItem, depth = 0) => {
         return (
-            <View key={item.link} style={{marginHorizontal: 20 * depth, marginTop: 5, marginBottom: 10 }}>
-                <Text style={[commonStyles.titleText, {fontWeight: 'bold'}]}>{item.text}</Text>
+            <FormItemContainer key={item.link}
+                               onLayout={({nativeEvent}) => this.items[item.link] = nativeEvent.layout}
+                               error={this.state.errors[item.link]}
+                               style={{paddingHorizontal: 20 * depth, borderWidth: 0}}>
+                {this.renderTitle(item)}
                 <TextInput
                     style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
                     value={this.state.values[item.link]}
                     keyboardType='numeric'
-                    onChangeText={text => this.updateValues(item.link, text)}
+                    onChangeText={text => {
+                        text = text.isEmpty() ? null : text;
+                        this.updateValues(item.link, text)
+                    }}
                 />
-            </View>
+            </FormItemContainer>
         )
     };
 
     renderString = (item: QuestionnaireItem, depth = 0) => {
         return (
-            <View key={item.link} style={{marginHorizontal: 20 * depth, marginTop: 5, marginBottom: 10 }}>
-                <Text style={[commonStyles.titleText, {fontWeight: 'bold'}]}>{item.text}</Text>
+            <FormItemContainer key={item.link}
+                               onLayout={({nativeEvent}) => this.items[item.link] = nativeEvent.layout}
+                               error={this.state.errors[item.link]}
+                               style={{paddingHorizontal: 20 * depth, borderWidth: 0}}>
+                {this.renderTitle(item)}
                 <TextInput
                     style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
                     value={this.state.values[item.link]}
-                    onChangeText={text => this.updateValues(item.link, text)}
+                    onChangeText={text => {
+                        text = text.isEmpty() ? null : text;
+                        this.updateValues(item.link, text)
+                    }}
                 />
-            </View>
+            </FormItemContainer>
         )
     };
 
     renderBoolean = (item: QuestionnaireItem, depth = 0) => {
         return (
-            <View key={item.link} style={{marginHorizontal: 20 * depth, marginTop: 5, marginBottom: 10}}>
-                <Text style={[commonStyles.titleText, {fontWeight: 'bold'}]}>{item.text}</Text>
+            <FormItemContainer key={item.link}
+                               onLayout={({nativeEvent}) => this.items[item.link] = nativeEvent.layout}
+                               error={this.state.errors[item.link]}
+                               style={{paddingHorizontal: 20 * depth, borderWidth: 0}}>
+                {this.renderTitle(item)}
 
                 <TouchableOpacity onPress={() => this.updateValues(item.link, true)}>
                     <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
@@ -171,7 +221,7 @@ export default class QuestionnaireItemsView extends Component {
                         <Text style={[commonStyles.formItemText, {marginLeft: 10}]}>{strings.Common.noButton}</Text>
                     </View>
                 </TouchableOpacity>
-            </View>
+            </FormItemContainer>
         )
     };
 
@@ -222,9 +272,11 @@ export default class QuestionnaireItemsView extends Component {
         }
 
         return (
-            <View>
+            <Content innerRef={ref => this.scrollView = ref}
+                     enableResetScrollToCoords={false}
+                     bounces={false}>
                 {items.map(item => this.renderQuestionnaireItem(item))}
-            </View>
+            </Content>
         );
     }
 }
@@ -232,6 +284,7 @@ export default class QuestionnaireItemsView extends Component {
 QuestionnaireItemsView.propTypes = {
     items: PropTypes.array.isRequired,
     values: PropTypes.object,
+    errors: PropTypes.object,
     valuesUpdate: PropTypes.func,
 };
 
@@ -246,5 +299,5 @@ const styles = StyleSheet.create({
         overflow: 'visible',
         marginRight: 10,
         borderColor: appColors.linkColor,
-    }
+    },
 });

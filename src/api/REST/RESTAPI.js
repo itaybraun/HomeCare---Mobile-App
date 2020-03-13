@@ -1,8 +1,4 @@
 import {API, APIRequest} from '../API';
-import axios from 'axios';
-import moment from 'moment';
-import Auth0 from 'react-native-auth0';
-import * as Keychain from 'react-native-keychain';
 import FHIR from 'fhirclient';
 
 export default class RESTAPI extends API {
