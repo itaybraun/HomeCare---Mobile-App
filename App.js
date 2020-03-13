@@ -25,13 +25,13 @@ import EventEmitter from 'eventemitter3';
 
 // TODO: find a way to move this to RESTAPI
 import './src/api/REST/RESTAPI+Tasks';
-import './src/api/REST/RESTAPI+Login';
 import './src/api/REST/RESTAPI+Flags';
 import './src/api/REST/RESTAPI+Patients';
 import './src/api/REST/RESTAPI+Practitioners';
 import './src/api/REST/RESTAPI+Visits';
 import './src/api/REST/RESTAPI+Questionnaire';
 import QuestionnaireScreen from './src/views/patients/patient/questionnaire/QuestionnaireScreen';
+import {API} from './src/api/API';
 
 export default class App extends React.Component {
 
@@ -51,7 +51,6 @@ export default class App extends React.Component {
         this.setState({loading: true});
         Utils.initialize();
         this.eventEmitter = new EventEmitter();
-        this.api = new RESTAPI();
 
         let settings = new Settings();
         try {
@@ -78,13 +77,10 @@ export default class App extends React.Component {
 
         return (
             <AppNavigator
-                screenProps={
-                    {
-                        api: this.api,
-                        settings: this.settings,
-                        eventEmitter: this.eventEmitter,
-                    }
-                }
+                screenProps={{
+                    settings: this.settings,
+                    eventEmitter: this.eventEmitter,
+                }}
             />
         );
     }

@@ -8,6 +8,10 @@ export class API {
     constructor(){
 
     }
+
+    userId: String;
+
+    token: String;
 }
 
 export class APIRequest extends Request {
@@ -20,12 +24,6 @@ export class APIRequest extends Request {
         return `Request success is ${this.success}, data is ${this.data}`;
     }
 }
-
-API.prototype.login = async function login(username, password): APIRequest {
-    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
-};
-
-
 
 API.prototype.getPatients = async function getPatients(): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));

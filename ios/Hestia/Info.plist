@@ -79,18 +79,14 @@
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>None</string>
-			<key>CFBundleURLName</key>
-			<string>AzureAuth</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>msal8a597862-04f8-4607-a34c-1d90024773b4</string>
-			</array>
-		</dict>
-	</array>
+  <key>CFBundleURLTypes</key>
+  <array>
+     <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+           <string>msauth.net.boganov.hestia</string>
+        </array>
+     </dict>
+  </array>
 </dict>
 </plist>

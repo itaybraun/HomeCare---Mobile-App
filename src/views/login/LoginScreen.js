@@ -1,14 +1,23 @@
 import React from 'react';
 import {SafeAreaView, View, Image, StyleSheet, TextInput, Platform,
     Keyboard, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
-import {Button, Text} from 'native-base';
+import {Button, Text, Form} from 'native-base';
 import AppScreen from '../../support/AppScreen';
 import Loading from '../../support/Loading';
 import {commonStyles} from '../../support/CommonStyles';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 import {strings} from '../../localization/strings';
-import {APIRequest} from '../../api/API';
+import {API, APIRequest} from '../../api/API';
 import DeviceInfo from 'react-native-device-info';
+import {AzureInstance, AzureLoginView} from 'react-native-azure-ad-2';
+import RESTAPI from '../../api/REST/RESTAPI';
+
+const CREDENTIAILS = {
+    client_id: '6b1d9c3b-df12-4a15-9a66-0e299f9a9bd2',
+    client_secret: '[v3NLm?k?1YqxJ7Gcvz6_F:]:?12s/z4',
+    redirect_uri: 'https://www.getpostman.com/oauth2/callback',
+    scope: 'https://cs2.azurewebsites.net/user_impersonation'
+};
 
 export default class LoginScreen extends AppScreen {
 
@@ -17,14 +26,17 @@ export default class LoginScreen extends AppScreen {
         username: 'user1@itaybraunhotmail.onmicrosoft.com',
         password: 'Kuju0746987',
         appVersion: null,
+        production: null,
     };
+
+    instance = new AzureInstance(CREDENTIAILS);
 
     componentDidMount(): void {
         super.componentDidMount();
 
         this.getData();
 
-        this.login();
+        //this.login();
     }
 
     getData = async (refresh = true) => {
@@ -38,75 +50,125 @@ export default class LoginScreen extends AppScreen {
         }
     };
 
-    login = async () => {
-        this.setState({loading: true});
-        let result:APIRequest = await this.api.login(this.state.username, this.state.password);
-        this.setState({loading: false});
+    onDevelopPress = () => {
+        let api = new RESTAPI('https://fhir1.azurewebsites.net');
+        api.token = null;
+        api.userId = '8cba6c16-4f07-42de-9b06-b5af4f05f23c';
+        this.props.screenProps.api = api;
 
-        if (result.success)
-            this.navigateTo('Tabs');
-        else
-            this.showError(result.data);
+        this.navigateTo('Tabs');
     };
+
+    onProdPress = () => {
+        this.setState({
+            production: true
+        });
+    };
+
+    _onLoginSuccess = async (event) => {
+        let api = new RESTAPI('https://cs2.azurewebsites.net');
+        api.token = this.instance.getToken().accessToken;
+        api.userId = '8cba6c16-4f07-42de-9b06-b5af4f05f23c';
+        this.props.screenProps.api = api;
+
+        this.navigateTo('Tabs');
+    };
+
+    _onLoginCancel = (event) => {
+        console.log(event);
+    };
+
 
     render() {
 
         return (
             <SafeAreaView style={{flex: 1}}>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <KeyboardAwareScrollView style={styles.container}
-                                             getTextInputRefs={() => { return [this.usernameInput, this.passwordInput]}}
-                                             contentContainerStyle={{flex: 1}}>
-                        <View style={styles.imageContainer}>
-                            <Image style={styles.image} source={require('../../assets/images/logo.png')} />
-                        </View>
-                        <View style={styles.formContainer}>
-                            <View style={styles.formItem}>
-                                <TextInput ref={obj => this.usernameInput = obj}
-                                           value={this.state.username}
-                                           style={commonStyles.input}
-                                           placeholder={strings.Login.username}
-                                           autoCapitalize='none'
-                                           autoCompleteType='username'
-                                           returnKeyType="next"
-                                           autoCorrect={false}
-                                           enablesReturnKeyAutomatically={true}
-                                           placeholderTextColor = "#CCCCCC"
-                                           paddingRight={12}
-                                           paddingLeft={12}
-                                           onChangeText={text => this.setState({username: text})}
-                                           onSubmitEditing={() => this.passwordInput.focus()}
-                                />
+
+                {
+                    this.state.production === true &&
+                        <AzureLoginView
+                            azureInstance={this.instance}
+                            loadingMessage=" "
+                            onSuccess={this._onLoginSuccess}
+                            onCancel={this._onLoginCancel}
+                        />
+                }
+
+                {
+                    this.state.production === null &&
+                        <Form style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
+                            <View style={styles.imageContainer}>
+                                <Image style={styles.image} source={require('../../assets/images/logo.png')}/>
                             </View>
-                            <View style={styles.formItem}>
-                                <TextInput ref={obj => this.passwordInput = obj}
-                                           value={this.state.password}
-                                           style={commonStyles.input}
-                                           secureTextEntry
-                                           autoCompleteType='password'
-                                           returnKeyType="go"
-                                           autoCorrect={false}
-                                           placeholder={strings.Login.password}
-                                           enablesReturnKeyAutomatically={true}
-                                           placeholderTextColor = "#CCCCCC"
-                                           paddingRight={12}
-                                           paddingLeft={12}
-                                           onChangeText={text => this.setState({password: text})}
-                                           onSubmitEditing={() => this.login()}
-                                />
+                            <Button warning style={{width: 250}} onPress={this.onDevelopPress}>
+                                <Text style={{fontWeight: 'bold'}}>{strings.Login.develop.toUpperCase()}</Text>
+                            </Button>
+                            <Button warning style={{width: 250}} onPress={this.onProdPress}>
+                                <Text style={{fontWeight: 'bold'}}>{strings.Login.production.toUpperCase()}</Text>
+                            </Button>
+                        </Form>
+                }
+
+
+                { false &&
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <KeyboardAwareScrollView style={styles.container}
+                                                 getTextInputRefs={() => {
+                                                     return [this.usernameInput, this.passwordInput]
+                                                 }}
+                                                 contentContainerStyle={{flex: 1}}>
+                            <View style={styles.imageContainer}>
+                                <Image style={styles.image} source={require('../../assets/images/logo.png')}/>
                             </View>
-                            <View style={[styles.formItem, {marginTop: 40, alignItems: 'center',}]}>
-                                <Button warning style={{paddingHorizontal: 40,}} onPress={this.login}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Login.login.toUpperCase()}</Text>
-                                </Button>
+                            <View style={styles.formContainer}>
+                                <View style={styles.formItem}>
+                                    <TextInput ref={obj => this.usernameInput = obj}
+                                               value={this.state.username}
+                                               style={commonStyles.input}
+                                               placeholder={strings.Login.username}
+                                               autoCapitalize='none'
+                                               autoCompleteType='username'
+                                               returnKeyType="next"
+                                               autoCorrect={false}
+                                               enablesReturnKeyAutomatically={true}
+                                               placeholderTextColor="#CCCCCC"
+                                               paddingRight={12}
+                                               paddingLeft={12}
+                                               onChangeText={text => this.setState({username: text})}
+                                               onSubmitEditing={() => this.passwordInput.focus()}
+                                    />
+                                </View>
+                                <View style={styles.formItem}>
+                                    <TextInput ref={obj => this.passwordInput = obj}
+                                               value={this.state.password}
+                                               style={commonStyles.input}
+                                               secureTextEntry
+                                               autoCompleteType='password'
+                                               returnKeyType="go"
+                                               autoCorrect={false}
+                                               placeholder={strings.Login.password}
+                                               enablesReturnKeyAutomatically={true}
+                                               placeholderTextColor="#CCCCCC"
+                                               paddingRight={12}
+                                               paddingLeft={12}
+                                               onChangeText={text => this.setState({password: text})}
+                                               onSubmitEditing={() => this.login()}
+                                    />
+                                </View>
+                                <View style={[styles.formItem, {marginTop: 40, alignItems: 'center',}]}>
+                                    <Button warning style={{paddingHorizontal: 40,}} onPress={this.login}>
+                                        <Text style={{fontWeight: 'bold'}}>{strings.Login.login.toUpperCase()}</Text>
+                                    </Button>
+                                </View>
                             </View>
-                        </View>
-                    </KeyboardAwareScrollView>
-                </TouchableWithoutFeedback>
+                        </KeyboardAwareScrollView>
+                    </TouchableWithoutFeedback>
+                }
                 <View style={styles.appVersion}>
                     <Text>{this.state.appVersion}</Text>
                 </View>
                 <Loading loading={this.state.loading} />
+
             </SafeAreaView>
         );
     }
@@ -124,7 +186,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 40,
-        flex: 1,
     },
     image: {
         width: 248,
