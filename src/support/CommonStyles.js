@@ -8,6 +8,8 @@ export const appColors = {
     linkColor: '#5C00EC',
     lineColor: '#CCCCCC',
     yellowColor: '#FEC260',
+    headerBackground: '#E9BD08',
+    headerFontColor: '#FFFFFF',
     backgroundYellowColor: '#DEBB4A',
     pinkColor: '#F1A5BD',
 };

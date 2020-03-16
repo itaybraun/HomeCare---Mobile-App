@@ -86,24 +86,40 @@ export default class App extends React.Component {
     }
 }
 
+
+const defaultNavigationOptions = {
+    headerStyle: {
+        backgroundColor: appColors.headerBackground,
+    },
+    headerTintColor: appColors.headerFontColor,
+};
+
 const PatientsStack = createStackNavigator({
     Patients: PatientsScreen,
     Patient: PatientScreen,
     Flags: FlagsScreen,
     Flag: FlagScreen,
     Questionnaire: QuestionnaireScreen,
+}, {
+    defaultNavigationOptions: defaultNavigationOptions
 });
 const WorkStack = createStackNavigator({
     Work: WorkScreen,
     Task: TaskScreen,
     Visit: VisitScreen,
     Calendar: CalendarScreen,
+}, {
+    defaultNavigationOptions: defaultNavigationOptions
 });
 const MessagesStack = createStackNavigator({
     Messages: MessagesScreen,
+}, {
+    defaultNavigationOptions: defaultNavigationOptions
 });
 const SettingsStack = createStackNavigator({
     Settings: SettingsScreen,
+}, {
+    defaultNavigationOptions: defaultNavigationOptions
 });
 
 const Tabs = createBottomTabNavigator({
@@ -150,17 +166,19 @@ const Tabs = createBottomTabNavigator({
     }
 });
 
-const AppNavigator = createAppContainer(createSwitchNavigator({
-    Login: {
-        screen: LoginScreen,
-        navigationOptions: {
-            headerShown: false,
+const AppNavigator = createAppContainer(
+    createSwitchNavigator({
+        Login: {
+            screen: LoginScreen,
+            navigationOptions: {
+                headerShown: false,
+            },
         },
-    },
-    Tabs: {
-        screen: Tabs,
-        navigationOptions: {
-            headerShown: false,
-        },
-    }
-}));
+        Tabs: {
+            screen: Tabs,
+            navigationOptions: {
+                headerShown: false,
+            },
+        }
+    })
+);

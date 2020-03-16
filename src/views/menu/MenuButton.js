@@ -8,7 +8,7 @@ export default class MenuButton extends Component {
     render() {
         return (
             <TouchableOpacity style={styles.buttonContainer}>
-                <Icon type="SimpleLineIcons" name="menu" style={{fontSize: 22, color: appColors.textColor}} />
+                <Icon type="SimpleLineIcons" name="menu" style={{fontSize: 22, color: appColors.headerFontColor}} />
             </TouchableOpacity>
         );
     }
