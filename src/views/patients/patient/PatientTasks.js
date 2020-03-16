@@ -53,7 +53,7 @@ export default class PatientTasks extends Component {
         return (
             <TouchableOpacity onPress={() => {}}>
                 <Card style={[commonStyles.cardStyle, task.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
-                    <Text style={[commonStyles.titleText]}>{created ? strings.formatString(strings.Patient.created, created) : null}</Text>
+                    <Text style={[commonStyles.contentText]}>{created ? strings.formatString(strings.Patient.created, created) : null}</Text>
                     <View style={{flex: 1,}}>
                         <Text
                             style={[commonStyles.yellowTitle, {paddingVertical: 10}]}

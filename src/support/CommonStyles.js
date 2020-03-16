@@ -25,12 +25,12 @@ export const commonStyles = {
     },
 
     titleText: {
-        fontSize: 18,
+        fontSize: 22,
         color: appColors.textColor,
     },
 
     boldTitleText: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: 'bold',
         color: appColors.textColor,
     },

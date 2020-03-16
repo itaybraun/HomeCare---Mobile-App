@@ -90,7 +90,7 @@ export default class PatientsScreen extends AppScreen {
 
     renderListHeader = () => {
         return (
-            <View style={{paddingTop: 6, paddingHorizontal: 8, paddingBottom: 10}}>
+            <View style={{paddingTop: 6, paddingHorizontal: 0, paddingBottom: 10}}>
                 <TextInput style={commonStyles.input}
                            returnKeyType="search"
                            autoCorrect={false}
@@ -128,13 +128,12 @@ export default class PatientsScreen extends AppScreen {
                 <Card style={commonStyles.cardStyle}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{flex: 1}}>
+                            <Text style={commonStyles.titleText}>{item.fullName}</Text>
                             {
                                 !patientGenderAndAge.isEmpty() &&
-                                <Text style={commonStyles.smallInfoText}>{patientGenderAndAge}</Text>
+                                <Text style={[commonStyles.smallInfoText, {marginTop: 5, marginLeft: 10}]}>{patientGenderAndAge}</Text>
                             }
-                            <Text style={commonStyles.titleText}>{item.fullName}</Text>
                         </View>
-                        {renderDisclosureIndicator()}
                     </View>
                 </Card>
             </TouchableOpacity>
