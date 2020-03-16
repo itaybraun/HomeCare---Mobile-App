@@ -5,6 +5,7 @@ import {strings} from '../../localization/strings';
 import MenuButton from '../menu/MenuButton';
 import {APIRequest} from '../../api/API';
 import {
+    appColors,
     commonStyles,
     renderDisclosureIndicator,
     renderLoading, renderNavigationHeaderButton,
@@ -17,6 +18,7 @@ import {TabView} from 'react-native-tab-view';
 import {Task} from '../../models/Task';
 import {uses24HourClock} from "react-native-localize";
 import {Flag} from '../../models/Flag';
+import {Patient} from '../../models/Patient';
 
 export default class WorkScreen extends AppScreen {
 
@@ -116,6 +118,18 @@ export default class WorkScreen extends AppScreen {
 
     };
 
+    addFlag = async () => {
+        // TODO
+    };
+
+    editFlag = async (flag: Flag) => {
+        this.navigateTo('Flag', {
+            patient: flag.patient,
+            flag: flag,
+            refresh: this.getData,
+        });
+    };
+
     handleTabIndexChange = index => {
         this.setState({ index });
     };
@@ -171,7 +185,8 @@ export default class WorkScreen extends AppScreen {
         let task: Task = item;
 
         return (
-            <TouchableOpacity onPress={() => this.selectTask(item)}>
+            <TouchableOpacity style={styles.itemContainer}
+                              onPress={() => this.selectTask(item)}>
                 <Card style={[commonStyles.cardStyle, item.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
                     <Text style={[commonStyles.titleText]}>{task.patient?.fullName}</Text>
                     <View style={{flex: 1,}}>
@@ -245,7 +260,7 @@ export default class WorkScreen extends AppScreen {
                 style={styles.itemContainer}
                 underlayColor='#FFFFFFFF'
                 activeOpacity={0.3}
-                onPress={() => {}}>
+                onPress={() => this.editFlag(flag)}>
                 <Card style={[commonStyles.cardStyle, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
                     <View style={styles.flagInfoContainer}>
                         <Text style={commonStyles.smallInfoText}>{item.startDate ? moment(item.startDate).format("MMM Do YYYY") : ''}</Text>
@@ -268,17 +283,21 @@ export default class WorkScreen extends AppScreen {
                                  contentContainerStyle={{flexGrow: 1}}
                                  sections={this.state.sortedFlags}
                                  renderItem={this.renderFlag}
-                                 stickySectionHeadersEnabled={false}
+                                 stickySectionHeadersEnabled={true}
                                  ItemSeparatorComponent={() => renderSeparator({height: 0})}
                                  ListEmptyComponent={this.renderListEmpty}
                                  ListHeaderComponent={this.renderListHeader}
                                  ListFooterComponent={this.renderListFooter}
                                  renderSectionHeader={({section: {title}}) => (
-                                     <View style={{marginBottom: 5, marginLeft: 1,}}>
-                                        <Text style={commonStyles.purpleTitleText}>{title}</Text>
+                                     <View style={{
+                                         backgroundColor: appColors.headerBackground,
+                                         alignItems: 'center',
+                                         padding: 10,
+                                     }}>
+                                        <Text style={{fontSize: 18, fontWeight: 'bold', color: appColors.headerFontColor}}>{title}</Text>
                                      </View>
                                  )}
-                                 renderSectionFooter={() => renderSeparator({height: 24})}
+                                 renderSectionFooter={() => renderSeparator({height: 12})}
                                  onRefresh={this.getData}
                                  refreshing={false}
                     />
@@ -305,11 +324,14 @@ export default class WorkScreen extends AppScreen {
 const styles = StyleSheet.create({
     list: {
         flex: 1,
-        padding: 10,
     },
 
     flagInfoContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+
+    itemContainer: {
+        marginHorizontal: 12,
     },
 });

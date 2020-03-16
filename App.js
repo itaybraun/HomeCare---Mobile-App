@@ -106,6 +106,7 @@ const PatientsStack = createStackNavigator({
 const WorkStack = createStackNavigator({
     Work: WorkScreen,
     Task: TaskScreen,
+    Flag: FlagScreen,
     Visit: VisitScreen,
     Calendar: CalendarScreen,
 }, {
