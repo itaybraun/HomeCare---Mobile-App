@@ -37,7 +37,7 @@ export default class PatientScreen extends AppScreen {
         index: 0,
         routes: [
             { key: 'profile', title: strings.Patient.profile },
-            { key: 'care', title: strings.Patient.carePlans },
+            //{ key: 'care', title: strings.Patient.carePlans },
             { key: 'tasks', title: strings.Patient.tasks },
         ],
 
