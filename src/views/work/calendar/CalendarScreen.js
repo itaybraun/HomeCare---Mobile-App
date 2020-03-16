@@ -234,7 +234,7 @@ export default class CalendarScreen extends AppScreen {
                         style={commonStyles.blackButtonContainer}
                         onPress={this.addVisit}
                     >
-                        <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
+                        <Icon type="Feather" name="plus" style={commonStyles.plusText}/>
                     </TouchableOpacity>
                 </View>
                 {renderLoading(this.state.loading)}

@@ -8,7 +8,7 @@ import {
     Keyboard,
     TouchableWithoutFeedback,
     Alert,
-    Image
+    Image, Platform,
 } from 'react-native';
 import AppScreen from '../../../../support/AppScreen';
 import {Patient} from '../../../../models/Patient';
@@ -215,7 +215,7 @@ export default class FlagsScreen extends AppScreen {
                         style={commonStyles.blackButtonContainer}
                         onPress={this.addFlag}
                     >
-                        <Icon type="Feather" name="plus" style={{fontSize: 36, color: '#FFFFFF', paddingTop: 4}}/>
+                        <Icon type="Feather" name="plus" style={commonStyles.plusText}/>
                     </TouchableOpacity>
                 </View>
                 {renderLoading(this.state.loading)}

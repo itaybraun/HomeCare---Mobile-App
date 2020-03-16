@@ -103,6 +103,12 @@ export const commonStyles = {
         backgroundColor: '#000000',
     },
 
+    plusText: {
+        fontSize: 36,
+        color: '#FFFFFF',
+        paddingTop: Platform.OS === 'ios' ? 4 : 0
+    },
+
     cardStyle: {
         padding: 12,
         borderRadius: 4,
