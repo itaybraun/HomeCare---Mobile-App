@@ -1,11 +1,21 @@
-
 import { getCountry } from "react-native-localize";
+import {decode, encode} from 'base-64'
+
+if (!global.btoa) {
+    global.btoa = encode;
+}
+
+if (!global.atob) {
+    global.atob = decode;
+}
+
+String.prototype.isEmpty = function () {
+    return (this.length === 0 || !this.trim());
+};
 
 export class Utils {
     static initialize() {
-        String.prototype.isEmpty = function () {
-            return (this.length === 0 || !this.trim());
-        };
+
     }
 
     static getFirstDayOfWeek() {

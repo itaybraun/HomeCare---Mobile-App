@@ -22,8 +22,6 @@ export default class RESTAPI extends API {
             result.headers.Authorization = `Bearer ${API.token}`;
         }
 
-        console.log(result);
-
         return result;
     };
 
