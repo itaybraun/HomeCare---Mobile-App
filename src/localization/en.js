@@ -94,6 +94,7 @@ export const en = {
         requester: 'Opened By',
         when: 'When',
         visit: 'Visit',
+        status: 'Status: {0}',
     },
 
     Visit: {
@@ -122,6 +123,16 @@ export const en = {
         urgent: 'Urgent',
         asap: 'ASAP',
         stat: 'STAT',
+    },
+
+    Statuses: {
+        draft: 'Draft',
+        active: 'Active',
+        'on-hold': 'On hold',
+        revoked: 'Revoked',
+        completed: 'Completed',
+        'entered-in-error': 'Entered in error',
+        unknown: 'Unknown',
     },
 
     Calendar: {

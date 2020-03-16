@@ -48,6 +48,7 @@ export default class PatientTasks extends Component {
 
         let task: Task = item;
         let created = task.openDate ? moment(task.openDate).fromNow() : null;
+        let statusText = task.status && strings.Statuses.hasOwnProperty(task.status) ? strings.Statuses[task.status] : null
 
         return (
             <TouchableOpacity onPress={() => {}}>
@@ -59,6 +60,11 @@ export default class PatientTasks extends Component {
                             numberOfLines={2}>
                             {task.text}
                         </Text>
+                        { statusText &&
+                            <Text style={[commonStyles.infoText, {marginBottom: 10}]}>
+                                {strings.formatString(strings.Task.status, statusText)}
+                            </Text>
+                        }
                         {
                             task.visit ?
                                 <Text style={[commonStyles.contentText]}>

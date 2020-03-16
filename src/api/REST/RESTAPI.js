@@ -17,11 +17,23 @@ export default class RESTAPI extends API {
                 'Cache-Control': 'no-cache',
             }
         };
-        if (this.token) {
-            result.headers.Authorization = `Bearer ${this.token}`;
+
+        if (API.token) {
+            result.headers.Authorization = `Bearer ${API.token}`;
         }
+
+        console.log(result);
 
         return result;
     };
+
+    setCurrentUser = async (identifier: String) => {
+        let result: APIRequest = await this.getPractitionerByIdentifier(identifier);
+        if (result.success) {
+            API.user = result.data;
+        }
+
+        return result;
+    }
 };
 

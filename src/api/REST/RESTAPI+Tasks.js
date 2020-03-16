@@ -1,7 +1,7 @@
-import {APIRequest} from '../API';
+import {APIRequest, API} from '../API';
 import {Patient} from '../../models/Patient';
 import moment from 'moment';
-import {Priorities, Task} from '../../models/Task';
+import {Priority, Status, Task} from '../../models/Task';
 import {Practitioner} from '../../models/Practitioner';
 import RESTAPI from './RESTAPI';
 import {getPatientFromJson} from './RESTAPI+Patients';
@@ -21,8 +21,7 @@ RESTAPI.prototype.getTasks = async function getTasks(patientId): APIRequest {
             params.subject = patientId;
             url += `/?subject=Patient/${patientId}`;
         } else {
-            params.performer = this.userId;
-            params.active = true;
+            params.performer = API.user?.id;
         }
         params.pageLimit = 0;
         params.flat = true;
@@ -72,16 +71,17 @@ export function getTaskFromJson(json) {
     task.patient = json.subject ? getPatientFromJson(json.subject) : null;
     task.requesterId = json.requester?.id || null;
     task.requester = json.requester ? getPractitionerFromJSON(json.requester) : null;
-    task.performerId = json.performer?.id || null;
-    task.performer = json.performer ? getPractitionerFromJSON(json.performer) : null;
+    task.performerId = API.user?.id;//json.performer?.id || null;
+    task.performer = API.user;//json.performer ? getPractitionerFromJSON(json.performer) : null;
     task.visitId = json.encounter?.id || null;
     task.visit = json.encounter ? getVisitFromJson(json.encounter) : null
     //task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
     task.openDate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;
     task.text = json.code?.text;
     // TODO: I don't like this priority thing...
-    task.priority = json.priority ? Priorities.getByString(json.priority) || Priorities.ROUTINE : Priorities.ROUTINE;
+    task.priority = json.priority ? Priority.getByString(json.priority) || Priority.ROUTINE : Priority.ROUTINE;
     task.questionnaireId = json.basedOn?.[0].relatedArtifact?.[0].resource?.replace('Questionnaire/', '') || null;
+    task.status = json.status ? Status.getByString(json.status) || Status.UNKNOWN : Status.UNKNOWN;
     return task;
 }
 

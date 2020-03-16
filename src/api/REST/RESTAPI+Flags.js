@@ -18,8 +18,8 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
         let url = 'Flag';
         if (patientId) {
             url += `/?subject=Patient/${patientId}`;
-        } else {
-            url += '?Practitioner=' + this.userId;
+        } else if (API.user) {
+            url += '?Practitioner=' + API.user.id;
         }
         params.pageLimit = 0;
         params.flat = true;

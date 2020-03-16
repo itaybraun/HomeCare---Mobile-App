@@ -11,6 +11,8 @@ import {API, APIRequest} from '../../api/API';
 import DeviceInfo from 'react-native-device-info';
 import {AzureInstance, AzureLoginView} from 'react-native-azure-ad-2';
 import RESTAPI from '../../api/REST/RESTAPI';
+import {jwtDecode} from 'fhirclient/lib/lib';
+import {Utils} from '../../support/Utils';
 
 const CREDENTIAILS = {
     client_id: '6b1d9c3b-df12-4a15-9a66-0e299f9a9bd2',
@@ -50,11 +52,13 @@ export default class LoginScreen extends AppScreen {
         }
     };
 
-    onDevelopPress = () => {
+    onDevelopPress = async () => {
         let api = new RESTAPI('https://fhir1.azurewebsites.net');
         api.token = null;
-        api.userId = '8cba6c16-4f07-42de-9b06-b5af4f05f23c';
         this.props.screenProps.api = api;
+
+        // await this.setCurrentUser('8cba6c16-4f07-42de-9b06-b5af4f05f23c');
+        await this.api.setCurrentUser('user1@itaybraunhotmail.onmicrosoft.com');
 
         this.navigateTo('Tabs');
     };
@@ -67,9 +71,16 @@ export default class LoginScreen extends AppScreen {
 
     _onLoginSuccess = async (event) => {
         let api = new RESTAPI('https://cs2.azurewebsites.net');
-        api.token = this.instance.getToken().accessToken;
-        api.userId = '8cba6c16-4f07-42de-9b06-b5af4f05f23c';
+
+        const token = this.instance.getToken().accessToken;
+        console.log(token);
+
+        const decodedToken = Utils.parseJwt(token);
+
+        api.token = token;
         this.props.screenProps.api = api;
+
+        await this.api.setCurrentUser(decodedToken.unique_name);
 
         this.navigateTo('Tabs');
     };

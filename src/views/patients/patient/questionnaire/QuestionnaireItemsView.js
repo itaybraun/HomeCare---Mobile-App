@@ -100,6 +100,8 @@ export default class QuestionnaireItemsView extends Component {
                 return this.renderGroup(item, depth);
             case 'choice':
                 return this.renderChoice(item, depth);
+            case 'integer':
+                return this.renderInteger(item, depth);
             case 'decimal':
                 return this.renderDecimal(item, depth);
             case 'string':
@@ -159,6 +161,28 @@ export default class QuestionnaireItemsView extends Component {
                 }
             </FormItemContainer>
         );
+    };
+
+    renderInteger = (item: QuestionnaireItem, depth = 0) => {
+        return (
+            <FormItemContainer key={item.link}
+                               onLayout={({nativeEvent}) => this.items[item.link] = nativeEvent.layout}
+                               error={this.state.errors[item.link]}
+                               style={{paddingHorizontal: 20 * depth, borderWidth: 0}}>
+                {this.renderTitle(item)}
+                <TextInput
+                    style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
+                    value={this.state.values[item.link]}
+                    keyboardType='numeric'
+                    onChangeText={text => {
+                        text = text.isEmpty() ? null : text;
+                        if (text)
+                            text = parseInt(text).toString();
+                        this.updateValues(item.link, text)
+                    }}
+                />
+            </FormItemContainer>
+        )
     };
 
     renderDecimal = (item: QuestionnaireItem, depth = 0) => {

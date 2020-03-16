@@ -14,15 +14,34 @@ RESTAPI.prototype.getPractitioner = async function getPractitioner(practitionerI
         if (!practitionerId) {
             return new APIRequest(true, null);
         }
-        const response = await this.server.get('Practitioner/'+practitionerId, {
-            params: {},
-        });
-        if (response.status === 200) {
-            const patient = getPractitionerFromJSON(response.data);
-            return new APIRequest(true, patient);
-        } else {
-            return new APIRequest(false, new Error(response.data));
+
+        let params = {};
+        let url = 'Practitioner/'+practitionerId;
+        params.flat = true;
+
+        const result = await this.server.request(this.createUrl(url), params);
+        console.log('getPractitioner', result);
+        let practitioner = getPractitionerFromJSON(result);
+        return new APIRequest(true, practitioner);
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
+RESTAPI.prototype.getPractitionerByIdentifier = async function getPractitionerByIdentifier(identifier): APIRequest {
+    try {
+        if (!identifier) {
+            return new APIRequest(true, null);
         }
+
+        let params = {};
+        let url = 'Practitioner?identifier='+identifier;
+        params.flat = true;
+
+        const result = await this.server.request(this.createUrl(url), params);
+        console.log('getPractitionerByIdentifier', result);
+        let practitioner = getPractitionerFromJSON(result[0]);
+        return new APIRequest(true, practitioner);
     } catch (error) {
         return new APIRequest(false, error);
     }

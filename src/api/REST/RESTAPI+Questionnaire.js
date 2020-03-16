@@ -66,14 +66,14 @@ function getItemFromJson(json) {
     return item;
 }
 
-function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire) {
+function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, authorId: String) {
     let data = {
         resourceType: "QuestionnaireResponse",
         questionnaire: "Questionnaire/" + questionnaire.id,
         status: "completed",
         subject: {
             reference: "Patient/" + questionnaire.patient.id,
-        }
+        },
     };
 
     function getItemAnswer(item:QuestionnaireItem) {
@@ -120,6 +120,7 @@ function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire) {
     }
 
     data.item = questionnaire.items.map(item => getItemAnswer(item));
+    data.author = API.user ? {reference: "Practitioner/"+API.user.id} : null;
 
     return data;
 

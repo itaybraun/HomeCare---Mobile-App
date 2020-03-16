@@ -3,19 +3,25 @@ import {Request} from '../support/Utils';
 import {Visit} from '../models/Visit';
 import {Task} from '../models/Task';
 import {Questionnaire} from '../models/Questionnaire';
+import {Practitioner} from '../models/Practitioner';
 
 export class API {
     constructor(){
 
     }
 
-    userId: String;
+    static user: Practitioner;
 
-    token: String;
+    static token: String;
+    get token(): String {
+        return API.token;
+    }
+    set token(token) {
+        API.token = token;
+    }
 }
 
 export class APIRequest extends Request {
-
     constructor(success, data = null) {
         super(success, data)
     }
@@ -24,6 +30,11 @@ export class APIRequest extends Request {
         return `Request success is ${this.success}, data is ${this.data}`;
     }
 }
+
+API.prototype.setCurrentUser = async function setCurrentUser(identifier: String): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
 
 API.prototype.getPatients = async function getPatients(): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
@@ -36,6 +47,10 @@ API.prototype.getPatient = async function getPatient(patientId): APIRequest {
 
 
 API.prototype.getPractitioner = async function getPractitioner(practitionerId): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+API.prototype.getPractitionerByIdentifier = async function getPractitionerByIdentifier(identifier): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 

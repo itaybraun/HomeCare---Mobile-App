@@ -8,7 +8,7 @@ export class Task extends BaseModel {
     openDate: Date;
     text: String;
     schedule: Date;
-    priority: Priorities;
+    priority: Priority;
 
     patientId: String;
     patient: Patient;
@@ -24,16 +24,18 @@ export class Task extends BaseModel {
 
     questionnaireId: String;
 
+    status: Status;
+
     get isPriorityImportant(): Boolean {
         return [
-            Priorities.ASAP,
-            Priorities.URGENT,
-            Priorities.STAT
+            Priority.ASAP,
+            Priority.URGENT,
+            Priority.STAT
         ].indexOf(this.priority) > -1;
     }
 }
 
-export const Priorities = {
+export const Priority = {
     ROUTINE: 'routine',
     URGENT: 'urgent',
     ASAP: 'asap',
@@ -41,14 +43,40 @@ export const Priorities = {
 
     getAll() {
         return [
-            Priorities.ROUTINE,
-            Priorities.URGENT,
-            Priorities.ASAP,
-            Priorities.STAT
+            Priority.ROUTINE,
+            Priority.URGENT,
+            Priority.ASAP,
+            Priority.STAT
         ]
     },
 
-    getByString(string): Priorities {
+    getByString(string): Priority {
+        return this.getAll().find(p => p === string);
+    }
+};
+
+export const Status = {
+    DRAFT: 'draft',
+    ACTIVE: 'active',
+    ON_HOLD: 'on-hold',
+    REVOKED: 'revoked',
+    COMPLETED: 'completed',
+    ERROR: 'entered-in-error',
+    UNKNOWN: 'unknown',
+
+    getAll() {
+        return [
+            Status.DRAFT,
+            Status.ACTIVE,
+            Status.ON_HOLD,
+            Status.REVOKED,
+            Status.COMPLETED,
+            Status.ERROR,
+            Status.UNKNOWN
+        ]
+    },
+
+    getByString(string): Status {
         return this.getAll().find(p => p === string);
     }
 };
