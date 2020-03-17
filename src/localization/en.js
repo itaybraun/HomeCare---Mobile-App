@@ -101,6 +101,10 @@ export const en = {
         plan: 'Plan',
         me: 'Me',
         selectPractitioner: 'Select Practitioner',
+        all: 'All',
+        open: 'Open',
+        closed: 'Closed',
+        filterTasks: 'Filter Tasks',
     },
 
     Visit: {

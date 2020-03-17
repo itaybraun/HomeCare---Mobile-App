@@ -12,6 +12,10 @@ import PatientProfile from './PatientProfile';
 import PatientCarePlans from './PatientCarePlans';
 import PatientTasks from './PatientTasks';
 import {Status, Task} from '../../../models/Task';
+import MenuButton from '../../menu/MenuButton';
+import ActionSheet from 'react-native-simple-action-sheet';
+import AsyncStorage from '@react-native-community/async-storage';
+import {Consts} from '../../../support/Consts';
 
 
 export default class PatientScreen extends AppScreen {
@@ -30,6 +34,16 @@ export default class PatientScreen extends AppScreen {
         return {
             title: title,
             headerBackTitle: ' ',
+            headerRight: () => {
+                return (
+                navigation.getParam('filterIsVisible') ?
+                    <TouchableOpacity style={{padding: 12}} onPress={navigation.getParam('showFilter')}>
+                        <Icon type="Feather" name="filter" style={{fontSize: 22, color: appColors.headerFontColor}}/>
+                    </TouchableOpacity> :
+                    null
+                )
+            }
+            ,
         }
     };
 
@@ -43,12 +57,18 @@ export default class PatientScreen extends AppScreen {
         ],
 
         tasks: [],
-        qaMode: this.settings.qaMode,
+        statuses: [Status.ACTIVE],
     };
 
     get patient(): Patient {
         return this.props.navigation.getParam('patient', null);
     }
+
+    possibleStatuses = [
+        {key: 'all', label: strings.Task.all, statuses: []},
+        {key: 'open', label: strings.Task.open, statuses: [Status.ACTIVE]},
+        {key: 'closed', label: strings.Task.closed, statuses: [Status.COMPLETED]},
+    ];
 
     //------------------------------------------------------------
     // Overrides
@@ -58,16 +78,11 @@ export default class PatientScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
-    }
 
-    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
-
-        if (this.state.qaMode !== this.settings.qaMode) {
-            await this.setState({
-                qaMode: this.settings.qaMode,
-            });
-            this.getData();
-        }
+        this.props.navigation.setParams({
+            showFilter: this.showFilter,
+            filterIsVisible: this.state.index === 1
+        });
     }
 
     //------------------------------------------------------------
@@ -76,13 +91,16 @@ export default class PatientScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         this.setState({loading: true});
+        let taskFilter = await AsyncStorage.getItem(Consts.TASKS_FILTER);
+        const statuses = taskFilter ? JSON.parse(taskFilter) : [Status.ACTIVE];
+        await this.setState({statuses: statuses});
         const tasks = await this.getTasks(refresh);
         this.setState({...tasks, loading: false});
     };
 
     getTasks = async (refresh = true) => {
         if (this.patient) {
-            let statuses = this.settings.qaMode ? null : [Status.ACTIVE];
+            let statuses = this.state.statuses.length > 0 ? this.state.statuses : null;
             let result: APIRequest = await this.api.getTasks(this.patient.id, statuses);
             if (result.success) {
                 return {tasks: result.data};
@@ -99,6 +117,7 @@ export default class PatientScreen extends AppScreen {
 
     handleTabIndexChange = index => {
         this.setState({ index });
+        this.props.navigation.setParams({ filterIsVisible: index === 1 });
     };
 
     addTask = () => {
@@ -127,12 +146,34 @@ export default class PatientScreen extends AppScreen {
         }
     };
 
+    showFilter = async () => {
+        let options = this.possibleStatuses.map(status => status.label);
+        if (Platform.OS === 'ios')
+            options.push(strings.Common.cancelButton);
+
+        ActionSheet.showActionSheetWithOptions({
+                options: options,
+                title: strings.Task.filterTasks,
+                cancelButtonIndex: options.length - 1,
+            },
+            async (buttonIndex) => {
+                if (buttonIndex < this.possibleStatuses.length) {
+                    let statuses = this.possibleStatuses[buttonIndex].statuses;
+                    await this.setState({
+                        statuses: statuses,
+                    });
+                    AsyncStorage.setItem(Consts.TASKS_FILTER, JSON.stringify(statuses));
+                    this.getData();
+                }
+            });
+    };
+
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
 
     renderTabBar = (props) => {
-        return renderTabBar(props, this.state.index, (index) => this.setState({index: index}));
+        return renderTabBar(props, this.state.index, this.handleTabIndexChange);
     };
 
     renderScene = ({ route }) => {
