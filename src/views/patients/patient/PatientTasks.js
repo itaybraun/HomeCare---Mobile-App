@@ -51,7 +51,7 @@ export default class PatientTasks extends Component {
         let statusText = task.status && strings.Statuses.hasOwnProperty(task.status) ? strings.Statuses[task.status] : null
 
         return (
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity disabled={!task.questionnaireId} onPress={() => this.executeTask(task)}>
                 <Card style={[commonStyles.cardStyle, task.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
                     <Text style={[commonStyles.contentText]}>{created ? strings.formatString(strings.Patient.created, created) : null}</Text>
                     <View style={{flex: 1,}}>
@@ -86,11 +86,7 @@ export default class PatientTasks extends Component {
 
                         {
                             task.questionnaireId &&
-                                <TouchableOpacity style={{marginTop: 15}}
-                                                  onPress={() => this.executeTask(task)}
-                                >
-                                    <Text style={[commonStyles.link, {fontWeight: 'bold'}]}>{strings.Patient.executeTask}</Text>
-                                </TouchableOpacity>
+                                <Text style={[commonStyles.link, {fontWeight: 'bold', marginTop: 15}]}>{strings.Patient.executeTask}</Text>
                         }
 
                     </View>

@@ -14,13 +14,6 @@ import RESTAPI from '../../api/REST/RESTAPI';
 import {jwtDecode} from 'fhirclient/lib/lib';
 import {Utils} from '../../support/Utils';
 
-const CREDENTIAILS = {
-    client_id: '6b1d9c3b-df12-4a15-9a66-0e299f9a9bd2',
-    client_secret: '[v3NLm?k?1YqxJ7Gcvz6_F:]:?12s/z4',
-    redirect_uri: 'https://www.getpostman.com/oauth2/callback',
-    scope: 'https://cs2.azurewebsites.net/user_impersonation'
-};
-
 export default class LoginScreen extends AppScreen {
 
     state = {
@@ -31,7 +24,12 @@ export default class LoginScreen extends AppScreen {
         production: null,
     };
 
-    instance = new AzureInstance(CREDENTIAILS);
+    instance = new AzureInstance({
+        client_id: '6b1d9c3b-df12-4a15-9a66-0e299f9a9bd2',
+        client_secret: '[v3NLm?k?1YqxJ7Gcvz6_F:]:?12s/z4',
+        redirect_uri: 'https://www.getpostman.com/oauth2/callback',
+        scope: 'https://cs2.azurewebsites.net/user_impersonation'
+    });
 
     componentDidMount(): void {
         super.componentDidMount();
