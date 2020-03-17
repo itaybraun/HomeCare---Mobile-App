@@ -190,23 +190,23 @@ export default class TaskScreen extends AppScreen {
                             <Text style={[commonStyles.contentText, {marginTop: 10,}]}>{strings.Priorities[this.state.task?.priority]}</Text>
                             <Text style={[commonStyles.infoText, {marginTop: 15}]}>{strings.Task.requester}:</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-                                {
-                                    this.state.task?.requester?.phone &&
-                                    <TouchableOpacity style={{marginRight: 10}}
-                                                      onPress={() => Linking.openURL(`tel:${this.state.task.requester.phone}`)}>
-                                        <Icon type="Feather" name="phone"
-                                              style={{fontSize: 24, color: appColors.textColor}}/>
-                                    </TouchableOpacity>
-                                }
+                                <Text style={[commonStyles.contentText, {flex: 1}]}>{this.state.task?.requester?.fullName}</Text>
                                 {
                                     this.state.task?.requester?.email &&
-                                    <TouchableOpacity style={{marginRight: 10}}
+                                    <TouchableOpacity style={{marginRight: 10, marginLeft: 15}}
                                                       onPress={() => Linking.openURL(`mailto:${this.state.task.requester.email}`)}>
                                         <Icon type="Feather" name="mail"
-                                              style={{fontSize: 24, color: appColors.textColor}}/>
+                                              style={{fontSize: 30, color: appColors.textColor}}/>
                                     </TouchableOpacity>
                                 }
-                                <Text style={[commonStyles.contentText]}>{this.state.task?.requester?.fullName}</Text>
+                                {
+                                    this.state.task?.requester?.phone &&
+                                    <TouchableOpacity style={{marginRight: 10, marginLeft: 15,}}
+                                                      onPress={() => Linking.openURL(`tel:${this.state.task.requester.phone}`)}>
+                                        <Icon type="Feather" name="phone"
+                                              style={{fontSize: 30, color: appColors.textColor}}/>
+                                    </TouchableOpacity>
+                                }
                             </View>
                         </Card>
 

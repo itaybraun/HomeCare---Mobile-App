@@ -45,14 +45,6 @@ export default class PatientProfile extends Component {
                     {this.renderSections(strings.Patient.vital, 'Vital',  require('../../../assets/icons/profile/vital.png'), true)}
                     {this.renderSections(strings.Patient.mental, 'Metal', require('../../../assets/icons/profile/mental.png'), true)}
                     {this.renderSections(strings.Patient.body, 'Body', require('../../../assets/icons/profile/body.png'), true)}
-
-                    <TouchableOpacity
-                        style={styles.quickActionsContainer}
-                        onPress={() => this.props.navigateTo('QuickActions')}>
-                        <Text style={[commonStyles.yellowTitle, {marginRight: 30}]}>{strings.Patient.quickActions}</Text>
-                        {renderDisclosureIndicator()}
-                    </TouchableOpacity>
-
                     {this.renderLinks(strings.Patient.activity, 'Activity')}
                     {this.renderLinks(strings.Patient.progress, 'Progress')}
                     {this.renderLinks(strings.Patient.alert, 'Alert')}
