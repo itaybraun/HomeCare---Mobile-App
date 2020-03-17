@@ -40,7 +40,7 @@ export default class AppScreen extends React.Component {
     componentWillUnmount = () => {
         this.willFocusListener.remove();
         this.didFocusListener.remove();
-        this.eventEmitter.removeListener('settings', this.update);
+        this.eventEmitter.removeListener('settings');
     };
 
     willFocus = () => {

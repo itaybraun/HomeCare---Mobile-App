@@ -11,6 +11,12 @@ export class API {
     }
 
     static user: Practitioner;
+    get user(): Practitioner {
+        return API.user;
+    }
+    set user(user) {
+        API.user = user;
+    }
 
     static token: String;
     get token(): String {
@@ -45,6 +51,10 @@ API.prototype.getPatient = async function getPatient(patientId): APIRequest {
 };
 
 
+
+API.prototype.getPractitioners = async function getPractitioners(): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
 
 API.prototype.getPractitioner = async function getPractitioner(practitionerId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
@@ -82,7 +92,15 @@ API.prototype.getTask = async function getTask(taskId): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
+API.prototype.addTask = async function addTask(task: Task): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
 API.prototype.updateTask = async function updateTask(task: Task): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
+API.prototype.getActivities = async function getActivities(): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 

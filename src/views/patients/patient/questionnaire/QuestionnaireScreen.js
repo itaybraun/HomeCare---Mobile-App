@@ -66,7 +66,7 @@ export default class QuestionnaireScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         const task: Task =  this.props.navigation.getParam('task', null);
-        if (task && task.questionnaireId) {
+        if (task && task.activity?.questionnaireId) {
             this.setState({loading: true});
             const questionnaire = await this.getQuestionnaire(task);
             this.setState({
@@ -79,7 +79,7 @@ export default class QuestionnaireScreen extends AppScreen {
 
     getQuestionnaire = async (task: Task) => {
 
-        let result: APIRequest = await this.api.getQuestionnaire(task.questionnaireId);
+        let result: APIRequest = await this.api.getQuestionnaire(task.activity.questionnaireId);
         if (result.success) {
             const questionnaire: Questionnaire = result.data;
             questionnaire.patient = task.patient;
@@ -123,6 +123,8 @@ export default class QuestionnaireScreen extends AppScreen {
                 task.status = Status.COMPLETED;
                 result = await this.api.updateTask(task);
                 if (result.success) {
+                    const refresh = this.props.navigation.getParam('refresh', null);
+                    refresh && refresh();
                     this.pop();
                 } else {
                     this.showError(result.data);

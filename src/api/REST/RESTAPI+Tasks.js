@@ -1,12 +1,11 @@
 import {APIRequest, API} from '../API';
-import {Patient} from '../../models/Patient';
 import moment from 'moment';
 import {Priority, Status, Task} from '../../models/Task';
-import {Practitioner} from '../../models/Practitioner';
 import RESTAPI from './RESTAPI';
 import {getPatientFromJson} from './RESTAPI+Patients';
 import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
 import {getVisitFromJson} from './RESTAPI+Visits';
+import {getActivityFromJson} from './RESTAPI+Questionnaire';
 
 //------------------------------------------------------------
 // Tasks
@@ -46,9 +45,21 @@ RESTAPI.prototype.getTask = async function getTask(taskId): APIRequest {
         params.flat = true;
         params.resolveReferences = ["subject", "requester", "performer.0", "encounter", "basedOn.0"];
         const result = await this.server.request(this.createUrl(url), params);
-        console.log(result);
+        console.log('getTask', result);
         const task = getTaskFromJson(result);
 
+        return new APIRequest(true, task);
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
+RESTAPI.prototype.addTask = async function addTask(task: Task): APIRequest {
+    try {
+        const data = getJsonFromTask(task);
+        const result = await this.server.create(data);
+        console.log('addTask', result);
+        task = getTaskFromJson(result);
         return new APIRequest(true, task);
     } catch (error) {
         return new APIRequest(false, error);
@@ -83,7 +94,8 @@ export function getTaskFromJson(json) {
     task.text = json.code?.text;
     // TODO: I don't like this priority thing...
     task.priority = json.priority ? Priority.getByString(json.priority) || Priority.ROUTINE : Priority.ROUTINE;
-    task.questionnaireId = json.basedOn?.[0].relatedArtifact?.[0].resource?.replace('Questionnaire/', '') || null;
+    task.activityId = json.basedOn?.[0]?.id;
+    task.activity = json.basedOn?.[0] ? getActivityFromJson(json.basedOn?.[0]) : null;
     task.status = json.status ? Status.getByString(json.status) || Status.UNKNOWN : Status.UNKNOWN;
     return task;
 }
@@ -110,9 +122,6 @@ export function getJsonFromTask(task: Task) {
         requester: {
             reference: "Practitioner/" + task.requesterId,
         },
-        encounter: {
-            reference: "Encounter/" + task.visit.id,
-        },
         performer: {
             reference: 'Practitioner/' + task.performerId,
         }
@@ -123,6 +132,20 @@ export function getJsonFromTask(task: Task) {
             reference: 'Practitioner/' + id,
         }
     });
+
+    if (task.activityId) {
+        data.basedOn = [
+            {
+                "reference": "ActivityDefinition/" + task.activityId
+            }
+        ];
+    }
+
+    if (task.visit) {
+        data.encounter = {
+            reference: "Encounter/" + task.visit.id,
+        };
+    }
 
     return data;
 }

@@ -88,6 +88,7 @@ export default class PatientScreen extends AppScreen {
                 return {tasks: result.data};
             } else {
                 this.showError(result.data);
+                return {tasks: []};
             }
         }
     };
@@ -100,9 +101,22 @@ export default class PatientScreen extends AppScreen {
         this.setState({ index });
     };
 
+    addTask = () => {
+        this.navigateTo('NewTask', {patient: this.patient, refresh: () => {
+                this.getData();
+                this.eventEmitter.emit('reloadTasks');
+            }
+        });
+    };
+
     selectTask = async (task: Task) => {
-        if (task.status === Status.ACTIVE) {
-            this.navigateTo('Questionnaire', {task: task})
+        if (task.status === Status.ACTIVE && task.activity?.questionnaireId) {
+            this.navigateTo('Questionnaire', {
+                task: task, refresh: () => {
+                    this.getData();
+                    this.eventEmitter.emit('reloadTasks');
+                }
+            });
         }
         else {
             // task.status = Status.ACTIVE;
@@ -139,6 +153,14 @@ export default class PatientScreen extends AppScreen {
                         <PatientTasks patient={this.patient}
                                       tasks={this.state.tasks}
                                       selectTask={this.selectTask} />
+                        <View style={{position: 'absolute', right: 10, bottom: 10}}>
+                            <TouchableOpacity
+                                style={commonStyles.blackButtonContainer}
+                                onPress={this.addTask}
+                            >
+                                <Icon type="Feather" name="plus" style={commonStyles.plusText}/>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 );
             default:

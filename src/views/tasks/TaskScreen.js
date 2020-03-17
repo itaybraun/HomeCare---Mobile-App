@@ -28,9 +28,9 @@ export default class TaskScreen extends AppScreen {
 
     static navigationOptions = ({navigation}) => {
         const task: Task = navigation.getParam('task', null);
-        let title = strings.Task.addTask;
+        let title = "";
         if (task)
-            title = task ? strings.Task.taskDetails : strings.Task.addTask;
+            title = strings.Task.taskDetails;
         return {
             title: title,
             headerBackTitle: ' ',
@@ -98,7 +98,7 @@ export default class TaskScreen extends AppScreen {
         this.setState({
             visit: visit,
         })
-    }
+    };
 
     submit = async () => {
 

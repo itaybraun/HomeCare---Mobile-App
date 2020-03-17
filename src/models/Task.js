@@ -2,6 +2,7 @@ import {Patient} from './Patient';
 import {Practitioner} from './Practitioner';
 import {BaseModel} from './BaseModel';
 import {Visit} from './Visit';
+import {Activity} from './Activity';
 
 export class Task extends BaseModel {
     id: String;
@@ -22,7 +23,8 @@ export class Task extends BaseModel {
     visitId: String;
     visit: Visit;
 
-    questionnaireId: String;
+    activityId: String;
+    activity: Activity;
 
     status: Status;
 

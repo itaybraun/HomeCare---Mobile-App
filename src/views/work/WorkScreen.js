@@ -57,7 +57,14 @@ export default class WorkScreen extends AppScreen {
 
         this.getData();
 
-        this.props.navigation.setParams({ showFilter: this.showFilter });
+        this.eventEmitter.on('reloadTasks', async () => {
+            const tasks = await this.getTasks();
+            this.setState({...tasks});
+        });
+    }
+
+    componentWillUnmount(): void {
+        this.eventEmitter.removeListener('reloadTasks');
     }
 
     //------------------------------------------------------------

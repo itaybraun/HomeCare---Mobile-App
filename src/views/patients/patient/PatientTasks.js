@@ -3,7 +3,7 @@ import {View, Text, FlatList, StyleSheet, TouchableOpacity, TouchableWithoutFeed
 import PropTypes from 'prop-types';
 import {Task, Status} from '../../../models/Task';
 import {commonStyles, renderSeparator} from '../../../support/CommonStyles';
-import {Card} from "native-base";
+import {Card, Icon} from 'native-base';
 import moment from 'moment';
 import {strings} from '../../../localization/strings';
 import {uses24HourClock} from "react-native-localize";
@@ -36,7 +36,7 @@ export default class PatientTasks extends Component {
 
     renderListFooter = () => {
         return (
-            <View style={{height: 12}} />
+            <View style={{height: 74}} />
         );
     };
 
@@ -54,7 +54,7 @@ export default class PatientTasks extends Component {
         let created = task.openDate ? moment(task.openDate).fromNow() : null;
         let statusText = task.status && strings.Statuses.hasOwnProperty(task.status) ? strings.Statuses[task.status] : null
 
-        let Component = task.questionnaireId ? TouchableOpacity : TouchableWithoutFeedback;
+        let Component = task.activity?.questionnaireId ? TouchableOpacity : TouchableWithoutFeedback;
 
         return (
             <Component onPress={() => this.selectTask(task)}>
@@ -91,7 +91,7 @@ export default class PatientTasks extends Component {
                         }
 
                         {
-                            task.questionnaireId &&
+                            task.status === Status.ACTIVE && task.activity?.questionnaireId &&
                                 <Text style={[commonStyles.link, {fontWeight: 'bold', marginTop: 15}]}>{strings.Patient.executeTask}</Text>
                         }
 

@@ -14,7 +14,7 @@ import FlagsScreen from './src/views/patients/patient/flags/FlagsScreen';
 import PatientScreen from './src/views/patients/patient/PatientScreen';
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import {appColors} from './src/support/CommonStyles';
-import TaskScreen from './src/views/work/TaskScreen';
+import TaskScreen from './src/views/tasks/TaskScreen';
 import VisitScreen from './src/views/work/VisitScreen';
 import RESTAPI from './src/api/REST/RESTAPI';
 import CalendarScreen from './src/views/work/calendar/CalendarScreen';
@@ -32,6 +32,7 @@ import './src/api/REST/RESTAPI+Visits';
 import './src/api/REST/RESTAPI+Questionnaire';
 import QuestionnaireScreen from './src/views/patients/patient/questionnaire/QuestionnaireScreen';
 import {API} from './src/api/API';
+import NewTaskScreen from './src/views/tasks/NewTaskScreen';
 
 export default class App extends React.Component {
 
@@ -100,6 +101,8 @@ const PatientsStack = createStackNavigator({
     Flags: FlagsScreen,
     Flag: FlagScreen,
     Questionnaire: QuestionnaireScreen,
+    NewTask: NewTaskScreen,
+    Visit: VisitScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });
@@ -109,6 +112,7 @@ const WorkStack = createStackNavigator({
     Flag: FlagScreen,
     Visit: VisitScreen,
     Calendar: CalendarScreen,
+    NewTask: NewTaskScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });

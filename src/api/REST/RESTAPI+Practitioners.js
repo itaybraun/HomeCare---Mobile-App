@@ -9,6 +9,23 @@ import {Address} from '../../models/Person';
 // Practitioners
 //------------------------------------------------------------
 
+RESTAPI.prototype.getPractitioners = async function getPractitioners(): APIRequest {
+
+    try {
+        let params = {};
+        let url = 'Practitioner';
+        let fhirOptions = {};
+        fhirOptions.pageLimit = 0;
+        fhirOptions.flat = true;
+        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        console.log('getPractitioners', result);
+        const practitioners = result.map(json => getPractitionerFromJSON((json))) || [];
+        return new APIRequest(true, practitioners);
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
 RESTAPI.prototype.getPractitioner = async function getPractitioner(practitionerId): APIRequest {
     try {
         if (!practitionerId) {

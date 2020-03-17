@@ -128,7 +128,6 @@ export default class VisitScreen extends AppScreen {
         let visit = new Visit();
         let errors = {};
 
-        visit = new Visit();
         visit.patientId = this.state.task?.patientId;
         visit.patient = this.state.task?.patient;
 

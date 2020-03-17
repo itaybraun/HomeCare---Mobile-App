@@ -1,6 +1,7 @@
 import {API, APIRequest} from '../API';
 import RESTAPI from './RESTAPI';
 import {Questionnaire, QuestionnaireChoiceOption, QuestionnaireItem} from '../../models/Questionnaire';
+import {Activity} from '../../models/Activity';
 
 //------------------------------------------------------------
 // Login
@@ -32,6 +33,22 @@ RESTAPI.prototype.submitQuestionnaire = async function submitQuestionnaire(answe
         return new APIRequest(true, null);
     } catch (error) {
         console.log(error);
+        return new APIRequest(false, error);
+    }
+};
+
+RESTAPI.prototype.getActivities = async function getActivities(): APIRequest {
+    try {
+        let params = {};
+        let url = 'ActivityDefinition';
+        let fhirOptions = {};
+        fhirOptions.flat = true;
+        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        console.log('getActivities', result);
+        let activities = result.map(json => getActivityFromJson(json)) || [];
+
+        return new APIRequest(true, activities);
+    } catch (error) {
         return new APIRequest(false, error);
     }
 };
@@ -123,5 +140,14 @@ function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, autho
     data.author = API.user ? {reference: "Practitioner/"+API.user.id} : null;
 
     return data;
+}
 
+export function getActivityFromJson(json) {
+    let activity = new Activity();
+
+    activity.id = json.id;
+    activity.text = json.description;
+    activity.questionnaireId = json.relatedArtifact?.[0]?.resource?.replace('Questionnaire/', '') || null;
+
+    return activity;
 }

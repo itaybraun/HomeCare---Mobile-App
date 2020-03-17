@@ -95,6 +95,12 @@ export const en = {
         when: 'When',
         visit: 'Visit',
         status: 'Status: {0}',
+        whatToDo: 'What to Do',
+        assignTo: 'Assign to',
+        notes: 'Notes',
+        plan: 'Plan',
+        me: 'Me',
+        selectPractitioner: 'Select Practitioner',
     },
 
     Visit: {
