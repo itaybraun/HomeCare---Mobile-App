@@ -1,7 +1,7 @@
 import {Flag} from '../models/Flag';
 import {Request} from '../support/Utils';
 import {Visit} from '../models/Visit';
-import {Task} from '../models/Task';
+import {Task, Status} from '../models/Task';
 import {Questionnaire} from '../models/Questionnaire';
 import {Practitioner} from '../models/Practitioner';
 
@@ -74,7 +74,7 @@ API.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest {
 
 
 
-API.prototype.getTasks = async function getTasks(patientId): APIRequest {
+API.prototype.getTasks = async function getTasks(patientId, statuses: [Status] = []): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 

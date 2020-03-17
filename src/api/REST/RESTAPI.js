@@ -10,7 +10,17 @@ export default class RESTAPI extends API {
         });
     }
 
-    createUrl = (url) => {
+    createUrl = (url, params = null) => {
+
+        let str = "";
+
+        if (params) {
+            str = Object.keys(params).map((key) => key + '=' + params[key]).join('&');
+        }
+
+        if (!str.isEmpty())
+            url += (url.indexOf("?") > -1 ? '&' : '?') + str;
+
         let result = {
             url: url,
             headers: {
@@ -21,6 +31,8 @@ export default class RESTAPI extends API {
         if (API.token) {
             result.headers.Authorization = `Bearer ${API.token}`;
         }
+
+        console.log(result);
 
         return result;
     };

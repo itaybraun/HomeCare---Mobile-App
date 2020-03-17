@@ -11,6 +11,7 @@ import {appColors, commonStyles, renderLoading, renderSeparator, renderTabBar} f
 import PatientProfile from './PatientProfile';
 import PatientCarePlans from './PatientCarePlans';
 import PatientTasks from './PatientTasks';
+import {Status} from '../../../models/Task';
 
 
 export default class PatientScreen extends AppScreen {
@@ -70,7 +71,7 @@ export default class PatientScreen extends AppScreen {
 
     getTasks = async (refresh = true) => {
         if (this.patient) {
-            let result: APIRequest = await this.api.getTasks(this.patient.id);
+            let result: APIRequest = await this.api.getTasks(this.patient.id, [Status.ACTIVE]);
             if (result.success) {
                 return {tasks: result.data};
             } else {

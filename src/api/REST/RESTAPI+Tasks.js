@@ -12,23 +12,25 @@ import {getVisitFromJson} from './RESTAPI+Visits';
 // Tasks
 //------------------------------------------------------------
 
-RESTAPI.prototype.getTasks = async function getTasks(patientId): APIRequest {
+RESTAPI.prototype.getTasks = async function getTasks(patientId, statuses: [Status] = null): APIRequest {
     try {
 
         let params = {};
         let url = 'ServiceRequest';
         if (patientId) {
             params.subject = patientId;
-            url += `/?subject=Patient/${patientId}`;
-        } else {
-            params.performer = API.user?.id;
+        } else if (API.user) {
+            //url += '?performer=' + API.user.id;
         }
-        params.pageLimit = 0;
-        params.flat = true;
-        params.resolveReferences = ["subject", "requester", "performer.0", "encounter", "basedOn.0"];
+        if (Array.isArray(statuses) && statuses.length > 0)
+            params.status = statuses.join();
+        let fhirOptions = {};
+        fhirOptions.pageLimit = 0;
+        fhirOptions.flat = true;
+        fhirOptions.resolveReferences = ["subject", "requester", "performer.0", "encounter", "basedOn.0"];
 
-        const result = await this.server.request(this.createUrl(url), params);
-        console.log(result);
+        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        console.log('getTasks', result);
         let tasks = result.map(json => getTaskFromJson(json)) || [];
 
         return new APIRequest(true, tasks);
