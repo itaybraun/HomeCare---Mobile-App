@@ -11,7 +11,7 @@ import {appColors, commonStyles, renderLoading, renderSeparator, renderTabBar} f
 import PatientProfile from './PatientProfile';
 import PatientCarePlans from './PatientCarePlans';
 import PatientTasks from './PatientTasks';
-import {Status} from '../../../models/Task';
+import {Status, Task} from '../../../models/Task';
 
 
 export default class PatientScreen extends AppScreen {
@@ -43,6 +43,7 @@ export default class PatientScreen extends AppScreen {
         ],
 
         tasks: [],
+        qaMode: this.settings.qaMode,
     };
 
     get patient(): Patient {
@@ -59,6 +60,16 @@ export default class PatientScreen extends AppScreen {
         this.getData();
     }
 
+    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+
+        if (this.state.qaMode !== this.settings.qaMode) {
+            await this.setState({
+                qaMode: this.settings.qaMode,
+            });
+            this.getData();
+        }
+    }
+
     //------------------------------------------------------------
     // Data
     //------------------------------------------------------------
@@ -71,7 +82,8 @@ export default class PatientScreen extends AppScreen {
 
     getTasks = async (refresh = true) => {
         if (this.patient) {
-            let result: APIRequest = await this.api.getTasks(this.patient.id, [Status.ACTIVE]);
+            let statuses = this.settings.qaMode ? null : [Status.ACTIVE];
+            let result: APIRequest = await this.api.getTasks(this.patient.id, statuses);
             if (result.success) {
                 return {tasks: result.data};
             } else {
@@ -86,6 +98,19 @@ export default class PatientScreen extends AppScreen {
 
     handleTabIndexChange = index => {
         this.setState({ index });
+    };
+
+    selectTask = async (task: Task) => {
+        if (task.status === Status.ACTIVE) {
+            this.navigateTo('Questionnaire', {task: task})
+        }
+        else {
+            // task.status = Status.ACTIVE;
+            // const request: APIRequest = await this.api.updateTask(task);
+            // if (request.success) {
+            //     this.getData();
+            // }
+        }
     };
 
     //------------------------------------------------------------
@@ -103,7 +128,19 @@ export default class PatientScreen extends AppScreen {
             case 'care':
                 return <PatientCarePlans patient={this.patient} navigateTo={this.navigateTo}  />;
             case 'tasks':
-                return <PatientTasks patient={this.patient} tasks={this.state.tasks} navigateTo={this.navigateTo} />;
+                return(
+                    <View style={{flex: 1}}>
+                        {
+                            this.state.qaMode &&
+                                <Text style={{textAlign: 'center', marginTop: 10}}>
+                                    QA Mode enabled. Showing all tasks
+                                </Text>
+                        }
+                        <PatientTasks patient={this.patient}
+                                      tasks={this.state.tasks}
+                                      selectTask={this.selectTask} />
+                    </View>
+                );
             default:
                 return null;
         }

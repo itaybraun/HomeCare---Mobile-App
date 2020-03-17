@@ -13,7 +13,7 @@ import AppScreen from '../../../../support/AppScreen';
 import {appColors, commonStyles, renderLoading, renderTabBar} from '../../../../support/CommonStyles';
 import {APIRequest} from '../../../../api/API';
 import {Questionnaire, QuestionnaireItem} from '../../../../models/Questionnaire';
-import {Task} from '../../../../models/Task';
+import {Status, Task} from '../../../../models/Task';
 import {strings} from '../../../../localization/strings';
 import QuestionnaireItemsView from './QuestionnaireItemsView';
 import {Content, Button} from 'native-base';
@@ -119,7 +119,14 @@ export default class QuestionnaireScreen extends AppScreen {
 
             let result: APIRequest = await this.api.submitQuestionnaire(this.state.values, this.state.questionnaire);
             if (result.success) {
-                this.pop();
+                let task: Task = this.state.task;
+                task.status = Status.COMPLETED;
+                result = await this.api.updateTask(task);
+                if (result.success) {
+                    this.pop();
+                } else {
+                    this.showError(result.data);
+                }
             } else {
                 this.showError(result.data);
             }

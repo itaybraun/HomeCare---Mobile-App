@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, StyleSheet, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import PropTypes from 'prop-types';
-import {Task} from '../../../models/Task';
+import {Task, Status} from '../../../models/Task';
 import {commonStyles, renderSeparator} from '../../../support/CommonStyles';
 import {Card} from "native-base";
 import moment from 'moment';
@@ -16,8 +16,12 @@ export default class PatientTasks extends Component {
     // Methods
     //------------------------------------------------------------
 
-    executeTask = (task: Task) => {
-        this.props.navigateTo('Questionnaire', {task: task});
+    //------------------------------------------------------------
+    // Methods
+    //------------------------------------------------------------
+
+    selectTask = (task: Task) => {
+        this.props.selectTask && this.props.selectTask(task);
     };
 
     //------------------------------------------------------------
@@ -50,8 +54,10 @@ export default class PatientTasks extends Component {
         let created = task.openDate ? moment(task.openDate).fromNow() : null;
         let statusText = task.status && strings.Statuses.hasOwnProperty(task.status) ? strings.Statuses[task.status] : null
 
+        let Component = task.questionnaireId ? TouchableOpacity : TouchableWithoutFeedback;
+
         return (
-            <TouchableOpacity disabled={!task.questionnaireId} onPress={() => this.executeTask(task)}>
+            <Component onPress={() => this.selectTask(task)}>
                 <Card style={[commonStyles.cardStyle, task.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
                     <Text style={[commonStyles.contentText]}>{created ? strings.formatString(strings.Patient.created, created) : null}</Text>
                     <View style={{flex: 1,}}>
@@ -91,7 +97,7 @@ export default class PatientTasks extends Component {
 
                     </View>
                 </Card>
-            </TouchableOpacity>
+            </Component>
         )
     };
 
@@ -110,7 +116,7 @@ export default class PatientTasks extends Component {
                           ListHeaderComponent={this.renderListHeader}
                           ListFooterComponent={this.renderListFooter}
                           keyExtractor={item => item.id}
-                          onRefresh={this.getData}
+                          onRefresh={this.props.refresh}
                           refreshing={false}
                 />
             </View>
@@ -120,7 +126,7 @@ export default class PatientTasks extends Component {
 
 PatientTasks.propTypes = {
     patient: PropTypes.instanceOf(Patient).isRequired,
-    navigateTo: PropTypes.func.isRequired,
+    selectTask: PropTypes.func.isRequired,
     tasks: PropTypes.array.isRequired,
 };
 

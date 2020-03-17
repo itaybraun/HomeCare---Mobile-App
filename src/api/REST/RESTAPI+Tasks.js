@@ -58,6 +58,7 @@ RESTAPI.prototype.getTask = async function getTask(taskId): APIRequest {
 RESTAPI.prototype.updateTask = async function updateTask(task: Task): APIRequest {
     try {
         const data = getJsonFromTask(task);
+        console.log(data);
         const result = await this.server.update(data);
         task = getTaskFromJson(result);
         return new APIRequest(true, task);
@@ -91,7 +92,7 @@ export function getJsonFromTask(task: Task) {
     const data = {
         resourceType: "ServiceRequest",
         id: task.id,
-        status: "active",
+        status: task.status,
         intent: "original-order",
         priority: task.priority,
         code: {
