@@ -56,7 +56,7 @@ RESTAPI.prototype.getActivities = async function getActivities(): APIRequest {
 export function getQuestionnaireFromJson(json) {
     let questionnaire = new Questionnaire();
     questionnaire.id = json.id;
-    questionnaire.name = json.name;
+    questionnaire.name = json.title;
 
     if (json.item)
         questionnaire.items = json.item.map(json => getItemFromJson(json));
