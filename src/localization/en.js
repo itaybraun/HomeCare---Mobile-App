@@ -105,6 +105,7 @@ export const en = {
         open: 'Open',
         closed: 'Closed',
         filterTasks: 'Filter Tasks',
+        selectActivity: 'Select Activity',
     },
 
     Visit: {

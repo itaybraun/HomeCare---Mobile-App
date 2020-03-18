@@ -33,6 +33,7 @@ import './src/api/REST/RESTAPI+Questionnaire';
 import QuestionnaireScreen from './src/views/patients/patient/questionnaire/QuestionnaireScreen';
 import {API} from './src/api/API';
 import NewTaskScreen from './src/views/tasks/NewTaskScreen';
+import SelectActivityScreen from './src/views/tasks/SelectActivityScreen';
 
 export default class App extends React.Component {
 
@@ -100,6 +101,7 @@ const PatientsStack = createStackNavigator({
     Flag: FlagScreen,
     Questionnaire: QuestionnaireScreen,
     NewTask: NewTaskScreen,
+    SelectActivity: SelectActivityScreen,
     Visit: VisitScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions

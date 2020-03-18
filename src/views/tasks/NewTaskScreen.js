@@ -12,7 +12,7 @@ import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import {Priority, Status, Task} from '../../models/Task';
 import {appColors, commonStyles, renderLoading, renderRadioButton, renderSeparator} from '../../support/CommonStyles';
-import {Button, Form, Icon, Card, Text, Content} from 'native-base';
+import {Button, Form, Icon, Picker, Text, Content} from 'native-base';
 import FormItemContainer from '../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
@@ -22,6 +22,7 @@ import {Visit} from '../../models/Visit';
 import ActionSheet from 'react-native-simple-action-sheet';
 import {Request} from '../../support/Utils';
 import {Practitioner} from '../../models/Practitioner';
+import {string} from 'prop-types';
 
 export default class NewTaskScreen extends AppScreen {
 
@@ -197,27 +198,6 @@ export default class NewTaskScreen extends AppScreen {
         this.pop();
     };
 
-    showActivityPicker = () => {
-        let options = this.state.activities.map(activity => activity.text);
-        if (Platform.OS === 'ios')
-            options.push(strings.Common.cancelButton);
-
-        ActionSheet.showActionSheetWithOptions({
-                options: options,
-                cancelButtonIndex: options.length - 1,
-            },
-            (buttonIndex) => {
-                if (buttonIndex < this.state.activities.length) {
-                    let errors = this.state.errors;
-                    errors.activity = false;
-                    this.setState({
-                        activity: this.state.activities[buttonIndex],
-                        errors: errors,
-                    })
-                }
-            });
-    };
-
     showPerformerPicker = async () => {
         let options = this.state.practitioners.map(practitioner => practitioner.fullName);
         if (Platform.OS === 'ios')
@@ -236,6 +216,21 @@ export default class NewTaskScreen extends AppScreen {
             });
     };
 
+    selectActivity = () => {
+        this.navigateTo('SelectActivity', {
+            activities: this.state.activities,
+            selectedActivity: this.state.activity,
+            submitActivity: this.submitActivity,
+        });
+    };
+
+
+    submitActivity = (activity) => {
+        this.setState({
+            activity: activity,
+        });
+    };
+
     selectVisit = () => {
 
         const task: Task = new Task();
@@ -252,7 +247,7 @@ export default class NewTaskScreen extends AppScreen {
     submitVisit = (visit) => {
         this.setState({
             visit: visit,
-        })
+        });
     };
 
     //------------------------------------------------------------
@@ -271,17 +266,20 @@ export default class NewTaskScreen extends AppScreen {
                     <Form>
                         <View>
                             <Text style={commonStyles.yellowText}>{strings.Task.whatToDo}</Text>
-                            <FormItemContainer style={{marginTop: 15}}
+                            <FormItemContainer
+                                style={{marginTop: 12}}
                                 title={strings.Task.plan}
                                 error={this.state.errors.activity}>
                                 <TouchableOpacity
                                     style={{flexDirection: 'row', padding: 11, alignItems: 'center'}}
-                                    onPress={this.showActivityPicker}>
+                                    onPress={this.selectActivity}>
                                     <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.activity?.text || ''}</Text>
                                     <Icon name="ios-arrow-down" />
                                 </TouchableOpacity>
                             </FormItemContainer>
                         </View>
+
+
 
                         <View>
                             <Text style={commonStyles.yellowText}>{strings.Task.patient}</Text>

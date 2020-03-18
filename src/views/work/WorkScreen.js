@@ -7,7 +7,7 @@ import {
     SectionList,
     TouchableOpacity,
     TouchableHighlight,
-    StatusBar,
+    StatusBar, Platform,
 } from 'react-native';
 import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
@@ -67,6 +67,8 @@ export default class WorkScreen extends AppScreen {
         this.getData();
 
         StatusBar.setBarStyle('light-content');
+        if (Platform.OS === 'android')
+            StatusBar.setBackgroundColor(appColors.headerBackground);
 
         this.eventEmitter.on('reloadTasks', async () => {
             const tasks = await this.getTasks();

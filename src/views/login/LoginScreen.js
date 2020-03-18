@@ -40,6 +40,8 @@ export default class LoginScreen extends AppScreen {
         this.getData();
 
         StatusBar.setBarStyle('dark-content');
+        if (Platform.OS === 'android')
+            StatusBar.setBackgroundColor('#FFFFFF');
 
         //this.login();
     }
@@ -61,7 +63,9 @@ export default class LoginScreen extends AppScreen {
         this.props.screenProps.api = api;
 
         // await this.setCurrentUser('8cba6c16-4f07-42de-9b06-b5af4f05f23c');
+        this.setState({loading: true});
         await this.api.setCurrentUser('user1@itaybraunhotmail.onmicrosoft.com');
+        this.setState({loading: false});
 
         this.navigateTo('Tabs');
     };
