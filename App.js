@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StatusBar, Platform, Image, View} from 'react-native';
 import LoginScreen from './src/views/login/LoginScreen';
-import {createStackNavigator} from 'react-navigation-stack';
+import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import PatientsScreen from './src/views/patients/PatientsScreen';
@@ -92,6 +92,7 @@ const defaultNavigationOptions = {
         fontSize: 20,
     },
     headerTintColor: appColors.headerFontColor,
+    ...TransitionPresets.SlideFromRightIOS,
 };
 
 const PatientsStack = createStackNavigator({

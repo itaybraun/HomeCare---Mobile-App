@@ -100,7 +100,7 @@ export default class LoginScreen extends AppScreen {
     render() {
 
         return (
-            <SafeAreaView style={{flex: 1}}>
+            <SafeAreaView style={styles.container}>
 
                 {
                     this.state.production === true &&
@@ -194,7 +194,8 @@ export default class LoginScreen extends AppScreen {
 
 const styles = StyleSheet.create({
     container: {
-
+        flex: 1,
+        backgroundColor: '#FFFFFF',
     },
     appVersion: {
         alignItems: 'flex-end',
