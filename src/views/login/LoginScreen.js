@@ -6,7 +6,7 @@ import {
 import {Button, Text, Form} from 'native-base';
 import AppScreen from '../../support/AppScreen';
 import Loading from '../../support/Loading';
-import {commonStyles} from '../../support/CommonStyles';
+import {commonStyles, renderLoading} from '../../support/CommonStyles';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 import {strings} from '../../localization/strings';
 import {API, APIRequest} from '../../api/API';
@@ -70,11 +70,11 @@ export default class LoginScreen extends AppScreen {
     };
 
     onSalHealthPress = async () => {
+        this.setState({loading: true});
         let api = new RESTAPI('https://cs004.azurewebsites.net');
         api.token = null;
         this.props.screenProps.api = api;
 
-        this.setState({loading: true});
         await this.api.setCurrentUser('user1@itaybraunhotmail.onmicrosoft.com');
         this.setState({loading: false});
 
@@ -88,6 +88,8 @@ export default class LoginScreen extends AppScreen {
     };
 
     _onLoginSuccess = async (event) => {
+        this.setState({loading: true});
+
         let api = new RESTAPI('https://cs2.azurewebsites.net');
 
         const token = this.instance.getToken().accessToken;
@@ -99,6 +101,7 @@ export default class LoginScreen extends AppScreen {
         this.props.screenProps.api = api;
 
         await this.api.setCurrentUser(decodedToken.unique_name);
+        this.setState({loading: false});
 
         this.navigateTo('Tabs');
     };
@@ -118,11 +121,11 @@ export default class LoginScreen extends AppScreen {
                         <AzureLoginView
                             azureInstance={this.instance}
                             loadingMessage=" "
+                            loadingView={renderLoading(true)}
                             onSuccess={this._onLoginSuccess}
                             onCancel={this._onLoginCancel}
                         />
                 }
-
                 {
                     this.state.production === null &&
                         <Form style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
@@ -199,8 +202,11 @@ export default class LoginScreen extends AppScreen {
                 <View style={styles.appVersion}>
                     <Text>{this.state.appVersion}</Text>
                 </View>
-                <Loading loading={this.state.loading} />
-
+                {
+                    false &&
+                    <Loading loading={this.state.loading}/>
+                }
+                {renderLoading(this.state.loading)}
             </SafeAreaView>
         );
     }
@@ -212,8 +218,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     appVersion: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
         alignItems: 'flex-end',
-        padding: 20,
     },
     imageContainer: {
         justifyContent: 'center',
