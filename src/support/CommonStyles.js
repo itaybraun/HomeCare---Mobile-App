@@ -115,6 +115,8 @@ export const commonStyles = {
         padding: 12,
         borderRadius: 4,
         overflow: 'hidden',
+        marginBottom: 0,
+        marginTop: 0,
     },
 
     formItem: {
@@ -143,6 +145,7 @@ export const commonStyles = {
         borderBottomColor: '#88888822',
     },
     tabItemText: {
+        fontSize: 16,
         textTransform: 'uppercase',
         color: appColors.textColor,
     },

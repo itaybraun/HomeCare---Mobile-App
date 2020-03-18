@@ -18,9 +18,9 @@ export default class PatientsScreen extends AppScreen {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings.Patients.title,
-            headerLeft: () =>
-                <MenuButton />
-            ,
+            // headerLeft: () =>
+            //     <MenuButton />
+            // ,
         }
     };
 
@@ -106,6 +106,12 @@ export default class PatientsScreen extends AppScreen {
         );
     };
 
+    renderListFooter = () => {
+        return (
+            <View style={{height: 0}} />
+        );
+    };
+
     renderListEmpty = () => {
         return (
             <View style={commonStyles.emptyScreen}>
@@ -147,10 +153,11 @@ export default class PatientsScreen extends AppScreen {
         return (
             <View style={commonStyles.screenContainer}>
                 <FlatList style={styles.list}
-                          contentContainerStyle={{ flexGrow: 1 }}
+                          contentContainerStyle={{ flexGrow: 1, padding: 10 }}
                           data={patients}
                           renderItem={this.renderItem}
                           ListHeaderComponent={this.renderListHeader}
+                          ListFooterComponent={this.renderListFooter}
                           keyExtractor={item => item.id}
                           onRefresh={this.getData}
                           refreshing={false}
@@ -167,7 +174,6 @@ const styles = StyleSheet.create({
 
     list: {
         flex: 1,
-        padding: 10,
     },
 
     patientItemContainer: {

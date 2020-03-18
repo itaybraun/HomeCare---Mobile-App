@@ -17,9 +17,9 @@ export default class SettingsScreen extends AppScreen {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings.Settings.title,
-            headerLeft: () =>
-                <MenuButton />
-            ,
+            // headerLeft: () =>
+            //     <MenuButton />
+            // ,
         }
     };
 

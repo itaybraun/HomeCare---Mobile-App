@@ -1,6 +1,8 @@
 import React from 'react';
-import {SafeAreaView, View, Image, StyleSheet, TextInput, Platform,
-    Keyboard, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
+import {
+    View, Image, StyleSheet, TextInput, Platform,
+    Keyboard, TouchableOpacity, TouchableWithoutFeedback, StatusBar,
+} from 'react-native';
 import {Button, Text, Form} from 'native-base';
 import AppScreen from '../../support/AppScreen';
 import Loading from '../../support/Loading';
@@ -13,6 +15,7 @@ import {AzureInstance, AzureLoginView} from 'react-native-azure-ad-2';
 import RESTAPI from '../../api/REST/RESTAPI';
 import {jwtDecode} from 'fhirclient/lib/lib';
 import {Utils} from '../../support/Utils';
+import { SafeAreaView } from 'react-navigation';
 
 export default class LoginScreen extends AppScreen {
 
@@ -35,6 +38,8 @@ export default class LoginScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
+        StatusBar.setBarStyle('dark-content');
 
         //this.login();
     }

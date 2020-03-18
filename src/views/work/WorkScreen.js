@@ -1,5 +1,14 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, SectionList, TouchableOpacity, TouchableHighlight} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    FlatList,
+    SectionList,
+    TouchableOpacity,
+    TouchableHighlight,
+    StatusBar,
+} from 'react-native';
 import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import MenuButton from '../menu/MenuButton';
@@ -29,9 +38,9 @@ export default class WorkScreen extends AppScreen {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings.Work.title,
-            headerLeft: () =>
-                <MenuButton />
-            ,
+            // headerLeft: () =>
+            //     <MenuButton />
+            // ,
         }
     };
 
@@ -56,6 +65,8 @@ export default class WorkScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
+        StatusBar.setBarStyle('light-content');
 
         this.eventEmitter.on('reloadTasks', async () => {
             const tasks = await this.getTasks();
@@ -173,7 +184,7 @@ export default class WorkScreen extends AppScreen {
 
     renderListFooter = () => {
         return (
-            <View style={{height: 12}} />
+            <View style={{height: 0}} />
         );
     };
 
@@ -235,7 +246,7 @@ export default class WorkScreen extends AppScreen {
             <View style={commonStyles.screenContainer}>
                 <View style={{flex: 1,}}>
                     <FlatList style={styles.list}
-                              contentContainerStyle={{ flexGrow: 1 }}
+                              contentContainerStyle={{ flexGrow: 1}}
                               data={tasks}
                               renderItem={this.renderTask}
                               ItemSeparatorComponent={() => renderSeparator()}
@@ -247,7 +258,7 @@ export default class WorkScreen extends AppScreen {
                               refreshing={false}
                     />
                 </View>
-                <View style={{ flexDirection: 'row', padding: 20, paddingTop: 10, alignItems: 'center', justifyContent: 'space-evenly'}}>
+                <View style={{ flexDirection: 'row', padding: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'space-evenly'}}>
                     <Button block
                             style={{backgroundColor: '#EBC7F2', width: 140,}}
                             onPress={() => this.navigateTo('Calendar')}>
@@ -291,7 +302,7 @@ export default class WorkScreen extends AppScreen {
                                  sections={this.state.sortedFlags}
                                  renderItem={this.renderFlag}
                                  stickySectionHeadersEnabled={true}
-                                 ItemSeparatorComponent={() => renderSeparator({height: 0})}
+                                 ItemSeparatorComponent={() => renderSeparator()}
                                  ListEmptyComponent={this.renderListEmpty}
                                  ListHeaderComponent={this.renderListHeader}
                                  ListFooterComponent={this.renderListFooter}
@@ -300,6 +311,7 @@ export default class WorkScreen extends AppScreen {
                                          backgroundColor: appColors.headerBackground,
                                          alignItems: 'center',
                                          padding: 10,
+                                         marginBottom: 10,
                                      }}>
                                         <Text style={{fontSize: 18, fontWeight: 'bold', color: appColors.headerFontColor}}>{title}</Text>
                                      </View>
@@ -339,6 +351,6 @@ const styles = StyleSheet.create({
     },
 
     itemContainer: {
-        marginHorizontal: 12,
+        marginHorizontal: 10,
     },
 });

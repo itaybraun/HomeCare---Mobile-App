@@ -9,9 +9,9 @@ export default class MessagesScreen extends AppScreen {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings.Chat.title,
-            headerLeft: () =>
-                <MenuButton />
-            ,
+            // headerLeft: () =>
+            //     <MenuButton />
+            // ,
         }
     };
 

@@ -62,11 +62,6 @@ export default class App extends React.Component {
         } catch (error) {console.log(error)}
         this.settings = settings;
 
-        if (Platform.OS === 'ios')
-            StatusBar.setBarStyle('dark-content');
-        else
-            StatusBar.setBarStyle('light-content');
-
         this.setState({loading: false});
     };
 
@@ -91,6 +86,9 @@ export default class App extends React.Component {
 const defaultNavigationOptions = {
     headerStyle: {
         backgroundColor: appColors.headerBackground,
+    },
+    headerTitleStyle: {
+        fontSize: 20,
     },
     headerTintColor: appColors.headerFontColor,
 };
@@ -163,7 +161,7 @@ const Tabs = createBottomTabNavigator({
         inactiveTintColor: '#777777',
         adaptive: false,
         labelStyle: {
-            fontSize: 10,
+            fontSize: 12,
         },
         style: {
             backgroundColor: appColors.backgroundYellowColor,
@@ -175,15 +173,9 @@ const AppNavigator = createAppContainer(
     createSwitchNavigator({
         Login: {
             screen: LoginScreen,
-            navigationOptions: {
-                headerShown: false,
-            },
         },
         Tabs: {
             screen: Tabs,
-            navigationOptions: {
-                headerShown: false,
-            },
         }
     })
 );
