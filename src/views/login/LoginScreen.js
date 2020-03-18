@@ -62,13 +62,24 @@ export default class LoginScreen extends AppScreen {
         api.token = null;
         this.props.screenProps.api = api;
 
-        // await this.setCurrentUser('8cba6c16-4f07-42de-9b06-b5af4f05f23c');
         this.setState({loading: true});
         await this.api.setCurrentUser('user1@itaybraunhotmail.onmicrosoft.com');
         this.setState({loading: false});
 
         this.navigateTo('Tabs');
     };
+
+    onSalHealthPress = async () => {
+        let api = new RESTAPI('https://cs004.azurewebsites.net');
+        api.token = null;
+        this.props.screenProps.api = api;
+
+        this.setState({loading: true});
+        await this.api.setCurrentUser('user1@itaybraunhotmail.onmicrosoft.com');
+        this.setState({loading: false});
+
+        this.navigateTo('Tabs');
+    }
 
     onProdPress = () => {
         this.setState({
@@ -123,6 +134,9 @@ export default class LoginScreen extends AppScreen {
                             </Button>
                             <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onProdPress}>
                                 <Text style={{fontWeight: 'bold'}}>{strings.Login.production.toUpperCase()}</Text>
+                            </Button>
+                            <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onSalHealthPress}>
+                                <Text style={{fontWeight: 'bold'}}>{'SAL HEALTH'}</Text>
                             </Button>
                         </Form>
                 }
