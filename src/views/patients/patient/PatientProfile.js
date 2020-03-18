@@ -16,21 +16,14 @@ export default class PatientProfile extends Component {
                 style={{opacity: disabled ? 0.5 : 1}}
                 onPress={() => this.props.navigateTo(route, {patient: this.props.patient})}>
                 <View style={styles.sectionContainer}>
-                    <Image source={image} style={styles.sectionIcon} />
+                    {
+                        image ?
+                            <Image source={image} style={styles.sectionIcon}/> :
+                            <Icon type='Entypo' name='heart' style={styles.sectionIcon}  />
+                    }
                     <View style={styles.sectionTextContainer}>
                         <Text style={[commonStyles.contentText, {fontSize: 16}]}>{title}</Text>
                     </View>
-                </View>
-            </TouchableOpacity>
-        );
-    };
-
-    renderLinks = (title, route) => {
-        return (
-            <TouchableOpacity
-                onPress={() => this.props.navigateTo(route, {patient: this.props.patient})}>
-                <View style={styles.linkContainer}>
-                    <Text style={[commonStyles.link, {fontWeight: '600'}]}>{title}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -45,10 +38,8 @@ export default class PatientProfile extends Component {
                     {this.renderSections(strings.Patient.vital, 'Vital',  require('../../../assets/icons/profile/vital.png'), true)}
                     {this.renderSections(strings.Patient.mental, 'Metal', require('../../../assets/icons/profile/mental.png'), true)}
                     {this.renderSections(strings.Patient.body, 'Body', require('../../../assets/icons/profile/body.png'), true)}
-                    {this.renderLinks(strings.Patient.activity, 'Activity')}
-                    {this.renderLinks(strings.Patient.progress, 'Progress')}
-                    {this.renderLinks(strings.Patient.alert, 'Alert')}
-                    {this.renderLinks(strings.Patient.vital, 'Vital')}
+                    {this.renderSections(strings.Patient.conditions, 'Conditions', null, true)}
+                    {this.renderSections(strings.Patient.timeline, 'Timeline', null , true)}
                 </ScrollView>
             </View>
         );

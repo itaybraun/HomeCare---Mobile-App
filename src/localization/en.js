@@ -40,10 +40,8 @@ export const en = {
         mental: 'Cognitive & Mental',
         body: 'Body Sites',
         quickActions: 'Quick Actions',
-        activity: 'Document Activity',
-        progress: 'Monitor Progress',
-        alert: 'Raise Alert',
-        created: 'Created {0}',
+        conditions: 'Conditions',
+        timeline: 'Timeline',
         executeTask: 'Execute Task',
     },
     Flags: {
