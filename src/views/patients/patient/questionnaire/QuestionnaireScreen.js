@@ -116,7 +116,7 @@ export default class QuestionnaireScreen extends AppScreen {
         let validationResult: Request = this.validate();
 
         if (validationResult.success) {
-
+            this.setState({loading: true,});
             let result: APIRequest = await this.api.submitQuestionnaire(this.state.values, this.state.questionnaire);
             if (result.success) {
                 let task: Task = this.state.task;
@@ -128,9 +128,11 @@ export default class QuestionnaireScreen extends AppScreen {
                     this.pop();
                 } else {
                     this.showError(result.data);
+                    this.setState({loading: true,});
                 }
             } else {
                 this.showError(result.data);
+                this.setState({loading: true,});
             }
         } else {
             this.setState({

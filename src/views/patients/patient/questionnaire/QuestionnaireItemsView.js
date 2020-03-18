@@ -77,8 +77,6 @@ export default class QuestionnaireItemsView extends Component {
         let values = this.state.values;
         values[name] = value;
 
-        console.log(name, value);
-
         let errors = this.state.errors;
         errors[name] = false;
         this.setState({
