@@ -135,7 +135,7 @@ export default class FlagsScreen extends AppScreen {
 
     renderListFooter = () => {
         return (
-            <View style={{height: 80}} />
+            <View style={{height: 74}} />
         );
     };
 
@@ -145,7 +145,7 @@ export default class FlagsScreen extends AppScreen {
 
         return (
             <TouchableHighlight
-                style={styles.itemContainer}
+                style={commonStyles.listItemContainer}
                 underlayColor='#FFFFFFFF'
                 activeOpacity={0.3}
                 onPress={() => this.editFlag(item, rowMap)}>
@@ -162,16 +162,16 @@ export default class FlagsScreen extends AppScreen {
 
     renderHiddenItem = ({item}, rowMap) => {
         return (
-            <View style={styles.menuContainer}>
+            <View style={commonStyles.menuContainer}>
                 <TouchableOpacity
-                    style={[styles.itemMenuContainer, {backgroundColor: '#8CE69B'}]}
+                    style={[commonStyles.itemMenuContainer, {backgroundColor: '#8CE69B'}]}
                     onPress={() => this.editFlag(item, rowMap)}>
                     <Icon type="Feather" name="edit"/>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.itemMenuContainer, {backgroundColor: '#DA8EA0'}]}
+                    style={[commonStyles.itemMenuContainer, {backgroundColor: '#DA8EA0'}]}
                     onPress={() => this.deleteFlag(item, rowMap)}>
-                    <Image style={styles.menuIcon} source={require('../../../../assets/icons/flags/delete.png')} />
+                    <Image style={commonStyles.menuIcon} source={require('../../../../assets/icons/flags/delete.png')} />
                 </TouchableOpacity>
             </View>
         );
@@ -231,35 +231,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    itemContainer: {
-        marginHorizontal: 12,
-        borderRadius: 4,
-    },
-
     flagInfoContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-    },
-
-    menuContainer: {
-        marginHorizontal: 14,
-        marginVertical: 6,
-        justifyContent: 'space-between',
-        flex: 1,
-        flexDirection: 'row',
-    },
-
-    itemMenuContainer: {
-        marginHorizontal: 1,
-        borderWidth: 1,
-        width: 100,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderColor: '#000000',
-    },
-
-    menuIcon: {
-        width: 30,
-        height: 30,
     },
 });

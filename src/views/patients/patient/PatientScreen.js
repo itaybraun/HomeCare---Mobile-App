@@ -65,7 +65,7 @@ export default class PatientScreen extends AppScreen {
     }
 
     possibleStatuses = [
-        {key: 'all', label: strings.Task.all, statuses: []},
+        {key: 'all', label: strings.Task.all, statuses: [Status.ACTIVE, Status.COMPLETED]},
         {key: 'open', label: strings.Task.open, statuses: [Status.ACTIVE]},
         {key: 'closed', label: strings.Task.closed, statuses: [Status.COMPLETED]},
     ];
@@ -146,6 +146,36 @@ export default class PatientScreen extends AppScreen {
         }
     };
 
+    deleteTask = async (task: Task) => {
+
+        this.showAlert(strings.Task.deleteTask, null, [
+            {
+                text: strings.Common.noButton,
+                style: 'cancel',
+                onPress: () => {
+
+                }
+            },
+            {
+                text: strings.Common.yesButton,
+                style: 'destructive',
+                onPress: async () => {
+                    this.setState({
+                        tasks: this.state.tasks.filter(t => t.id !== task.id)
+                    });
+
+                    task.status = Status.REVOKED;
+                    const request: APIRequest = await this.api.updateTask(task);
+                    if (request.success) {
+                        //this.getData();
+                    } else {
+                        this.showError(result.data);
+                    }
+                },
+            }
+        ]);
+    };
+
     showFilter = async () => {
         let options = this.possibleStatuses.map(status => status.label);
         if (Platform.OS === 'ios')
@@ -193,7 +223,9 @@ export default class PatientScreen extends AppScreen {
                         }
                         <PatientTasks patient={this.patient}
                                       tasks={this.state.tasks}
-                                      selectTask={this.selectTask} />
+                                      selectTask={this.selectTask}
+                                      deleteTask={this.deleteTask}
+                        />
                         <View style={{position: 'absolute', right: 10, bottom: 10}}>
                             <TouchableOpacity
                                 style={commonStyles.blackButtonContainer}
@@ -217,6 +249,7 @@ export default class PatientScreen extends AppScreen {
                     onIndexChange={this.handleTabIndexChange}
                     renderScene={this.renderScene}
                     renderTabBar={this.renderTabBar}
+                    swipeEnabled={false}
                 />
                 {renderLoading(this.state.loading)}
             </View>

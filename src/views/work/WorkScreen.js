@@ -205,7 +205,7 @@ export default class WorkScreen extends AppScreen {
         let task: Task = item;
 
         return (
-            <TouchableOpacity style={styles.itemContainer}
+            <TouchableOpacity style={commonStyles.listItemContainer}
                               onPress={() => this.selectTask(item)}>
                 <Card style={[commonStyles.cardStyle, item.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
                     <Text style={[commonStyles.titleText]}>{task.patient?.fullName}</Text>
@@ -277,7 +277,7 @@ export default class WorkScreen extends AppScreen {
         const flag: Flag = item;
         return (
             <TouchableHighlight
-                style={styles.itemContainer}
+                style={commonStyles.listItemContainer}
                 underlayColor='#FFFFFFFF'
                 activeOpacity={0.3}
                 onPress={() => this.editFlag(flag)}>
@@ -349,9 +349,5 @@ const styles = StyleSheet.create({
     flagInfoContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-    },
-
-    itemContainer: {
-        marginHorizontal: 10,
     },
 });

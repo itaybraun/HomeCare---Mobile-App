@@ -118,6 +118,10 @@ export const commonStyles = {
         marginTop: 0,
     },
 
+    listItemContainer: {
+        marginHorizontal: 10,
+    },
+
     formItem: {
         padding: 0,
         paddingLeft: 11,
@@ -199,6 +203,27 @@ export const commonStyles = {
     },
 
 
+    menuContainer: {
+        marginHorizontal: 14,
+        marginVertical: 6,
+        justifyContent: 'space-between',
+        flex: 1,
+        flexDirection: 'row',
+    },
+
+    itemMenuContainer: {
+        marginHorizontal: 1,
+        borderWidth: 1,
+        width: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: '#000000',
+    },
+
+    menuIcon: {
+        width: 30,
+        height: 30,
+    },
 
 };
 

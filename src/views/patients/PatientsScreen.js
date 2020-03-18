@@ -90,7 +90,7 @@ export default class PatientsScreen extends AppScreen {
 
     renderListHeader = () => {
         return (
-            <View style={{paddingTop: 6, paddingHorizontal: 0, paddingBottom: 10}}>
+            <View style={{margin: 10}}>
                 <TextInput style={commonStyles.input}
                            returnKeyType="search"
                            autoCorrect={false}
@@ -108,7 +108,7 @@ export default class PatientsScreen extends AppScreen {
 
     renderListFooter = () => {
         return (
-            <View style={{height: 0}} />
+            <View style={{height: 10}} />
         );
     };
 
@@ -130,7 +130,9 @@ export default class PatientsScreen extends AppScreen {
         patientGenderAndAge = patientGenderAndAge.join(", ");
 
         return (
-            <TouchableOpacity onPress={() => this.selectPatient(item)}>
+            <TouchableOpacity
+                style={commonStyles.listItemContainer}
+                onPress={() => this.selectPatient(item)}>
                 <Card style={commonStyles.cardStyle}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{flex: 1}}>
@@ -153,7 +155,7 @@ export default class PatientsScreen extends AppScreen {
         return (
             <View style={commonStyles.screenContainer}>
                 <FlatList style={styles.list}
-                          contentContainerStyle={{ flexGrow: 1, padding: 10 }}
+                          contentContainerStyle={{ flexGrow: 1, }}
                           data={patients}
                           renderItem={this.renderItem}
                           ListHeaderComponent={this.renderListHeader}
