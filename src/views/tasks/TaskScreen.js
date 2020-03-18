@@ -102,9 +102,7 @@ export default class TaskScreen extends AppScreen {
 
     submit = async () => {
 
-        this.setState({
-            loading: true,
-        });
+        this.setState({loading: true,});
 
         let task: Task = this.state.task;
         let visit: Visit = this.state.visit;
@@ -189,7 +187,7 @@ export default class TaskScreen extends AppScreen {
                             <Text style={commonStyles.titleText}>{this.state.task?.text}</Text>
                             <Text style={[commonStyles.contentText, {marginTop: 10,}]}>{strings.Priorities[this.state.task?.priority]}</Text>
                             <Text style={[commonStyles.infoText, {marginTop: 15}]}>{strings.Task.requester}:</Text>
-                            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
                                 <Text style={[commonStyles.contentText, {flex: 1}]}>{this.state.task?.requester?.fullName}</Text>
                                 {
                                     this.state.task?.requester?.email &&

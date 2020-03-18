@@ -131,8 +131,7 @@ export default class QuestionnaireItemsView extends Component {
     renderTitle = (item: QuestionnaireItem) => {
         return (
             <Text style={[
-                commonStyles.titleText,
-                {fontWeight: 'bold'},
+                commonStyles.boldTitleText,
                 this.state.errors[item.link] ? {color: '#FF0000'} : {}]
             }>
                 {item.text}

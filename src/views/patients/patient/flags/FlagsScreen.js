@@ -135,11 +135,14 @@ export default class FlagsScreen extends AppScreen {
 
     renderListFooter = () => {
         return (
-            <View style={{height: 74}} />
+            <View style={{height: 80}} />
         );
     };
 
     renderItem = ({item}, rowMap) => {
+
+        const flag: Flag = item;
+
         return (
             <TouchableHighlight
                 style={styles.itemContainer}
@@ -148,11 +151,10 @@ export default class FlagsScreen extends AppScreen {
                 onPress={() => this.editFlag(item, rowMap)}>
                 <Card style={[commonStyles.cardStyle, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
                     <View style={styles.flagInfoContainer}>
-                        <Text style={commonStyles.smallInfoText}>{item.startDate ? moment(item.startDate).format("MMM Do YYYY") : ''}</Text>
-                        <Text style={commonStyles.smallInfoText}>{item.category}</Text>
+                        <Text style={commonStyles.smallInfoText}>{flag.startDate ? moment(flag.startDate).format("MMM Do YYYY") : ''}</Text>
+                        <Text style={commonStyles.smallInfoText}>{flag.category}</Text>
                     </View>
-                    <Text style={[commonStyles.boldTitleText, {marginVertical: 6}]}>{item.title}</Text>
-                    <Text style={commonStyles.contentText}>{item.text}</Text>
+                    <Text style={[commonStyles.contentText, {marginTop: 10}]}>{flag.text}</Text>
                 </Card>
             </TouchableHighlight>
         )

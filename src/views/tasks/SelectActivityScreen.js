@@ -104,7 +104,7 @@ export default class SelectActivityScreen extends AppScreen {
 
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {renderRadioButton(this.state.selectedActivity === activity)}
-                    <Text style={{marginLeft: 10}}>
+                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>
                         {activity.text}
                     </Text>
                 </View>

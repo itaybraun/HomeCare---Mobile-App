@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     },
     appVersion: {
         position: 'absolute',
-        bottom: 20,
+        bottom: 10,
         right: 20,
         alignItems: 'flex-end',
     },

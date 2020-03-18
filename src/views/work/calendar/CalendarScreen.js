@@ -108,7 +108,7 @@ export default class CalendarScreen extends AppScreen {
 
     renderListHeader = () => {
         return (
-            <Card style={{marginLeft: 10, marginRight: 10, marginTop: 10, }}>
+            <Card style={{marginLeft: 10, marginRight: 10, marginTop: 10, marginBottom: 10, }}>
                 <Calendar
                     hideExtraDays={true}
                     firstDay={Utils.getFirstDayOfWeek()}
@@ -139,21 +139,21 @@ export default class CalendarScreen extends AppScreen {
 
     renderListFooter = () => {
         return (
-            <View style={{height: 74}} />
+            <View style={{height: 12}} />
         );
     };
 
     renderListEmpty = () => {
         return (
             <View style={commonStyles.emptyScreen}>
-                <Text>{strings.formatString(strings.Calendar.noVisits, this.state.selectedDate)}</Text>
+                <Text style={commonStyles.contentText}>{strings.formatString(strings.Calendar.noVisits, this.state.selectedDate)}</Text>
             </View>
         )
     };
 
     renderVisit = ({item}) => {
         let visit: Visit = item;
-        const width = uses24HourClock() ? 45 : 75;
+        const width = uses24HourClock() ? 50 : 80;
         return (
             <TouchableOpacity style={styles.visitContainer}>
                 <Card style={commonStyles.cardStyle}>
@@ -168,7 +168,7 @@ export default class CalendarScreen extends AppScreen {
                         </View>
                         <View style={styles.separator} />
                         <View style={{flex: 1, justifyContent: 'center'}}>
-                            <Text style={visit.tasks && visit.tasks.length > 0 ? commonStyles.yellowText : commonStyles.titleText}>
+                            <Text style={visit.tasks && visit.tasks.length > 0 ? commonStyles.yellowTitleText : commonStyles.titleText}>
                                 {visit.tasks?.[0]?.text || strings.Calendar.noTask}
                             </Text>
                             {
@@ -221,7 +221,7 @@ export default class CalendarScreen extends AppScreen {
                           contentContainerStyle={{ flexGrow: 1 }}
                           data={this.getSelectedDateVisits()}
                           renderItem={this.renderVisit}
-                          ItemSeparatorComponent={() => renderSeparator({height: 0})}
+                          ItemSeparatorComponent={() => renderSeparator()}
                           ListEmptyComponent={this.renderListEmpty}
                           ListHeaderComponent={this.renderListHeader}
                           ListFooterComponent={this.renderListFooter}
@@ -229,14 +229,6 @@ export default class CalendarScreen extends AppScreen {
                           onRefresh={this.getData}
                           refreshing={false}
                 />
-                <View style={{position: 'absolute', right: 10, bottom: 10}}>
-                    <TouchableOpacity
-                        style={commonStyles.blackButtonContainer}
-                        onPress={this.addVisit}
-                    >
-                        <Icon type="Feather" name="plus" style={commonStyles.plusText}/>
-                    </TouchableOpacity>
-                </View>
                 {renderLoading(this.state.loading)}
             </View>
         );
@@ -254,7 +246,7 @@ const styles = StyleSheet.create({
     },
 
     timeStyle: {
-        fontSize: 16,
+        ...commonStyles.contentText,
         color: '#9296FE',
     },
 

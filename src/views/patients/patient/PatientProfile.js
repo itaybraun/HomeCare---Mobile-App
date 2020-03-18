@@ -22,7 +22,7 @@ export default class PatientProfile extends Component {
                             <Icon type='Entypo' name='heart' style={styles.sectionIcon}  />
                     }
                     <View style={styles.sectionTextContainer}>
-                        <Text style={[commonStyles.contentText, {fontSize: 16}]}>{title}</Text>
+                        <Text style={[commonStyles.contentText]}>{title}</Text>
                     </View>
                 </View>
             </TouchableOpacity>

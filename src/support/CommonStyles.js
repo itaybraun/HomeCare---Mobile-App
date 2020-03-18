@@ -17,12 +17,12 @@ export const appColors = {
 export const commonStyles = {
 
     smallInfoText: {
-        fontSize: 14,
+        fontSize: 16,
         color: '#888888',
     },
 
     infoText: {
-        fontSize: 16,
+        fontSize: 18,
         color: '#888888',
     },
 
@@ -37,18 +37,18 @@ export const commonStyles = {
         color: appColors.textColor,
     },
 
-    yellowTitle: {
-        fontSize: 24,
+    yellowTitleText: {
+        fontSize: 22,
         color: appColors.yellowColor,
     },
 
     yellowText: {
-        fontSize: 18,
+        fontSize: 20,
         color: appColors.yellowColor,
     },
 
     contentText: {
-        fontSize: 16,
+        fontSize: 18,
         color: appColors.textColor,
     },
 
@@ -58,7 +58,7 @@ export const commonStyles = {
     },
 
     purpleTitleText: {
-        fontSize: 18,
+        fontSize: 22,
         color: appColors.linkColor,
     },
 
@@ -68,7 +68,6 @@ export const commonStyles = {
         height: 40,
         padding: 5,
         color: '#000000',
-
     },
 
     screenContainer: {
@@ -130,7 +129,6 @@ export const commonStyles = {
         fontSize: 18,
         color: appColors.textColor,
     },
-
 
 
     tabBar: {
@@ -196,7 +194,7 @@ export const commonStyles = {
 
     pinkHeaderText: {
         color: '#FFFFFF',
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
     },
 

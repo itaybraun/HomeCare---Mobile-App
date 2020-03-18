@@ -211,7 +211,7 @@ export default class WorkScreen extends AppScreen {
                     <Text style={[commonStyles.titleText]}>{task.patient?.fullName}</Text>
                     <View style={{flex: 1,}}>
                         <Text
-                            style={[commonStyles.yellowTitle, {paddingVertical: 10}]}
+                            style={[commonStyles.yellowTitleText, {paddingVertical: 10}]}
                             numberOfLines={2}>
                             {item.text}
                         </Text>
@@ -281,13 +281,12 @@ export default class WorkScreen extends AppScreen {
                 underlayColor='#FFFFFFFF'
                 activeOpacity={0.3}
                 onPress={() => this.editFlag(flag)}>
-                <Card style={[commonStyles.cardStyle, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
+                <Card style={[commonStyles.cardStyle, {backgroundColor: flag.internal ? '#E8E16C' : '#FFFFFF'}]}>
                     <View style={styles.flagInfoContainer}>
-                        <Text style={commonStyles.smallInfoText}>{item.startDate ? moment(item.startDate).format("MMM Do YYYY") : ''}</Text>
-                        <Text style={commonStyles.smallInfoText}>{item.category}</Text>
+                        <Text style={commonStyles.smallInfoText}>{flag.startDate ? moment(flag.startDate).format("MMM Do YYYY") : ''}</Text>
+                        <Text style={commonStyles.smallInfoText}>{flag.category}</Text>
                     </View>
-                    <Text style={[commonStyles.boldTitleText, {marginVertical: 6}]}>{item.title}</Text>
-                    <Text style={commonStyles.contentText}>{item.text}</Text>
+                    <Text style={[commonStyles.contentText, {marginTop: 10}]}>{flag.text}</Text>
                 </Card>
             </TouchableHighlight>
         )

@@ -145,6 +145,7 @@ export default class NewTaskScreen extends AppScreen {
         let validationResult: Request = this.validate();
 
         if (validationResult.success) {
+            this.setState({loading: true,});
             let task: Task = validationResult.data;
             let visit: Visit = this.state.visit;
 
@@ -156,6 +157,7 @@ export default class NewTaskScreen extends AppScreen {
                         visit = result.data;
                     } else {
                         this.showError(result.data);
+                        this.setState({loading: false,});
                         return;
                     }
                 }
@@ -169,6 +171,7 @@ export default class NewTaskScreen extends AppScreen {
                 task = result.data;
             } else {
                 this.showError(result.data);
+                this.setState({loading: false,});
                 return;
             }
 
@@ -180,6 +183,7 @@ export default class NewTaskScreen extends AppScreen {
 
                 } else {
                     this.showError(result.data);
+                    this.setState({loading: false,});
                     return;
                 }
             }
@@ -294,7 +298,9 @@ export default class NewTaskScreen extends AppScreen {
                             <TouchableOpacity onPress={() => this.setState({performer: null})}>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                     {renderRadioButton(this.state.performer === null)}
-                                    <Text style={{marginLeft: 10}}>{strings.Task.me}</Text>
+                                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>
+                                        {strings.Task.me}
+                                    </Text>
                                 </View>
                             </TouchableOpacity>
 
@@ -303,7 +309,9 @@ export default class NewTaskScreen extends AppScreen {
                             <TouchableOpacity onPress={this.showPerformerPicker}>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                     {renderRadioButton(this.state.performer !== null)}
-                                    <Text style={{marginLeft: 10}}>{this.state.performer?.fullName || strings.Task.selectPractitioner}</Text>
+                                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>
+                                        {this.state.performer?.fullName || strings.Task.selectPractitioner}
+                                    </Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -358,6 +366,7 @@ export default class NewTaskScreen extends AppScreen {
                 {renderLoading(this.state.loading)}
 
 
+
                 <DateTimePickerModal
                     isVisible={this.state.showingDatePicker}
                     date={this.state.start || new Date()}
@@ -375,7 +384,6 @@ export default class NewTaskScreen extends AppScreen {
                     }}
                     onCancel={() => this.setState({showingVisitDatePicker: false,})}
                 />
-
             </View>
         );
     }

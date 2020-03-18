@@ -199,7 +199,7 @@ export default class VisitScreen extends AppScreen {
 
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {renderRadioButton(this.state.selectedVisitIndex === index)}
-                    <Text style={{marginLeft: 10}}>
+                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>
                         {
                             moment(item.start).format(
                             uses24HourClock() ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
@@ -223,7 +223,7 @@ export default class VisitScreen extends AppScreen {
                 {renderSeparator()}
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {renderRadioButton(this.state.selectedVisitIndex === index)}
-                    <Text style={{marginLeft: 10}}>{strings.Visit.newVisit}</Text>
+                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>{strings.Visit.newVisit}</Text>
                 </View>
                 {
                     this.state.selectedVisitIndex === index &&
@@ -306,6 +306,8 @@ export default class VisitScreen extends AppScreen {
                         <Text style={{color: '#EC1A31', fontWeight: 'bold'}}>{strings.Common.cancelButton?.toUpperCase()}</Text>
                     </Button>
                 </View>
+
+
 
                 <DateTimePickerModal
                     isVisible={this.state.showingVisitDatePicker}

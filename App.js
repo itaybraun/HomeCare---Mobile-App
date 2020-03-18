@@ -13,7 +13,7 @@ import {Utils} from './src/support/Utils';
 import FlagsScreen from './src/views/patients/patient/flags/FlagsScreen';
 import PatientScreen from './src/views/patients/patient/PatientScreen';
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
-import {appColors} from './src/support/CommonStyles';
+import {appColors, commonStyles} from './src/support/CommonStyles';
 import TaskScreen from './src/views/tasks/TaskScreen';
 import VisitScreen from './src/views/work/VisitScreen';
 import RESTAPI from './src/api/REST/RESTAPI';
@@ -90,6 +90,7 @@ const defaultNavigationOptions = {
     },
     headerTitleStyle: {
         fontSize: 20,
+        color: appColors.headerFontColor,
     },
     headerTintColor: appColors.headerFontColor,
     ...TransitionPresets.SlideFromRightIOS,

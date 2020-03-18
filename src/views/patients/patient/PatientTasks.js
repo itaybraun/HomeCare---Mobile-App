@@ -36,7 +36,7 @@ export default class PatientTasks extends Component {
 
     renderListFooter = () => {
         return (
-            <View style={{height: 74}} />
+            <View style={{height: 80}} />
         );
     };
 
@@ -59,10 +59,13 @@ export default class PatientTasks extends Component {
         return (
             <Component onPress={() => this.selectTask(task)}>
                 <Card style={[commonStyles.cardStyle, task.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
-                    <Text style={[commonStyles.contentText]}>{created ? strings.formatString(strings.Patient.created, created) : null}</Text>
+                    <Text style={[commonStyles.contentText]}>
+                        {created ? strings.formatString(strings.Patient.created, created) : null}
+                    </Text>
+
                     <View style={{flex: 1,}}>
                         <Text
-                            style={[commonStyles.yellowTitle, {paddingVertical: 10}]}
+                            style={[commonStyles.yellowTitleText, {paddingVertical: 10}]}
                             numberOfLines={2}>
                             {task.text}
                         </Text>

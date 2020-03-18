@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import AppScreen from '../../../../support/AppScreen';
 import {strings} from '../../../../localization/strings';
-import {appColors, commonStyles} from '../../../../support/CommonStyles';
+import {appColors, commonStyles, renderLoading} from '../../../../support/CommonStyles';
 import FormItemContainer from '../../../other/FormItemContainer';
 import {Button, Content, Form, Icon, Text, Textarea} from 'native-base';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -142,6 +142,7 @@ export default class FlagScreen extends AppScreen {
         let validationResult: Request = this.validate();
 
         if (validationResult.success) {
+            this.setState({loading: true,});
             let result: APIRequest;
             const flag: Flag = this.props.navigation.getParam('flag', null);
             const patient: Patient = this.props.navigation.getParam('patient', null);
@@ -162,6 +163,7 @@ export default class FlagScreen extends AppScreen {
                 this.pop();
             } else {
                 this.showError(result.data);
+                this.setState({loading: false,});
             }
         } else {
             this.setState({
@@ -177,109 +179,114 @@ export default class FlagScreen extends AppScreen {
     render() {
         return (
             <View style={commonStyles.screenContainer} >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <Content
-                        style={{flex: 1}}
-                        contentContainerStyle={{padding: 20}}
-                        bounces={false}
-                        automaticallyAdjustContentInsets={false}>
-                        <Form>
-                            <FormItemContainer
-                                title={strings.Flags.category}
-                                error={this.state.errors.category}>
-                                <TouchableOpacity
-                                    style={{flexDirection: 'row', padding: 11, alignItems: 'center'}}
-                                    onPress={this.showCategoryPicker}>
-                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.category?.label || ''}</Text>
-                                    <Icon name="ios-arrow-down" />
-                                </TouchableOpacity>
-                            </FormItemContainer>
+                <Content
+                    style={{flex: 1}}
+                    contentContainerStyle={{padding: 20}}
+                    bounces={false}
+                    automaticallyAdjustContentInsets={false}>
+                    <Form>
+                        <FormItemContainer
+                            title={strings.Flags.category}
+                            error={this.state.errors.category}>
+                            <TouchableOpacity
+                                style={{flexDirection: 'row', padding: 11, alignItems: 'center'}}
+                                onPress={this.showCategoryPicker}>
+                                <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.category?.label || ''}</Text>
+                                <Icon name="ios-arrow-down" />
+                            </TouchableOpacity>
+                        </FormItemContainer>
 
-                            <FormItemContainer
-                                style={{paddingVertical: 8,}}
-                                title={strings.Flags.text}
-                                error={this.state.errors.text}>
-                                <Textarea
-                                    rowSpan={4}
-                                    style={[commonStyles.formItem, commonStyles.formItemText]}
-                                    selectionColor={appColors.linkColor}
-                                    autoCorrect={false}
-                                    value={this.state.text}
-                                    onChangeText={value => {
-                                        let errors = this.state.errors;
-                                        errors.text = false;
-                                        this.setState({
-                                            text: value,
-                                            errors: errors,
-                                        })
-                                    }}
-                                />
-                            </FormItemContainer>
+                        <FormItemContainer
+                            style={{paddingVertical: 8,}}
+                            title={strings.Flags.text}
+                            error={this.state.errors.text}>
+                            <Textarea
+                                rowSpan={4}
+                                style={[commonStyles.formItem, commonStyles.formItemText]}
+                                selectionColor={appColors.linkColor}
+                                autoCorrect={false}
+                                value={this.state.text}
+                                onChangeText={value => {
+                                    let errors = this.state.errors;
+                                    errors.text = false;
+                                    this.setState({
+                                        text: value,
+                                        errors: errors,
+                                    })
+                                }}
+                            />
+                        </FormItemContainer>
 
-                            <FormItemContainer style={{padding: 11, flexDirection: 'row', justifyContent: 'space-between'}} title={strings.Flags.internal}>
-                                <Button
-                                    style={{
-                                        borderColor: appColors.linkColor,
-                                        backgroundColor: this.state.internal ? appColors.yellowColor : '#FFFFFF',
-                                        width: 80,
-                                        justifyContent: 'center'
-                                    }}
-                                    bordered small rounded
-                                    onPress={() => this.setState({internal: true})}>
-                                    <Text style={{color: appColors.linkColor}}>{strings.Common.yesButton.toUpperCase()}</Text>
-                                </Button>
-                                <Button
-                                    style={{
-                                        borderColor: appColors.linkColor,
-                                        backgroundColor: !this.state.internal ? appColors.yellowColor : '#FFFFFF',
-                                        width: 80,
-                                        justifyContent: 'center'
-                                    }}
-                                    bordered small rounded
-                                    onPress={() => this.setState({internal: false})}>
-                                    <Text style={{color: appColors.linkColor}}>{strings.Common.noButton.toUpperCase()}</Text>
-                                </Button>
-                            </FormItemContainer>
+                        <FormItemContainer style={{padding: 11, flexDirection: 'row', justifyContent: 'space-between'}} title={strings.Flags.internal}>
+                            <Button
+                                style={{
+                                    borderColor: appColors.linkColor,
+                                    backgroundColor: this.state.internal ? appColors.yellowColor : '#FFFFFF',
+                                    width: 80,
+                                    justifyContent: 'center'
+                                }}
+                                bordered small rounded
+                                onPress={() => this.setState({internal: true})}>
+                                <Text style={{color: appColors.linkColor}}>{strings.Common.yesButton.toUpperCase()}</Text>
+                            </Button>
+                            <Button
+                                style={{
+                                    borderColor: appColors.linkColor,
+                                    backgroundColor: !this.state.internal ? appColors.yellowColor : '#FFFFFF',
+                                    width: 80,
+                                    justifyContent: 'center'
+                                }}
+                                bordered small rounded
+                                onPress={() => this.setState({internal: false})}>
+                                <Text style={{color: appColors.linkColor}}>{strings.Common.noButton.toUpperCase()}</Text>
+                            </Button>
+                        </FormItemContainer>
 
-                            <FormItemContainer
-                                style={{padding: 11,}}
-                                title={strings.Flags.startDate}
-                                error={this.state.errors.startDate}>
-                                <TouchableOpacity
-                                    onPress={() => this.setState({showingStartDatePicker: true})}>
-                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''}</Text>
-                                        <Icon type="Octicons" name="calendar" />
-                                    </View>
-                                </TouchableOpacity>
-                            </FormItemContainer>
+                        <FormItemContainer
+                            style={{padding: 11,}}
+                            title={strings.Flags.startDate}
+                            error={this.state.errors.startDate}>
+                            <TouchableOpacity
+                                onPress={() => this.setState({showingStartDatePicker: true})}>
+                                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''}</Text>
+                                    <Icon type="Octicons" name="calendar" />
+                                </View>
+                            </TouchableOpacity>
+                        </FormItemContainer>
 
-                            <FormItemContainer
-                                style={{padding: 11,}}
-                                title={strings.Flags.endDate}
-                                error={this.state.errors.endDate}
-                            >
-                                <TouchableOpacity
-                                    onPress={() => this.setState({showingEndDatePicker: true})}>
-                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''}</Text>
-                                        <Icon type="Octicons" name="calendar" />
-                                    </View>
-                                </TouchableOpacity>
-                            </FormItemContainer>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <Button success transparent
-                                        onPress={this.submit}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.submitButton.toUpperCase()}</Text>
-                                </Button>
-                                <Button danger transparent
-                                        onPress={this.cancel}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Common.cancelButton.toUpperCase()}</Text>
-                                </Button>
-                            </View>
-                        </Form>
-                    </Content>
-                </TouchableWithoutFeedback>
+                        <FormItemContainer
+                            style={{padding: 11,}}
+                            title={strings.Flags.endDate}
+                            error={this.state.errors.endDate}
+                        >
+                            <TouchableOpacity
+                                onPress={() => this.setState({showingEndDatePicker: true})}>
+                                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''}</Text>
+                                    <Icon type="Octicons" name="calendar" />
+                                </View>
+                            </TouchableOpacity>
+                        </FormItemContainer>
+
+
+                    </Form>
+                </Content>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: 10,}}>
+                    <Button block
+                            style={{backgroundColor: '#CCF4C9', width: 120,}}
+                            onPress={this.submit}>
+                        <Text style={{color: '#32C02B', fontWeight: 'bold'}}>{strings.Common.submitButton?.toUpperCase()}</Text>
+                    </Button>
+                    <Button block
+                            style={{backgroundColor: '#F5BEC0', width: 120,}}
+                            onPress={this.cancel}>
+                        <Text style={{color: '#EC1A31', fontWeight: 'bold'}}>{strings.Common.cancelButton?.toUpperCase()}</Text>
+                    </Button>
+                </View>
+                {renderLoading(this.state.loading)}
+
+
 
                 <DateTimePickerModal
                     isVisible={this.state.showingStartDatePicker}

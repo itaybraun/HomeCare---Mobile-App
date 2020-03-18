@@ -220,13 +220,13 @@ export default class QuestionnaireScreen extends AppScreen {
                 </View>
                 <View style={{paddingHorizontal: 20, paddingVertical: 10,}}>
                     <Text style={commonStyles.infoText}>{strings.Questionnaire.basedOnTask}:</Text>
-                    <Text style={[commonStyles.titleText, {marginTop: 3, fontWeight: 'bold'}]}>{task.text}</Text>
+                    <Text style={[commonStyles.titleText, {marginTop: 3}]}>{task.text}</Text>
 
                     <Text style={[commonStyles.infoText, {marginTop: 10,}]}>{strings.Questionnaire.patient}:</Text>
-                    <Text style={[commonStyles.titleText, {marginTop: 3, fontWeight: 'bold'}]}>{task.patient?.fullName}</Text>
+                    <Text style={[commonStyles.titleText, {marginTop: 3}]}>{task.patient?.fullName}</Text>
 
                     <Text style={[commonStyles.infoText, {marginTop: 10,}]}>{strings.Questionnaire.practitioner}:</Text>
-                    <Text style={[commonStyles.titleText, {marginTop: 3, fontWeight: 'bold'}]}>{task.performer?.fullName}</Text>
+                    <Text style={[commonStyles.titleText, {marginTop: 3}]}>{task.performer?.fullName}</Text>
                 </View>
             </Content>
         )
@@ -262,7 +262,7 @@ export default class QuestionnaireScreen extends AppScreen {
                 <View style={commonStyles.pinkHeader}>
                     <Text style={commonStyles.pinkHeaderText}>{strings.Questionnaire.submit}</Text>
                 </View>
-                <Text style={{textAlign: 'center', marginTop: 30, fontSize: 18,}}>{strings.Questionnaire.submitText}</Text>
+                <Text style={[commonStyles.contentText, {textAlign: 'center', marginTop: 30,}]}>{strings.Questionnaire.submitText}</Text>
                 <Button block
                         style={{backgroundColor: appColors.pinkColor, width: 120, alignSelf: 'center', marginTop: 100}}
                         onPress={this.submit}>
