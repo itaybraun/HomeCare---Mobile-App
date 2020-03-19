@@ -24,7 +24,7 @@ import {
 import {Card, Icon, Button, Text as NativeText, Container} from 'native-base';
 import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
-import {Task} from '../../models/Task';
+import {Status, Task} from '../../models/Task';
 import {uses24HourClock} from "react-native-localize";
 import {Flag} from '../../models/Flag';
 import {Patient} from '../../models/Patient';
@@ -92,7 +92,7 @@ export default class WorkScreen extends AppScreen {
     };
 
     getTasks = async (refresh = true) => {
-        let result: APIRequest = await this.api.getTasks();
+        let result: APIRequest = await this.api.getTasks(null, [Status.ACTIVE]);
         if (result.success) {
             return {tasks: result.data};
         } else {
@@ -180,13 +180,13 @@ export default class WorkScreen extends AppScreen {
 
     renderListHeader = () => {
         return (
-            <View style={{height: 12}} />
+            <View style={{height: 10}} />
         );
     };
 
     renderListFooter = () => {
         return (
-            <View style={{height: 0}} />
+            <View style={{height: 5}} />
         );
     };
 
@@ -260,7 +260,7 @@ export default class WorkScreen extends AppScreen {
                               refreshing={false}
                     />
                 </View>
-                <View style={{ flexDirection: 'row', padding: 10, paddingTop: 10, alignItems: 'center', justifyContent: 'space-evenly'}}>
+                <View style={{ flexDirection: 'row', padding: 10, paddingTop: 5, alignItems: 'center', justifyContent: 'space-evenly'}}>
                     <Button block
                             style={{backgroundColor: '#EBC7F2', width: 140,}}
                             onPress={() => this.navigateTo('Calendar')}>

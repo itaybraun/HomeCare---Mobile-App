@@ -51,6 +51,10 @@ export default class QuestionnaireItemsView extends Component {
     // Methods
     //------------------------------------------------------------
 
+    showImage = (image) => {
+
+    }
+
     uploadImage = (image) => {
         ImagePicker.showImagePicker((response) => {
             console.log('Response = ', response);
@@ -257,10 +261,10 @@ export default class QuestionnaireItemsView extends Component {
                     <FormItemContainer
                         title={item.text}
                         bottomInfo={strings.Questionnaire.upTo3Images}>
-                        <View style={{flexDirection: 'row', padding: 20,}}>
+                        <Content horizontal style={{flexDirection: 'row', padding: 0,}} contentContainerStyle={{padding: 10}}>
                             {this.state.values.images?.map((image, index) => this.renderImageContainer(image, index))}
                             {(!this.state.values.images || this.state.values.images?.length <= 2) && this.renderImageContainer()}
-                        </View>
+                        </Content>
                     </FormItemContainer>
                 </View>
             </View>
@@ -271,11 +275,12 @@ export default class QuestionnaireItemsView extends Component {
 
         return (
             <TouchableOpacity
+                key={index}
                 style={styles.imageContainer}
                 onPress={() => image ? this.showImage(image) : this.uploadImage()}>
                 {
                     image ?
-                        <Image key={index} style={{width: 100, height: 70}} source={image} /> :
+                        <Image style={{width: 90, height: 70}} source={image} /> :
                         <View key='add' style={{paddingHorizontal: 5,}}>
                             <Icon type="Feather" name="plus" style={{fontSize: 36, color: appColors.linkColor, paddingTop: 4}}/>
                         </View>
@@ -312,7 +317,7 @@ QuestionnaireItemsView.propTypes = {
 const styles = StyleSheet.create({
     imageContainer: {
         height: 70,
-        maxWidth: 100,
+        maxWidth: 90,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 4,
