@@ -87,7 +87,7 @@ export default class TaskScreen extends AppScreen {
     //------------------------------------------------------------
 
     selectVisit = () => {
-        this.navigateTo('Visit', {
+        this.navigateTo('SelectVisit', {
             task: this.props.navigation.getParam('task', null),
             selectedVisit: this.state.visit,
             submitVisit: this.submitVisit,

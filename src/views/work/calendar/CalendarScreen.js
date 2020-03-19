@@ -96,8 +96,8 @@ export default class CalendarScreen extends AppScreen {
         });
     };
 
-    addVisit = () => {
-
+    editVisit = (visit) => {
+        this.navigateTo('Visit', {visit: visit, refresh: this.getData});
     };
 
     //------------------------------------------------------------
@@ -155,7 +155,7 @@ export default class CalendarScreen extends AppScreen {
         let visit: Visit = item;
         const width = uses24HourClock() ? 50 : 80;
         return (
-            <TouchableOpacity style={styles.visitContainer}>
+            <TouchableOpacity style={styles.visitContainer} onPress={() => this.editVisit(visit)}>
                 <Card style={commonStyles.cardStyle}>
                     <View style={{flexDirection: 'row'}}>
                         <View style={{width: width, justifyContent: 'center'}}>

@@ -241,7 +241,7 @@ export default class NewTaskScreen extends AppScreen {
         task.patientId = this.state.patient?.id;
         task.patient = this.state.patient;
 
-        this.navigateTo('Visit', {
+        this.navigateTo('SelectVisit', {
             task: task,
             selectedVisit: this.state.visit,
             submitVisit: this.submitVisit,

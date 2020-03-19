@@ -27,7 +27,7 @@ import {APIRequest} from '../../api/API';
 import {Visit} from '../../models/Visit';
 import {Request} from '../../support/Utils';
 
-export default class VisitScreen extends AppScreen {
+export default class SelectVisitScreen extends AppScreen {
 
     //------------------------------------------------------------
     // Properties

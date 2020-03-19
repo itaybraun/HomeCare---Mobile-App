@@ -15,13 +15,14 @@ import PatientScreen from './src/views/patients/patient/PatientScreen';
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import {appColors, commonStyles} from './src/support/CommonStyles';
 import TaskScreen from './src/views/tasks/TaskScreen';
-import VisitScreen from './src/views/work/VisitScreen';
 import RESTAPI from './src/api/REST/RESTAPI';
 import CalendarScreen from './src/views/work/calendar/CalendarScreen';
 import {Settings} from './src/models/Settings';
 import AsyncStorage from '@react-native-community/async-storage';
-import {Consts} from './src/support/Consts';
+import {AsyncStorageConsts} from './src/support/Consts';
 import EventEmitter from 'eventemitter3';
+import VisitScreen from './src/views/visits/VisitScreen';
+import SelectVisitScreen from './src/views/visits/SelectVisitScreen';
 
 // TODO: find a way to move this to RESTAPI
 import './src/api/REST/RESTAPI+Tasks';
@@ -56,7 +57,7 @@ export default class App extends React.Component {
 
         let settings = new Settings();
         try {
-            const savedSettings = await AsyncStorage.getItem(Consts.STORAGE_SETTINGS);
+            const savedSettings = await AsyncStorage.getItem(AsyncStorageConsts.STORAGE_SETTINGS);
             if (savedSettings) {
                 settings = JSON.parse(savedSettings);
             }
@@ -104,7 +105,7 @@ const PatientsStack = createStackNavigator({
     Questionnaire: QuestionnaireScreen,
     NewTask: NewTaskScreen,
     SelectActivity: SelectActivityScreen,
-    Visit: VisitScreen,
+    SelectVisit: SelectVisitScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });
@@ -112,9 +113,10 @@ const WorkStack = createStackNavigator({
     Work: WorkScreen,
     Task: TaskScreen,
     Flag: FlagScreen,
-    Visit: VisitScreen,
+    SelectVisit: SelectVisitScreen,
     Calendar: CalendarScreen,
     NewTask: NewTaskScreen,
+    Visit: VisitScreen
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });

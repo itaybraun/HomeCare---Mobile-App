@@ -6,7 +6,7 @@ import MenuButton from '../menu/MenuButton';
 import { Container, Header, Content, Button, ListItem, Text, Icon, Left, Body, Right, Switch } from 'native-base';
 import {commonStyles} from '../../support/CommonStyles';
 import AsyncStorage from '@react-native-community/async-storage';
-import {Consts} from './../../support/Consts';
+import {AsyncStorageConsts} from './../../support/Consts';
 
 export default class SettingsScreen extends AppScreen {
 
@@ -41,7 +41,7 @@ export default class SettingsScreen extends AppScreen {
         if (this.settings.hasOwnProperty(property)) {
             this.settings[property] = value;
             this.eventEmitter.emit('settings');
-            await AsyncStorage.setItem(Consts.STORAGE_SETTINGS, JSON.stringify(this.settings));
+            await AsyncStorage.setItem(AsyncStorageConsts.STORAGE_SETTINGS, JSON.stringify(this.settings));
         }
     }
 

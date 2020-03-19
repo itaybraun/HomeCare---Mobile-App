@@ -110,6 +110,7 @@ export const en = {
 
     Visit: {
         selectAVisit: 'Select a Visit',
+        editVisit: 'Edit Visit',
         patient: 'Patient',
         newVisit: 'Schedule a New Visit',
         date: 'Date',

@@ -15,7 +15,7 @@ import {Status, Task} from '../../../models/Task';
 import MenuButton from '../../menu/MenuButton';
 import ActionSheet from 'react-native-simple-action-sheet';
 import AsyncStorage from '@react-native-community/async-storage';
-import {Consts} from '../../../support/Consts';
+import {AsyncStorageConsts} from '../../../support/Consts';
 
 
 export default class PatientScreen extends AppScreen {
@@ -91,7 +91,7 @@ export default class PatientScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         this.setState({loading: true});
-        let taskFilter = await AsyncStorage.getItem(Consts.TASKS_FILTER);
+        let taskFilter = await AsyncStorage.getItem(AsyncStorageConsts.TASKS_FILTER);
         const statuses = taskFilter ? JSON.parse(taskFilter) : [Status.ACTIVE];
         await this.setState({statuses: statuses});
         const tasks = await this.getTasks(refresh);
@@ -192,7 +192,7 @@ export default class PatientScreen extends AppScreen {
                     await this.setState({
                         statuses: statuses,
                     });
-                    AsyncStorage.setItem(Consts.TASKS_FILTER, JSON.stringify(statuses));
+                    AsyncStorage.setItem(AsyncStorageConsts.TASKS_FILTER, JSON.stringify(statuses));
                     this.getData();
                 }
             });
