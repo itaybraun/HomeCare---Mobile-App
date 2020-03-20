@@ -159,7 +159,7 @@ export default class GeneralScreen extends AppScreen {
                         }
                         {
                             relative.email &&
-                            <TouchableOpacity style={{marginRight: 10, marginLeft: 20}}
+                            <TouchableOpacity style={{marginRight: 0, marginLeft: 20}}
                                               onPress={() => Linking.openURL(`mailto:${relative.email}`)}>
                                 <Icon type="Feather" name="mail"
                                       style={{fontSize: 30, color: appColors.textColor}}/>

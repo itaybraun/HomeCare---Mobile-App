@@ -46,7 +46,6 @@ export function getRelativeFromJson(json) {
 
     relative.phone = json.telecom?.find(t => t.system ==='phone')?.value;
     relative.email = json.telecom?.find(t => t.system === 'email')?.value;
-    relative.email = 'Adsa'
 
     return relative;
 }
