@@ -1,4 +1,5 @@
 PODS:
+  - AZSClient (0.2.6)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
@@ -182,6 +183,9 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
+  - react-native-azure-blob-storage (1.2.1):
+    - AZSClient
+    - React
   - react-native-image-picker (2.3.1):
     - React
   - react-native-safe-area-context (0.6.4):
@@ -264,6 +268,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-azure-blob-storage (from `../node_modules/react-native-azure-blob-storage`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -293,6 +298,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AZSClient
     - boost-for-react-native
 
 EXTERNAL SOURCES:
@@ -324,6 +330,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-azure-blob-storage:
+    :path: "../node_modules/react-native-azure-blob-storage"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
@@ -376,6 +384,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AZSClient: efd576cabf56f97e38cb1b614739f4b0c1906392
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
@@ -391,6 +400,7 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
+  react-native-azure-blob-storage: b4c244dbb9b77cda5e5ee42cbe4c35703a2d88b4
   react-native-image-picker: 668e72d0277dc8c12ae90e835507c1eddd2e4f85
   react-native-safe-area-context: 042dfc9d4db17196841df962ba9497f6e7a5bd02
   react-native-webview: 055c7110f17c2f19c971f655064ee480638db668

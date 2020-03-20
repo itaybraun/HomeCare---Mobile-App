@@ -19,9 +19,7 @@ import QuestionnaireItemsView from './QuestionnaireItemsView';
 import {Content, Button} from 'native-base';
 import {Request} from '../../../../support/Utils';
 import {TabView} from 'react-native-tab-view';
-import PatientProfile from '../PatientProfile';
-import PatientCarePlans from '../PatientCarePlans';
-import PatientTasks from '../PatientTasks';
+import {EAzureBlobStorageImage} from 'react-native-azure-blob-storage';
 
 export default class QuestionnaireScreen extends AppScreen {
 
@@ -58,6 +56,12 @@ export default class QuestionnaireScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
+        EAzureBlobStorageImage.configure(
+            "fhir1imagestore",
+            "47+vv7jGM8gpHJGspmgveOwI8hNCQKC9uJ2Rynq7F6wdqnZvdivg5BJQuyZYk75gOnlPvFd9oVuuG2/eMRCscw==",
+            "blob1"
+        );
     }
 
     //------------------------------------------------------------
@@ -96,7 +100,7 @@ export default class QuestionnaireScreen extends AppScreen {
 
     validate = () => {
         const errors = {};
-        const requiredItems = this.getRequiredItems();
+        const requiredItems = this.getRequiredItemsIds();
         for (const link of requiredItems) {
             if (!this.state.values.hasOwnProperty(link) || this.state.values[link] === null) {
                 errors[link] = true;
@@ -108,7 +112,6 @@ export default class QuestionnaireScreen extends AppScreen {
     };
 
     submit = async () => {
-
         await this.setState({
             errors: {},
         });
@@ -117,6 +120,8 @@ export default class QuestionnaireScreen extends AppScreen {
 
         if (validationResult.success) {
             this.setState({loading: true,});
+            //await this.uploadImages();
+
             let result: APIRequest = await this.api.submitQuestionnaire(this.state.values, this.state.questionnaire);
             if (result.success) {
                 let task: Task = this.state.task;
@@ -142,28 +147,53 @@ export default class QuestionnaireScreen extends AppScreen {
         }
     };
 
-    getRequiredItems() {
+    getRequiredItemsIds() {
+        return this.getAllItems().reduce((required, item) => {
+            if (item.required) {
+                required.push(item.link);
+            }
+            return required;
+        }, []);
+    }
+
+    getAllItems() {
         let items = this.state.questionnaire.items;
         if (!items)
             return [];
 
-        function checkItem(item: QuestionnaireItem) {
-            let req = [];
+        function getItemsFrom(item: QuestionnaireItem) {
+            let subItems = [];
+            subItems.push(item);
             if (item.items) {
-                req = item.items.map(item => checkItem(item)).flat()
+                subItems = subItems.concat(item.items.map(item => getItemsFrom(item)).flat());
             }
 
-            if (item.required)
-                req.push(item.link);
-
-            return req;
+            return subItems;
         }
 
-        return items.map(item => checkItem(item)).flat();
+        return items.map(item => getItemsFrom(item)).flat();
     }
 
     handleTabIndexChange = index => {
         this.setState({ index });
+    };
+
+    uploadImages = async () => {
+        let imageItems = this.getAllItems().filter(item => item.type === 'url');
+        for (const item of imageItems) {
+            let files = this.state.values[item.link] || [];
+            for (const file of files) {
+                try {
+                    const name = await EAzureBlobStorageImage.uploadFile(file)
+                    console.log("Container File Name", name)
+                } catch(error) {
+                    console.log(error);
+                }
+            }
+
+        }
+
+
     };
 
     //------------------------------------------------------------

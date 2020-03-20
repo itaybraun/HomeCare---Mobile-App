@@ -51,11 +51,11 @@ export default class QuestionnaireItemsView extends Component {
     // Methods
     //------------------------------------------------------------
 
-    showImage = (image) => {
+    showImage = (item: QuestionnaireItem, image) => {
 
     }
 
-    uploadImage = (image) => {
+    addImage = (item: QuestionnaireItem) => {
         ImagePicker.showImagePicker((response) => {
             console.log('Response = ', response);
 
@@ -66,13 +66,12 @@ export default class QuestionnaireItemsView extends Component {
             } else if (response.customButton) {
                 //console.log('User tapped custom button: ', response.customButton);
             } else {
-                const source = { uri: response.uri };
                 // You can also display the image using data:
                 // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-                let images = this.state.values.images || [];
-                images.push(source);
-                this.updateValues('images', images);
+                let images = this.state.values[item.link] || [];
+                images.push(response.uri);
+                this.updateValues(item.link, images);
             }
         });
     };
@@ -251,6 +250,12 @@ export default class QuestionnaireItemsView extends Component {
     };
 
     renderImage = (item: QuestionnaireItem) => {
+
+        let images = this.state.values[item.link]?.map(i => i) || [];
+        if (images.length <= 2) {
+            images.push(null);
+        }
+
         return (
             <View key={item.link}>
                 <View style={commonStyles.pinkHeader}>
@@ -262,31 +267,29 @@ export default class QuestionnaireItemsView extends Component {
                         title={item.text}
                         bottomInfo={strings.Questionnaire.upTo3Images}>
                         <Content horizontal style={{flexDirection: 'row', padding: 0,}} contentContainerStyle={{padding: 10}}>
-                            {this.state.values.images?.map((image, index) => this.renderImageContainer(image, index))}
-                            {(!this.state.values.images || this.state.values.images?.length <= 2) && this.renderImageContainer()}
+                            {
+                                images.map((image, index) => {
+                                    return (
+                                        <TouchableOpacity
+                                            key={index}
+                                            style={styles.imageContainer}
+                                            onPress={() => image ? this.showImage(item, image) : this.addImage(item)}>
+                                            {
+                                                image ?
+                                                    <Image style={{width: 90, height: 70}} source={{uri: image}} /> :
+                                                    <View key='add' style={{paddingHorizontal: 5,}}>
+                                                        <Icon type="Feather" name="plus" style={{fontSize: 36, color: appColors.linkColor, paddingTop: 4}}/>
+                                                    </View>
+                                            }
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            }
                         </Content>
                     </FormItemContainer>
                 </View>
             </View>
         );
-    };
-
-    renderImageContainer = (image = null, index = null) => {
-
-        return (
-            <TouchableOpacity
-                key={index}
-                style={styles.imageContainer}
-                onPress={() => image ? this.showImage(image) : this.uploadImage()}>
-                {
-                    image ?
-                        <Image style={{width: 90, height: 70}} source={image} /> :
-                        <View key='add' style={{paddingHorizontal: 5,}}>
-                            <Icon type="Feather" name="plus" style={{fontSize: 36, color: appColors.linkColor, paddingTop: 4}}/>
-                        </View>
-                }
-            </TouchableOpacity>
-        )
     };
 
     render() {
