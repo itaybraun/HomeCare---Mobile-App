@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Platform, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
+import { I18nManager } from 'react-native';
 import {Icon} from "native-base";
-
 
 export const appColors = {
     textColor: '#333333',
@@ -14,52 +14,67 @@ export const appColors = {
     pinkColor: '#F1A5BD',
 };
 
+function commonTextProperties() {
+    return {
+        //writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'
+    };
+}
+
 export const commonStyles = {
 
     smallInfoText: {
         fontSize: 16,
         color: '#888888',
+        ...commonTextProperties()
     },
 
     infoText: {
         fontSize: 18,
         color: '#888888',
+        ...commonTextProperties()
     },
 
     titleText: {
         fontSize: 22,
         color: appColors.textColor,
+        ...commonTextProperties()
     },
 
     boldTitleText: {
         fontSize: 22,
         fontWeight: 'bold',
         color: appColors.textColor,
+        ...commonTextProperties()
     },
 
     yellowTitleText: {
         fontSize: 22,
         color: appColors.yellowColor,
+        ...commonTextProperties()
     },
 
     yellowText: {
         fontSize: 20,
         color: appColors.yellowColor,
+        ...commonTextProperties()
     },
 
     contentText: {
         fontSize: 18,
         color: appColors.textColor,
+        ...commonTextProperties()
     },
 
     link: {
         textTransform: 'uppercase',
         color: appColors.linkColor,
+        ...commonTextProperties()
     },
 
     purpleTitleText: {
         fontSize: 22,
         color: appColors.linkColor,
+        ...commonTextProperties()
     },
 
     input: {
@@ -200,6 +215,7 @@ export const commonStyles = {
         color: '#FFFFFF',
         fontSize: 20,
         fontWeight: 'bold',
+        ...commonTextProperties()
     },
 
 

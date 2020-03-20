@@ -2,7 +2,7 @@ import {API, APIRequest} from '../API';
 import RESTAPI from './RESTAPI';
 import {Patient} from '../../models/Patient';
 import moment from 'moment';
-import {Address} from '../../models/Person';
+import {Address, Person} from '../../models/Person';
 
 //------------------------------------------------------------
 // Patients

@@ -31,10 +31,12 @@ import './src/api/REST/RESTAPI+Patients';
 import './src/api/REST/RESTAPI+Practitioners';
 import './src/api/REST/RESTAPI+Visits';
 import './src/api/REST/RESTAPI+Questionnaire';
+import './src/api/REST/RESTAPI+Relatives';
 import QuestionnaireScreen from './src/views/patients/patient/questionnaire/QuestionnaireScreen';
 import {API} from './src/api/API';
 import NewTaskScreen from './src/views/tasks/NewTaskScreen';
 import SelectActivityScreen from './src/views/tasks/SelectActivityScreen';
+import GeneralScreen from './src/views/patients/patient/general/GeneralScreen';
 
 export default class App extends React.Component {
 
@@ -106,6 +108,7 @@ const PatientsStack = createStackNavigator({
     NewTask: NewTaskScreen,
     SelectActivity: SelectActivityScreen,
     SelectVisit: SelectVisitScreen,
+    General: GeneralScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });

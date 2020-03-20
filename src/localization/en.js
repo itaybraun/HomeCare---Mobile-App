@@ -44,6 +44,7 @@ export const en = {
         timeline: 'Timeline',
         created: 'Created {0}',
         executeTask: 'Execute Task',
+        relatedPeople: 'Related People'
     },
     Flags: {
         title: 'Flags',

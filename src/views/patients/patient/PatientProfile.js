@@ -33,7 +33,7 @@ export default class PatientProfile extends Component {
         return (
             <View style={{flex: 1, padding: 12}}>
                 <ScrollView bounces={false} style={{flex: 1,}}>
-                    {this.renderSections(strings.Patient.general, 'General', require('../../../assets/icons/profile/general.png'), true)}
+                    {this.renderSections(strings.Patient.general, 'General', require('../../../assets/icons/profile/general.png'))}
                     {this.renderSections(strings.Patient.flags, 'Flags', require('../../../assets/icons/profile/flags.png'))}
                     {this.renderSections(strings.Patient.vital, 'Vital',  require('../../../assets/icons/profile/vital.png'), true)}
                     {this.renderSections(strings.Patient.mental, 'Metal', require('../../../assets/icons/profile/mental.png'), true)}

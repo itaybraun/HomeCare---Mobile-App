@@ -131,3 +131,9 @@ API.prototype.getQuestionnaire = async function getQuestionnaire(id: String): AP
 API.prototype.submitQuestionnaire = async function submitQuestionnaire(answers: Object, questionnaire: Questionnaire): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
+
+
+
+API.prototype.getPatientRelatives = async function getPatientRelatives(patientId): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
