@@ -75,7 +75,7 @@ export default class LoginScreen extends AppScreen {
         api.token = null;
         this.props.screenProps.api = api;
 
-        await this.api.setCurrentUser('user1@itaybraunhotmail.onmicrosoft.com');
+        await this.api.setCurrentUser('user1');
         this.setState({loading: false});
 
         this.navigateTo('Tabs');

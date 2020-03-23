@@ -83,7 +83,7 @@ function getItemFromJson(json) {
     return item;
 }
 
-function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, authorId: String) {
+function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire) {
     let data = {
         resourceType: "QuestionnaireResponse",
         questionnaire: "Questionnaire/" + questionnaire.id,
