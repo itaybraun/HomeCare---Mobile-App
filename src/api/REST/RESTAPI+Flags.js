@@ -17,15 +17,16 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
         let params = {};
         let url = 'Flag';
         if (patientId) {
-            url += `/?subject=Patient/${patientId}`;
+            params.subject = patientId;
         } else if (API.user) {
-            url += '?Practitioner=' + API.user.id;
+            //params.Practitioner = API.user.id;
         }
-        params.pageLimit = 0;
-        params.flat = true;
-        params.resolveReferences = ["subject"];
+        let fhirOptions = {};
+        fhirOptions.pageLimit = 0;
+        fhirOptions.flat = true;
+        fhirOptions.resolveReferences = ["subject"];
 
-        const result = await this.server.request(this.createUrl(url), params);
+        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
         console.log('getFlags', result);
         let flags = result.map(json => getFlagFromJson(json)) || [];
         return new APIRequest(true, flags);

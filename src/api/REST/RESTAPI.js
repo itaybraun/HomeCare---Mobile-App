@@ -45,5 +45,10 @@ export default class RESTAPI extends API {
 
         return result;
     }
+
+    set token(token) {
+        super.token = token;
+        this.server.setToken(token);
+    }
 };
 
