@@ -70,9 +70,9 @@ export const en = {
 
     Work: {
         title: 'My Work',
-        tasks: 'Tasks',
+        tasks: 'All Tasks',
         noData: 'No data to display',
-        flags: 'Flags',
+        flags: 'All Flags',
         map: 'Map',
         calendar: 'Calendar',
     },
