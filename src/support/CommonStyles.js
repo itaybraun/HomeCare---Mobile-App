@@ -65,6 +65,12 @@ export const commonStyles = {
         ...commonTextProperties()
     },
 
+    smallContentText: {
+        fontSize: 16,
+        color: appColors.textColor,
+        ...commonTextProperties()
+    },
+
     link: {
         textTransform: 'uppercase',
         color: appColors.linkColor,

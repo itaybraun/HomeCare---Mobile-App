@@ -3,7 +3,7 @@ import {
     View,
     Text,
     StyleSheet,
-    FlatList,
+    Image,
     SectionList,
     TouchableOpacity,
     TouchableHighlight,
@@ -47,6 +47,7 @@ export default class WorkScreen extends AppScreen {
     state = {
         loading: false,
         tasks: [],
+        sortedTasks: [],
         flags: [],
         sortedFlags: [],
         index: 0,
@@ -94,7 +95,19 @@ export default class WorkScreen extends AppScreen {
     getTasks = async (refresh = true) => {
         let result: APIRequest = await this.api.getTasks(null, [Status.ACTIVE]);
         if (result.success) {
-            return {tasks: result.data};
+            let sortedTasks = result.data.reduce((array, task: Task) => {
+                let userArray = array.find(o => o.title === task.patient.fullName);
+                if (userArray)
+                    userArray.data.push(task);
+                else {
+                    array.push({
+                        title: task.patient.fullName,
+                        data: [task],
+                    })
+                }
+                return array;
+            }, []);
+            return {tasks: result.data, sortedTasks: sortedTasks};
         } else {
             this.showError(result.data);
         }
@@ -208,16 +221,19 @@ export default class WorkScreen extends AppScreen {
             <TouchableOpacity style={commonStyles.listItemContainer}
                               onPress={() => this.selectTask(item)}>
                 <Card style={[commonStyles.cardStyle, item.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
-                    <Text style={[commonStyles.titleText]}>{task.patient?.fullName}</Text>
-                    <View style={{flex: 1,}}>
+                    <View style={{flex: 1, flexDirection: 'row', alignItems:'center'}}>
+                        <Image source={require('../../assets/icons/tasks/task.png')} style={{width: 48, height: 48}} />
                         <Text
-                            style={[commonStyles.yellowTitleText, {paddingVertical: 10}]}
+                            style={[commonStyles.yellowTitleText, { flex: 1, backgroundColor: '#ffffff', marginLeft: 10}]}
                             numberOfLines={2}>
                             {item.text}
                         </Text>
+                    </View>
+                    <View style={{flex: 1, marginTop: 16, flexDirection: 'row'}}>
+                        <Text style={[commonStyles.smallContentText]}>{strings.Task.when}: </Text>
                         {
                             item.visit ?
-                                <Text style={[commonStyles.contentText]}>
+                                <Text style={[commonStyles.smallContentText, {fontWeight: 'bold'}]}>
                                     {
                                         item.visit && item.visit.start && item.visit.end ?
                                             moment(item.visit.start).format(
@@ -231,9 +247,14 @@ export default class WorkScreen extends AppScreen {
                                     }
                                 </Text>
                                 :
-                                <Text style={[commonStyles.contentText, {color: '#FF0000'}]}>{strings.Tasks.noSchedule}</Text>
+                                <Text style={[commonStyles.smallContentText, {color: '#FF0000'}]}>
+                                    {strings.Tasks.noSchedule}
+                                </Text>
                         }
-
+                    </View>
+                    <View style={{flex: 1, marginTop: 16, flexDirection: 'row'}}>
+                        <Text style={[commonStyles.smallContentText]}>{strings.Task.priority}: </Text>
+                        <Text style={[commonStyles.smallContentText, {fontWeight: 'bold'}]}>{strings.Priorities[item.priority]}</Text>
                     </View>
                 </Card>
             </TouchableOpacity>
@@ -241,23 +262,32 @@ export default class WorkScreen extends AppScreen {
     };
 
     renderTasks = () => {
-
-        const tasks = this.state.tasks;
-
         return (
             <View style={commonStyles.screenContainer}>
                 <View style={{flex: 1,}}>
-                    <FlatList style={styles.list}
-                              contentContainerStyle={{ flexGrow: 1}}
-                              data={tasks}
-                              renderItem={this.renderTask}
-                              ItemSeparatorComponent={() => renderSeparator()}
-                              ListEmptyComponent={this.renderListEmpty}
-                              ListHeaderComponent={this.renderListHeader}
-                              ListFooterComponent={this.renderListFooter}
-                              keyExtractor={item => item.id}
-                              onRefresh={this.getData}
-                              refreshing={false}
+                    <SectionList style={styles.list}
+                                 keyExtractor={item => item.id}
+                                 contentContainerStyle={{flexGrow: 1}}
+                                 sections={this.state.sortedTasks}
+                                 renderItem={this.renderTask}
+                                 stickySectionHeadersEnabled={true}
+                                 ItemSeparatorComponent={() => renderSeparator()}
+                                 ListEmptyComponent={this.renderListEmpty}
+                                 ListHeaderComponent={this.renderListHeader}
+                                 ListFooterComponent={this.renderListFooter}
+                                 renderSectionHeader={({section: {title}}) => (
+                                     <View style={{
+                                         backgroundColor: appColors.headerBackground,
+                                         alignItems: 'center',
+                                         padding: 10,
+                                         marginBottom: 10,
+                                     }}>
+                                         <Text style={{fontSize: 18, fontWeight: 'bold', color: appColors.headerFontColor}}>{title}</Text>
+                                     </View>
+                                 )}
+                                 renderSectionFooter={() => renderSeparator({height: 12})}
+                                 onRefresh={this.getData}
+                                 refreshing={false}
                     />
                 </View>
                 <View style={{ flexDirection: 'row', padding: 10, paddingTop: 5, alignItems: 'center', justifyContent: 'space-evenly'}}>

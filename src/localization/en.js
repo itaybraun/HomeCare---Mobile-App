@@ -93,6 +93,7 @@ export const en = {
         category: 'Category',
         requester: 'Opened By',
         when: 'When',
+        priority: 'Priority',
         visit: 'Visit',
         status: 'Status: {0}',
         whatToDo: 'What to Do',
