@@ -106,6 +106,8 @@ export default class SelectVisitScreen extends AppScreen {
                 start = selectedVisit.start;
                 end = selectedVisit.end;
             }
+        } else {
+            selectedVisitIndex = visits.length + 1;
         }
         return {
             selectedVisitIndex: selectedVisitIndex,
@@ -153,26 +155,29 @@ export default class SelectVisitScreen extends AppScreen {
 
         let visit: Visit = this.state.visits[this.state.selectedVisitIndex];
         if (!visit) {
-            await this.setState({
-                errors: {},
-            });
-
-            let validationResult: Request = this.validate();
-
-            if (validationResult.success) {
-                visit = validationResult.data;
-            } else {
-                this.setState({
-                    errors: validationResult.data
+            if (this.state.selectedVisitIndex === this.state.visits.length) {
+                await this.setState({
+                    errors: {},
                 });
+
+                let validationResult: Request = this.validate();
+
+                if (validationResult.success) {
+                    visit = validationResult.data;
+                } else {
+                    this.setState({
+                        errors: validationResult.data
+                    });
+                    return;
+                }
+            } else {
+                visit = null;
             }
         }
 
-        if (visit) {
-            const submitVisit = this.props.navigation.getParam('submitVisit', null)
-            submitVisit && submitVisit(visit);
-            this.pop();
-        }
+        const submitVisit = this.props.navigation.getParam('submitVisit', null)
+        submitVisit && submitVisit(visit);
+        this.pop();
     };
 
     cancel = () => {
@@ -184,9 +189,66 @@ export default class SelectVisitScreen extends AppScreen {
     //------------------------------------------------------------
 
     renderListHeader = () => {
+        let index = this.state.visits.length;
         return (
-            <View style={{margin: 20,}}>
+            <View style={{margin: 20, marginBottom: 10}}>
                 <Text style={commonStyles.titleText}>{strings.Visit.patient}: {this.state.task?.patient?.fullName}</Text>
+                <TouchableOpacity
+                    onPress={() => this.selectVisit(index)}>
+                    {renderSeparator()}
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        {renderRadioButton(this.state.selectedVisitIndex === index)}
+                        <Text style={[commonStyles.link, {flex: 1, marginLeft: 10}]}>{strings.Visit.newVisit?.toUpperCase()}</Text>
+                    </View>
+                    {
+                        this.state.selectedVisitIndex === index &&
+                        <Form style={{marginTop: 20}}>
+                            <FormItemContainer
+                                style={{padding: 11,}}
+                                title={strings.Visit.date}
+                                error={this.state.errors.start}>
+                                <TouchableOpacity
+                                    onPress={() => this.setState({showingVisitDatePicker: true})}>
+                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
+                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>
+                                            {this.state.start ? moment(this.state.start).format('ddd, MMM Do YYYY') : ''}
+                                        </Text>
+                                        <Icon type="Octicons" name="calendar" style={{color: appColors.textColor}} />
+                                    </View>
+                                </TouchableOpacity>
+                            </FormItemContainer>
+
+                            <View style={{flexDirection: 'row'}}>
+                                <FormItemContainer
+                                    style={{width: 110}}
+                                    title={strings.Visit.start}
+                                    error={this.state.errors.start}>
+                                    <TouchableOpacity
+                                        onPress={() => this.setState({showingVisitStartTimePicker: true})}>
+                                        <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
+                                            <Text style={[{flex: 1}, commonStyles.formItemText]}>
+                                                {this.state.start ? moment(this.state.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </FormItemContainer>
+                                <FormItemContainer
+                                    style={{width: 110, marginLeft: 50}}
+                                    title={strings.Visit.end}
+                                    error={this.state.errors.end}>
+                                    <TouchableOpacity
+                                        onPress={() => this.setState({showingVisitEndTimePicker: true})}>
+                                        <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
+                                            <Text style={[{flex: 1}, commonStyles.formItemText]}>
+                                                {this.state.end ? moment(this.state.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </FormItemContainer>
+                            </View>
+                        </Form>
+                    }
+                </TouchableOpacity>
             </View>
         );
     };
@@ -215,64 +277,18 @@ export default class SelectVisitScreen extends AppScreen {
     };
 
     renderListFooter = () => {
-        let index = this.state.visits.length;
+        let index = this.state.visits.length + 1;
         return (
             <TouchableOpacity
-                style={{paddingHorizontal: 20}}
+                style={{paddingHorizontal: 20, marginTop: 10}}
                 onPress={() => this.selectVisit(index)}>
-                {renderSeparator()}
+
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {renderRadioButton(this.state.selectedVisitIndex === index)}
-                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>{strings.Visit.newVisit}</Text>
+                    <Text style={[commonStyles.contentText, {color: 'red', flex: 1, marginLeft: 10}]}>
+                        {strings.Visit.noVisit?.toUpperCase()}
+                    </Text>
                 </View>
-                {
-                    this.state.selectedVisitIndex === index &&
-                    <Form style={{marginTop: 20}}>
-                        <FormItemContainer
-                            style={{padding: 11,}}
-                            title={strings.Visit.date}
-                            error={this.state.errors.start}>
-                            <TouchableOpacity
-                                onPress={() => this.setState({showingVisitDatePicker: true})}>
-                                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                        {this.state.start ? moment(this.state.start).format('ddd, MMM Do YYYY') : ''}
-                                    </Text>
-                                    <Icon type="Octicons" name="calendar" style={{color: appColors.textColor}} />
-                                </View>
-                            </TouchableOpacity>
-                        </FormItemContainer>
-
-                        <View style={{flexDirection: 'row'}}>
-                            <FormItemContainer
-                                style={{width: 110}}
-                                title={strings.Visit.start}
-                                error={this.state.errors.start}>
-                                <TouchableOpacity
-                                    onPress={() => this.setState({showingVisitStartTimePicker: true})}>
-                                    <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
-                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                            {this.state.start ? moment(this.state.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
-                                        </Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </FormItemContainer>
-                            <FormItemContainer
-                                style={{width: 110, marginLeft: 50}}
-                                title={strings.Visit.end}
-                                error={this.state.errors.end}>
-                                <TouchableOpacity
-                                    onPress={() => this.setState({showingVisitEndTimePicker: true})}>
-                                    <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
-                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                            {this.state.end ? moment(this.state.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
-                                        </Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </FormItemContainer>
-                        </View>
-                    </Form>
-                }
             </TouchableOpacity>
         );
     };

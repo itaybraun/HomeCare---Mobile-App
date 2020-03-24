@@ -108,13 +108,9 @@ export default class TaskScreen extends AppScreen {
 
         let task: Task = this.state.task;
         let visit: Visit = this.state.visit;
-        if (!visit) {
-            this.pop();
-            return;
-        }
 
         // add new visit if needed
-        if (!visit.id) {
+        if (visit && !visit.id) {
             let result: APIRequest = await this.api.addVisit(visit);
             if (result.success) {
                 visit = result.data;
@@ -142,17 +138,19 @@ export default class TaskScreen extends AppScreen {
             }
         }
         // add task to new visit
-        visit.addTaskId(task.id);
-        let result: APIRequest = await this.api.updateVisit(visit);
-        if (!result.success) {
-            this.setState({loading: false,});
-            this.showError(result.data);
-            return;
+        if (visit) {
+            visit.addTaskId(task.id);
+            let result: APIRequest = await this.api.updateVisit(visit);
+            if (!result.success) {
+                this.setState({loading: false,});
+                this.showError(result.data);
+                return;
+            }
         }
 
         // update task
         task.visit = visit;
-        result = await this.api.updateTask(task);
+        let result: APIRequest = await this.api.updateTask(task);
         if (result.success) {
             const refresh = this.props.navigation.getParam('refresh', null)
             refresh && refresh();

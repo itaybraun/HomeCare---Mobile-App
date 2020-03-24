@@ -114,13 +114,14 @@ export const en = {
         selectAVisit: 'Select a Visit',
         editVisit: 'Edit Visit',
         patient: 'Patient',
-        newVisit: 'Schedule a New Visit',
+        newVisit: 'Add New',
         date: 'Date',
         start: 'Start',
         end: 'End',
         pickStartTime: 'Pick a start time',
         pickEndTime: 'Pick an end time',
         reason: 'Reason',
+        noVisit: 'No Schedule',
     },
 
     Chat: {
