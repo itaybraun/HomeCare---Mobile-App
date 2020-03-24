@@ -186,9 +186,12 @@ export default class TaskScreen extends AppScreen {
                     <Form>
                         <Text style={commonStyles.yellowText}>{strings.Task.task}</Text>
                         <Card style={[{padding: 15, marginBottom: 15,}, this.state.task?.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
-                            <Text style={commonStyles.titleText}>{this.state.task?.text}</Text>
-                            <Text style={[commonStyles.contentText, {marginTop: 10,}]}>{strings.Priorities[this.state.task?.priority]}</Text>
-                            <Text style={[commonStyles.infoText, {marginTop: 15}]}>{strings.Task.requester}:</Text>
+                            <Text style={commonStyles.yellowTitleText} numberOfLines={2}>{this.state.task?.text}</Text>
+                            <View style={{flexDirection: 'row', marginTop: 10}}>
+                                <Text style={[commonStyles.infoText]}>{strings.Task.priority}: </Text>
+                                <Text style={[commonStyles.contentText]}>{strings.Priorities[this.state.task?.priority]}</Text>
+                            </View>
+                            <Text style={[commonStyles.infoText, {marginTop: 10}]}>{strings.Task.requester}:</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
                                 <Text style={[commonStyles.contentText, {flex: 1}]}>{this.state.task?.requester?.fullName}</Text>
                                 {
@@ -215,7 +218,7 @@ export default class TaskScreen extends AppScreen {
                             <Text style={[commonStyles.titleText]}>{this.state.task?.patient?.fullName}</Text>
                             {
                                 !patientGenderAndAge.isEmpty() &&
-                                <Text style={[commonStyles.contentText, {marginTop: 5,}]}>
+                                <Text style={[commonStyles.smallContentText, {marginTop: 5,}]}>
                                     {patientGenderAndAge}
                                 </Text>
                             }
