@@ -48,6 +48,10 @@ export default class QuestionnaireScreen extends AppScreen {
         errors: {},
     };
 
+    imageStore = "fhir1imagestore";
+    blob = "blob1";
+
+
     //------------------------------------------------------------
     // Overrides
     //------------------------------------------------------------
@@ -58,9 +62,9 @@ export default class QuestionnaireScreen extends AppScreen {
         this.getData();
 
         EAzureBlobStorageImage.configure(
-            "fhir1imagestore",
+            this.imageStore,
             "47+vv7jGM8gpHJGspmgveOwI8hNCQKC9uJ2Rynq7F6wdqnZvdivg5BJQuyZYk75gOnlPvFd9oVuuG2/eMRCscw==",
-            "blob1"
+            this.blob,
         );
     }
 
@@ -120,8 +124,7 @@ export default class QuestionnaireScreen extends AppScreen {
 
         if (validationResult.success) {
             this.setState({loading: true,});
-            //await this.uploadImages();
-
+            await this.uploadImages();
             let result: APIRequest = await this.api.submitQuestionnaire(this.state.values, this.state.questionnaire);
             if (result.success) {
                 let task: Task = this.state.task;
@@ -137,7 +140,7 @@ export default class QuestionnaireScreen extends AppScreen {
                 }
             } else {
                 this.showError(result.data);
-                this.setState({loading: true,});
+                this.setState({loading: false,});
             }
         } else {
             this.setState({
@@ -179,21 +182,37 @@ export default class QuestionnaireScreen extends AppScreen {
     };
 
     uploadImages = async () => {
+
         let imageItems = this.getAllItems().filter(item => item.type === 'url');
         for (const item of imageItems) {
             let files = this.state.values[item.link] || [];
+            let uploadedFiles = [];
             for (const file of files) {
-                try {
-                    const name = await EAzureBlobStorageImage.uploadFile(file)
-                    console.log("Container File Name", name)
-                } catch(error) {
-                    console.log(error);
+                if (file.indexOf('http') === -1) {
+                    try {
+                        const name = await EAzureBlobStorageImage.uploadFile(file);
+                        const link = `https://${this.imageStore}.blob.core.windows.net/blob1/` + name;
+                        uploadedFiles.push(link);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                } else {
+                    uploadedFiles.push(file);
                 }
             }
 
+            let values = this.state.values;
+            if (uploadedFiles.length > 0)
+                values[item.link] = uploadedFiles
+            else
+                delete values[item.link];
+
+            await this.setState({
+                values: values
+            });
+
+            console.log(this.state.values);
         }
-
-
     };
 
     //------------------------------------------------------------

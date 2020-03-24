@@ -131,6 +131,15 @@ function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire) {
                     valueString: answers[item.link]
                 }];
                 break;
+            case 'url':
+
+                const result = (answers[item.link] || []).map(url => {
+                    return {
+                        valueUri: url
+                    }
+                });
+
+                object.answer = result;
         }
 
         return object;

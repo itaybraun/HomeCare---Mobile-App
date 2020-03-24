@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {QuestionnaireItem, } from '../../../../models/Questionnaire';
-import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {appColors, commonStyles, renderRadioButton, renderSeparator} from '../../../../support/CommonStyles';
 import {strings} from '../../../../localization/strings';
 import PropTypes from 'prop-types';
@@ -51,29 +51,38 @@ export default class QuestionnaireItemsView extends Component {
     // Methods
     //------------------------------------------------------------
 
-    showImage = (item: QuestionnaireItem, image) => {
-
-    }
-
-    addImage = (item: QuestionnaireItem) => {
+    addImage = (item: QuestionnaireItem, index: Number) => {
         ImagePicker.showImagePicker((response) => {
             console.log('Response = ', response);
 
-            if (response.didCancel) {
-                //console.log('User cancelled image picker');
-            } else if (response.error) {
-                //console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                //console.log('User tapped custom button: ', response.customButton);
-            } else {
-                // You can also display the image using data:
-                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+            let images = this.state.values[item.link] || [];
+            images.splice(index, 1);
 
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
                 let images = this.state.values[item.link] || [];
-                images.push(response.uri);
-                this.updateValues(item.link, images);
+                let path = Platform.OS === 'ios' ? response.uri.replace("file://", "") : "file://"+response.path;
+                images[index] = path;
             }
+
+            this.updateValues(item.link, images);
         });
+
+        let images = this.state.values[item.link] || [];
+        images[index] = true;
+        this.updateValues(item.link, images);
+
+    };
+
+    removeImage = (item: QuestionnaireItem, index: Number,) => {
+        let images = this.state.values[item.link] || [];
+        images.splice(index, 1);
+        this.updateValues(item.link, images);
     };
 
     updateValues = (name, value) => {
@@ -270,18 +279,47 @@ export default class QuestionnaireItemsView extends Component {
                             {
                                 images.map((image, index) => {
                                     return (
-                                        <TouchableOpacity
-                                            key={index}
-                                            style={styles.imageContainer}
-                                            onPress={() => image ? this.showImage(item, image) : this.addImage(item)}>
+                                        <View key={index}>
+                                            <TouchableOpacity
+
+                                                style={styles.imageContainer}
+                                                onPress={() => image ? this.removeImage(item, index) : this.addImage(item, index)}>
+                                                {
+                                                    image ?
+                                                        <View style={{overflow: 'visible',}}>
+                                                            {
+                                                                image === true ?
+                                                                    <View style={{width: 90, height: 70, justifyContent: 'center', alignItems: 'center'}}>
+                                                                        <ActivityIndicator />
+                                                                    </View>
+                                                                    :
+                                                                    <View style={{overflow: 'visible',}}>
+                                                                        <Image style={{width: 90, height: 70}} source={{uri: image}} />
+
+                                                                    </View>
+                                                            }
+
+                                                        </View>
+                                                        :
+                                                        <View key='add' style={{paddingHorizontal: 5,}}>
+                                                            <Icon type="Feather" name="plus" style={{fontSize: 36, color: appColors.linkColor, paddingTop: 4}}/>
+                                                        </View>
+                                                }
+                                            </TouchableOpacity>
                                             {
-                                                image ?
-                                                    <Image style={{width: 90, height: 70}} source={{uri: image}} /> :
-                                                    <View key='add' style={{paddingHorizontal: 5,}}>
-                                                        <Icon type="Feather" name="plus" style={{fontSize: 36, color: appColors.linkColor, paddingTop: 4}}/>
+                                                (typeof image === 'string') &&
+                                                    <View style={{
+                                                        backgroundColor: 'red', position: 'absolute',
+                                                        width: 16, height: 16, borderRadius: 8, right: 4, top: -6,
+                                                        alignItems: 'center', justifyContent: 'center'
+                                                    }}>
+                                                        <Icon style={{color: 'white', marginTop: -1, fontSize: 16}}
+                                                              name='remove' type='FontAwesome' />
                                                     </View>
+
+
                                             }
-                                        </TouchableOpacity>
+                                        </View>
                                     )
                                 })
                             }
