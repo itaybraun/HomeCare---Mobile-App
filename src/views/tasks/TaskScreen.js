@@ -94,10 +94,12 @@ export default class TaskScreen extends AppScreen {
         });
     };
 
-    submitVisit = (visit) => {
-        this.setState({
+    submitVisit = async (visit) => {
+        await this.setState({
             visit: visit,
-        })
+        });
+
+        this.submit();
     };
 
     submit = async () => {
@@ -117,6 +119,7 @@ export default class TaskScreen extends AppScreen {
             if (result.success) {
                 visit = result.data;
             } else {
+                this.setState({loading: false,});
                 this.showError(result.data);
                 return;
             }
@@ -130,9 +133,11 @@ export default class TaskScreen extends AppScreen {
                 visit.removeTaskId(task.id);
                 result = await this.api.updateVisit(visit);
                 if (!result.success) {
+                    this.setState({loading: false,});
                     this.showError(result.data);
                 }
             } else {
+                this.setState({loading: false,});
                 this.showError(result.data);
             }
         }
@@ -140,6 +145,7 @@ export default class TaskScreen extends AppScreen {
         visit.addTaskId(task.id);
         let result: APIRequest = await this.api.updateVisit(visit);
         if (!result.success) {
+            this.setState({loading: false,});
             this.showError(result.data);
             return;
         }
@@ -150,14 +156,12 @@ export default class TaskScreen extends AppScreen {
         if (result.success) {
             const refresh = this.props.navigation.getParam('refresh', null)
             refresh && refresh();
-            this.pop();
+            this.setState({loading: false,});
+            //this.pop();
         } else {
+            this.setState({loading: false,});
             this.showError(result.data);
         }
-    };
-
-    cancel = () => {
-        this.pop();
     };
 
     //------------------------------------------------------------
@@ -263,18 +267,6 @@ export default class TaskScreen extends AppScreen {
                         </FormItemContainer>
                     </Form>
                 </ScrollView>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: 10,}}>
-                    <Button block
-                            style={{backgroundColor: '#CCF4C9', width: 120,}}
-                            onPress={this.submit}>
-                        <Text style={{color: '#32C02B', fontWeight: 'bold'}}>{strings.Common.submitButton?.toUpperCase()}</Text>
-                    </Button>
-                    <Button block
-                            style={{backgroundColor: '#F5BEC0', width: 120,}}
-                            onPress={this.cancel}>
-                        <Text style={{color: '#EC1A31', fontWeight: 'bold'}}>{strings.Common.cancelButton?.toUpperCase()}</Text>
-                    </Button>
-                </View>
                 {renderLoading(this.state.loading)}
             </View>
         );
