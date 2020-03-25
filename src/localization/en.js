@@ -131,6 +131,10 @@ export const en = {
     Settings: {
         title: 'Settings',
         qa: 'QA Mode',
+        imageQuality: 'Image Quality',
+        original: 'Original',
+        medium: 'Medium',
+        small: 'Small',
     },
 
     Priorities: {

@@ -37,6 +37,7 @@ import {API} from './src/api/API';
 import NewTaskScreen from './src/views/tasks/NewTaskScreen';
 import SelectActivityScreen from './src/views/tasks/SelectActivityScreen';
 import GeneralScreen from './src/views/patients/patient/general/GeneralScreen';
+import ImageQualityScreen from './src/views/settings/ImageQualityScreen';
 
 export default class App extends React.Component {
 
@@ -61,7 +62,7 @@ export default class App extends React.Component {
         try {
             const savedSettings = await AsyncStorage.getItem(AsyncStorageConsts.STORAGE_SETTINGS);
             if (savedSettings) {
-                settings = JSON.parse(savedSettings);
+                settings = new Settings(JSON.parse(savedSettings));
             }
         } catch (error) {console.log(error)}
         this.settings = settings;
@@ -130,6 +131,7 @@ const MessagesStack = createStackNavigator({
 });
 const SettingsStack = createStackNavigator({
     Settings: SettingsScreen,
+    ImageQuality: ImageQualityScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });

@@ -193,7 +193,7 @@ export default class WorkScreen extends AppScreen {
 
     renderListHeader = () => {
         return (
-            <View style={{height: 10}} />
+            <View style={{height: 0}} />
         );
     };
 
@@ -219,27 +219,27 @@ export default class WorkScreen extends AppScreen {
 
         return (
             <TouchableOpacity style={commonStyles.listItemContainer}
-                              onPress={() => this.selectTask(item)}>
-                <Card style={[commonStyles.cardStyle, item.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
+                              onPress={() => this.selectTask(task)}>
+                <Card style={[commonStyles.cardStyle, task.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
                     <View style={{flex: 1, flexDirection: 'row', alignItems:'center'}}>
                         <Image source={require('../../assets/icons/tasks/task.png')} style={{width: 48, height: 48}} />
                         <Text
                             style={[commonStyles.yellowTitleText, { flex: 1, backgroundColor: '#ffffff', marginLeft: 10}]}
                             numberOfLines={2}>
-                            {item.text}
+                            {task.text}
                         </Text>
                     </View>
-                    <View style={{flex: 1, marginTop: 16, flexDirection: 'row'}}>
+                    <View style={{flex: 1, marginTop: 16, flexDirection: 'row', alignItems: 'center',}}>
                         <Text style={[commonStyles.smallContentText]}>{strings.Task.when}: </Text>
                         {
-                            item.visit ?
-                                <Text style={[commonStyles.smallContentText, {fontWeight: 'bold'}]}>
+                            task.visit ?
+                                <Text style={[{flex: 1}, commonStyles.smallContentText, {fontWeight: 'bold'}]}>
                                     {
-                                        item.visit && item.visit.start && item.visit.end ?
-                                            moment(item.visit.start).format(
+                                        task.visit && task.visit.start && task.visit.end ?
+                                            moment(task.visit.start).format(
                                                 uses24HourClock() ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
                                             ) +
-                                            moment(item.visit.end).format(
+                                            moment(task.visit.end).format(
                                                 uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
                                             )
 

@@ -29,21 +29,29 @@ export default class SettingsScreen extends AppScreen {
 
     componentDidMount(): void {
         super.componentDidMount();
-
-        console.log(this.settings)
     }
 
     //------------------------------------------------------------
     // Methods
     //------------------------------------------------------------
 
-    async updateSettings(property, value) {
+    updateSettings = async (property, value) => {
         if (this.settings.hasOwnProperty(property)) {
             this.settings[property] = value;
             this.eventEmitter.emit('settings');
             await AsyncStorage.setItem(AsyncStorageConsts.STORAGE_SETTINGS, JSON.stringify(this.settings));
         }
     }
+
+    changeImageQuality = () => {
+        this.navigateTo('ImageQuality', {
+            value: this.settings.imageQuality,
+            update: (value) => {
+                this.updateSettings('imageQuality', value)
+                this.forceUpdate();
+            },
+        });
+    };
 
     //------------------------------------------------------------
     // Render
@@ -67,6 +75,20 @@ export default class SettingsScreen extends AppScreen {
                             <Switch value={this.settings.qaMode} onValueChange={(value) => {
                                 this.updateSettings('qaMode', value);
                             }}/>
+                        </Right>
+                    </ListItem>
+                    <ListItem icon onPress={this.changeImageQuality}>
+                        <Left>
+                            <Button style={{ backgroundColor: "#3CD340" }}>
+                                <Icon active name="ios-image" />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Text>{strings.Settings.imageQuality}</Text>
+                        </Body>
+                        <Right>
+                            <Text>{strings.Settings[this.settings.imageQuality]}</Text>
+                            <Icon name="arrow-forward" />
                         </Right>
                     </ListItem>
                 </Content>
