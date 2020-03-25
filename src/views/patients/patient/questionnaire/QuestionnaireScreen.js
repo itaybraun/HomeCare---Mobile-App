@@ -7,7 +7,7 @@ import {
     Text,
     ScrollView,
     KeyboardAvoidingView,
-    Keyboard, TouchableWithoutFeedback, Alert,
+    Keyboard, TouchableWithoutFeedback, Alert, Platform,
 } from 'react-native';
 import AppScreen from '../../../../support/AppScreen';
 import {appColors, commonStyles, renderLoading, renderTabBar} from '../../../../support/CommonStyles';
@@ -20,6 +20,7 @@ import {Content, Button} from 'native-base';
 import {Request} from '../../../../support/Utils';
 import {TabView} from 'react-native-tab-view';
 import {EAzureBlobStorageImage} from 'react-native-azure-blob-storage';
+import ImageResizer from 'react-native-image-resizer';
 
 export default class QuestionnaireScreen extends AppScreen {
 
@@ -184,14 +185,27 @@ export default class QuestionnaireScreen extends AppScreen {
     uploadImages = async () => {
 
         let imageItems = this.getAllItems().filter(item => item.type === 'url');
+
         for (const item of imageItems) {
             let files = this.state.values[item.link] || [];
             let uploadedFiles = [];
-            for (const file of files) {
+            for (let file of files) {
                 if (file.indexOf('http') === -1) {
                     try {
+                        // convert image
+                        if (this.settings.imageQuality === 'medium') {
+                            let response = await ImageResizer.createResizedImage(file, 1024, 1024, 'JPEG', 80);
+                            file = Platform.OS === 'ios' ? response.uri.replace("file://", "") : "file://"+response.path;
+                        }
+                        if (this.settings.imageQuality === 'small') {
+                            let response = await ImageResizer.createResizedImage(file, 768, 768, 'JPEG', 50);
+                            file = Platform.OS === 'ios' ? response.uri.replace("file://", "") : "file://"+response.path;
+                        }
+
+                        // upload image
                         const name = await EAzureBlobStorageImage.uploadFile(file);
                         const link = `https://${this.imageStore}.blob.core.windows.net/blob1/` + name;
+                        console.log(link);
                         uploadedFiles.push(link);
                     } catch (error) {
                         console.log(error);
