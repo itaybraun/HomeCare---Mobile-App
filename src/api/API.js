@@ -132,6 +132,10 @@ API.prototype.submitQuestionnaire = async function submitQuestionnaire(answers: 
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
+API.prototype.getQuestionnaireResponse = async function getQuestionnaireResponse(taskId: String): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
 
 
 API.prototype.getPatientRelatives = async function getPatientRelatives(patientId): APIRequest {

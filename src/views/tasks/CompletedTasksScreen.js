@@ -70,7 +70,7 @@ export default class CompletedTasksScreen extends AppScreen {
     //------------------------------------------------------------
 
     selectTask = (task: Task) => {
-
+        this.navigateTo('QuestionnaireResponse', {task: task});
     };
 
     //------------------------------------------------------------

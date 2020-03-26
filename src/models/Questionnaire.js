@@ -27,6 +27,12 @@ export class QuestionnaireItem extends BaseModel {
     items: [QuestionnaireItem];
     required: Boolean;
     options: [QuestionnaireChoiceOption];
+    answers: [Object];
+}
+
+export class QuestionnaireResponse extends BaseModel {
+    id: String;
+    items: [QuestionnaireItem];
 }
 
 

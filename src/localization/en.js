@@ -177,4 +177,9 @@ export const en = {
         noData: 'No completed tasks',
         executionDate: 'Execution Date',
     },
+
+    QuestionnaireResponse: {
+        completedTask: 'Completed Task',
+        responseNotFound: 'Response has not been found!'
+    },
 };

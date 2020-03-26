@@ -198,7 +198,7 @@ export default class SelectVisitScreen extends AppScreen {
                     {renderSeparator()}
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         {renderRadioButton(this.state.selectedVisitIndex === index)}
-                        <Text style={[commonStyles.link, {flex: 1, marginLeft: 10}]}>{strings.Visit.newVisit?.toUpperCase()}</Text>
+                        <Text style={[commonStyles.contentText, commonStyles.link, {flex: 1, marginLeft: 10}]}>{strings.Visit.newVisit?.toUpperCase()}</Text>
                     </View>
                     {
                         this.state.selectedVisitIndex === index &&

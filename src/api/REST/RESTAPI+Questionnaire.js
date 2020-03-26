@@ -1,6 +1,11 @@
 import {API, APIRequest} from '../API';
 import RESTAPI from './RESTAPI';
-import {Questionnaire, QuestionnaireChoiceOption, QuestionnaireItem} from '../../models/Questionnaire';
+import {
+    Questionnaire,
+    QuestionnaireChoiceOption,
+    QuestionnaireItem,
+    QuestionnaireResponse,
+} from '../../models/Questionnaire';
 import {Activity} from '../../models/Activity';
 
 //------------------------------------------------------------
@@ -28,6 +33,7 @@ RESTAPI.prototype.getQuestionnaire = async function getQuestionnaire(id: String)
 RESTAPI.prototype.submitQuestionnaire = async function submitQuestionnaire(answers: Object, questionnaire: Questionnaire, taskId: String): APIRequest {
     try {
         const data = getJsonFromAnswers(answers, questionnaire, taskId);
+        console.log(data);
         const result = await this.server.create(data);
         console.log('submitQuestionnaire', result);
         return new APIRequest(true, null);
@@ -48,6 +54,22 @@ RESTAPI.prototype.getActivities = async function getActivities(): APIRequest {
         let activities = result.map(json => getActivityFromJson(json)) || [];
 
         return new APIRequest(true, activities);
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
+RESTAPI.prototype.getQuestionnaireResponse = async function getQuestionnaireResponse(taskId: String): APIRequest {
+    try {
+        let params = {};
+        let url = 'QuestionnaireResponse/3539bb23-2f4d-45a1-80c8-5b6515e060c3';
+        let fhirOptions = {};
+        fhirOptions.flat = true;
+        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        let response = getQuestionnaireResponseFromJson(result);
+        console.log('getQuestionnaireResponse', response);
+        return new APIRequest(true, response);
+
     } catch (error) {
         return new APIRequest(false, error);
     }
@@ -79,6 +101,51 @@ function getItemFromJson(json) {
                 option.valueCoding.display,
                 option.valueCoding.system)
         );
+
+    return item;
+}
+
+export function getQuestionnaireResponseFromJson(json) {
+    let response = new QuestionnaireResponse();
+    response.id = json.id;
+    if (json.item) {
+        response.items = json.item.map(json => getResponseItemFromJson(json));
+    }
+
+    return response;
+}
+
+function getResponseItemFromJson(json) {
+    let item = new QuestionnaireItem();
+    if (json.item)
+        item.items = json.item.map(json => getResponseItemFromJson(json));
+    item.link = json.linkId;
+    item.text = json.text;
+    item.type = 'group';
+    if (json.answer) {
+        item.answers = json.answer.map(answer => {
+            if (answer.hasOwnProperty('valueCoding')) {
+                item.type = 'choice';
+                return answer.valueCoding.display;
+            }
+            if (answer.hasOwnProperty('valueBoolean')) {
+                item.type = 'boolean';
+                return answer.valueBoolean;
+            }
+            if (answer.hasOwnProperty('valueDecimal')) {
+                item.type = 'decimal';
+                return answer.valueDecimal;
+            }
+            if (answer.hasOwnProperty('valueString')) {
+                item.type = 'string';
+                return answer.valueString;
+            }
+            if (answer.hasOwnProperty('valueUri')) {
+                item.type = 'url';
+                return answer.valueUri;
+            }
+        });
+    }
 
     return item;
 }
@@ -147,7 +214,7 @@ function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, taskI
 
     data.item = questionnaire.items.map(item => getItemAnswer(item));
     data.author = API.user ? {reference: "Practitioner/"+API.user.id} : null;
-    data.basedOn = taskId ? [{reference: "ServiceRequest/" + taskId}] : null;
+    data.basedOn = taskId ? {reference: "ServiceRequest/" + taskId} : null;
 
     return data;
 }
