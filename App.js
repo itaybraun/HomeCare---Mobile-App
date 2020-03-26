@@ -38,6 +38,7 @@ import NewTaskScreen from './src/views/tasks/NewTaskScreen';
 import SelectActivityScreen from './src/views/tasks/SelectActivityScreen';
 import GeneralScreen from './src/views/patients/patient/general/GeneralScreen';
 import ImageQualityScreen from './src/views/settings/ImageQualityScreen';
+import CompletedTasksScreen from './src/views/tasks/CompletedTasksScreen';
 
 export default class App extends React.Component {
 
@@ -106,6 +107,7 @@ const PatientsStack = createStackNavigator({
     Flags: FlagsScreen,
     Flag: FlagScreen,
     Questionnaire: QuestionnaireScreen,
+    CompletedTasks: CompletedTasksScreen,
     NewTask: NewTaskScreen,
     SelectActivity: SelectActivityScreen,
     SelectVisit: SelectVisitScreen,

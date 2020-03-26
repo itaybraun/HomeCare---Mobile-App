@@ -161,7 +161,7 @@ export const en = {
         noTask: 'No Task',
     },
 
-    Questionnaire :{
+    Questionnaire: {
         general: 'General',
         basedOnTask: 'Based on Task',
         patient: 'Patient',
@@ -170,5 +170,11 @@ export const en = {
         upTo3Images: 'Up to 3 images',
         submit: 'Submit',
         submitText: 'You are about to submit the form',
-    }
+    },
+
+    CompletedTasks: {
+        completedTasks: 'Completed Tasks',
+        noData: 'No completed tasks',
+        executionDate: 'Execution Date',
+    },
 };

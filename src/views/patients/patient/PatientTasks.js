@@ -54,7 +54,7 @@ export default class PatientTasks extends Component {
     renderListEmpty = () => {
         return (
             <View style={commonStyles.emptyScreen}>
-                <Text>{strings.Work.noData}</Text>
+                <Text style={commonStyles.smallContentText}>{strings.Work.noData}</Text>
             </View>
         )
     };

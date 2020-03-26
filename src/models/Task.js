@@ -10,6 +10,7 @@ export class Task extends BaseModel {
     text: String;
     schedule: Date;
     priority: Priority;
+    executionDate: Date;
 
     patientId: String;
     patient: Patient;

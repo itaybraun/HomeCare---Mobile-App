@@ -180,7 +180,7 @@ export default class FlagsScreen extends AppScreen {
     renderListEmpty = () => {
         return (
             <View style={commonStyles.emptyScreen}>
-                <Text>{strings.Flags.noFlags}</Text>
+                <Text style={commonStyles.smallContentText}>{strings.Flags.noFlags}</Text>
             </View>
         )
     };

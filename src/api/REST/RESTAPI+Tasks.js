@@ -91,6 +91,7 @@ export function getTaskFromJson(json) {
     task.visit = json.encounter ? getVisitFromJson(json.encounter) : null
     //task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
     task.openDate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;
+    task.executionDate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;
     task.text = json.code?.text;
     // TODO: I don't like this priority thing...
     task.priority = json.priority ? Priority.getByString(json.priority) || Priority.ROUTINE : Priority.ROUTINE;

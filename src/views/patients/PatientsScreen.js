@@ -115,7 +115,7 @@ export default class PatientsScreen extends AppScreen {
     renderListEmpty = () => {
         return (
             <View style={commonStyles.emptyScreen}>
-                <Text>{strings.Patients.noPatients}</Text>
+                <Text style={commonStyles.smallContentText}>{strings.Patients.noPatients}</Text>
             </View>
         )
     };
