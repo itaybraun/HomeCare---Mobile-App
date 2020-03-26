@@ -40,6 +40,7 @@ export default class PatientProfile extends Component {
                     {this.renderSections(strings.Patient.body, 'Body', require('../../../assets/icons/profile/body.png'), true)}
                     {this.renderSections(strings.Patient.conditions, 'Conditions', null, true)}
                     {this.renderSections(strings.Patient.timeline, 'Timeline', null , true)}
+                    {this.renderSections(strings.Patient.completedTasks, 'CompletedTasks', require('../../../assets/icons/profile/tasks.png'))}
                 </ScrollView>
             </View>
         );

@@ -42,6 +42,7 @@ export const en = {
         quickActions: 'Quick Actions',
         conditions: 'Conditions',
         timeline: 'Timeline',
+        completedTasks: 'Completed Tasks',
         created: 'Created {0}',
         executeTask: 'Execute Task',
         relatedPeople: 'Related People'
