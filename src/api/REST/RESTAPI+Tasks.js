@@ -127,12 +127,6 @@ export function getJsonFromTask(task: Task) {
         }
     };
 
-    data.performer = task.performerIds?.map(id => {
-        return {
-            reference: 'Practitioner/' + id,
-        }
-    });
-
     if (task.activityId) {
         data.basedOn = [
             {

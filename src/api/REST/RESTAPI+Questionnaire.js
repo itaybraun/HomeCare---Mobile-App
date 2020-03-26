@@ -25,9 +25,9 @@ RESTAPI.prototype.getQuestionnaire = async function getQuestionnaire(id: String)
     }
 };
 
-RESTAPI.prototype.submitQuestionnaire = async function submitQuestionnaire(answers: Object, questionnaire: Questionnaire): APIRequest {
+RESTAPI.prototype.submitQuestionnaire = async function submitQuestionnaire(answers: Object, questionnaire: Questionnaire, taskId: String): APIRequest {
     try {
-        const data = getJsonFromAnswers(answers, questionnaire);
+        const data = getJsonFromAnswers(answers, questionnaire, taskId);
         const result = await this.server.create(data);
         console.log('submitQuestionnaire', result);
         return new APIRequest(true, null);
@@ -83,7 +83,7 @@ function getItemFromJson(json) {
     return item;
 }
 
-function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire) {
+function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, taskId: String) {
     let data = {
         resourceType: "QuestionnaireResponse",
         questionnaire: "Questionnaire/" + questionnaire.id,
@@ -147,6 +147,7 @@ function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire) {
 
     data.item = questionnaire.items.map(item => getItemAnswer(item));
     data.author = API.user ? {reference: "Practitioner/"+API.user.id} : null;
+    data.basedOn = taskId ? [{reference: "ServiceRequest/" + taskId}] : null;
 
     return data;
 }

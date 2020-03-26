@@ -126,7 +126,7 @@ export default class QuestionnaireScreen extends AppScreen {
         if (validationResult.success) {
             this.setState({loading: true,});
             await this.uploadImages();
-            let result: APIRequest = await this.api.submitQuestionnaire(this.state.values, this.state.questionnaire);
+            let result: APIRequest = await this.api.submitQuestionnaire(this.state.values, this.state.questionnaire, this.state.task.id);
             if (result.success) {
                 let task: Task = this.state.task;
                 task.status = Status.COMPLETED;
