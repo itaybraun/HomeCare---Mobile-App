@@ -32,6 +32,7 @@ export class QuestionnaireItem extends BaseModel {
 
 export class QuestionnaireResponse extends BaseModel {
     id: String;
+    taskId: String;
     items: [QuestionnaireItem];
 }
 

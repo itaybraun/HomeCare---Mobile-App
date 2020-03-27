@@ -27,6 +27,7 @@ export default class CompletedTasksScreen extends AppScreen {
     state = {
         loading: false,
         tasks: [],
+        responses: [],
     };
 
     get patient(): Patient {
@@ -50,7 +51,8 @@ export default class CompletedTasksScreen extends AppScreen {
     getData = async (refresh = true) => {
         this.setState({loading: true});
         const tasks = await this.getTasks(refresh);
-        this.setState({...tasks, loading: false});
+        const responses = await this.getResponses(refresh);
+        this.setState({...tasks, ...responses, loading: false});
     };
 
     getTasks = async (refresh = true) => {
@@ -60,9 +62,23 @@ export default class CompletedTasksScreen extends AppScreen {
                 return {tasks: result.data};
             } else {
                 this.showError(result.data);
-                return {tasks: []};
             }
         }
+
+        return {tasks: []};
+    };
+
+    getResponses = async (refresh = true) => {
+        if (this.patient) {
+            let result: APIRequest = await this.api.getQuestionnaireResponses(this.patient.id);
+            if (result.success) {
+                return {responses: result.data};
+            } else {
+                this.showError(result.data);
+            }
+        }
+
+        return {responses: []};
     };
 
     //------------------------------------------------------------
@@ -70,7 +86,10 @@ export default class CompletedTasksScreen extends AppScreen {
     //------------------------------------------------------------
 
     selectTask = (task: Task) => {
-        this.navigateTo('QuestionnaireResponse', {task: task});
+        this.navigateTo('QuestionnaireResponse',{
+            task: task,
+            response: this.state.responses.find(response => response.taskId === task.id),
+        });
     };
 
     //------------------------------------------------------------

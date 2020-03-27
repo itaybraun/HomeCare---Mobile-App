@@ -49,7 +49,7 @@ export default class QuestionnaireResponseScreen extends AppScreen {
     getData = async (refresh = true) => {
         this.setState({loading: true});
         let task: Task = this.props.navigation.getParam('task', null);
-        let response: QuestionnaireResponse = task ? await this.getResponse(task) : null;
+        let response: QuestionnaireResponse = this.props.navigation.getParam('response', null);
         if (!task || !response) {
             this.showAlert(strings.QuestionnaireResponse.responseNotFound);
             this.pop();
@@ -57,18 +57,7 @@ export default class QuestionnaireResponseScreen extends AppScreen {
             return;
         }
 
-        console.log(response);
-
         this.setState({task: task, response: response, loading: false});
-    };
-
-    getResponse = async (task: Task) => {
-        let result: APIRequest = await this.api.getQuestionnaireResponse(task.id);
-        if (result.success) {
-            return result.data;
-        } else {
-            this.showError(result.data);
-        }
     };
 
     //------------------------------------------------------------

@@ -59,6 +59,30 @@ RESTAPI.prototype.getActivities = async function getActivities(): APIRequest {
     }
 };
 
+
+RESTAPI.prototype.getQuestionnaireResponses = async function getQuestionnaireResponses(patientId: String): APIRequest {
+    try {
+        let params = {};
+        let url = 'QuestionnaireResponse';
+        if (patientId) {
+            params.subject = patientId;
+        } else if (API.user) {
+            //url += '?performer=' + API.user.id;
+        }
+        let fhirOptions = {};
+        fhirOptions.pageLimit = 0;
+        fhirOptions.flat = true;
+        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        console.log(result);
+        let responses = result.map(json => getQuestionnaireResponseFromJson(json));
+        console.log('getQuestionnaireResponses', responses);
+        return new APIRequest(true, responses);
+
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
 RESTAPI.prototype.getQuestionnaireResponse = async function getQuestionnaireResponse(taskId: String): APIRequest {
     try {
         let params = {};
@@ -108,6 +132,7 @@ function getItemFromJson(json) {
 export function getQuestionnaireResponseFromJson(json) {
     let response = new QuestionnaireResponse();
     response.id = json.id;
+    response.taskId = json.basedOn?.[0]?.reference?.replace('ServiceRequest/', '') || null;
     if (json.item) {
         response.items = json.item.map(json => getResponseItemFromJson(json));
     }
