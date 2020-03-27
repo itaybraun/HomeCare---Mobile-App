@@ -10,6 +10,7 @@ import {Content, Icon} from 'native-base';
 import moment from 'moment';
 import FormItemContainer from '../other/FormItemContainer';
 import ImageView from 'react-native-image-view';
+import {uses24HourClock} from "react-native-localize";
 
 export default class QuestionnaireResponseScreen extends AppScreen {
 
@@ -152,7 +153,7 @@ export default class QuestionnaireResponseScreen extends AppScreen {
                     {
                         item.answers.map((url, index) => {
                         return(
-                            <TouchableOpacity style={{marginRight: 10,}} onPress={() => this.showImage(url, index)}>
+                            <TouchableOpacity key={item.link + index} style={{marginRight: 10,}} onPress={() => this.showImage(url, index)}>
                                 <Image key={item.link+index}
                                        style={{width: 90, height: 70}}
                                        source={{url: url}} />
@@ -189,7 +190,11 @@ export default class QuestionnaireResponseScreen extends AppScreen {
                             {
                                 task.executionDate &&
                                 <Text style={[commonStyles.smallInfoText, {marginTop: 5}]}>
-                                    {moment(task.executionDate).format('ddd, MMM DD YYYY')}
+                                    {
+                                        task.executionDate &&
+                                        moment(task.executionDate).format(
+                                            uses24HourClock() ? 'ddd, MMM DD YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A')
+                                    }
                                 </Text>
                             }
                         </View>

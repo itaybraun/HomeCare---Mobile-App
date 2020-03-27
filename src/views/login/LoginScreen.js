@@ -3,10 +3,10 @@ import {
     View, Image, StyleSheet, TextInput, Platform,
     Keyboard, TouchableOpacity, TouchableWithoutFeedback, StatusBar,
 } from 'react-native';
-import {Button, Text, Form} from 'native-base';
+import {Button, Text, Form, Icon} from 'native-base';
 import AppScreen from '../../support/AppScreen';
 import Loading from '../../support/Loading';
-import {commonStyles, renderLoading} from '../../support/CommonStyles';
+import {appColors, commonStyles, renderLoading} from '../../support/CommonStyles';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 import {strings} from '../../localization/strings';
 import {API, APIRequest} from '../../api/API';
@@ -91,7 +91,7 @@ export default class LoginScreen extends AppScreen {
     };
 
     _onLoginSuccess = async (event) => {
-        this.setState({loading: true});
+        this.setState({loading: true, production: false});
 
         let api = new RESTAPI('https://cs2.azurewebsites.net');
 
@@ -121,30 +121,41 @@ export default class LoginScreen extends AppScreen {
 
                 {
                     this.state.production === true &&
-                        <AzureLoginView
-                            azureInstance={this.instance}
-                            loadingMessage=" "
-                            loadingView={renderLoading(true)}
-                            onSuccess={this._onLoginSuccess}
-                            onCancel={this._onLoginCancel}
-                        />
+                        <View style={{flex: 1}}>
+                            <AzureLoginView
+                                azureInstance={this.instance}
+                                loadingMessage=" "
+                                loadingView={renderLoading(true)}
+                                onSuccess={this._onLoginSuccess}
+                                onCancel={this._onLoginCancel}
+                            />
+                            <TouchableOpacity style={{position: 'absolute', padding: 12, right: 5, top: 5,}}
+                                              onPress={() => this.setState({production: null})}>
+                                <Icon type="AntDesign" name="close" style={{fontSize: 22, color: appColors.textColor}}/>
+                            </TouchableOpacity>
+                        </View>
                 }
                 {
                     this.state.production === null &&
-                        <Form style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
-                            <View style={styles.imageContainer}>
-                                <Image style={styles.image} source={require('../../assets/images/logo.png')}/>
+                        <View style={{flex: 1}}>
+                            <Form style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
+                                <View style={styles.imageContainer}>
+                                    <Image style={styles.image} source={require('../../assets/images/logo.png')}/>
+                                </View>
+                                <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onDevelopPress}>
+                                    <Text style={{fontWeight: 'bold'}}>{strings.Login.develop.toUpperCase()}</Text>
+                                </Button>
+                                <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onProdPress}>
+                                    <Text style={{fontWeight: 'bold'}}>{strings.Login.production.toUpperCase()}</Text>
+                                </Button>
+                                <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onSalHealthPress}>
+                                    <Text style={{fontWeight: 'bold'}}>{'SAL HEALTH'}</Text>
+                                </Button>
+                            </Form>
+                            <View style={styles.appVersion}>
+                                <Text>{this.state.appVersion}</Text>
                             </View>
-                            <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onDevelopPress}>
-                                <Text style={{fontWeight: 'bold'}}>{strings.Login.develop.toUpperCase()}</Text>
-                            </Button>
-                            <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onProdPress}>
-                                <Text style={{fontWeight: 'bold'}}>{strings.Login.production.toUpperCase()}</Text>
-                            </Button>
-                            <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onSalHealthPress}>
-                                <Text style={{fontWeight: 'bold'}}>{'SAL HEALTH'}</Text>
-                            </Button>
-                        </Form>
+                        </View>
                 }
 
 
@@ -202,9 +213,6 @@ export default class LoginScreen extends AppScreen {
                         </KeyboardAwareScrollView>
                     </TouchableWithoutFeedback>
                 }
-                <View style={styles.appVersion}>
-                    <Text>{this.state.appVersion}</Text>
-                </View>
                 {
                     false &&
                     <Loading loading={this.state.loading}/>

@@ -177,6 +177,10 @@ export const en = {
         completedTasks: 'Completed Tasks',
         noData: 'No completed tasks',
         executionDate: 'Execution Date',
+        sorting: 'Sort task',
+        sortByName: 'By Name',
+        sortByDateAsc: 'By Date Ascending',
+        sortByDateDesc: 'By Date Descending',
     },
 
     QuestionnaireResponse: {

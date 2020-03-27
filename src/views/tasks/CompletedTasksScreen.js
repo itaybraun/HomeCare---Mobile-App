@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, FlatList, StyleSheet, TouchableOpacity, TextInput, Text, Image, TouchableHighlight} from 'react-native';
 import AppScreen from '../../support/AppScreen';
-import {commonStyles, renderLoading, renderSeparator} from '../../support/CommonStyles';
+import {appColors, commonStyles, renderLoading, renderSeparator} from '../../support/CommonStyles';
 import {strings} from '../../localization/strings';
 import {APIRequest} from '../../api/API';
 import {Status, Task} from '../../models/Task';
@@ -10,6 +10,9 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import {Card, Icon} from 'native-base';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
+import ActionSheet from 'react-native-simple-action-sheet';
+import AsyncStorage from '@react-native-community/async-storage';
+import {AsyncStorageConsts} from '../../support/Consts';
 
 export default class CompletedTasksScreen extends AppScreen {
 
@@ -21,6 +24,13 @@ export default class CompletedTasksScreen extends AppScreen {
         return {
             title: strings.CompletedTasks.completedTasks,
             headerBackTitle: ' ',
+            headerRight: () => {
+                return (
+                    <TouchableOpacity style={{padding: 12}} onPress={navigation.getParam('showSortMenu')}>
+                        <Icon type="MaterialCommunityIcons" name="sort" style={{fontSize: 22, color: appColors.headerFontColor}}/>
+                    </TouchableOpacity>
+                )
+            }
         }
     };
 
@@ -28,7 +38,14 @@ export default class CompletedTasksScreen extends AppScreen {
         loading: false,
         tasks: [],
         responses: [],
+        sortBy: null,
     };
+
+    possibleSortValues = [
+        {key: 'name', label: strings.CompletedTasks.sortByName},
+        {key: 'dateAsc', label: strings.CompletedTasks.sortByDateAsc},
+        {key: 'dateDesc', label: strings.CompletedTasks.sortByDateDesc},
+    ];
 
     get patient(): Patient {
         return this.props.navigation.getParam('patient', null);
@@ -42,6 +59,10 @@ export default class CompletedTasksScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
+        this.props.navigation.setParams({
+            showSortMenu: this.showSortMenu,
+        });
     }
 
     //------------------------------------------------------------
@@ -52,7 +73,8 @@ export default class CompletedTasksScreen extends AppScreen {
         this.setState({loading: true});
         const tasks = await this.getTasks(refresh);
         const responses = await this.getResponses(refresh);
-        this.setState({...tasks, ...responses, loading: false});
+        const sortBy = await AsyncStorage.getItem(AsyncStorageConsts.COMPLETED_TASKS_SORT) || this.possibleSortValues[0].key;
+        this.setState({...tasks, ...responses, sortBy: sortBy, loading: false});
     };
 
     getTasks = async (refresh = true) => {
@@ -85,11 +107,50 @@ export default class CompletedTasksScreen extends AppScreen {
     // Methods
     //------------------------------------------------------------
 
+    showSortMenu = async () => {
+        let options = this.possibleSortValues.map(value => value.label);
+        if (Platform.OS === 'ios')
+            options.push(strings.Common.cancelButton);
+
+        ActionSheet.showActionSheetWithOptions({
+                options: options,
+                title: strings.CompletedTasks.sorting,
+                cancelButtonIndex: options.length - 1,
+            },
+            async (buttonIndex) => {
+                if (buttonIndex < this.possibleSortValues.length) {
+                    let value = this.possibleSortValues[buttonIndex].key;
+                    AsyncStorage.setItem(AsyncStorageConsts.COMPLETED_TASKS_SORT, value);
+                    this.setState({
+                        sortBy: value,
+                    })
+                }
+            });
+    };
+
     selectTask = (task: Task) => {
         this.navigateTo('QuestionnaireResponse',{
             task: task,
             response: this.state.responses.find(response => response.taskId === task.id),
         });
+    };
+
+    sortByName = (a: Task, b: Task) => {
+        if (a.text > b.text) {
+            return 1;
+        }
+        if (a.text < b.text) {
+            return -1;
+        }
+        return 0;
+    };
+
+    sortByDateAsc = (a: Task, b: Task) => {
+        return a.executionDate - b.executionDate;
+    };
+
+    sortByDateDesc = (a: Task, b: Task) => {
+        return b.executionDate - a.executionDate;
     };
 
     //------------------------------------------------------------
@@ -157,15 +218,9 @@ export default class CompletedTasksScreen extends AppScreen {
                                 task.executionDate &&
                                 <Text style={[commonStyles.smallInfoText, {marginTop: 5}]}>
                                     {
-                                        task.visit && task.visit.start && task.visit.end ?
-                                            moment(task.visit.start).format(
-                                                uses24HourClock() ? 'ddd, MMM DD YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
-                                            ) +
-                                            moment(task.visit.end).format(
-                                                uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
-                                            )
-
-                                            : ''
+                                        task.executionDate &&
+                                            moment(task.executionDate).format(
+                                                uses24HourClock() ? 'ddd, MMM DD YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A')
                                     }
                                 </Text>
                             }
@@ -177,6 +232,15 @@ export default class CompletedTasksScreen extends AppScreen {
     };
 
     render() {
+
+        let tasks = this.state.tasks;
+
+        console.log(this.hasOwnProperty('sort' + this.state.sortBy))
+
+        if (this.state.sortBy && this.hasOwnProperty('sortBy' + this.state.sortBy.capitalize())) {
+            tasks = tasks.sort(this['sortBy' + this.state.sortBy.capitalize()]);
+        }
+
         return (
             <View style={commonStyles.screenContainer}>
                 <SwipeListView
@@ -185,7 +249,7 @@ export default class CompletedTasksScreen extends AppScreen {
                     }}
                     style={styles.list}
                     contentContainerStyle={{ flexGrow: 1 }}
-                    data={this.state.tasks}
+                    data={tasks}
                     keyExtractor={item => item.id}
                     renderItem={this.renderTask}
                     renderHiddenItem={this.renderHiddenItem}

@@ -13,6 +13,10 @@ String.prototype.isEmpty = function () {
     return (this.length === 0 || !this.trim());
 };
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1)
+}
+
 export class Utils {
     static initialize() {
 
