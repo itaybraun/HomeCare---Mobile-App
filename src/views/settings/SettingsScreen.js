@@ -7,6 +7,7 @@ import { Container, Header, Content, Button, ListItem, Text, Icon, Left, Body, R
 import {commonStyles} from '../../support/CommonStyles';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from './../../support/Consts';
+import CookieManager from '@react-native-community/cookies';
 
 export default class SettingsScreen extends AppScreen {
 
@@ -14,7 +15,7 @@ export default class SettingsScreen extends AppScreen {
     // Properties
     //------------------------------------------------------------
 
-    static navigationOptions = ({ navigation }) => {
+    static navigationOptions = ({navigation}) => {
         return {
             title: strings.Settings.title,
             // headerLeft: () =>
@@ -53,6 +54,11 @@ export default class SettingsScreen extends AppScreen {
         });
     };
 
+    logout = async () => {
+        await CookieManager.clearAll(true)
+        this.navigateTo('Login');
+    };
+
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
@@ -61,37 +67,52 @@ export default class SettingsScreen extends AppScreen {
         return (
             <View style={{flex: 1}}>
                 <Container>
-                <Content bounces={false}>
-                    <ListItem icon>
-                        <Left>
-                            <Button style={{ backgroundColor: "#FF9501" }}>
-                                <Icon active name="bug" />
-                            </Button>
-                        </Left>
-                        <Body>
-                            <Text>{strings.Settings.qa}</Text>
-                        </Body>
-                        <Right>
-                            <Switch value={this.settings.qaMode} onValueChange={(value) => {
-                                this.updateSettings('qaMode', value);
-                            }}/>
-                        </Right>
-                    </ListItem>
-                    <ListItem icon onPress={this.changeImageQuality}>
-                        <Left>
-                            <Button style={{ backgroundColor: "#3CD340" }}>
-                                <Icon active name="ios-image" />
-                            </Button>
-                        </Left>
-                        <Body>
-                            <Text>{strings.Settings.imageQuality}</Text>
-                        </Body>
-                        <Right>
-                            <Text>{strings.Settings[this.settings.imageQuality]}</Text>
-                            <Icon name="arrow-forward" />
-                        </Right>
-                    </ListItem>
-                </Content>
+                    <Content bounces={false}>
+                        <ListItem icon>
+                            <Left>
+                                <Button style={{backgroundColor: "#FF9501"}}>
+                                    <Icon active name="bug"/>
+                                </Button>
+                            </Left>
+                            <Body>
+                                <Text>{strings.Settings.qa}</Text>
+                            </Body>
+                            <Right>
+                                <Switch value={this.settings.qaMode} onValueChange={(value) => {
+                                    this.updateSettings('qaMode', value);
+                                }}/>
+                            </Right>
+                        </ListItem>
+                        <ListItem icon onPress={this.changeImageQuality}>
+                            <Left>
+                                <Button style={{backgroundColor: "#3CD340"}}>
+                                    <Icon active name="ios-image"/>
+                                </Button>
+                            </Left>
+                            <Body>
+                                <Text>{strings.Settings.imageQuality}</Text>
+                            </Body>
+                            <Right>
+                                <Text>{strings.Settings[this.settings.imageQuality]}</Text>
+                                <Icon name="arrow-forward"/>
+                            </Right>
+                        </ListItem>
+                        <ListItem itemDivider>
+                            <Body>
+                                <Text></Text>
+                            </Body>
+                        </ListItem>
+                        <ListItem icon onPress={this.logout}>
+                            <Left>
+                                <Button style={{backgroundColor: "#007AFF"}}>
+                                    <Icon active name="md-exit"/>
+                                </Button>
+                            </Left>
+                            <Body>
+                                <Text>{strings.Settings.logout}</Text>
+                            </Body>
+                        </ListItem>
+                    </Content>
                 </Container>
             </View>
         );

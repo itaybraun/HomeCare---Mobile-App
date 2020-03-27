@@ -136,6 +136,7 @@ export const en = {
         original: 'Original',
         medium: 'Medium',
         small: 'Small',
+        logout: 'Delete Access Token',
     },
 
     Priorities: {
