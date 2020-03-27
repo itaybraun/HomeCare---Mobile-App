@@ -156,7 +156,17 @@ export default class CompletedTasksScreen extends AppScreen {
                             {
                                 task.executionDate &&
                                 <Text style={[commonStyles.smallInfoText, {marginTop: 5}]}>
-                                    {moment(task.executionDate).format('ddd, MMM DD YYYY')}
+                                    {
+                                        task.visit && task.visit.start && task.visit.end ?
+                                            moment(task.visit.start).format(
+                                                uses24HourClock() ? 'ddd, MMM DD YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
+                                            ) +
+                                            moment(task.visit.end).format(
+                                                uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
+                                            )
+
+                                            : ''
+                                    }
                                 </Text>
                             }
                         </View>

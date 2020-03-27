@@ -7,6 +7,7 @@ import {
     QuestionnaireResponse,
 } from '../../models/Questionnaire';
 import {Activity} from '../../models/Activity';
+import moment from 'moment';
 
 //------------------------------------------------------------
 // Login
@@ -180,6 +181,7 @@ function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, taskI
         resourceType: "QuestionnaireResponse",
         questionnaire: "Questionnaire/" + questionnaire.id,
         status: "completed",
+        authored : moment().toISOString(true),
         subject: {
             reference: "Patient/" + questionnaire.patient.id,
         },
