@@ -13,6 +13,8 @@ export class Visit extends BaseModel {
     tasks: [Task];
 
     addTaskId = (id) => {
+        if (!id)
+            return;
         if (!this.taskIds) {
             this.taskIds = [id];
         } else if (!this.taskIds.includes(id)) {

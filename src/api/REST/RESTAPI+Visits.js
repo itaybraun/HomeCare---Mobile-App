@@ -14,22 +14,20 @@ import {getTaskFromJson} from './RESTAPI+Tasks';
 
 RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
     try {
+        let params = {};
         let url = 'Encounter';
         if (patientId) {
-            url += '?subject=' + patientId;
+            params.subject = patientId;
         } else {
 
         }
-        let params = {};
-        params.pageLimit = 0;
-        params.flat = true;
-        params.resolveReferences = ["subject", "basedOn"];
-        const result = await this.server.request(this.createUrl(url), params);
-        console.log('getVisits1', result);
-
+        let fhirOptions = {};
+        fhirOptions.pageLimit = 0;
+        fhirOptions.flat = true;
+        fhirOptions.resolveReferences = ["subject", "basedOn"];
+        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        console.log('getVisits', result);
         let visits = result.map(json => getVisitFromJson(json)) || [];
-        console.log('getVisits2', visits);
-
         return new APIRequest(true, visits);
     } catch (error) {
         console.log(error);
@@ -145,6 +143,7 @@ function getJsonFromVisit(visit: Visit) {
         data.id = visit.id;
     }
 
+    visit.taskIds.filter(id => id);
     data.basedOn = visit.taskIds?.map(id => {
         return {
             reference: 'ServiceRequest/' + id,

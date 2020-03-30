@@ -254,19 +254,28 @@ export default class SelectVisitScreen extends AppScreen {
     };
 
     renderVisit = ({item, index}) => {
+
+        let visit: Visit = item;
+        let disabled = visit.start < new Date();
+
+        if (disabled && this.state.selectedVisitIndex !== index ) {
+            return <View style={{marginTop: -10}} />
+        }
+
         return (
             <TouchableOpacity
+                disabled={disabled}
                 style={{paddingHorizontal: 20,}}
                 onPress={() => this.selectVisit(index)}>
 
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {renderRadioButton(this.state.selectedVisitIndex === index)}
-                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>
+                    <Text style={[commonStyles.contentText, disabled && {color: '#cccccc'}, {flex: 1, marginLeft: 10}]}>
                         {
-                            moment(item.start).format(
+                            moment(visit.start).format(
                             uses24HourClock() ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
                             ) +
-                            moment(item.end).format(
+                            moment(visit.end).format(
                             uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
                             )
                         }
@@ -329,6 +338,7 @@ export default class SelectVisitScreen extends AppScreen {
                     isVisible={this.state.showingVisitDatePicker}
                     date={this.state.start || new Date()}
                     mode="date"
+                    minimumDate={new Date()}
                     onConfirm={(date) => {
                         let errors = this.state.errors;
                         errors.start = false;
@@ -347,6 +357,7 @@ export default class SelectVisitScreen extends AppScreen {
                     isVisible={this.state.showingVisitStartTimePicker}
                     headerTextIOS={strings.Visit.pickStartTime}
                     date={this.state.start ?? new Date()}
+                    minimumDate={new Date()}
                     mode="time"
                     is24Hour={uses24HourClock()}
                     onConfirm={(date) => {
@@ -368,6 +379,7 @@ export default class SelectVisitScreen extends AppScreen {
                     headerTextIOS={strings.Visit.pickEndTime}
                     date={this.state.end ?? new Date()}
                     mode="time"
+                    minimumDate={new Date()}
                     is24Hour={uses24HourClock()}
                     onConfirm={(date) => {
                         if (this.state.start) {

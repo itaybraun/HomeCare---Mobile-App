@@ -221,6 +221,14 @@ export default class NewTaskScreen extends AppScreen {
     };
 
     selectActivity = () => {
+
+        let errors = this.state.errors;
+        errors.activity = false;
+
+        this.setState({
+            errors: errors,
+        });
+
         this.navigateTo('SelectActivity', {
             activities: this.state.activities,
             selectedActivity: this.state.activity,
