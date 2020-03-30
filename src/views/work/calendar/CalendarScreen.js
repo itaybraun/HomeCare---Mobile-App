@@ -168,9 +168,20 @@ export default class CalendarScreen extends AppScreen {
                         </View>
                         <View style={styles.separator} />
                         <View style={{flex: 1, justifyContent: 'center'}}>
-                            <Text style={visit.tasks && visit.tasks.length > 0 ? commonStyles.yellowTitleText : commonStyles.titleText}>
-                                {visit.tasks?.[0]?.text || strings.Calendar.noTask}
-                            </Text>
+                            {
+                                visit.tasks && visit.tasks.length > 0 ?
+                                visit.tasks?.map(task => {
+                                    return (
+                                        <Text key={task.id} style={[commonStyles.yellowTitleText, {marginBottom: 5,}]}>
+                                            {task.text}
+                                        </Text>
+                                    );
+                                }) :
+                                    <Text style={commonStyles.titleText}>
+                                        {strings.Calendar.noTask}
+                                    </Text>
+                            }
+
                             {
                                 visit?.patient?.fullName &&
                                 <Text style={commonStyles.contentText}>{visit.patient.fullName}</Text>
