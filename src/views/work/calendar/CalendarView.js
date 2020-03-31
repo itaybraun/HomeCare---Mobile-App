@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {View, FlatList, StyleSheet, TouchableOpacity, TextInput, Text} from 'react-native';
 import AppScreen from '../../../support/AppScreen';
 import {commonStyles, renderLoading, renderSeparator} from '../../../support/CommonStyles';
@@ -12,24 +12,16 @@ import {Visit} from '../../../models/Visit';
 import {Card, Icon} from 'native-base';
 import {Task} from '../../../models/Task';
 import { Tooltip } from 'react-native-elements';
+import PropTypes from 'prop-types';
+import PatientTasks from '../../patients/patient/PatientTasks';
 
-export default class CalendarScreen extends AppScreen {
+export default class CalendarView extends Component {
 
     //------------------------------------------------------------
     // Properties
     //------------------------------------------------------------
 
-    static navigationOptions = ({ navigation }) => {
-        return {
-            title: strings.Calendar.myCalendar,
-            headerBackTitle: ' ',
-        }
-    };
-
     state = {
-        loading: false,
-        visits: [],
-        tasks: [],
         selectedDate: moment(new Date()).format('YYYY-MM-DD'),
     };
 
@@ -37,35 +29,9 @@ export default class CalendarScreen extends AppScreen {
     // Overrides
     //------------------------------------------------------------
 
-    componentDidMount(): void {
-        super.componentDidMount();
-
-        this.getData();
-    }
-
     //------------------------------------------------------------
     // Data
     //------------------------------------------------------------
-
-    getData = async (refresh = true) => {
-        this.setState({loading: true});
-        const visits = await this.getVisits();
-        this.setState({
-            ...visits,
-            loading: false,
-        });
-    };
-
-    getVisits = async () => {
-        let result: APIRequest = await this.api.getVisits();
-        if (result.success) {
-            let visits = result.data;
-            return {visits: visits};
-        } else {
-            this.showError(result.data);
-            return {visits: []};
-        }
-    };
 
     //------------------------------------------------------------
     // Methods
@@ -74,7 +40,7 @@ export default class CalendarScreen extends AppScreen {
     generateMarkedDates = () => {
         let markedDates = {};
 
-        for (const visit of this.state.visits) {
+        for (const visit of this.props.visits) {
             markedDates[moment(visit.start).format('YYYY-MM-DD')] = {marked: true}
         }
 
@@ -89,15 +55,15 @@ export default class CalendarScreen extends AppScreen {
 
     getSelectedDateVisits = () => {
 
-        return this.state.visits.filter(visit => {
+        return this.props.visits.filter(visit => {
             if (moment(visit.start).isSame(this.state.selectedDate, 'day')) {
                 return visit;
             }
         });
     };
 
-    editVisit = (visit) => {
-        this.navigateTo('Visit', {visit: visit, refresh: this.getData});
+    selectVisit = (visit) => {
+        this.props.selectVisit && this.props.selectVisit(visit);
     };
 
     //------------------------------------------------------------
@@ -155,24 +121,28 @@ export default class CalendarScreen extends AppScreen {
         let visit: Visit = item;
         const width = uses24HourClock() ? 50 : 80;
         return (
-            <TouchableOpacity style={styles.visitContainer} onPress={() => this.editVisit(visit)}>
+            <TouchableOpacity style={styles.visitContainer} onPress={() => this.selectVisit(visit)}>
                 <Card style={commonStyles.cardStyle}>
                     <View style={{flexDirection: 'row'}}>
                         <View style={{width: width, justifyContent: 'center'}}>
                             <Text style={styles.timeStyle}>
                                 {moment(visit.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}
                             </Text>
-                            <Text style={styles.timeStyle}>
+                            <Text style={[styles.timeStyle, {marginTop: 5,}]}>
                                 {moment(visit.end).format(uses24HourClock()  ? 'HH:mm' : 'hh:mm A')}
                             </Text>
                         </View>
                         <View style={styles.separator} />
                         <View style={{flex: 1, justifyContent: 'center'}}>
                             {
+                                visit?.patient?.fullName &&
+                                <Text style={commonStyles.contentText}>{visit.patient.fullName}</Text>
+                            }
+                            {
                                 visit.tasks && visit.tasks.length > 0 ?
                                 visit.tasks?.map(task => {
                                     return (
-                                        <Text key={task.id} style={[commonStyles.yellowTitleText, {marginBottom: 5,}]}>
+                                        <Text key={task.id} style={[commonStyles.yellowTitleText, {marginTop: 5,}]}>
                                             {task.text}
                                         </Text>
                                     );
@@ -182,14 +152,9 @@ export default class CalendarScreen extends AppScreen {
                                     </Text>
                             }
 
-                            {
-                                visit?.patient?.fullName &&
-                                <Text style={commonStyles.contentText}>{visit.patient.fullName}</Text>
-                            }
-
                         </View>
                         {
-                            this.settings.qaMode &&
+                            this.props.additionalData &&
                             <View style={{justifyContent: 'center', alignSelf: 'stretch'}}>
                                 <Tooltip
                                     overlayColor={'#FFFFFF00'}
@@ -225,7 +190,6 @@ export default class CalendarScreen extends AppScreen {
     };
 
     render() {
-
         return (
             <View style={commonStyles.screenContainer}>
                 <FlatList style={styles.list}
@@ -240,10 +204,15 @@ export default class CalendarScreen extends AppScreen {
                           onRefresh={this.getData}
                           refreshing={false}
                 />
-                {renderLoading(this.state.loading)}
             </View>
         );
     }
+}
+
+CalendarView.propTypes = {
+    visits: PropTypes.array.isRequired,
+    selectVisit: PropTypes.func,
+    additionalData: PropTypes.bool,
 }
 
 const styles = StyleSheet.create({

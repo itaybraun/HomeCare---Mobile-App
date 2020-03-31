@@ -65,6 +65,20 @@ export const commonStyles = {
     text: {
         ...commonTextProperties(),
     },
+    light: {
+        ...commonTextProperties(),
+        ...light(),
+    },
+    medium: {
+        ...commonTextProperties(),
+        ...medium(),
+    },
+
+    bold: {
+        ...commonTextProperties(),
+        ...bold(),
+    },
+
     h1: {
         fontSize: 56,
         ...commonTextProperties(),
@@ -218,26 +232,31 @@ export const commonStyles = {
 
 
     tabBar: {
+        backgroundColor: appColors.mainColor,
         flexDirection: 'row',
+        padding: 20,
+        paddingTop: 0,
     },
 
     tabItem: {
         flex: 1,
         alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: 2,
-        borderBottomColor: '#88888822',
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#707070',
     },
     tabItemText: {
         fontSize: 16,
+        ...medium(),
         textTransform: 'uppercase',
-        color: appColors.textColor,
+        color: '#FFFFFFB3',
     },
     tabItemSelected: {
-        borderBottomColor: appColors.linkColor,
+        borderBottomWidth: 2,
+        borderBottomColor: '#FFFFFF',
     },
     tabItemTextSelected: {
-        color: appColors.linkColor,
+        color: '#FFFFFF',
     },
 
 

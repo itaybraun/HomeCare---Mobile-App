@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StatusBar, Platform, Image, View} from 'react-native';
+import {StatusBar, Platform, Text, Image, View} from 'react-native';
 import LoginScreen from './src/views/login/LoginScreen';
 import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
@@ -16,7 +16,6 @@ import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import {appColors, commonStyles} from './src/support/CommonStyles';
 import TaskScreen from './src/views/tasks/TaskScreen';
 import RESTAPI from './src/api/REST/RESTAPI';
-import CalendarScreen from './src/views/work/calendar/CalendarScreen';
 import {Settings} from './src/models/Settings';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from './src/support/Consts';
@@ -96,7 +95,10 @@ export default class App extends React.Component {
 
 const defaultNavigationOptions = {
     headerStyle: {
-        backgroundColor: appColors.headerBackground,
+        backgroundColor: appColors.mainColor,
+        borderBottomWidth: 0,
+        elevation: 0,
+        shadowOpacity: 0
     },
     headerTitleStyle: {
         fontSize: 20,
@@ -104,6 +106,10 @@ const defaultNavigationOptions = {
     },
     headerTintColor: appColors.headerFontColor,
     ...TransitionPresets.SlideFromRightIOS,
+};
+
+const tabBarLabel = (focused, title) => {
+    return <Text style={[{textAlign: 'center'}, focused && commonStyles.bold]}>{title}</Text>
 };
 
 const PatientsStack = createStackNavigator({
@@ -126,7 +132,6 @@ const WorkStack = createStackNavigator({
     Task: TaskScreen,
     Flag: FlagScreen,
     SelectVisit: SelectVisitScreen,
-    Calendar: CalendarScreen,
     NewTask: NewTaskScreen,
     Visit: VisitScreen
 }, {
@@ -148,17 +153,35 @@ const Tabs = createBottomTabNavigator({
     Work: {
         screen: WorkStack,
         navigationOptions: {
-            tabBarLabel: strings.Tabs.work,
+            tabBarLabel: ({focused}) => {
+                return tabBarLabel(focused, strings.Tabs.work)
+            }
         },
     },
     Patients: {
         screen: PatientsStack,
         navigationOptions: {
-            tabBarLabel: strings.Tabs.patients,
+            tabBarLabel: ({focused}) => {
+                return tabBarLabel(focused, strings.Tabs.patients)
+            }
         },
     },
-    Messages: MessagesStack,
-    Settings: SettingsStack,
+    // Messages: {
+    //     screen: MessagesStack,
+    //     navigationOptions: {
+    //         tabBarLabel: ({focused}) => {
+    //             return tabBarLabel(focused, strings.Tabs.messages)
+    //         }
+    //     },
+    // },
+    Settings: {
+        screen: SettingsStack,
+        navigationOptions: {
+            tabBarLabel: ({focused}) => {
+                return tabBarLabel(focused, strings.Tabs.settings)
+            }
+        },
+    },
 }, {
     defaultNavigationOptions: ({navigation}) => ({
         tabBarIcon: ({focused, horizontal, tintColor}) => {
@@ -174,16 +197,18 @@ const Tabs = createBottomTabNavigator({
                 return <Image source={require('./src/assets/icons/tabs/settings.png')} style={tabStyle}/>;
             }
         },
+
     }),
     tabBarOptions: {
         activeTintColor: '#000000',
-        inactiveTintColor: '#777777',
+        inactiveTintColor: '#000000',
         adaptive: false,
         labelStyle: {
+            ...commonStyles.text,
             fontSize: 12,
         },
         style: {
-            backgroundColor: appColors.backgroundYellowColor,
+            backgroundColor: appColors.mainColor,
         }
     }
 });

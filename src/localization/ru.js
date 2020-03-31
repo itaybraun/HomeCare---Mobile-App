@@ -18,6 +18,7 @@ export const ru = {
         patients: 'Пациенты',
         chat: 'Чат',
         settings: 'Настройки',
+        messages: 'Сообщения',
     },
     Patients: {
         title: 'My Patients',

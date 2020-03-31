@@ -24,6 +24,7 @@ import {
 import {Card, Icon, Button, Text as NativeText, Container} from 'native-base';
 import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
+import CalendarView from './calendar/CalendarView';
 import {Status, Task} from '../../models/Task';
 import {uses24HourClock} from "react-native-localize";
 import {Flag} from '../../models/Flag';
@@ -48,12 +49,14 @@ export default class WorkScreen extends AppScreen {
         loading: false,
         tasks: [],
         sortedTasks: [],
+        visits: [],
         flags: [],
         sortedFlags: [],
         index: 0,
         routes: [
             { key: 'tasks', title: strings.Work.tasks },
-            { key: 'flags', title: strings.Work.flags },
+            { key: 'calendar', title: strings.Work.calendar },
+            { key: 'flags', title: strings.Work.alerts },
         ],
 
     };
@@ -69,7 +72,7 @@ export default class WorkScreen extends AppScreen {
 
         StatusBar.setBarStyle('light-content');
         if (Platform.OS === 'android')
-            StatusBar.setBackgroundColor(appColors.headerBackground);
+            StatusBar.setBackgroundColor(appColors.mainColor);
 
         this.eventEmitter.on('reloadTasks', async () => {
             const tasks = await this.getTasks();
@@ -88,8 +91,9 @@ export default class WorkScreen extends AppScreen {
     getData = async (refresh = true) => {
         this.setState({loading: true});
         const tasks = await this.getTasks(refresh);
+        const visits = await this.getVisits();
         const flags = await this.getFlags(refresh);
-        this.setState({...tasks, ...flags, loading: false});
+        this.setState({...tasks, ...visits, ...flags, loading: false});
     };
 
     getTasks = async (refresh = true) => {
@@ -110,6 +114,17 @@ export default class WorkScreen extends AppScreen {
             return {tasks: result.data, sortedTasks: sortedTasks};
         } else {
             this.showError(result.data);
+        }
+    };
+
+    getVisits = async () => {
+        let result: APIRequest = await this.api.getVisits();
+        if (result.success) {
+            let visits = result.data;
+            return {visits: visits};
+        } else {
+            this.showError(result.data);
+            return {visits: []};
         }
     };
 
@@ -143,6 +158,13 @@ export default class WorkScreen extends AppScreen {
     selectTask = (task) => {
         this.navigateTo('Task', {
             task: task,
+            refresh: this.getData,
+        });
+    };
+
+    selectVisit = (visit) => {
+        this.navigateTo('Visit', {
+            visit: visit,
             refresh: this.getData,
         });
     };
@@ -181,6 +203,8 @@ export default class WorkScreen extends AppScreen {
         switch (route.key) {
             case 'tasks':
                 return this.renderTasks();
+            case 'calendar':
+                return this.renderCalendar();
             case 'flags':
                 return this.renderFlags();
             default:
@@ -199,7 +223,7 @@ export default class WorkScreen extends AppScreen {
 
     renderListFooter = () => {
         return (
-            <View style={{height: 5}} />
+            <View style={{height: 0}} />
         );
     };
 
@@ -208,6 +232,18 @@ export default class WorkScreen extends AppScreen {
             <View style={commonStyles.emptyScreen}>
                 <Text style={commonStyles.smallContentText}>{strings.Work.noData}</Text>
             </View>
+        )
+    };
+
+    // Calendar
+
+    renderCalendar = () => {
+        return (
+            <CalendarView
+                visits={this.state.visits}
+                selectVisit={this.selectVisit}
+                additionalData={this.settings.qaMode}
+            />
         )
     };
 
@@ -277,25 +313,16 @@ export default class WorkScreen extends AppScreen {
                                  ListFooterComponent={this.renderListFooter}
                                  renderSectionHeader={({section: {title}}) => (
                                      <View style={{
-                                         backgroundColor: appColors.headerBackground,
-                                         alignItems: 'center',
+                                         backgroundColor: '#FFFFFF',
                                          padding: 10,
-                                         marginBottom: 10,
                                      }}>
-                                         <Text style={{fontSize: 18, fontWeight: 'bold', color: appColors.headerFontColor}}>{title}</Text>
+                                         <Text style={[commonStyles.medium, {fontSize: 16, color: appColors.mainColor}]}>{title}</Text>
                                      </View>
                                  )}
                                  renderSectionFooter={() => renderSeparator({height: 12})}
                                  onRefresh={this.getData}
                                  refreshing={false}
                     />
-                </View>
-                <View style={{ flexDirection: 'row', padding: 10, paddingTop: 5, alignItems: 'center', justifyContent: 'space-evenly'}}>
-                    <Button block
-                            style={{backgroundColor: '#EBC7F2', width: 140,}}
-                            onPress={() => this.navigateTo('Calendar')}>
-                        <NativeText style={{color: '#AB1FBD', fontWeight: 'bold'}}>{strings.Work.calendar?.toUpperCase()}</NativeText>
-                    </Button>
                 </View>
             </View>
         );
@@ -339,12 +366,10 @@ export default class WorkScreen extends AppScreen {
                                  ListFooterComponent={this.renderListFooter}
                                  renderSectionHeader={({section: {title}}) => (
                                      <View style={{
-                                         backgroundColor: appColors.headerBackground,
-                                         alignItems: 'center',
+                                         backgroundColor: '#FFFFFF',
                                          padding: 10,
-                                         marginBottom: 10,
                                      }}>
-                                        <Text style={{fontSize: 18, fontWeight: 'bold', color: appColors.headerFontColor}}>{title}</Text>
+                                         <Text style={[commonStyles.medium, {fontSize: 16, color: appColors.mainColor}]}>{title}</Text>
                                      </View>
                                  )}
                                  renderSectionFooter={() => renderSeparator({height: 12})}

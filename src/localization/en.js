@@ -22,6 +22,7 @@ export const en = {
         patients: 'Patients',
         chat: 'Chat',
         settings: 'Settings',
+        messages: 'Messages',
     },
     Patients: {
         title: 'My Patients',
@@ -78,6 +79,7 @@ export const en = {
         flags: 'All Flags',
         map: 'Map',
         calendar: 'Calendar',
+        alerts: 'Alerts',
     },
 
     Tasks: {
