@@ -23,6 +23,8 @@ import {AsyncStorageConsts} from './src/support/Consts';
 import EventEmitter from 'eventemitter3';
 import VisitScreen from './src/views/visits/VisitScreen';
 import SelectVisitScreen from './src/views/visits/SelectVisitScreen';
+import {setCustomText} from 'react-native-global-props/src/CustomFunctions/setCustomText';
+import {setCustomTextInput} from 'react-native-global-props/src/CustomFunctions/setCustomTextInput';
 
 // TODO: find a way to move this to RESTAPI
 import './src/api/REST/RESTAPI+Tasks';
@@ -57,6 +59,8 @@ export default class App extends React.Component {
 
     getData = async () => {
         this.setState({loading: true});
+        setCustomText({style: commonStyles.text});
+        setCustomTextInput({style: commonStyles.text});
         Utils.initialize();
         this.eventEmitter = new EventEmitter();
 

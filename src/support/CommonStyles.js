@@ -4,6 +4,7 @@ import { I18nManager } from 'react-native';
 import {Icon} from "native-base";
 
 export const appColors = {
+    mainColor: '#6E78F7',
     textColor: '#333333',
     linkColor: '#5C00EC',
     lineColor: '#CCCCCC',
@@ -16,12 +17,65 @@ export const appColors = {
 
 function commonTextProperties() {
     return {
+        fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue' : 'Roboto',
         //writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'
     };
 }
 
-export const commonStyles = {
+function light() {
+    return {
+        ...Platform.select({
+            ios: {
+                fontWeight: '300',
+            },
+            android: {
+                fontFamily: 'Roboto_light',
+            },
+        }),
+    }
+}
 
+function medium() {
+    return {
+        ...Platform.select({
+            ios: {
+                fontWeight: '600',
+            },
+            android: {
+                fontFamily: 'Roboto_medium',
+            },
+        }),
+    }
+}
+
+function bold() {
+    return {
+        ...Platform.select({
+            ios: {
+                fontWeight: 'bold',
+            },
+            android: {
+                fontFamily: 'Roboto_bold',
+            },
+        }),
+    }
+}
+
+export const commonStyles = {
+    text: {
+        ...commonTextProperties(),
+    },
+    h1: {
+        fontSize: 56,
+        ...commonTextProperties(),
+        ...medium(),
+    },
+
+    h2: {
+        fontSize: 26,
+        ...commonTextProperties(),
+        ...medium(),
+    },
     smallInfoText: {
         fontSize: 16,
         color: '#888888',
@@ -34,6 +88,12 @@ export const commonStyles = {
         ...commonTextProperties()
     },
 
+    buttonText: {
+        fontSize: 16,
+        ...commonTextProperties(),
+        ...medium(),
+    },
+
     titleText: {
         fontSize: 22,
         color: appColors.textColor,
@@ -42,9 +102,10 @@ export const commonStyles = {
 
     boldTitleText: {
         fontSize: 22,
-        fontWeight: 'bold',
         color: appColors.textColor,
-        ...commonTextProperties()
+        ...commonTextProperties(),
+        ...bold(),
+
     },
 
     yellowTitleText: {

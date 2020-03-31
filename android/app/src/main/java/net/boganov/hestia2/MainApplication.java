@@ -1,4 +1,4 @@
-package net.boganov.hestia22;
+package net.boganov.hestia2;
 
 import android.app.Application;
 import android.content.Context;

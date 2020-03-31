@@ -139,83 +139,30 @@ export default class LoginScreen extends AppScreen {
                     this.state.production === null &&
                         <View style={{flex: 1}}>
                             <Form style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
-                                <View style={styles.imageContainer}>
-                                    <Image style={styles.image} source={require('../../assets/images/logo.png')}/>
+                                <View style={{alignItems: 'center'}}>
+                                    <Text style={[commonStyles.h1, {color: appColors.mainColor}]}>{strings.Login.appName}</Text>
+                                    <View style={styles.imageContainer}>
+                                        <Image style={styles.image} source={require('../../assets/images/login.png')}/>
+                                    </View>
+                                    <Text style={[commonStyles.h2, {color: appColors.mainColor}]}>{strings.Login.homecarePlatform}</Text>
                                 </View>
-                                <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onDevelopPress}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Login.develop.toUpperCase()}</Text>
+                                <Button style={{backgroundColor: appColors.mainColor, width: 230, justifyContent: 'center'}} onPress={this.onDevelopPress}>
+                                    <Text style={commonStyles.buttonText}>{strings.Login.develop.toUpperCase()}</Text>
                                 </Button>
-                                <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onProdPress}>
-                                    <Text style={{fontWeight: 'bold'}}>{strings.Login.production.toUpperCase()}</Text>
+                                <Button style={{backgroundColor: appColors.mainColor, width: 230, justifyContent: 'center'}} onPress={this.onProdPress}>
+                                    <Text style={commonStyles.buttonText}>{strings.Login.production.toUpperCase()}</Text>
                                 </Button>
-                                <Button warning style={{width: 230, justifyContent: 'center'}} onPress={this.onSalHealthPress}>
-                                    <Text style={{fontWeight: 'bold'}}>{'SAL HEALTH'}</Text>
+                                <Button style={{backgroundColor: appColors.mainColor, width: 230, justifyContent: 'center'}} onPress={this.onSalHealthPress}>
+                                    <Text style={commonStyles.buttonText}>{'SAL HEALTH'}</Text>
                                 </Button>
                             </Form>
-                            <View style={styles.appVersion}>
-                                <Text>{this.state.appVersion}</Text>
+
+                            <View style={{flexDirection: 'row', marginHorizontal: 10, alignItems: 'flex-end', justifyContent:'space-between' }}>
+                                <Image style={styles.bottomLogo} source={require('../../assets/images/logo.png')} />
+                                <Text style={commonStyles.smallInfoText}>{this.state.appVersion}</Text>
                             </View>
+
                         </View>
-                }
-
-
-                { false &&
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <KeyboardAwareScrollView style={styles.container}
-                                                 getTextInputRefs={() => {
-                                                     return [this.usernameInput, this.passwordInput]
-                                                 }}
-                                                 contentContainerStyle={{flex: 1}}>
-                            <View style={styles.imageContainer}>
-                                <Image style={styles.image} source={require('../../assets/images/logo.png')}/>
-                            </View>
-                            <View style={styles.formContainer}>
-                                <View style={styles.formItem}>
-                                    <TextInput ref={obj => this.usernameInput = obj}
-                                               value={this.state.username}
-                                               style={commonStyles.input}
-                                               placeholder={strings.Login.username}
-                                               autoCapitalize='none'
-                                               autoCompleteType='username'
-                                               returnKeyType="next"
-                                               autoCorrect={false}
-                                               enablesReturnKeyAutomatically={true}
-                                               placeholderTextColor="#CCCCCC"
-                                               paddingRight={12}
-                                               paddingLeft={12}
-                                               onChangeText={text => this.setState({username: text})}
-                                               onSubmitEditing={() => this.passwordInput.focus()}
-                                    />
-                                </View>
-                                <View style={styles.formItem}>
-                                    <TextInput ref={obj => this.passwordInput = obj}
-                                               value={this.state.password}
-                                               style={commonStyles.input}
-                                               secureTextEntry
-                                               autoCompleteType='password'
-                                               returnKeyType="go"
-                                               autoCorrect={false}
-                                               placeholder={strings.Login.password}
-                                               enablesReturnKeyAutomatically={true}
-                                               placeholderTextColor="#CCCCCC"
-                                               paddingRight={12}
-                                               paddingLeft={12}
-                                               onChangeText={text => this.setState({password: text})}
-                                               onSubmitEditing={() => this.login()}
-                                    />
-                                </View>
-                                <View style={[styles.formItem, {marginTop: 40, alignItems: 'center',}]}>
-                                    <Button warning style={{paddingHorizontal: 40,}} onPress={this.login}>
-                                        <Text style={{fontWeight: 'bold'}}>{strings.Login.login.toUpperCase()}</Text>
-                                    </Button>
-                                </View>
-                            </View>
-                        </KeyboardAwareScrollView>
-                    </TouchableWithoutFeedback>
-                }
-                {
-                    false &&
-                    <Loading loading={this.state.loading}/>
                 }
                 {renderLoading(this.state.loading)}
             </SafeAreaView>
@@ -228,20 +175,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFFFF',
     },
-    appVersion: {
-        position: 'absolute',
-        bottom: 10,
-        right: 20,
-        alignItems: 'flex-end',
-    },
     imageContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 40,
     },
     image: {
-        width: 248,
-        height: 200,
+
     },
     formContainer: {
         flex: 1,
@@ -250,4 +189,9 @@ const styles = StyleSheet.create({
     formItem: {
         marginTop: 20,
     },
+
+    bottomLogo: {
+        width: 80,
+        height: 60,
+    }
 });

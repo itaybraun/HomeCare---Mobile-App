@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* Hestia2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* Hestia2Tests.m */; };
+		0E21EA379C3443FB8AFEBAFC /* Roboto_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDCC0986EE924DB3A76C43F8 /* Roboto_bold.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -16,9 +17,12 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* Hestia2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* Hestia2Tests.m */; };
+		304448E2C76242A895D7295C /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 64504EF98A7C42979AB7427D /* Roboto_medium.ttf */; };
 		3851C1FA0A21445022874697 /* libPods-Hestia2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DECEA61EAD68C0EFA944FEF /* libPods-Hestia2Tests.a */; };
+		4BFFB04C43894A5DA0364723 /* Roboto_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 068D004C2F054587A5DEA022 /* Roboto_light.ttf */; };
 		5C269D8AFD431391618085E9 /* libPods-Hestia2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 468B50BFE76354DE4A970042 /* libPods-Hestia2.a */; };
 		830788147BC1B26D1580E1E7 /* libPods-Hestia2-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC5257A691E843C54E11E907 /* libPods-Hestia2-tvOSTests.a */; };
+		8B09AC83D44D49BEBF20B3C2 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C17BC1E8F8F45A6B4E29133 /* Roboto.ttf */; };
 		A5E6440F8DB13FAB4DF85477 /* libPods-Hestia2-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7AB1438DC1E28F0E0004A78 /* libPods-Hestia2-tvOS.a */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +48,10 @@
 		00E356EE1AD99517003FC87E /* Hestia2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Hestia2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* Hestia2Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Hestia2Tests.m; sourceTree = "<group>"; };
+		068D004C2F054587A5DEA022 /* Roboto_light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_light.ttf; path = ../src/assets/fonts/Roboto_light.ttf; sourceTree = "<group>"; };
+		0A942D06A4A242B897A45DED /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		1182970C94C645DB8A63CCA9 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		11FEAB69A13348C7B35BEC8D /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Hestia2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hestia2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Hestia2/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Hestia2/AppDelegate.m; sourceTree = "<group>"; };
@@ -51,22 +59,39 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Hestia2/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Hestia2/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Hestia2/main.m; sourceTree = "<group>"; };
+		1C17BC1E8F8F45A6B4E29133 /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = ../src/assets/fonts/Roboto.ttf; sourceTree = "<group>"; };
 		1DF1BF8343917DEF523F0D7B /* Pods-Hestia2-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hestia2-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Hestia2-tvOS/Pods-Hestia2-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Hestia2-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hestia2-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Hestia2-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hestia2-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E43486CEF8043E8A1361FBF /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		38E49993BBC948879B6EC058 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		3F76D96BFB93455FBD8DD381 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		468B50BFE76354DE4A970042 /* libPods-Hestia2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hestia2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		568D1A5130DDD43CAFAB21C0 /* Pods-Hestia2-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hestia2-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Hestia2-tvOSTests/Pods-Hestia2-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5749225396BF428EAB795BBE /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		5FEC92A82BEB7EFBFCDE9B8A /* Pods-Hestia2Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hestia2Tests.debug.xcconfig"; path = "Target Support Files/Pods-Hestia2Tests/Pods-Hestia2Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		64504EF98A7C42979AB7427D /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = ../src/assets/fonts/Roboto_medium.ttf; sourceTree = "<group>"; };
+		699E6B82A1034F3A999E0063 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		839BCA779DB5D20D4E5B08B7 /* Pods-Hestia2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hestia2.release.xcconfig"; path = "Target Support Files/Pods-Hestia2/Pods-Hestia2.release.xcconfig"; sourceTree = "<group>"; };
 		8DECEA61EAD68C0EFA944FEF /* libPods-Hestia2Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hestia2Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9921C6ACAD6E188DC207B7AE /* Pods-Hestia2-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hestia2-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Hestia2-tvOSTests/Pods-Hestia2-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		9A21D3962A494A72894694E4 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		A56128BCC2E1406EB9DF4190 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		AAFCFE58B1E3408B93263D77 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		ABA2FF3CCAAF3499B76DE826 /* Pods-Hestia2-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hestia2-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Hestia2-tvOS/Pods-Hestia2-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		B7AB1438DC1E28F0E0004A78 /* libPods-Hestia2-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hestia2-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC5257A691E843C54E11E907 /* libPods-Hestia2-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hestia2-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDCC0986EE924DB3A76C43F8 /* Roboto_bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_bold.ttf; path = ../src/assets/fonts/Roboto_bold.ttf; sourceTree = "<group>"; };
+		C68AA6F1923B4F4D90DDEF3A /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		CF703A70B57B46D0AC698C61 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		DCB5A5B8989E49058CA34265 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		E1ED5A6E78DDCA3A82F05EC2 /* Pods-Hestia2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hestia2.debug.xcconfig"; path = "Target Support Files/Pods-Hestia2/Pods-Hestia2.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F0EBED04712044FA9AB04CCA /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		F1074564B0EA4D6F98FE8A53 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		F62B53B23718CFD7EF319E1E /* Pods-Hestia2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hestia2Tests.release.xcconfig"; path = "Target Support Files/Pods-Hestia2Tests/Pods-Hestia2Tests.release.xcconfig"; sourceTree = "<group>"; };
+		FC472602F70E4452BD77B896 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +189,34 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5138F38F1C17466DB21C2BC5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BDCC0986EE924DB3A76C43F8 /* Roboto_bold.ttf */,
+				068D004C2F054587A5DEA022 /* Roboto_light.ttf */,
+				64504EF98A7C42979AB7427D /* Roboto_medium.ttf */,
+				1C17BC1E8F8F45A6B4E29133 /* Roboto.ttf */,
+				F1074564B0EA4D6F98FE8A53 /* AntDesign.ttf */,
+				CF703A70B57B46D0AC698C61 /* Entypo.ttf */,
+				9A21D3962A494A72894694E4 /* EvilIcons.ttf */,
+				F0EBED04712044FA9AB04CCA /* Feather.ttf */,
+				0A942D06A4A242B897A45DED /* FontAwesome.ttf */,
+				2E43486CEF8043E8A1361FBF /* FontAwesome5_Brands.ttf */,
+				C68AA6F1923B4F4D90DDEF3A /* FontAwesome5_Regular.ttf */,
+				3F76D96BFB93455FBD8DD381 /* FontAwesome5_Solid.ttf */,
+				11FEAB69A13348C7B35BEC8D /* Fontisto.ttf */,
+				38E49993BBC948879B6EC058 /* Foundation.ttf */,
+				DCB5A5B8989E49058CA34265 /* Ionicons.ttf */,
+				FC472602F70E4452BD77B896 /* MaterialCommunityIcons.ttf */,
+				A56128BCC2E1406EB9DF4190 /* MaterialIcons.ttf */,
+				699E6B82A1034F3A999E0063 /* Octicons.ttf */,
+				AAFCFE58B1E3408B93263D77 /* rubicon-icon-font.ttf */,
+				5749225396BF428EAB795BBE /* SimpleLineIcons.ttf */,
+				1182970C94C645DB8A63CCA9 /* Zocial.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,6 +233,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				00BBE8C301452826D4591BAC /* Pods */,
+				5138F38F1C17466DB21C2BC5 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -285,7 +339,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -344,6 +398,10 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				0E21EA379C3443FB8AFEBAFC /* Roboto_bold.ttf in Resources */,
+				4BFFB04C43894A5DA0364723 /* Roboto_light.ttf in Resources */,
+				304448E2C76242A895D7295C /* Roboto_medium.ttf in Resources */,
+				8B09AC83D44D49BEBF20B3C2 /* Roboto.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

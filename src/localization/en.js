@@ -9,6 +9,8 @@ export const en = {
         okButton: 'OK',
     },
     Login: {
+        appName: 'Hestia',
+        homecarePlatform: 'A Homecare Platform',
         username: 'Username',
         password: 'Password',
         login: 'Login',
