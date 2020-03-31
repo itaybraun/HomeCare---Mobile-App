@@ -130,10 +130,10 @@ android {
     }
 
     defaultConfig {
-        applicationId "net.boganov.hestia"
+        applicationId "net.boganov.hestia2"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 40
+        versionCode 1
         versionName "0.0.1"
     }
     splits {
