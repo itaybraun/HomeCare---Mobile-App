@@ -143,7 +143,7 @@ function getJsonFromVisit(visit: Visit) {
         data.id = visit.id;
     }
 
-    visit.taskIds.filter(id => id);
+    visit.taskIds && visit.taskIds.filter(id => id);
     data.basedOn = visit.taskIds?.map(id => {
         return {
             reference: 'ServiceRequest/' + id,
