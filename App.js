@@ -24,6 +24,7 @@ import VisitScreen from './src/views/visits/VisitScreen';
 import SelectVisitScreen from './src/views/visits/SelectVisitScreen';
 import {setCustomText} from 'react-native-global-props/src/CustomFunctions/setCustomText';
 import {setCustomTextInput} from 'react-native-global-props/src/CustomFunctions/setCustomTextInput';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 // TODO: find a way to move this to RESTAPI
 import './src/api/REST/RESTAPI+Tasks';
@@ -82,12 +83,14 @@ export default class App extends React.Component {
         }
 
         return (
-            <AppNavigator
-                screenProps={{
-                    settings: this.settings,
-                    eventEmitter: this.eventEmitter,
-                }}
-            />
+            <SafeAreaProvider>
+                <AppNavigator
+                    screenProps={{
+                        settings: this.settings,
+                        eventEmitter: this.eventEmitter,
+                    }}
+                />
+            </SafeAreaProvider>
         );
     }
 }
