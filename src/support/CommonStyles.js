@@ -5,7 +5,7 @@ import {Icon} from "native-base";
 
 export const appColors = {
     mainColor: '#6E78F7',
-    textColor: '#333333',
+    textColor: '#0D0D0D',
     linkColor: '#5C00EC',
     lineColor: '#CCCCCC',
     yellowColor: '#FEC260',
@@ -234,7 +234,7 @@ export const commonStyles = {
     tabBar: {
         backgroundColor: appColors.mainColor,
         flexDirection: 'row',
-        padding: 20,
+        padding: 10,
         paddingTop: 0,
     },
 
@@ -360,7 +360,7 @@ export const renderTabBar = (props, selectedIndex, onIndexChange) => {
                             key={route.key}
                             style={[commonStyles.tabItem, selectedIndex === i ? commonStyles.tabItemSelected : {}]}
                             onPress={() => onIndexChange && onIndexChange(i)}>
-                            <Text style={[commonStyles.tabItemText, selectedIndex === i ? commonStyles.tabItemTextSelected : {}]}>{route.title}</Text>
+                            <Text numberOfLines={1} style={[commonStyles.tabItemText, selectedIndex === i ? commonStyles.tabItemTextSelected : {}]}>{route.title}</Text>
                         </TouchableOpacity>
                     );
                 })
@@ -387,3 +387,4 @@ export const renderRadioButton = (selected) => {
         </View>
     );
 };
+

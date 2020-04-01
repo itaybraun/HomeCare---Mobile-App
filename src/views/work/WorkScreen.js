@@ -25,6 +25,7 @@ import {Card, Icon, Button, Text as NativeText, Container} from 'native-base';
 import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
 import CalendarView from './calendar/CalendarView';
+import TaskRenderer from '../tasks/TaskRenderer';
 import {Status, Task} from '../../models/Task';
 import {uses24HourClock} from "react-native-localize";
 import {Flag} from '../../models/Flag';
@@ -254,46 +255,7 @@ export default class WorkScreen extends AppScreen {
         let task: Task = item;
 
         return (
-            <TouchableOpacity style={commonStyles.listItemContainer}
-                              onPress={() => this.selectTask(task)}>
-                <Card style={[commonStyles.cardStyle, task.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
-                    <View style={{flex: 1, flexDirection: 'row', alignItems:'center'}}>
-                        <Image source={require('../../assets/icons/tasks/task.png')} style={{width: 48, height: 48}} />
-                        <Text
-                            style={[commonStyles.yellowTitleText, { flex: 1, backgroundColor: '#ffffff', marginLeft: 10}]}
-                            numberOfLines={2}>
-                            {task.text}
-                        </Text>
-                    </View>
-                    <View style={{flex: 1, marginTop: 16, flexDirection: 'row', alignItems: 'center',}}>
-                        <Text style={[commonStyles.smallContentText]}>{strings.Task.when}: </Text>
-                        {
-                            task.visit ?
-                                <Text style={[{flex: 1}, commonStyles.smallContentText, {fontWeight: 'bold'}]}>
-                                    {
-                                        task.visit && task.visit.start && task.visit.end ?
-                                            moment(task.visit.start).format(
-                                                uses24HourClock() ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
-                                            ) +
-                                            moment(task.visit.end).format(
-                                                uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
-                                            )
-
-                                            : ''
-                                    }
-                                </Text>
-                                :
-                                <Text style={[commonStyles.smallContentText, {color: '#FF0000'}]}>
-                                    {strings.Tasks.noSchedule}
-                                </Text>
-                        }
-                    </View>
-                    <View style={{flex: 1, marginTop: 16, flexDirection: 'row'}}>
-                        <Text style={[commonStyles.smallContentText]}>{strings.Task.priority}: </Text>
-                        <Text style={[commonStyles.smallContentText, {fontWeight: 'bold'}]}>{strings.Priorities[item.priority]}</Text>
-                    </View>
-                </Card>
-            </TouchableOpacity>
+            <TaskRenderer task={task} selectTask={this.selectTask} />
         )
     };
 
