@@ -112,7 +112,7 @@ export default class CalendarView extends Component {
     renderListEmpty = () => {
         return (
             <View style={commonStyles.emptyScreen}>
-                <Text style={commonStyles.contentText}>{strings.formatString(strings.Calendar.noVisits, this.state.selectedDate)}</Text>
+                <Text style={commonStyles.smallContentText}>{strings.formatString(strings.Calendar.noVisits, this.state.selectedDate)}</Text>
             </View>
         )
     };
@@ -135,14 +135,14 @@ export default class CalendarView extends Component {
                         <View style={styles.separator} />
                         <View style={{flex: 1, justifyContent: 'center'}}>
                             {
-                                visit?.patient?.fullName &&
+                                visit.patient?.fullName &&
                                 <Text style={commonStyles.contentText}>{visit.patient.fullName}</Text>
                             }
                             {
                                 visit.tasks && visit.tasks.length > 0 ?
                                 visit.tasks?.map(task => {
                                     return (
-                                        <Text key={task.id} style={[commonStyles.yellowTitleText, {marginTop: 5,}]}>
+                                        <Text key={task.id} style={[commonStyles.contentText, {color: '#F37E08', marginTop: 5,}]}>
                                             {task.text}
                                         </Text>
                                     );
@@ -227,12 +227,12 @@ const styles = StyleSheet.create({
 
     timeStyle: {
         ...commonStyles.contentText,
-        color: '#9296FE',
+        color: '#6E78F7',
     },
 
     separator: {
         marginHorizontal: 10,
         width: 1,
-        backgroundColor: '#807979'
+        backgroundColor: '#707070'
     }
 });
