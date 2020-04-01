@@ -29,6 +29,8 @@ export class Task extends BaseModel {
 
     status: Status;
 
+    notes: String;
+
     get isPriorityImportant(): Boolean {
         return [
             Priority.ASAP,

@@ -64,6 +64,9 @@ export default class SettingsScreen extends AppScreen {
     //------------------------------------------------------------
 
     render() {
+
+        console.log(this.settings.qaMode)
+
         return (
             <View style={{flex: 1}}>
                 <Container>

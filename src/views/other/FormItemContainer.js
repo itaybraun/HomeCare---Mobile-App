@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, Text, KeyboardAvoidingView, Animated} from 'react-native';
-import {appColors} from '../../support/CommonStyles';
+import {appColors, commonStyles} from '../../support/CommonStyles';
 import PropTypes from 'prop-types';
 import {strings} from '../../localization/strings';
 
@@ -30,7 +30,7 @@ export default class FormItemContainer extends Component {
 
     render() {
 
-        let color = appColors.linkColor;
+        let color = appColors.textColor;
         this.shakeAnimation = new Animated.Value(0);
 
         if (this.props.error) {
@@ -40,21 +40,20 @@ export default class FormItemContainer extends Component {
             color = appColors.textColor;
 
         return (
-            <View {...this.props} style={{marginBottom: 20,}}>
+            <View {...this.props}>
                 <Animated.View style={[
                     styles.container,
                     {...this.props.style},
                     {borderColor: color},
                     {transform: [{translateX: this.shakeAnimation}]}
                 ]}>
-                    {this.props.children}
                     {
                         this.props.title &&
                         <View style={styles.titleContainer}>
-                            <View style={styles.borderEraser}/>
-                            <Text style={[styles.titleText, {color: color}]}>{this.props.title}</Text>
+                            <Text style={[commonStyles.smallInfoText]}>{this.props.title}</Text>
                         </View>
                     }
+                    {this.props.children}
                 </Animated.View>
                 {
                     this.props.bottomInfo &&
@@ -75,23 +74,19 @@ FormItemContainer.propTypes = {
 
 const styles = StyleSheet.create({
     container: {
-        borderRadius: 4,
-        borderWidth: 2,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
         overflow: 'visible',
+        borderBottomColor: '#70707026',
+        borderBottomWidth: 1,
     },
 
     titleContainer: {
-        position: 'absolute',
-        paddingHorizontal: 5,
-        top: -10,
-        left: 6,
-        height: 17,
-        justifyContent: 'center',
-        alignItems: 'center',
+        marginBottom: 5,
     },
 
     titleText: {
-
+        ...commonStyles.infoText,
     },
     borderEraser: {
         backgroundColor: '#FFFFFF',

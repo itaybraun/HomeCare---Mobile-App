@@ -122,6 +122,12 @@ export const commonStyles = {
 
     },
 
+    mainColorTitle: {
+        fontSize: 20,
+        color: appColors.mainColor,
+        ...commonTextProperties()
+    },
+
     yellowTitleText: {
         fontSize: 22,
         color: appColors.yellowColor,
@@ -228,6 +234,7 @@ export const commonStyles = {
     formItemText: {
         fontSize: 18,
         color: appColors.textColor,
+        ...commonTextProperties()
     },
 
 
