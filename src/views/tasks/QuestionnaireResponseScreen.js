@@ -156,7 +156,8 @@ export default class QuestionnaireResponseScreen extends AppScreen {
                             <TouchableOpacity key={item.link + index} style={{marginRight: 10,}} onPress={() => this.showImage(url, index)}>
                                 <Image key={item.link+index}
                                        style={{width: 90, height: 70}}
-                                       source={{url: url}} />
+                                       source={{uri: url}}
+                                />
                             </TouchableOpacity>
                         );
                     })}
