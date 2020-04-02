@@ -7,6 +7,7 @@ export const en = {
         noButton: 'No',
         yesButton: 'Yes',
         okButton: 'OK',
+        doneButton: 'Done',
     },
     Login: {
         appName: 'Hestia',
@@ -94,6 +95,7 @@ export const en = {
         addTask: 'Add Task',
         taskDetails: 'Task Details',
         task: 'Task',
+        editTask: 'Task - Edit',
         taskId: 'Task ID',
         created: 'Created',
         patient: 'Patient',

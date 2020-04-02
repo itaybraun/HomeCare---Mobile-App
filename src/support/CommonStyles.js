@@ -2,9 +2,11 @@ import React from 'react';
 import {View, Platform, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
 import { I18nManager } from 'react-native';
 import {Icon} from "native-base";
+import {TransitionPresets} from 'react-navigation-stack';
 
 export const appColors = {
     mainColor: '#6E78F7',
+    secondColor: '#FFFFFF',
     textColor: '#0D0D0D',
     linkColor: '#5C00EC',
     lineColor: '#CCCCCC',
@@ -109,13 +111,13 @@ export const commonStyles = {
     },
 
     titleText: {
-        fontSize: 22,
+        fontSize: 20,
         color: appColors.textColor,
         ...commonTextProperties()
     },
 
     boldTitleText: {
-        fontSize: 22,
+        fontSize: 20,
         color: appColors.textColor,
         ...commonTextProperties(),
         ...bold(),
@@ -147,7 +149,7 @@ export const commonStyles = {
     },
 
     smallContentText: {
-        fontSize: 16,
+        fontSize: 18,
         color: appColors.textColor,
         ...commonTextProperties()
     },
@@ -393,5 +395,35 @@ export const renderRadioButton = (selected) => {
             }
         </View>
     );
+};
+
+export const defaultNavigationOptions = {
+    headerStyle: {
+        backgroundColor: appColors.mainColor,
+        borderBottomWidth: 0,
+        elevation: 0,
+        shadowOpacity: 0
+    },
+    headerTitleStyle: {
+        fontSize: 20,
+        color: appColors.headerFontColor,
+    },
+    headerTintColor: appColors.headerFontColor,
+    ...TransitionPresets.SlideFromRightIOS,
+};
+
+export const popupNavigationOptions = {
+    headerStyle: {
+        backgroundColor: appColors.secondColor,
+        borderBottomWidth: 0,
+        elevation: 0,
+        shadowOpacity: 0
+    },
+    headerTitleStyle: {
+        fontSize: 20,
+        color: 'black',
+    },
+    headerTintColor: 'black',
+    ...TransitionPresets.ModalSlideFromBottomIOS,
 };
 

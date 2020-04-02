@@ -11,7 +11,7 @@ import {
 import AppScreen from '../../support/AppScreen';
 import {
     appColors,
-    commonStyles,
+    commonStyles, popupNavigationOptions,
     renderDisclosureIndicator,
     renderLoading, renderRadioButton,
     renderSeparator,
@@ -26,6 +26,7 @@ import {uses24HourClock} from "react-native-localize";
 import {APIRequest} from '../../api/API';
 import {Visit} from '../../models/Visit';
 import {Request} from '../../support/Utils';
+import {TransitionPresets} from 'react-navigation-stack';
 
 export default class SelectVisitScreen extends AppScreen {
 
@@ -37,6 +38,22 @@ export default class SelectVisitScreen extends AppScreen {
         return {
             title: strings.Visit.selectAVisit,
             headerBackTitle: ' ',
+            ...popupNavigationOptions,
+            ...TransitionPresets.SlideFromRightIOS,
+            headerLeft: () => {
+                return (
+                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('cancel')}>
+                        <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{strings.Common.cancelButton}</Text>
+                    </TouchableOpacity>
+                )
+            },
+            headerRight: () => {
+                return (
+                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('done')}>
+                        <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{strings.Common.doneButton}</Text>
+                    </TouchableOpacity>
+                )
+            }
         }
     };
 
@@ -63,6 +80,12 @@ export default class SelectVisitScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
+        this.props.navigation.setParams({
+            done: this.submit,
+            cancel: this.cancel,
+            hideTabBar: true,
+        });
     }
 
     //------------------------------------------------------------
@@ -305,7 +328,11 @@ export default class SelectVisitScreen extends AppScreen {
     render() {
 
         if (this.state.loading) {
-            return renderLoading(this.state.loading)
+            return (
+                <View style={commonStyles.screenContainer}>
+                    {renderLoading(this.state.loading)}
+                </View>
+            )
         }
 
         return (
@@ -332,7 +359,7 @@ export default class SelectVisitScreen extends AppScreen {
                     </Button>
                 </View>
 
-
+                {renderLoading(this.state.loading)}
 
                 <DateTimePickerModal
                     isVisible={this.state.showingVisitDatePicker}

@@ -13,7 +13,7 @@ import {Utils} from './src/support/Utils';
 import FlagsScreen from './src/views/patients/patient/flags/FlagsScreen';
 import PatientScreen from './src/views/patients/patient/PatientScreen';
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
-import {appColors, commonStyles} from './src/support/CommonStyles';
+import {appColors, commonStyles, defaultNavigationOptions} from './src/support/CommonStyles';
 import TaskScreen from './src/views/tasks/TaskScreen';
 import RESTAPI from './src/api/REST/RESTAPI';
 import {Settings} from './src/models/Settings';
@@ -42,6 +42,7 @@ import GeneralScreen from './src/views/patients/patient/general/GeneralScreen';
 import ImageQualityScreen from './src/views/settings/ImageQualityScreen';
 import CompletedTasksScreen from './src/views/tasks/CompletedTasksScreen';
 import QuestionnaireResponseScreen from './src/views/tasks/QuestionnaireResponseScreen';
+import EditTaskScreen from './src/views/tasks/EditTaskScreen';
 
 export default class App extends React.Component {
 
@@ -95,22 +96,6 @@ export default class App extends React.Component {
     }
 }
 
-
-const defaultNavigationOptions = {
-    headerStyle: {
-        backgroundColor: appColors.mainColor,
-        borderBottomWidth: 0,
-        elevation: 0,
-        shadowOpacity: 0
-    },
-    headerTitleStyle: {
-        fontSize: 20,
-        color: appColors.headerFontColor,
-    },
-    headerTintColor: appColors.headerFontColor,
-    ...TransitionPresets.SlideFromRightIOS,
-};
-
 const tabBarLabel = (focused, title) => {
     return <Text style={[{textAlign: 'center'}, focused && commonStyles.bold]}>{title}</Text>
 };
@@ -133,6 +118,7 @@ const PatientsStack = createStackNavigator({
 const WorkStack = createStackNavigator({
     Work: WorkScreen,
     Task: TaskScreen,
+    EditTask: EditTaskScreen,
     Flag: FlagScreen,
     SelectVisit: SelectVisitScreen,
     NewTask: NewTaskScreen,
@@ -140,11 +126,13 @@ const WorkStack = createStackNavigator({
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });
+
 const MessagesStack = createStackNavigator({
     Messages: MessagesScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });
+
 const SettingsStack = createStackNavigator({
     Settings: SettingsScreen,
     ImageQuality: ImageQualityScreen,
@@ -158,7 +146,7 @@ const Tabs = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: ({focused}) => {
                 return tabBarLabel(focused, strings.Tabs.work)
-            }
+            },
         },
     },
     Patients: {
@@ -199,8 +187,7 @@ const Tabs = createBottomTabNavigator({
             } else if (routeName === 'Settings') {
                 return <Image source={require('./src/assets/icons/tabs/settings.png')} style={tabStyle}/>;
             }
-        },
-
+        }
     }),
     tabBarOptions: {
         activeTintColor: '#000000',
@@ -215,6 +202,20 @@ const Tabs = createBottomTabNavigator({
         }
     }
 });
+
+WorkStack.navigationOptions = ({ navigation }) => {
+    let hideTabBar = navigation.state.routes[navigation.state.index].params?.hideTabBar || false;
+    return {
+        tabBarVisible: !hideTabBar
+    }
+};
+
+PatientsStack.navigationOptions = ({ navigation }) => {
+    let hideTabBar = navigation.state.routes[navigation.state.index].params?.hideTabBar || false;
+    return {
+        tabBarVisible: !hideTabBar
+    }
+};
 
 const AppNavigator = createAppContainer(
     createSwitchNavigator({

@@ -11,8 +11,8 @@ import {
 import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import {Status, Task} from '../../models/Task';
-import {appColors, commonStyles, renderLoading} from '../../support/CommonStyles';
-import {Button, Form, Icon, Card, Container, Content, List, ListItem, Left, Body, Right, Text} from 'native-base';
+import {appColors, commonStyles, renderLoading, popupNavigationOptions} from '../../support/CommonStyles';
+import {Button, Form, Icon, Left, Text, Container, Content, List, ListItem, Right, Body} from 'native-base';
 import FormItemContainer from '../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
@@ -23,26 +23,30 @@ import ActionSheet from 'react-native-simple-action-sheet';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../support/Consts';
 import TaskRenderer from './TaskRenderer';
+import {TransitionPresets} from 'react-navigation-stack';
 
-export default class TaskScreen extends AppScreen {
+export default class EditTaskScreen extends AppScreen {
 
     //------------------------------------------------------------
     // Properties
     //------------------------------------------------------------
 
     static navigationOptions = ({navigation}) => {
-        const task: Task = navigation.getParam('task', null);
-        let title = "";
-        if (task)
-            title = strings.Task.taskDetails;
         return {
-            title: title,
-            headerBackTitle: ' ',
+            title: strings.Task.editTask,
+            ...popupNavigationOptions,
+            headerLeft: () => {
+                return (
+                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('cancel')}>
+                        <Icon type="Ionicons" name="md-close"
+                              style={{fontSize: 24, color: 'black'}}/>
+                    </TouchableOpacity>
+                )
+            },
             headerRight: () => {
                 return (
-                    <TouchableOpacity style={{padding: 12}} onPress={navigation.getParam('showMenu')}>
-                        <Icon type="Entypo" name="dots-three-horizontal"
-                              style={{fontSize: 22, color: appColors.headerFontColor}}/>
+                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('submit')}>
+                        <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{strings.Common.submitButton}</Text>
                     </TouchableOpacity>
                 )
             }
@@ -61,10 +65,10 @@ export default class TaskScreen extends AppScreen {
     componentDidMount(): void {
         super.componentDidMount();
 
-        //this.getData();
-
         this.props.navigation.setParams({
-            showMenu: this.showMenu,
+            cancel: this.cancel,
+            submit: this.submit,
+            hideTabBar: true,
         });
     }
 
@@ -72,64 +76,25 @@ export default class TaskScreen extends AppScreen {
     // Data
     //------------------------------------------------------------
 
-    getData = async (refresh = true) => {
-        this.setState({loading: true});
-        const task = await this.getTask();
-        this.setState({
-            ...task,
-            loading: false,
-        })
-    };
-
-    getTask = async () => {
-        let task: Task = this.props.navigation.getParam('task', null);
-        let result: APIRequest = await this.api.getTask(task.id);
-
-        if (result.success) {
-            task = result.data;
-        }
-
-        return {
-            task: task,
-        };
-    };
-
     //------------------------------------------------------------
     // Methods
     //------------------------------------------------------------
 
-    showMenu = () => {
-        let options = [
-            strings.Task.menuEdit,
-            strings.Task.menuExecute,
-            strings.Task.menuCancel,
-        ];
-        if (Platform.OS === 'ios')
-            options.push(strings.Common.cancelButton);
+    cancel = () => {
+        this.pop();
+    }
 
-        ActionSheet.showActionSheetWithOptions({
-                options: options,
-                cancelButtonIndex: options.length - 1,
-            },
-            (buttonIndex) => {
-                switch (buttonIndex) {
-                    case 0:
-                        this.editTask();
-                        break;
-                }
-            });
-    };
-
-    editTask = () => {
-        this.navigateTo('EditTask', {
+    selectVisit = () => {
+        this.navigateTo('SelectVisit', {
             task: this.props.navigation.getParam('task', null),
-            updateTask: this.updateTask,
+            selectedVisit: this.state.visit,
+            submitVisit: this.submitVisit,
         });
     };
 
-    updateTask = async (task) => {
+    submitVisit = async (visit) => {
         await this.setState({
-            task: task,
+            visit: visit,
         });
     };
 
@@ -208,13 +173,11 @@ export default class TaskScreen extends AppScreen {
                 {task &&
                 <Container>
                     <Content bounces={false}>
-                        <View style={{flex: 1, margin: 10, alignItems: 'center', flexDirection: 'row'}}>
-                            <Image source={TaskRenderer.statusImage[task.status]}/>
-                            <Text style={[commonStyles.mainColorTitle, {marginHorizontal: 10, flex: 1}]}
-                                  numberOfLines={3}>{task.text}</Text>
-                        </View>
                         <List>
-                            <ListItem>
+                            <ListItem avatar>
+                                <Left>
+                                    <Image source={TaskRenderer.statusImage[task.status]}/>
+                                </Left>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.taskId}</Text>
@@ -225,39 +188,16 @@ export default class TaskScreen extends AppScreen {
                             <ListItem>
                                 <Body>
                                     <Text
-                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.created}</Text>
-                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                        {
-                                            task.openDate ?
-                                                moment(task.openDate).format(
-                                                    uses24HourClock() ?
-                                                        'ddd, MMM DD YYYY HH:mm' :
-                                                        'ddd, MMM DD YYYY hh:mm A'
-                                                ) : ''
-                                        }
-                                    </Text>
-                                </Body>
-                            </ListItem>
-
-                            <ListItem>
-                                <Body>
-                                    <Text
-                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.requester}</Text>
-                                    <Text
-                                        style={[{flex: 1}, commonStyles.formItemText]}>{task.requester?.fullName}</Text>
-                                </Body>
-                            </ListItem>
-
-                            <ListItem>
-                                <Body>
-                                    <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.priority}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{strings.Priorities[task.priority]}</Text>
                                 </Body>
+                                <Right>
+                                    <Icon name="arrow-forward"/>
+                                </Right>
                             </ListItem>
 
-                            <ListItem>
+                            <ListItem onPress={this.selectVisit}>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.schedule}</Text>
@@ -281,6 +221,9 @@ export default class TaskScreen extends AppScreen {
                                             </Text>
                                     }
                                 </Body>
+                                <Body style={{flex: 0}}>
+                                    <Icon type='Octicons' name='calendar' />
+                                </Body>
                             </ListItem>
 
                             <ListItem>
@@ -290,22 +233,22 @@ export default class TaskScreen extends AppScreen {
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{task.performer?.fullName}</Text>
                                 </Body>
+                                <Right>
+                                    <Icon name="arrow-forward"/>
+                                </Right>
                             </ListItem>
 
-                            {
-                                task.notes &&
-                                <ListItem>
-                                    <Body>
-                                        <Text
-                                            style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.notes}</Text>
-                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>{task.notes}</Text>
-                                    </Body>
-                                </ListItem>
-                            }
+                            <ListItem>
+                                <Body>
+                                    <Text
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.notes}</Text>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{task.notes}</Text>
+                                </Body>
+                                <Right>
+                                    <Icon name="arrow-forward"/>
+                                </Right>
+                            </ListItem>
                         </List>
-                        <View style={{alignItems: 'flex-end', marginTop: 10,}}>
-                            <Image source={require('../../assets/icons/tasks/care.png')}/>
-                        </View>
                     </Content>
                 </Container>
                 }
