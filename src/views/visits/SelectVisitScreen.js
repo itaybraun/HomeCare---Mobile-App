@@ -96,7 +96,7 @@ export default class SelectVisitScreen extends AppScreen {
         this.setState({loading: true});
         const task: Task = this.props.navigation.getParam('task', null);
         const visits = task && task.patient ? await this.getVisits(task.patient.id) : null;
-        const selectedVisit = this.getSelectedVisit(visits.visits);
+        const selectedVisit = this.getSelectedVisit(visits.visits, task);
         this.setState({
             ...visits,
             ...selectedVisit,
@@ -109,6 +109,9 @@ export default class SelectVisitScreen extends AppScreen {
         let result: APIRequest = await this.api.getVisits(patientId);
         if (result.success) {
             let visits = result.data;
+            visits = visits.sort((a: Visit, b: Visit) => {
+                return a.start - b.start;
+            });
             return {visits: visits};
         } else {
             this.showError(result.data);
@@ -116,7 +119,7 @@ export default class SelectVisitScreen extends AppScreen {
         }
     };
 
-    getSelectedVisit = (visits) => {
+    getSelectedVisit = (visits, task: Task) => {
         let selectedVisitIndex = 0;
         let start: Date = null;
         let end: Date = null;
@@ -215,62 +218,61 @@ export default class SelectVisitScreen extends AppScreen {
         let index = this.state.visits.length;
         return (
             <View style={{margin: 20, marginBottom: 10}}>
-                <Text style={commonStyles.titleText}>{strings.Visit.patient}: {this.state.task?.patient?.fullName}</Text>
                 <TouchableOpacity
                     onPress={() => this.selectVisit(index)}>
                     {renderSeparator()}
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
                         {renderRadioButton(this.state.selectedVisitIndex === index)}
-                        <Text style={[commonStyles.contentText, commonStyles.link, {flex: 1, marginLeft: 10}]}>{strings.Visit.newVisit?.toUpperCase()}</Text>
-                    </View>
-                    {
-                        this.state.selectedVisitIndex === index &&
-                        <Form style={{marginTop: 20}}>
-                            <FormItemContainer
-                                style={{padding: 11,}}
-                                title={strings.Visit.date}
-                                error={this.state.errors.start}>
-                                <TouchableOpacity
-                                    onPress={() => this.setState({showingVisitDatePicker: true})}>
-                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                            {this.state.start ? moment(this.state.start).format('ddd, MMM Do YYYY') : ''}
-                                        </Text>
-                                        <Icon type="Octicons" name="calendar" style={{color: appColors.textColor}} />
-                                    </View>
-                                </TouchableOpacity>
-                            </FormItemContainer>
-
-                            <View style={{flexDirection: 'row'}}>
+                        <View style={{marginLeft: 10}}>
+                            <Text style={[commonStyles.contentText, {flex: 1}]}>{strings.Visit.newVisit}</Text>
+                            <Form style={{marginTop: 20}}>
                                 <FormItemContainer
-                                    style={{width: 110}}
-                                    title={strings.Visit.start}
+                                    style={{padding: 11,}}
+                                    title={strings.Visit.date}
                                     error={this.state.errors.start}>
                                     <TouchableOpacity
-                                        onPress={() => this.setState({showingVisitStartTimePicker: true})}>
-                                        <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
+                                        onPress={() => this.setState({showingVisitDatePicker: true})}>
+                                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                             <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                                {this.state.start ? moment(this.state.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
+                                                {this.state.start ? moment(this.state.start).format('ddd, MMM Do YYYY') : ''}
                                             </Text>
+                                            <Icon type="Octicons" name="calendar" style={{color: appColors.textColor}} />
                                         </View>
                                     </TouchableOpacity>
                                 </FormItemContainer>
-                                <FormItemContainer
-                                    style={{width: 110, marginLeft: 50}}
-                                    title={strings.Visit.end}
-                                    error={this.state.errors.end}>
-                                    <TouchableOpacity
-                                        onPress={() => this.setState({showingVisitEndTimePicker: true})}>
-                                        <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
-                                            <Text style={[{flex: 1}, commonStyles.formItemText]}>
-                                                {this.state.end ? moment(this.state.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
-                                            </Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </FormItemContainer>
-                            </View>
-                        </Form>
-                    }
+
+                                <View style={{flexDirection: 'row'}}>
+                                    <FormItemContainer
+                                        style={{width: 110}}
+                                        title={strings.Visit.start}
+                                        error={this.state.errors.start}>
+                                        <TouchableOpacity
+                                            onPress={() => this.setState({showingVisitStartTimePicker: true})}>
+                                            <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
+                                                <Text style={[{flex: 1}, commonStyles.formItemText]}>
+                                                    {this.state.start ? moment(this.state.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </FormItemContainer>
+                                    <FormItemContainer
+                                        style={{width: 110, marginLeft: 50}}
+                                        title={strings.Visit.end}
+                                        error={this.state.errors.end}>
+                                        <TouchableOpacity
+                                            onPress={() => this.setState({showingVisitEndTimePicker: true})}>
+                                            <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
+                                                <Text style={[{flex: 1}, commonStyles.formItemText]}>
+                                                    {this.state.end ? moment(this.state.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </FormItemContainer>
+                                </View>
+                            </Form>
+                        </View>
+                    </View>
+
                 </TouchableOpacity>
             </View>
         );
@@ -279,7 +281,7 @@ export default class SelectVisitScreen extends AppScreen {
     renderVisit = ({item, index}) => {
 
         let visit: Visit = item;
-        let disabled = visit.start < new Date();
+        let disabled = moment(visit.start).startOf('day') < moment().startOf('day');
 
         if (disabled && this.state.selectedVisitIndex !== index ) {
             return <View style={{marginTop: -10}} />
@@ -318,7 +320,7 @@ export default class SelectVisitScreen extends AppScreen {
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {renderRadioButton(this.state.selectedVisitIndex === index)}
                     <Text style={[commonStyles.contentText, {color: 'red', flex: 1, marginLeft: 10}]}>
-                        {strings.Visit.noVisit?.toUpperCase()}
+                        {strings.Visit.removeSchedule}
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -345,19 +347,6 @@ export default class SelectVisitScreen extends AppScreen {
                           keyExtractor={item => item.id}
                           ItemSeparatorComponent={() => renderSeparator()}
                 />
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: 10,}}>
-                    <Button block
-                            style={{backgroundColor: '#CCF4C9', width: 120,}}
-                            onPress={this.submit}>
-                        <Text style={{color: '#32C02B', fontWeight: 'bold'}}>{strings.Common.okButton?.toUpperCase()}</Text>
-                    </Button>
-                    <Button block
-                            style={{backgroundColor: '#F5BEC0', width: 120,}}
-                            onPress={this.cancel}>
-                        <Text style={{color: '#EC1A31', fontWeight: 'bold'}}>{strings.Common.cancelButton?.toUpperCase()}</Text>
-                    </Button>
-                </View>
 
                 {renderLoading(this.state.loading)}
 

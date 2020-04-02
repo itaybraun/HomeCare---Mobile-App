@@ -131,6 +131,9 @@ export default class TaskScreen extends AppScreen {
         await this.setState({
             task: task,
         });
+
+        const refresh = this.props.navigation.getParam('refresh', null);
+        refresh && refresh();
     };
 
     submit = async () => {

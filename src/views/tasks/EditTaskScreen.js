@@ -24,6 +24,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../support/Consts';
 import TaskRenderer from './TaskRenderer';
 import {TransitionPresets} from 'react-navigation-stack';
+import cloneDeep from 'lodash.clonedeep';
 
 export default class EditTaskScreen extends AppScreen {
 
@@ -55,7 +56,8 @@ export default class EditTaskScreen extends AppScreen {
 
     state = {
         loading: false,
-        task: this.props.navigation.getParam('task', null),
+        task: null,
+        visit: null,
     };
 
     //------------------------------------------------------------
@@ -64,6 +66,8 @@ export default class EditTaskScreen extends AppScreen {
 
     componentDidMount(): void {
         super.componentDidMount();
+
+        this.getData();
 
         this.props.navigation.setParams({
             cancel: this.cancel,
@@ -76,23 +80,38 @@ export default class EditTaskScreen extends AppScreen {
     // Data
     //------------------------------------------------------------
 
+    getData = () => {
+        let task: Task = this.props.navigation.getParam('task', null) ;
+        if (task) {
+            task = cloneDeep(task);
+        }
+        this.setState({
+            task: task,
+            visit: task.visit,
+        });
+    };
+
     //------------------------------------------------------------
     // Methods
     //------------------------------------------------------------
 
     cancel = () => {
         this.pop();
-    }
+    };
 
     selectVisit = () => {
+
+        console.log(this.state.visit);
+
         this.navigateTo('SelectVisit', {
-            task: this.props.navigation.getParam('task', null),
+            task: this.state.task,
             selectedVisit: this.state.visit,
             submitVisit: this.submitVisit,
         });
     };
 
     submitVisit = async (visit) => {
+
         await this.setState({
             visit: visit,
         });
@@ -148,10 +167,10 @@ export default class EditTaskScreen extends AppScreen {
         task.visit = visit;
         let result: APIRequest = await this.api.updateTask(task);
         if (result.success) {
-            const refresh = this.props.navigation.getParam('refresh', null)
-            refresh && refresh();
+            const updateTask = this.props.navigation.getParam('updateTask', null);
+            updateTask && updateTask(task);
             this.setState({loading: false,});
-            //this.pop();
+            this.pop();
         } else {
             this.setState({loading: false,});
             this.showError(result.data);
@@ -165,7 +184,7 @@ export default class EditTaskScreen extends AppScreen {
     render() {
 
         const task: Task = this.state.task;
-
+        const visit: Visit = this.state.visit;
 
         return (
 
@@ -202,22 +221,21 @@ export default class EditTaskScreen extends AppScreen {
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.schedule}</Text>
                                     {
-                                        task.visit && task.visit.start && task.visit.end ?
+                                        visit && visit.start && visit.end ?
                                             <Text style={[{flex: 1}, commonStyles.formItemText]}>{
-                                                moment(task.visit.start).format(
+                                                moment(visit.start).format(
                                                     uses24HourClock() ? 'ddd, MMM-DD-YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A'
                                                 ) +
-                                                moment(task.visit.end).format(
+                                                moment(visit.end).format(
                                                     uses24HourClock() ? ' - HH:mm' : ' - hh:mm A'
                                                 )}
                                             </Text>
 
-                                            : <Text style={[commonStyles.smallContentText, commonStyles.bold, {
-                                                textAlign: 'center',
+                                            : <Text style={[commonStyles.smallContentText, {
                                                 flex: 1,
                                                 color: '#FF0000'
                                             }]}>
-                                                {strings.Tasks.noSchedule?.toUpperCase()}
+                                                {strings.Tasks.noSchedule}
                                             </Text>
                                     }
                                 </Body>

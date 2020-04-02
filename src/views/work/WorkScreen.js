@@ -182,7 +182,12 @@ export default class WorkScreen extends AppScreen {
         this.navigateTo('Flag', {
             patient: flag.patient,
             flag: flag,
-            refresh: this.getData,
+            refresh: async () => {
+                const flags = await this.getFlags();
+                this.setState({
+                    ...flags,
+                });
+            },
         });
     };
 
