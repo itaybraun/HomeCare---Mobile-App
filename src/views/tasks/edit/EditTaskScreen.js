@@ -25,6 +25,7 @@ import {AsyncStorageConsts} from '../../../support/Consts';
 import TaskRenderer from '../TaskRenderer';
 import {TransitionPresets} from 'react-navigation-stack';
 import cloneDeep from 'lodash.clonedeep';
+import {Practitioner} from '../../../models/Practitioner';
 
 export default class EditTaskScreen extends AppScreen {
 
@@ -99,10 +100,12 @@ export default class EditTaskScreen extends AppScreen {
         this.pop();
     };
 
+
+
     selectPriority = () => {
         this.navigateTo('SelectPriority', {
             selectedPriority: this.state.task.priority,
-            updateTask: this.updateTask,
+            updatePriority: this.updatePriority,
         });
     };
 
@@ -110,25 +113,39 @@ export default class EditTaskScreen extends AppScreen {
         this.navigateTo('SelectVisit', {
             task: this.state.task,
             selectedVisit: this.state.visit,
-            submitVisit: this.submitVisit,
+            submitVisit: this.updateVisit,
         });
     };
 
-    submitVisit = async (visit) => {
-
-        await this.setState({
-            visit: visit,
+    selectPerformer = () => {
+        this.navigateTo('SelectPerformer', {
+            selectedPerformer: this.state.task.performer,
+            updatePerformer: this.updatePerformer,
         });
     };
 
-    updateTask = async (property, value) => {
+
+
+    updatePriority = async (value) => {
         let task: Task = this.state.task;
-        task[property] = value;
+        task.priority = value;
 
-        await this.setState({
-            task: task,
-        });
+        await this.setState({task: task,});
     };
+
+    updateVisit = async (visit) => {
+        await this.setState({visit: visit,});
+    };
+
+    updatePerformer = async (value: Practitioner) => {
+        let task: Task = this.state.task;
+        task.performer = value;
+        task.performerId = value?.id;
+
+        await this.setState({task: task,});
+    };
+
+
 
     submit = async () => {
 
@@ -260,7 +277,7 @@ export default class EditTaskScreen extends AppScreen {
                                 </Body>
                             </ListItem>
 
-                            <ListItem>
+                            <ListItem onPress={this.selectPerformer}>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.performer}</Text>

@@ -44,6 +44,7 @@ import CompletedTasksScreen from './src/views/tasks/CompletedTasksScreen';
 import QuestionnaireResponseScreen from './src/views/tasks/QuestionnaireResponseScreen';
 import EditTaskScreen from './src/views/tasks/edit/EditTaskScreen';
 import SelectPriorityScreen from './src/views/tasks/edit/SelectPriorityScreen';
+import SelectPerformerScreen from './src/views/tasks/edit/SelectPerformerScreen';
 
 export default class App extends React.Component {
 
@@ -123,6 +124,7 @@ const WorkStack = createStackNavigator({
     Flag: FlagScreen,
     SelectVisit: SelectVisitScreen,
     SelectPriority: SelectPriorityScreen,
+    SelectPerformer: SelectPerformerScreen,
     NewTask: NewTaskScreen,
     Visit: VisitScreen
 }, {

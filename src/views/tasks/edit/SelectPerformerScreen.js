@@ -24,8 +24,9 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
 import {TransitionPresets} from 'react-navigation-stack';
+import {APIRequest} from '../../../api/API';
 
-export default class SelectPriorityScreen extends AppScreen {
+export default class SelectPerformerScreen extends AppScreen {
 
     //------------------------------------------------------------
     // Properties
@@ -33,7 +34,7 @@ export default class SelectPriorityScreen extends AppScreen {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: strings.Task.priority,
+            title: strings.Task.assignTo,
             headerBackTitle: ' ',
             ...popupNavigationOptions,
             ...TransitionPresets.SlideFromRightIOS,
@@ -56,7 +57,8 @@ export default class SelectPriorityScreen extends AppScreen {
 
     state = {
         loading: false,
-        selectedPriority: this.props.navigation.getParam('selectedPriority', null),
+        performers: [],
+        selectedPerformer: this.props.navigation.getParam('selectedPerformer', null),
     };
 
     //------------------------------------------------------------
@@ -80,7 +82,19 @@ export default class SelectPriorityScreen extends AppScreen {
     //------------------------------------------------------------
 
     getData = async (refresh = true) => {
+        this.setState({loading: true});
+        const performers = await this.getPerformers();
+        this.setState({...performers, loading: false});
+    };
 
+    getPerformers = async () => {
+        let result: APIRequest = await this.api.getPractitioners();
+        if (result.success) {
+            return {performers: result.data};
+        } else {
+            this.showError(result.data);
+            return {performers: []};
+        }
     };
 
     //------------------------------------------------------------
@@ -88,8 +102,8 @@ export default class SelectPriorityScreen extends AppScreen {
     //------------------------------------------------------------
 
     submit = async () => {
-        const updatePriority = this.props.navigation.getParam('updatePriority', null)
-        updatePriority && updatePriority(this.state.selectedPriority);
+        const updatePerformer = this.props.navigation.getParam('updatePerformer', null);
+        updatePerformer && updatePerformer(this.state.selectedPerformer);
         this.pop();
     };
 
@@ -106,23 +120,24 @@ export default class SelectPriorityScreen extends AppScreen {
         return (
             <View style={[commonStyles.screenContainer, {paddingVertical: 20}]} onPress={Keyboard.dismiss}>
                 {
-                    Priority.getAll().map(priority => {
+                    this.state.performers.map(performer=> {
                         return(
                             <TouchableOpacity
-                                key={priority}
+                                key={performer.id}
                                 style={{paddingHorizontal: 20,}}
                                 onPress={() => this.setState({
-                                    selectedPriority: priority,
+                                    selectedPerformer: performer,
                                 })}>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    {renderRadioButton(this.state.selectedPriority === priority)}
-                                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>{strings.Priorities[priority]}</Text>
+                                    {renderRadioButton(this.state.selectedPerformer?.id === performer.id)}
+                                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>{performer.fullName}</Text>
                                 </View>
                                 {renderSeparator()}
                             </TouchableOpacity>
                         );
                     })
                 }
+                {renderLoading(this.state.loading)}
             </View>
         );
     }
