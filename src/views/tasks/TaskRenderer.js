@@ -53,13 +53,12 @@ export default class TaskRenderer extends Component {
                                 {...this.props}
 
             >
-                <Card style={[commonStyles.cardStyle, task.isPriorityImportant ? {backgroundColor: '#F9E3E6'} : {}]}>
+                <Card style={commonStyles.cardStyle}>
                     <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
                         <Image source={TaskRenderer.statusImage[task.status]} style={{width: 48, height: 48}}/>
                         <Text
                             style={[commonStyles.titleText, {
                                 flex: 1,
-                                backgroundColor: '#ffffff',
                                 marginLeft: 10
                             }]}
                             numberOfLines={2}>

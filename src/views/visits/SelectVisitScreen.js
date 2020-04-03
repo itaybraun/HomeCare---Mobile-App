@@ -220,7 +220,6 @@ export default class SelectVisitScreen extends AppScreen {
             <View style={{margin: 20, marginBottom: 10}}>
                 <TouchableOpacity
                     onPress={() => this.selectVisit(index)}>
-                    {renderSeparator()}
                     <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
                         {renderRadioButton(this.state.selectedVisitIndex === index)}
                         <View style={{marginLeft: 10}}>
@@ -231,7 +230,7 @@ export default class SelectVisitScreen extends AppScreen {
                                     title={strings.Visit.date}
                                     error={this.state.errors.start}>
                                     <TouchableOpacity
-                                        onPress={() => this.setState({showingVisitDatePicker: true})}>
+                                        onPress={() => this.setState({selectedVisitIndex: index, showingVisitDatePicker: true})}>
                                         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                             <Text style={[{flex: 1}, commonStyles.formItemText]}>
                                                 {this.state.start ? moment(this.state.start).format('ddd, MMM Do YYYY') : ''}
@@ -247,7 +246,7 @@ export default class SelectVisitScreen extends AppScreen {
                                         title={strings.Visit.start}
                                         error={this.state.errors.start}>
                                         <TouchableOpacity
-                                            onPress={() => this.setState({showingVisitStartTimePicker: true})}>
+                                            onPress={() => this.setState({selectedVisitIndex: index, showingVisitStartTimePicker: true})}>
                                             <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
                                                 <Text style={[{flex: 1}, commonStyles.formItemText]}>
                                                     {this.state.start ? moment(this.state.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
@@ -260,7 +259,7 @@ export default class SelectVisitScreen extends AppScreen {
                                         title={strings.Visit.end}
                                         error={this.state.errors.end}>
                                         <TouchableOpacity
-                                            onPress={() => this.setState({showingVisitEndTimePicker: true})}>
+                                            onPress={() => this.setState({selectedVisitIndex: index, showingVisitEndTimePicker: true})}>
                                             <View style={{flexDirection: 'row', padding: 11, paddingVertical: 17, alignItems: 'center'}}>
                                                 <Text style={[{flex: 1}, commonStyles.formItemText]}>
                                                     {this.state.end ? moment(this.state.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A') : ' '}
@@ -281,6 +280,7 @@ export default class SelectVisitScreen extends AppScreen {
     renderVisit = ({item, index}) => {
 
         let visit: Visit = item;
+
         let disabled = moment(visit.start).startOf('day') < moment().startOf('day');
 
         if (disabled && this.state.selectedVisitIndex !== index ) {

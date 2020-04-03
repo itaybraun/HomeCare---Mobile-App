@@ -8,21 +8,21 @@ import {
     TouchableWithoutFeedback,
     Keyboard, ScrollView, Linking
 } from 'react-native';
-import AppScreen from '../../support/AppScreen';
-import {strings} from '../../localization/strings';
-import {Status, Task} from '../../models/Task';
-import {appColors, commonStyles, renderLoading, popupNavigationOptions} from '../../support/CommonStyles';
+import AppScreen from '../../../support/AppScreen';
+import {strings} from '../../../localization/strings';
+import {Status, Task} from '../../../models/Task';
+import {appColors, commonStyles, renderLoading, popupNavigationOptions} from '../../../support/CommonStyles';
 import {Button, Form, Icon, Left, Text, Container, Content, List, ListItem, Right, Body} from 'native-base';
-import FormItemContainer from '../other/FormItemContainer';
+import FormItemContainer from '../../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
-import {APIRequest} from '../../api/API';
-import {Visit} from '../../models/Visit';
+import {APIRequest} from '../../../api/API';
+import {Visit} from '../../../models/Visit';
 import ActionSheet from 'react-native-simple-action-sheet';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AsyncStorageConsts} from '../../support/Consts';
-import TaskRenderer from './TaskRenderer';
+import {AsyncStorageConsts} from '../../../support/Consts';
+import TaskRenderer from '../TaskRenderer';
 import {TransitionPresets} from 'react-navigation-stack';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -99,10 +99,14 @@ export default class EditTaskScreen extends AppScreen {
         this.pop();
     };
 
+    selectPriority = () => {
+        this.navigateTo('SelectPriority', {
+            selectedPriority: this.state.task.priority,
+            updateTask: this.updateTask,
+        });
+    };
+
     selectVisit = () => {
-
-        console.log(this.state.visit);
-
         this.navigateTo('SelectVisit', {
             task: this.state.task,
             selectedVisit: this.state.visit,
@@ -117,6 +121,15 @@ export default class EditTaskScreen extends AppScreen {
         });
     };
 
+    updateTask = async (property, value) => {
+        let task: Task = this.state.task;
+        task[property] = value;
+
+        await this.setState({
+            task: task,
+        });
+    };
+
     submit = async () => {
 
         this.setState({loading: true,});
@@ -124,47 +137,50 @@ export default class EditTaskScreen extends AppScreen {
         let task: Task = this.state.task;
         let visit: Visit = this.state.visit;
 
-        // add new visit if needed
-        if (visit && !visit.id) {
-            let result: APIRequest = await this.api.addVisit(visit);
-            if (result.success) {
-                visit = result.data;
-            } else {
-                this.setState({loading: false,});
-                this.showError(result.data);
-                return;
-            }
-        }
+        if (task.visit?.id !== visit?.id) {
 
-        // remove task from old visit. CRAZY!
-        if (task.visit) {
-            let result: APIRequest = await this.api.getVisit(task.visit.id);
-            if (result.success) {
-                let visit: Visit = result.data;
-                visit.removeTaskId(task.id);
-                result = await this.api.updateVisit(visit);
-                if (!result.success) {
+            // add new visit if needed
+            if (visit && !visit.id) {
+                let result: APIRequest = await this.api.addVisit(visit);
+                if (result.success) {
+                    visit = result.data;
+                } else {
+                    this.setState({loading: false,});
+                    this.showError(result.data);
+                    return;
+                }
+            }
+
+            // remove task from old visit. CRAZY!
+            if (task.visit) {
+                let result: APIRequest = await this.api.getVisit(task.visit.id);
+                if (result.success) {
+                    let visit: Visit = result.data;
+                    visit.removeTaskId(task.id);
+                    result = await this.api.updateVisit(visit);
+                    if (!result.success) {
+                        this.setState({loading: false,});
+                        this.showError(result.data);
+                    }
+                } else {
                     this.setState({loading: false,});
                     this.showError(result.data);
                 }
-            } else {
-                this.setState({loading: false,});
-                this.showError(result.data);
             }
-        }
-        // add task to new visit
-        if (visit) {
-            visit.addTaskId(task.id);
-            let result: APIRequest = await this.api.updateVisit(visit);
-            if (!result.success) {
-                this.setState({loading: false,});
-                this.showError(result.data);
-                return;
+            // add task to new visit
+            if (visit) {
+                visit.addTaskId(task.id);
+                let result: APIRequest = await this.api.updateVisit(visit);
+                if (!result.success) {
+                    this.setState({loading: false,});
+                    this.showError(result.data);
+                    return;
+                }
             }
-        }
 
-        // update task
-        task.visit = visit;
+            // update task
+            task.visit = visit;
+        }
         let result: APIRequest = await this.api.updateTask(task);
         if (result.success) {
             const updateTask = this.props.navigation.getParam('updateTask', null);
@@ -204,7 +220,7 @@ export default class EditTaskScreen extends AppScreen {
                                 </Body>
                             </ListItem>
 
-                            <ListItem>
+                            <ListItem onPress={this.selectPriority}>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.priority}</Text>

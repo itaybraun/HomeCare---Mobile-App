@@ -42,7 +42,8 @@ import GeneralScreen from './src/views/patients/patient/general/GeneralScreen';
 import ImageQualityScreen from './src/views/settings/ImageQualityScreen';
 import CompletedTasksScreen from './src/views/tasks/CompletedTasksScreen';
 import QuestionnaireResponseScreen from './src/views/tasks/QuestionnaireResponseScreen';
-import EditTaskScreen from './src/views/tasks/EditTaskScreen';
+import EditTaskScreen from './src/views/tasks/edit/EditTaskScreen';
+import SelectPriorityScreen from './src/views/tasks/edit/SelectPriorityScreen';
 
 export default class App extends React.Component {
 
@@ -121,6 +122,7 @@ const WorkStack = createStackNavigator({
     EditTask: EditTaskScreen,
     Flag: FlagScreen,
     SelectVisit: SelectVisitScreen,
+    SelectPriority: SelectPriorityScreen,
     NewTask: NewTaskScreen,
     Visit: VisitScreen
 }, {

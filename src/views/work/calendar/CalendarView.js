@@ -119,6 +119,9 @@ export default class CalendarView extends Component {
 
     renderVisit = ({item}) => {
         let visit: Visit = item;
+
+        console.log(visit)
+
         const width = uses24HourClock() ? 50 : 80;
         return (
             <TouchableOpacity style={styles.visitContainer} onPress={() => this.selectVisit(visit)}>
