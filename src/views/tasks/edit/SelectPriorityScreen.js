@@ -104,13 +104,12 @@ export default class SelectPriorityScreen extends AppScreen {
     render() {
 
         return (
-            <View style={[commonStyles.screenContainer, {paddingVertical: 20}]} onPress={Keyboard.dismiss}>
+            <View style={[commonStyles.screenContainer, {padding: 20}]} onPress={Keyboard.dismiss}>
                 {
                     Priority.getAll().map(priority => {
                         return(
                             <TouchableOpacity
                                 key={priority}
-                                style={{paddingHorizontal: 20,}}
                                 onPress={() => this.setState({
                                     selectedPriority: priority,
                                 })}>

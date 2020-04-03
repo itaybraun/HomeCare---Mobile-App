@@ -118,13 +118,12 @@ export default class SelectPerformerScreen extends AppScreen {
     render() {
 
         return (
-            <View style={[commonStyles.screenContainer, {paddingVertical: 20}]} onPress={Keyboard.dismiss}>
+            <View style={[commonStyles.screenContainer, {padding: 20}]} onPress={Keyboard.dismiss}>
                 {
                     this.state.performers.map(performer=> {
                         return(
                             <TouchableOpacity
                                 key={performer.id}
-                                style={{paddingHorizontal: 20,}}
                                 onPress={() => this.setState({
                                     selectedPerformer: performer,
                                 })}>

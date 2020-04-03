@@ -81,6 +81,7 @@ export const en = {
         map: 'Map',
         calendar: 'Calendar',
         alerts: 'Alerts',
+        filter: 'Filter',
     },
 
     Tasks: {
@@ -137,6 +138,7 @@ export const en = {
         reason: 'Reason',
         noVisit: 'No Schedule',
         removeSchedule: 'Remove Schedule',
+        addToExisting: 'Add to existing visit',
     },
 
     Chat: {

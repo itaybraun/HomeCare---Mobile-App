@@ -66,6 +66,7 @@ RESTAPI.prototype.updateVisit = async function updateVisit(visit: Visit): APIReq
     try {
         const data = getJsonFromVisit(visit);
         const result = await this.server.update(data);
+        console.log('updateVisit', result);
         visit = getVisitFromJson(result);
         // HACK!
         return await this.getVisit(visit.id);

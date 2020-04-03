@@ -12,19 +12,19 @@ export class Visit extends BaseModel {
     taskIds: [String];
     tasks: [Task];
 
-    addTaskId = (id) => {
-        if (!id)
+    addTaskId = (taskId) => {
+        if (!taskId)
             return;
         if (!this.taskIds) {
-            this.taskIds = [id];
-        } else if (!this.taskIds.includes(id)) {
-            this.taskIds.push(id);
+            this.taskIds = [taskId];
+        } else if (!this.taskIds.includes(taskId)) {
+            this.taskIds.push(taskId);
         }
     }
 
-    removeTaskId = (id) => {
+    removeTaskId = (taskId) => {
         if (!this.taskIds)
             return;
-        this.taskIds = this.taskIds.filter(id => id !== id);
+        this.taskIds = this.taskIds.filter(id => id !== taskId);
     }
 }

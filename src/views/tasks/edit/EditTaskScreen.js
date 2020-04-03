@@ -83,9 +83,11 @@ export default class EditTaskScreen extends AppScreen {
 
     getData = () => {
         let task: Task = this.props.navigation.getParam('task', null) ;
+
         if (task) {
             task = cloneDeep(task);
         }
+
         this.setState({
             task: task,
             visit: task.visit,
@@ -154,7 +156,7 @@ export default class EditTaskScreen extends AppScreen {
         let task: Task = this.state.task;
         let visit: Visit = this.state.visit;
 
-        if (task.visit?.id !== visit?.id) {
+        if ((!task.visit && visit) || task.visit?.id !== visit?.id) {
 
             // add new visit if needed
             if (visit && !visit.id) {
@@ -169,6 +171,7 @@ export default class EditTaskScreen extends AppScreen {
             }
 
             // remove task from old visit. CRAZY!
+
             if (task.visit) {
                 let result: APIRequest = await this.api.getVisit(task.visit.id);
                 if (result.success) {

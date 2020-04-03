@@ -167,10 +167,10 @@ export const commonStyles = {
     },
 
     input: {
-        borderWidth: 1,
-        borderColor: '#CCCCCC',
+        backgroundColor: '#F5F1F1',
         height: 40,
         padding: 5,
+        borderRadius: 4,
         color: '#000000',
     },
 
@@ -336,6 +336,10 @@ export const commonStyles = {
         height: 30,
     },
 
+    line: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#707070',
+    }
 };
 
 export const renderSeparator = (style = null) => {

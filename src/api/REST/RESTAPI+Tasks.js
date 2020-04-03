@@ -88,7 +88,7 @@ export function getTaskFromJson(json) {
     task.performerId = API.user?.id;//json.performer?.id || null;
     task.performer = API.user;//json.performer ? getPractitionerFromJSON(json.performer) : null;
     task.visitId = json.encounter?.id || null;
-    task.visit = json.encounter ? getVisitFromJson(json.encounter) : null
+    task.visit = json.encounter ? getVisitFromJson(json.encounter) : null;
     //task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
     task.openDate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;
     task.executionDate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;

@@ -63,6 +63,8 @@ export default class TaskScreen extends AppScreen {
 
         //this.getData();
 
+        console.log(this.state.task);
+
         this.props.navigation.setParams({
             showMenu: this.showMenu,
         });

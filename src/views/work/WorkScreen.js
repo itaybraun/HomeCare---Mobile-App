@@ -7,7 +7,7 @@ import {
     SectionList,
     TouchableOpacity,
     TouchableHighlight,
-    StatusBar, Platform,
+    StatusBar, Platform, TextInput,
 } from 'react-native';
 import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
@@ -30,6 +30,7 @@ import {Status, Task} from '../../models/Task';
 import {uses24HourClock} from "react-native-localize";
 import {Flag} from '../../models/Flag';
 import {Patient} from '../../models/Patient';
+import {Visit} from '../../models/Visit';
 
 export default class WorkScreen extends AppScreen {
 
@@ -50,6 +51,8 @@ export default class WorkScreen extends AppScreen {
         loading: false,
         tasks: [],
         sortedTasks: [],
+        taskFilterInputText: null,
+        filteredTasks: null,
         visits: [],
         flags: [],
         sortedFlags: [],
@@ -100,19 +103,14 @@ export default class WorkScreen extends AppScreen {
     getTasks = async (refresh = true) => {
         let result: APIRequest = await this.api.getTasks(null, [Status.ACTIVE]);
         if (result.success) {
-            let sortedTasks = result.data.reduce((array, task: Task) => {
-                let userArray = array.find(o => o.title === task.patient.fullName);
-                if (userArray)
-                    userArray.data.push(task);
-                else {
-                    array.push({
-                        title: task.patient.fullName,
-                        data: [task],
-                    })
-                }
-                return array;
-            }, []);
-            return {tasks: result.data, sortedTasks: sortedTasks};
+            let tasks = result.data.sort((a: Task, b: Task) => {
+                return ('' + a.patient.fullName).localeCompare(b.patient.fullName);
+            });
+            let sortedTasks = this.getSortedTasks(tasks);
+            let filteredTasks = this.state.taskFilterInputText ?
+                this.getFilteredTasks(this.state.tasks, this.state.taskFilterInputText) : null;
+
+            return {tasks: result.data, sortedTasks: sortedTasks, filteredTasks: filteredTasks};
         } else {
             this.showError(result.data);
         }
@@ -151,6 +149,27 @@ export default class WorkScreen extends AppScreen {
             this.showError(result.data);
         }
     };
+
+    getSortedTasks = (tasks) => {
+        return tasks.reduce((array, task: Task) => {
+            let userArray = array.find(o => o.title === task.patient.fullName);
+            if (userArray)
+                userArray.data.push(task);
+            else {
+                array.push({
+                    title: task.patient.fullName,
+                    data: [task],
+                })
+            }
+            return array;
+        }, []);
+    };
+
+    getFilteredTasks = (tasks, text) => {
+        text = text.toLowerCase();
+        const filteredTasks = tasks.filter(task => task.text.toLowerCase().indexOf(text) > -1);
+        return this.getSortedTasks(filteredTasks);
+    }
 
     //------------------------------------------------------------
     // Methods
@@ -195,6 +214,13 @@ export default class WorkScreen extends AppScreen {
         this.setState({ index });
     };
 
+    filterTasks = (text) => {
+        this.setState({
+            taskFilterInputText: text.isEmpty() ? null : text,
+            filteredTasks: text.isEmpty() ? null : this.getFilteredTasks(this.state.tasks, text)
+        });
+    };
+
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
@@ -224,6 +250,46 @@ export default class WorkScreen extends AppScreen {
     renderListHeader = () => {
         return (
             <View style={{height: 0}} />
+        );
+    };
+
+    renderTasksHeader = () => {
+        return (
+            <View style={{margin: 10}}>
+                <TextInput ref={ref => this.taskFilterInput = ref}
+                           style={commonStyles.input}
+                           returnKeyType="search"
+                           autoCorrect={false}
+                           value={this.state.taskFilterInputText}
+                           autoCapitalize='none'
+                           placeholderTextColor="#CCCCCC"
+                           placeholder={strings.Work.filter}
+                           enablesReturnKeyAutomatically={true}
+                           paddingRight={12}
+                           paddingLeft={12}
+                           onChangeText={this.filterTasks}
+                />
+                {
+                    this.state.filteredTasks &&
+                    <TouchableOpacity
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            bottom: 0,
+                            right: 5,
+                            width: 20,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                        onPress={() => {
+                            this.taskFilterInput.clear();
+                            this.filterTasks('');
+                        }
+                        }>
+                        <Icon type='AntDesign' name='closecircle' style={{fontSize: 16, color: '#0000004D'}}/>
+                    </TouchableOpacity>
+                }
+            </View>
         );
     };
 
@@ -265,18 +331,21 @@ export default class WorkScreen extends AppScreen {
     };
 
     renderTasks = () => {
+
+        const data = this.state.filteredTasks || this.state.sortedTasks;
+
         return (
             <View style={commonStyles.screenContainer}>
                 <View style={{flex: 1,}}>
                     <SectionList style={styles.list}
                                  keyExtractor={item => item.id}
                                  contentContainerStyle={{flexGrow: 1}}
-                                 sections={this.state.sortedTasks}
+                                 sections={data}
                                  renderItem={this.renderTask}
                                  stickySectionHeadersEnabled={true}
                                  ItemSeparatorComponent={() => renderSeparator()}
                                  ListEmptyComponent={this.renderListEmpty}
-                                 ListHeaderComponent={this.renderListHeader}
+                                 ListHeaderComponent={this.renderTasksHeader}
                                  ListFooterComponent={this.renderListFooter}
                                  renderSectionHeader={({section: {title}}) => (
                                      <View style={{
