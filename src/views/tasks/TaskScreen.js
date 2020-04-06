@@ -23,6 +23,7 @@ import ActionSheet from 'react-native-simple-action-sheet';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../support/Consts';
 import TaskRenderer from './TaskRenderer';
+import FlagRenderer from '../patients/patient/flags/FlagRenderer';
 
 export default class TaskScreen extends AppScreen {
 
@@ -31,12 +32,8 @@ export default class TaskScreen extends AppScreen {
     //------------------------------------------------------------
 
     static navigationOptions = ({navigation}) => {
-        const task: Task = navigation.getParam('task', null);
-        let title = "";
-        if (task)
-            title = strings.Task.taskDetails;
         return {
-            title: title,
+            title: strings.Task.taskDetails,
             headerBackTitle: ' ',
             headerRight: () => {
                 return (
@@ -61,10 +58,6 @@ export default class TaskScreen extends AppScreen {
     componentDidMount(): void {
         super.componentDidMount();
 
-        //this.getData();
-
-        console.log(this.state.task);
-
         this.props.navigation.setParams({
             showMenu: this.showMenu,
         });
@@ -73,28 +66,6 @@ export default class TaskScreen extends AppScreen {
     //------------------------------------------------------------
     // Data
     //------------------------------------------------------------
-
-    getData = async (refresh = true) => {
-        this.setState({loading: true});
-        const task = await this.getTask();
-        this.setState({
-            ...task,
-            loading: false,
-        })
-    };
-
-    getTask = async () => {
-        let task: Task = this.props.navigation.getParam('task', null);
-        let result: APIRequest = await this.api.getTask(task.id);
-
-        if (result.success) {
-            task = result.data;
-        }
-
-        return {
-            task: task,
-        };
-    };
 
     //------------------------------------------------------------
     // Methods
@@ -138,66 +109,6 @@ export default class TaskScreen extends AppScreen {
         refresh && refresh();
     };
 
-    submit = async () => {
-
-        this.setState({loading: true,});
-
-        let task: Task = this.state.task;
-        let visit: Visit = this.state.visit;
-
-        // add new visit if needed
-        if (visit && !visit.id) {
-            let result: APIRequest = await this.api.addVisit(visit);
-            if (result.success) {
-                visit = result.data;
-            } else {
-                this.setState({loading: false,});
-                this.showError(result.data);
-                return;
-            }
-        }
-
-        // remove task from old visit. CRAZY!
-        if (task.visit) {
-            let result: APIRequest = await this.api.getVisit(task.visit.id);
-            if (result.success) {
-                let visit: Visit = result.data;
-                visit.removeTaskId(task.id);
-                result = await this.api.updateVisit(visit);
-                if (!result.success) {
-                    this.setState({loading: false,});
-                    this.showError(result.data);
-                }
-            } else {
-                this.setState({loading: false,});
-                this.showError(result.data);
-            }
-        }
-        // add task to new visit
-        if (visit) {
-            visit.addTaskId(task.id);
-            let result: APIRequest = await this.api.updateVisit(visit);
-            if (!result.success) {
-                this.setState({loading: false,});
-                this.showError(result.data);
-                return;
-            }
-        }
-
-        // update task
-        task.visit = visit;
-        let result: APIRequest = await this.api.updateTask(task);
-        if (result.success) {
-            const refresh = this.props.navigation.getParam('refresh', null)
-            refresh && refresh();
-            this.setState({loading: false,});
-            //this.pop();
-        } else {
-            this.setState({loading: false,});
-            this.showError(result.data);
-        }
-    };
-
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
@@ -206,7 +117,6 @@ export default class TaskScreen extends AppScreen {
 
         const task: Task = this.state.task;
 
-
         return (
 
             <View style={commonStyles.screenContainer} onPress={Keyboard.dismiss}>
@@ -214,15 +124,13 @@ export default class TaskScreen extends AppScreen {
                 <Container>
                     <Content bounces={false}>
                         <View style={{flex: 1, margin: 10, alignItems: 'center', flexDirection: 'row'}}>
-                            <Image source={TaskRenderer.statusImage[task.status]}/>
-                            <Text style={[commonStyles.mainColorTitle, {marginHorizontal: 10, flex: 1}]}
+                            <Text style={[commonStyles.titleText, {marginHorizontal: 10, flex: 1}]}
                                   numberOfLines={3}>{task.text}</Text>
                         </View>
                         <List>
                             <ListItem>
-                                <Body>
-                                    <Text
-                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.taskId}</Text>
+                                <Body style={{flexDirection: 'row'}}>
+                                    <Image style={{width: 22, height: 22}} source={TaskRenderer.statusImage[task.status]}/>
                                     <Text style={[{flex: 1}, commonStyles.formItemText]}>{task.id}</Text>
                                 </Body>
                             </ListItem>

@@ -12,7 +12,7 @@ import {strings} from './src/localization/strings';
 import {Utils} from './src/support/Utils';
 import FlagsScreen from './src/views/patients/patient/flags/FlagsScreen';
 import PatientScreen from './src/views/patients/patient/PatientScreen';
-import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
+import EditFlagScreen from './src/views/patients/patient/flags/edit/EditFlagScreen';
 import {appColors, commonStyles, defaultNavigationOptions} from './src/support/CommonStyles';
 import TaskScreen from './src/views/tasks/TaskScreen';
 import RESTAPI from './src/api/REST/RESTAPI';
@@ -45,6 +45,7 @@ import QuestionnaireResponseScreen from './src/views/tasks/QuestionnaireResponse
 import EditTaskScreen from './src/views/tasks/edit/EditTaskScreen';
 import SelectPriorityScreen from './src/views/tasks/edit/SelectPriorityScreen';
 import SelectPerformerScreen from './src/views/tasks/edit/SelectPerformerScreen';
+import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 
 export default class App extends React.Component {
 
@@ -106,7 +107,7 @@ const PatientsStack = createStackNavigator({
     Patients: PatientsScreen,
     Patient: PatientScreen,
     Flags: FlagsScreen,
-    Flag: FlagScreen,
+    Flag: EditFlagScreen,
     Questionnaire: QuestionnaireScreen,
     CompletedTasks: CompletedTasksScreen,
     NewTask: NewTaskScreen,
@@ -122,6 +123,7 @@ const WorkStack = createStackNavigator({
     Task: TaskScreen,
     EditTask: EditTaskScreen,
     Flag: FlagScreen,
+    EditFlag: EditFlagScreen,
     SelectVisit: SelectVisitScreen,
     SelectPriority: SelectPriorityScreen,
     SelectPerformer: SelectPerformerScreen,

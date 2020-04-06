@@ -72,6 +72,8 @@ RESTAPI.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest
 function getFlagFromJson(json) {
     let flag = new Flag();
     flag.id = json.id;
+    flag.status = json.status;
+    flag.lastUpdate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;
     flag.text = json.code?.text;
     flag.category = json.category?.map(category => category.text).join(',');
     flag.startDate = moment(json.period?.start).toDate();

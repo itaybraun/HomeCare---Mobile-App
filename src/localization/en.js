@@ -56,6 +56,7 @@ export const en = {
         userTitle: '{0} Flags',
         addFlag: 'Add flag',
         newFlag: 'New Flag',
+        details: 'Alert Details',
         editFlag: 'Edit Flag',
         noFlags: 'No data to display',
         deleteFlag: 'You are about to delete a flag. Are you sure?',
@@ -65,6 +66,16 @@ export const en = {
         startDate: 'Start Date',
         endDate: 'End Date',
         to: 'to',
+    },
+
+    Flag: {
+        menuEdit: 'Edit',
+        status: 'Status',
+        lastUpdate: 'Last Update',
+        patientName: 'Patient Name',
+        category: 'Category',
+        validFrom: 'Valid From',
+        validTo: 'Valid To',
     },
 
     Work: {
