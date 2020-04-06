@@ -225,7 +225,7 @@ export default class SelectVisitScreen extends AppScreen {
                     onPress={() => this.selectVisit(newIndex)}>
                     <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
                         {renderRadioButton(this.state.selectedVisitIndex === newIndex)}
-                        <View style={{marginLeft: 20}}>
+                        <View style={{flex: 1, marginLeft: 20, marginRight: 34}}>
                             <Text style={[commonStyles.contentText, {flex: 1}]}>{strings.Visit.newVisit}</Text>
                             <Form style={{marginTop: 20}}>
                                 <FormItemContainer
@@ -243,7 +243,7 @@ export default class SelectVisitScreen extends AppScreen {
                                     </TouchableOpacity>
                                 </FormItemContainer>
 
-                                <View style={{flexDirection: 'row'}}>
+                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                                     <FormItemContainer
                                         style={{width: 110}}
                                         title={strings.Visit.start}
@@ -258,7 +258,7 @@ export default class SelectVisitScreen extends AppScreen {
                                         </TouchableOpacity>
                                     </FormItemContainer>
                                     <FormItemContainer
-                                        style={{width: 110, marginLeft: 50}}
+                                        style={{width: 110}}
                                         title={strings.Visit.end}
                                         error={this.state.errors.end}>
                                         <TouchableOpacity

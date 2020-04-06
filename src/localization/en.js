@@ -139,6 +139,7 @@ export const en = {
         noVisit: 'No Schedule',
         removeSchedule: 'Remove Schedule',
         addToExisting: 'Add to existing visit',
+        schedule: 'Schedule',
     },
 
     Chat: {

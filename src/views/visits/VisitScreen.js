@@ -11,7 +11,7 @@ import {
 import AppScreen from '../../support/AppScreen';
 import {
     appColors,
-    commonStyles,
+    commonStyles, popupNavigationOptions,
     renderDisclosureIndicator,
     renderLoading, renderRadioButton,
     renderSeparator,
@@ -24,6 +24,7 @@ import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
 import {APIRequest} from '../../api/API';
 import {Visit} from '../../models/Visit';
+import {TransitionPresets} from 'react-navigation-stack';
 
 
 export default class VisitScreen extends AppScreen {
@@ -34,8 +35,23 @@ export default class VisitScreen extends AppScreen {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: strings.Visit.editVisit,
+            title: strings.Visit.schedule,
             headerBackTitle: ' ',
+            ...popupNavigationOptions,
+            headerLeft: () => {
+                return (
+                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('cancel')}>
+                        <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{strings.Common.cancelButton}</Text>
+                    </TouchableOpacity>
+                )
+            },
+            headerRight: () => {
+                return (
+                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('done')}>
+                        <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{strings.Common.submitButton}</Text>
+                    </TouchableOpacity>
+                )
+            }
         }
     };
 
@@ -55,6 +71,12 @@ export default class VisitScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
+        this.props.navigation.setParams({
+            done: this.submit,
+            cancel: this.cancel,
+            hideTabBar: true,
+        });
     }
 
     //------------------------------------------------------------
@@ -105,7 +127,7 @@ export default class VisitScreen extends AppScreen {
             <View style={commonStyles.screenContainer} >
                 <Content
                     style={{flex: 1}}
-                    contentContainerStyle={{padding: 20}}
+                    contentContainerStyle={{paddingVertical: 40, paddingHorizontal: 64}}
                     bounces={false}
                     automaticallyAdjustContentInsets={false}>
 
@@ -124,7 +146,7 @@ export default class VisitScreen extends AppScreen {
                         </TouchableOpacity>
                     </FormItemContainer>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <FormItemContainer
                             style={{width: 110}}
                             title={strings.Visit.start}>
@@ -152,21 +174,7 @@ export default class VisitScreen extends AppScreen {
                     </View>
                 </Form>
                 </Content>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20, marginTop: 10,}}>
-                    <Button block
-                            style={{backgroundColor: '#CCF4C9', width: 120,}}
-                            onPress={this.submit}>
-                        <Text style={{color: '#32C02B', fontWeight: 'bold'}}>{strings.Common.submitButton?.toUpperCase()}</Text>
-                    </Button>
-                    <Button block
-                            style={{backgroundColor: '#F5BEC0', width: 120,}}
-                            onPress={this.cancel}>
-                        <Text style={{color: '#EC1A31', fontWeight: 'bold'}}>{strings.Common.cancelButton?.toUpperCase()}</Text>
-                    </Button>
-                </View>
                 {renderLoading(this.state.loading)}
-
 
 
                 <DateTimePickerModal
