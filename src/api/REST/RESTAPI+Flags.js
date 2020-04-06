@@ -35,6 +35,21 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
     }
 };
 
+RESTAPI.prototype.getFlag = async function getFlag(flagId): APIRequest {
+    try {
+        let params = {};
+        let url = 'Flag/'+flagId;
+        let fhirOptions = {};
+        fhirOptions.resolveReferences = ["subject"];
+        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        console.log('getFlag', result);
+        const flag = getFlagFromJson(result);
+        return new APIRequest(true, flag);
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
 RESTAPI.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
     try {
         const data = getJsonFromFlag(flag);
@@ -53,7 +68,7 @@ RESTAPI.prototype.editFlag = async function editFlag(flag: Flag): APIRequest {
         const result = await this.server.update(data);
         console.log('editFlag', result);
         flag = getFlagFromJson(result);
-        return new APIRequest(true, flag);
+        return await this.getFlag(flag.id);
     } catch (error) {
         return new APIRequest(false, error);
     }

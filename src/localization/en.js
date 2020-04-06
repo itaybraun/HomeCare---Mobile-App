@@ -76,6 +76,7 @@ export const en = {
         category: 'Category',
         validFrom: 'Valid From',
         validTo: 'Valid To',
+        editFlag: 'Edit Alert'
     },
 
     Work: {

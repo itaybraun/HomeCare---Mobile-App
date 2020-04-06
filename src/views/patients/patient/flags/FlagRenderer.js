@@ -54,12 +54,11 @@ export default class FlagRenderer extends Component {
                             style={[commonStyles.contentText, {
                                 flex: 1,
                                 marginLeft: 10
-                            }]}
-                            numberOfLines={2}>
+                            }]}>
                             {flag.text}
                         </Text>
                     </View>
-                    <View style={{flex: 1, marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <View style={{flex: 1, marginTop: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                         <View style={[styles.priorityContainer, {backgroundColor: FlagRenderer.categoryColor[categoryString] + '26'}]}>
                             <Text numberOfLines={1} style={[
                                 commonStyles.text,
