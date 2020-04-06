@@ -149,7 +149,7 @@ export const commonStyles = {
     },
 
     smallContentText: {
-        fontSize: 18,
+        fontSize: 16,
         color: appColors.textColor,
         ...commonTextProperties()
     },

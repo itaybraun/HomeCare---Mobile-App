@@ -101,7 +101,7 @@ export default class TaskRenderer extends Component {
                                         </Text>
                                     </View>
                                     <View>
-                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, {fontWeight: 'bold'}]}>
+                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, commonStyles.bold]}>
                                             {moment(task.visit.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}
                                             &nbsp;-&nbsp;
                                             {moment(task.visit.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}

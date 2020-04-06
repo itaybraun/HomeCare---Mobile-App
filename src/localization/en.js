@@ -64,13 +64,7 @@ export const en = {
         internal: 'Internal',
         startDate: 'Start Date',
         endDate: 'End Date',
-        admin: 'Admin',
-        behavioral: 'Behavioral',
-        clinical: 'Clinical',
-        contact: 'Contact',
-        drug: 'Drug',
-        lab: 'Lab',
-        safety: 'Safety',
+        to: 'to',
     },
 
     Work: {
@@ -171,6 +165,16 @@ export const en = {
         completed: 'Completed',
         'entered-in-error': 'Entered in error',
         unknown: 'Unknown',
+    },
+
+    Categories: {
+        admin: 'Admin',
+        behavioral: 'Behavioral',
+        clinical: 'Clinical',
+        contact: 'Contact',
+        drug: 'Drug',
+        lab: 'Lab',
+        safety: 'Safety',
     },
 
     Calendar: {

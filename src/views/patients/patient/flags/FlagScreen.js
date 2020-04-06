@@ -48,13 +48,13 @@ export default class FlagScreen extends AppScreen {
     };
 
     categories = [
-        {key: 'admin', label: strings.Flags.admin,},
-        {key: 'behavioral', label: strings.Flags.behavioral,},
-        {key: 'clinical', label: strings.Flags.clinical,},
-        {key: 'contact', label: strings.Flags.contact,},
-        {key: 'drug', label: strings.Flags.drug,},
-        {key: 'lab', label: strings.Flags.lab,},
-        {key: 'safety', label: strings.Flags.safety,},
+        {key: 'admin', label: strings.Categories.admin,},
+        {key: 'behavioral', label: strings.Categories.behavioral,},
+        {key: 'clinical', label: strings.Categories.clinical,},
+        {key: 'contact', label: strings.Categories.contact,},
+        {key: 'drug', label: strings.Categories.drug,},
+        {key: 'lab', label: strings.Categories.lab,},
+        {key: 'safety', label: strings.Categories.safety,},
     ];
 
     componentDidMount(): void {

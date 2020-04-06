@@ -31,6 +31,7 @@ import {uses24HourClock} from "react-native-localize";
 import {Flag} from '../../models/Flag';
 import {Patient} from '../../models/Patient';
 import {Visit} from '../../models/Visit';
+import FlagRenderer from '../patients/patient/flags/FlagRenderer';
 
 export default class WorkScreen extends AppScreen {
 
@@ -52,7 +53,9 @@ export default class WorkScreen extends AppScreen {
         tasks: [],
         sortedTasks: [],
         taskFilterInputText: null,
+        flagFilterInputText: null,
         filteredTasks: null,
+        filteredFlags: null,
         visits: [],
         flags: [],
         sortedFlags: [],
@@ -108,9 +111,9 @@ export default class WorkScreen extends AppScreen {
             });
             let sortedTasks = this.getSortedTasks(tasks);
             let filteredTasks = this.state.taskFilterInputText ?
-                this.getFilteredTasks(this.state.tasks, this.state.taskFilterInputText) : null;
+                this.getFilteredTasks(tasks, this.state.taskFilterInputText) : null;
 
-            return {tasks: result.data, sortedTasks: sortedTasks, filteredTasks: filteredTasks};
+            return {tasks: tasks, sortedTasks: sortedTasks, filteredTasks: filteredTasks};
         } else {
             this.showError(result.data);
         }
@@ -130,21 +133,15 @@ export default class WorkScreen extends AppScreen {
     getFlags = async (refresh = true) => {
         let result: APIRequest = await this.api.getFlags();
         if (result.success) {
+            let flags = result.data.sort((a: Task, b: Task) => {
+                return ('' + a.patient.fullName).localeCompare(b.patient.fullName);
+            });
+            let sortedFlags = this.getSortedTasks(flags);
 
-            let sortedFlags = result.data.reduce((array, flag: Flag) => {
-                let userArray = array.find(o => o.title === flag.patient.fullName);
-                if (userArray)
-                    userArray.data.push(flag);
-                else {
-                    array.push({
-                        title: flag.patient.fullName,
-                        data: [flag],
-                    })
-                }
-                return array;
-            }, []);
+            let filteredFlags = this.state.flagFilterInputText ?
+                this.getFilteredFlags(flags, this.state.taskFilterInputText) : null;
 
-            return {flags: result.data, sortedFlags: sortedFlags};
+            return {flags: flags, sortedFlags: sortedFlags, filteredFlags: filteredFlags};
         } else {
             this.showError(result.data);
         }
@@ -165,11 +162,32 @@ export default class WorkScreen extends AppScreen {
         }, []);
     };
 
+    getSortedFlags = (flags) => {
+        return flags.reduce((array, flag: Flag) => {
+            let userArray = array.find(o => o.title === flag.patient.fullName);
+            if (userArray)
+                userArray.data.push(flag);
+            else {
+                array.push({
+                    title: flag.patient.fullName,
+                    data: [flag],
+                })
+            }
+            return array;
+        }, []);
+    };
+
     getFilteredTasks = (tasks, text) => {
         text = text.toLowerCase();
         const filteredTasks = tasks.filter(task => task.text.toLowerCase().indexOf(text) > -1);
         return this.getSortedTasks(filteredTasks);
-    }
+    };
+
+    getFilteredFlags = (flags, text) => {
+        text = text.toLowerCase();
+        const filteredFlags = flags.filter(flag => flag.text.toLowerCase().indexOf(text) > -1);
+        return this.getSortedFlags(filteredFlags);
+    };
 
     //------------------------------------------------------------
     // Methods
@@ -197,7 +215,7 @@ export default class WorkScreen extends AppScreen {
         // TODO
     };
 
-    editFlag = async (flag: Flag) => {
+    selectFlag = (flag: Flag) => {
         this.navigateTo('Flag', {
             patient: flag.patient,
             flag: flag,
@@ -220,6 +238,13 @@ export default class WorkScreen extends AppScreen {
             filteredTasks: text.isEmpty() ? null : this.getFilteredTasks(this.state.tasks, text)
         });
     };
+
+    filterFlags = (text) => {
+        this.setState({
+            flagFilterInputText: text.isEmpty() ? null : text,
+            filteredFlags: text.isEmpty() ? null : this.getFilteredFlags(this.state.flags, text)
+        });
+    }
 
     //------------------------------------------------------------
     // Render
@@ -293,6 +318,46 @@ export default class WorkScreen extends AppScreen {
         );
     };
 
+    renderFlagsHeader = () => {
+        return (
+            <View style={{margin: 10}}>
+                <TextInput ref={ref => this.flagFilterInput = ref}
+                           style={commonStyles.input}
+                           returnKeyType="search"
+                           autoCorrect={false}
+                           value={this.state.flagFilterInputText}
+                           autoCapitalize='none'
+                           placeholderTextColor="#CCCCCC"
+                           placeholder={strings.Work.filter}
+                           enablesReturnKeyAutomatically={true}
+                           paddingRight={12}
+                           paddingLeft={12}
+                           onChangeText={this.filterFlags}
+                />
+                {
+                    this.state.filteredFlags &&
+                    <TouchableOpacity
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            bottom: 0,
+                            right: 5,
+                            width: 20,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                        onPress={() => {
+                            this.flagFilterInput.clear();
+                            this.filterFlags('');
+                        }
+                        }>
+                        <Icon type='AntDesign' name='closecircle' style={{fontSize: 16, color: '#0000004D'}}/>
+                    </TouchableOpacity>
+                }
+            </View>
+        );
+    };
+
     renderListFooter = () => {
         return (
             <View style={{height: 0}} />
@@ -332,7 +397,7 @@ export default class WorkScreen extends AppScreen {
 
     renderTasks = () => {
 
-        const data = this.state.filteredTasks || this.state.sortedTasks;
+        const tasks = this.state.filteredTasks || this.state.sortedTasks;
 
         return (
             <View style={commonStyles.screenContainer}>
@@ -340,7 +405,7 @@ export default class WorkScreen extends AppScreen {
                     <SectionList style={styles.list}
                                  keyExtractor={item => item.id}
                                  contentContainerStyle={{flexGrow: 1}}
-                                 sections={data}
+                                 sections={tasks}
                                  renderItem={this.renderTask}
                                  stickySectionHeadersEnabled={true}
                                  ItemSeparatorComponent={() => renderSeparator()}
@@ -369,23 +434,13 @@ export default class WorkScreen extends AppScreen {
     renderFlag = ({item}) => {
         const flag: Flag = item;
         return (
-            <TouchableHighlight
-                style={commonStyles.listItemContainer}
-                underlayColor='#FFFFFFFF'
-                activeOpacity={0.3}
-                onPress={() => this.editFlag(flag)}>
-                <Card style={[commonStyles.cardStyle, {backgroundColor: flag.internal ? '#E8E16C' : '#FFFFFF'}]}>
-                    <View style={styles.flagInfoContainer}>
-                        <Text style={commonStyles.smallInfoText}>{flag.startDate ? moment(flag.startDate).format("MMM Do YYYY") : ''}</Text>
-                        <Text style={commonStyles.smallInfoText}>{flag.category}</Text>
-                    </View>
-                    <Text style={[commonStyles.contentText, {marginTop: 10}]}>{flag.text}</Text>
-                </Card>
-            </TouchableHighlight>
-        )
+            <FlagRenderer flag={flag} selectFlag={this.selectFlag} />
+        );
     };
 
     renderFlags = () => {
+
+        const flags = this.state.filteredFlags || this.state.sortedFlags;
 
         return (
             <View style={commonStyles.screenContainer}>
@@ -393,12 +448,12 @@ export default class WorkScreen extends AppScreen {
                     <SectionList style={styles.list}
                                  keyExtractor={item => item.id}
                                  contentContainerStyle={{flexGrow: 1}}
-                                 sections={this.state.sortedFlags}
+                                 sections={flags}
                                  renderItem={this.renderFlag}
                                  stickySectionHeadersEnabled={true}
                                  ItemSeparatorComponent={() => renderSeparator()}
                                  ListEmptyComponent={this.renderListEmpty}
-                                 ListHeaderComponent={this.renderListHeader}
+                                 ListHeaderComponent={this.renderFlagsHeader}
                                  ListFooterComponent={this.renderListFooter}
                                  renderSectionHeader={({section: {title}}) => (
                                      <View style={{
