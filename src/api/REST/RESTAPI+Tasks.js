@@ -18,8 +18,8 @@ RESTAPI.prototype.getTasks = async function getTasks(patientId, statuses: [Statu
         let url = 'ServiceRequest';
         if (patientId) {
             params.subject = patientId;
-        } else if (API.user) {
-            //url += '?performer=' + API.user.id;
+        } else if (this.user) {
+            url += '?performer=' + this.user.id;
         }
         if (Array.isArray(statuses) && statuses.length > 0)
             params.status = statuses.join();
@@ -85,8 +85,8 @@ export function getTaskFromJson(json) {
     task.patient = json.subject ? getPatientFromJson(json.subject) : null;
     task.requesterId = json.requester?.id || null;
     task.requester = json.requester ? getPractitionerFromJSON(json.requester) : null;
-    task.performerId = API.user?.id;//json.performer?.id || null;
-    task.performer = API.user;//json.performer ? getPractitionerFromJSON(json.performer) : null;
+    task.performerId = json.performer?.id || null;
+    task.performer = json.performer ? getPractitionerFromJSON(json.performer) : null;
     task.visitId = json.encounter?.id || null;
     task.visit = json.encounter ? getVisitFromJson(json.encounter) : null;
     //task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;

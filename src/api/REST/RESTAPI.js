@@ -28,7 +28,7 @@ export default class RESTAPI extends API {
             }
         };
 
-        if (API.token) {
+        if (this.token) {
             result.headers.Authorization = `Bearer ${API.token}`;
         }
 
@@ -38,9 +38,10 @@ export default class RESTAPI extends API {
     };
 
     setCurrentUser = async (identifier: String) => {
+        this.upn = identifier;
         let result: APIRequest = await this.getPractitionerByIdentifier(identifier);
         if (result.success) {
-            API.user = result.data;
+            this.user = result.data;
         }
 
         return result;
