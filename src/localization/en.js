@@ -15,7 +15,7 @@ export const en = {
         username: 'Username',
         password: 'Password',
         login: 'Login',
-        production: 'Production server',
+        production: 'Development Secured',
         develop: 'Development server',
     },
     Tabs: {
