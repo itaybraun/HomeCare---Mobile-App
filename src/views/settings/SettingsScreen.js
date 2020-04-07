@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import MenuButton from '../menu/MenuButton';
@@ -54,9 +54,8 @@ export default class SettingsScreen extends AppScreen {
         });
     };
 
-    logout = async () => {
-        await CookieManager.clearAll(true)
-        this.navigateTo('Login');
+    showUser = async () => {
+        this.navigateTo('CurrentUser', {});
     };
 
     //------------------------------------------------------------
@@ -64,21 +63,13 @@ export default class SettingsScreen extends AppScreen {
     //------------------------------------------------------------
 
     render() {
-
-        console.log(this.settings.qaMode)
-
         return (
             <View style={{flex: 1}}>
                 <Container>
                     <Content bounces={false}>
-                        <ListItem icon>
-                            <Left>
-                                <Button style={{backgroundColor: "#FF9501"}}>
-                                    <Icon active name="bug"/>
-                                </Button>
-                            </Left>
+                        <ListItem>
                             <Body>
-                                <Text>{strings.Settings.qa}</Text>
+                                <Text style={commonStyles.contentText}>{strings.Settings.qa}</Text>
                             </Body>
                             <Right>
                                 <Switch value={this.settings.qaMode} onValueChange={(value) => {
@@ -86,36 +77,31 @@ export default class SettingsScreen extends AppScreen {
                                 }}/>
                             </Right>
                         </ListItem>
-                        <ListItem icon onPress={this.changeImageQuality}>
-                            <Left>
-                                <Button style={{backgroundColor: "#3CD340"}}>
-                                    <Icon active name="ios-image"/>
-                                </Button>
-                            </Left>
+                        <ListItem onPress={this.changeImageQuality}>
                             <Body>
-                                <Text>{strings.Settings.imageQuality}</Text>
+                                <Text style={commonStyles.contentText}>{strings.Settings.imageQuality}</Text>
                             </Body>
-                            <Right>
-                                <Text>{strings.Settings[this.settings.imageQuality]}</Text>
-                                <Icon name="arrow-forward"/>
+                            <Right style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Text style={commonStyles.infoText}>{strings.Settings[this.settings.imageQuality]}</Text>
+                                <Icon style={{marginLeft: 10}} name="arrow-forward"/>
                             </Right>
                         </ListItem>
-                        <ListItem itemDivider>
+                        <ListItem onPress={this.showUser}>
                             <Body>
-                                <Text></Text>
+                                <Text style={commonStyles.smallInfoText}>{strings.Settings.currentUser}</Text>
+                                <Text style={[{flex: 1}, commonStyles.smallContentText]}>
+                                    {this.api.user?.id}
+                                </Text>
                             </Body>
+                            <Right style={{flex: 0}}>
+                                <Icon style={{marginLeft: 10}} name="arrow-forward"/>
+                            </Right>
                         </ListItem>
-                        <ListItem icon onPress={this.logout}>
-                            <Left>
-                                <Button style={{backgroundColor: "#007AFF"}}>
-                                    <Icon active name="md-exit"/>
-                                </Button>
-                            </Left>
-                            <Body>
-                                <Text>{strings.Settings.logout}</Text>
-                            </Body>
-                        </ListItem>
+
                     </Content>
+                    <View style={{alignItems: 'flex-end', marginTop: 10,}}>
+                        <Image source={require('../../assets/icons/settings/settings.png')}/>
+                    </View>
                 </Container>
             </View>
         );

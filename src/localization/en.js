@@ -159,7 +159,15 @@ export const en = {
         original: 'Original',
         medium: 'Medium',
         small: 'Small',
-        logout: 'Delete Access Token',
+        currentUser: 'Current User',
+        authentication: 'Authentication',
+        azureAD: 'Azure AD',
+        noAuth: 'No Auth',
+        upn: 'UPN',
+        practitionerId: 'Practitioner ID',
+        accessToken: 'Access Token',
+        deleteToken: 'Delete',
+        logout: 'Logout',
     },
 
     Priorities: {

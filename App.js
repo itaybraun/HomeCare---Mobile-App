@@ -46,6 +46,7 @@ import EditTaskScreen from './src/views/tasks/edit/EditTaskScreen';
 import SelectPriorityScreen from './src/views/tasks/edit/SelectPriorityScreen';
 import SelectPerformerScreen from './src/views/tasks/edit/SelectPerformerScreen';
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
+import CurrentUserScreen from './src/views/settings/CurrentUserScreen';
 
 export default class App extends React.Component {
 
@@ -142,6 +143,7 @@ const MessagesStack = createStackNavigator({
 const SettingsStack = createStackNavigator({
     Settings: SettingsScreen,
     ImageQuality: ImageQualityScreen,
+    CurrentUser: CurrentUserScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });
@@ -185,13 +187,23 @@ const Tabs = createBottomTabNavigator({
             const {routeName} = navigation.state;
             let tabStyle = {tintColor: tintColor};
             if (routeName === 'Patients') {
-                return <Image source={require('./src/assets/icons/tabs/patients.png')} style={tabStyle}/>;
+                return (
+                <View style={{marginTop: 6}}>
+                    <Image source={require('./src/assets/icons/tabs/patients.png')} style={tabStyle}/>
+                </View>
+                );
             } else if (routeName === 'Work') {
-                return <Image source={require('./src/assets/icons/tabs/work.png')} style={tabStyle}/>;
-            } else if (routeName === 'Messages') {
-                return <Image source={require('./src/assets/icons/tabs/chat.png')} style={tabStyle}/>;
+                return (
+                    <View style={{marginTop: 6}}>
+                        <Image source={require('./src/assets/icons/tabs/work.png')} style={tabStyle}/>
+                    </View>
+                );
             } else if (routeName === 'Settings') {
-                return <Image source={require('./src/assets/icons/tabs/settings.png')} style={tabStyle}/>;
+                return (
+                    <View style={{marginTop: 6}}>
+                        <Image source={require('./src/assets/icons/tabs/settings.png')} style={tabStyle}/>
+                    </View>
+                );
             }
         }
     }),

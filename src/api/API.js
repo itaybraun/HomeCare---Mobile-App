@@ -18,13 +18,8 @@ export class API {
         API.user = user;
     }
 
-    static token: String;
-    get token(): String {
-        return API.token;
-    }
-    set token(token) {
-        API.token = token;
-    }
+    upn: String;
+    token: String;
 }
 
 export class APIRequest extends Request {
