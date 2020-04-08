@@ -72,6 +72,18 @@ export default class LoginScreen extends AppScreen {
         this.navigateTo('Tabs');
     };
 
+    onEvgenyPress = async () => {
+        let api = new RESTAPI('https://fhir1.azurewebsites.net');
+        api.token = null;
+        this.props.screenProps.api = api;
+
+        this.setState({loading: true});
+        await this.api.setCurrentUser('user4@itaybraunhotmail.onmicrosoft.com');
+        this.setState({loading: false});
+
+        this.navigateTo('Tabs');
+    };
+
     onSalHealthPress = async () => {
         this.setState({loading: true});
         let api = new RESTAPI('https://cs004.azurewebsites.net');
@@ -82,7 +94,7 @@ export default class LoginScreen extends AppScreen {
         this.setState({loading: false});
 
         this.navigateTo('Tabs');
-    }
+    };
 
     onProdPress = () => {
         this.setState({
@@ -146,6 +158,12 @@ export default class LoginScreen extends AppScreen {
                                     </View>
                                     <Text style={[commonStyles.h2, {color: appColors.mainColor}]}>{strings.Login.homecarePlatform}</Text>
                                 </View>
+                                {
+                                    __DEV__ &&
+                                    <Button style={{backgroundColor: appColors.mainColor, width: 230, justifyContent: 'center'}} onPress={this.onEvgenyPress}>
+                                        <Text style={commonStyles.buttonText}>EVGENY</Text>
+                                    </Button>
+                                }
                                 <Button style={{backgroundColor: appColors.mainColor, width: 230, justifyContent: 'center'}} onPress={this.onDevelopPress}>
                                     <Text style={commonStyles.buttonText}>{strings.Login.develop.toUpperCase()}</Text>
                                 </Button>
