@@ -81,9 +81,9 @@ export default class SettingsScreen extends AppScreen {
                             <Body>
                                 <Text style={commonStyles.contentText}>{strings.Settings.imageQuality}</Text>
                             </Body>
-                            <Right style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Text style={commonStyles.infoText}>{strings.Settings[this.settings.imageQuality]}</Text>
-                                <Icon style={{marginLeft: 10}} name="arrow-forward"/>
+                            <Right style={{minWidth: 60, justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center'}}>
+                                    <Text style={commonStyles.infoText}>{strings.Settings[this.settings.imageQuality]}</Text>
+                                    <Icon style={{marginLeft: 10}} name="arrow-forward"/>
                             </Right>
                         </ListItem>
                         <ListItem onPress={this.showUser}>

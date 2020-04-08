@@ -225,7 +225,7 @@ export default class SelectVisitScreen extends AppScreen {
                     onPress={() => this.selectVisit(newIndex)}>
                     <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
                         {renderRadioButton(this.state.selectedVisitIndex === newIndex)}
-                        <View style={{flex: 1, marginLeft: 20, marginRight: 34}}>
+                        <View style={{flex: 1, marginLeft: 20, marginRight: 10}}>
                             <Text style={[commonStyles.contentText, {flex: 1}]}>{strings.Visit.newVisit}</Text>
                             <Form style={{marginTop: 20}}>
                                 <FormItemContainer
@@ -301,16 +301,16 @@ export default class SelectVisitScreen extends AppScreen {
     renderVisit = ({item, index}) => {
 
         let visit: Visit = item;
+        let selectedVisit = this.props.navigation.getParam('selectedVisit', null);
 
         let disabled = moment(visit.start).startOf('day') < moment().startOf('day');
 
-        if (disabled && this.state.selectedVisitIndex !== index ) {
+        if (disabled && this.state.selectedVisitIndex !== index && visit.id !== selectedVisit?.id) {
             return <View style={{marginTop: -10}} />
         }
 
         return (
             <TouchableOpacity
-                disabled={disabled}
                 style={{paddingHorizontal: 20,}}
                 onPress={() => this.selectVisit(index)}>
 
