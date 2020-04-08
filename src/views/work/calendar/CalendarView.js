@@ -141,11 +141,17 @@ export default class CalendarView extends Component {
                             }
                             {
                                 visit.tasks && visit.tasks.length > 0 ?
-                                visit.tasks?.map(task => {
+                                visit.tasks?.map((task, index) => {
                                     return (
-                                        <Text key={task.id} style={[commonStyles.contentText, {color: '#F37E08', marginTop: 5,}]}>
-                                            {task.text}
-                                        </Text>
+                                        <View key={task.id} style={{marginTop: 5}}>
+                                            {index > 0 &&
+                                                <View style={[commonStyles.line, {marginBottom: 5}]}/>
+                                            }
+                                            <Text style={[commonStyles.contentText, {color: '#F37E08', marginBottom: 5}]}>
+                                                {task.text}
+                                            </Text>
+
+                                        </View>
                                     );
                                 }) :
                                     <Text style={commonStyles.titleText}>

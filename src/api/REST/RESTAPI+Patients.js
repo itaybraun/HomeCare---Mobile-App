@@ -59,6 +59,7 @@ export function getPatientFromJson(json) {
     }) : null;
 
     patient.phone = json.telecom?.find(telecom => telecom.system ==='phone')?.value;
+    patient.identifier = json.identifier?.[0]?.value;
 
     return patient;
 }

@@ -163,7 +163,7 @@ export default class GeneralScreen extends AppScreen {
                                 <Text
                                     style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.General.identifier}</Text>
                                 <Text
-                                    style={[{flex: 1}, commonStyles.formItemText]}>{}</Text>
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{patient.identifier}</Text>
                             </Body>
                         </ListItem>
 

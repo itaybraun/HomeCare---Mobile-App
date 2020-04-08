@@ -216,7 +216,7 @@ export default class PatientsTasksScreen extends AppScreen {
                     onIndexChange={(index) => this.setState({ index })}
                     renderScene={this.renderScene}
                     renderTabBar={(props) =>
-                        renderWhiteTabBar(props, this.state.index, (index) => this.setState({index: index}))}
+                        renderTabBar(props, this.state.index, (index) => this.setState({index: index}))}
                 />
                 {renderLoading(this.state.loading)}
             </View>
