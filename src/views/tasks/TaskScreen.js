@@ -124,13 +124,15 @@ export default class TaskScreen extends AppScreen {
                 <Container>
                     <Content bounces={false}>
                         <View style={{flex: 1, margin: 10, alignItems: 'center', flexDirection: 'row'}}>
-                            <Text style={[commonStyles.titleText, {marginHorizontal: 10, flex: 1}]}
+                            <Image source={TaskRenderer.statusImage[task.status]}/>
+                            <Text style={[commonStyles.mainColorTitle, {marginHorizontal: 10, flex: 1}]}
                                   numberOfLines={3}>{task.text}</Text>
                         </View>
                         <List>
                             <ListItem>
-                                <Body style={{flexDirection: 'row'}}>
-                                    <Image style={{width: 22, height: 22}} source={TaskRenderer.statusImage[task.status]}/>
+                                <Body>
+                                    <Text
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.taskId}</Text>
                                     <Text style={[{flex: 1}, commonStyles.formItemText]}>{task.id}</Text>
                                 </Body>
                             </ListItem>
@@ -158,6 +160,15 @@ export default class TaskScreen extends AppScreen {
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.requester}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{task.requester?.fullName}</Text>
+                                </Body>
+                            </ListItem>
+
+                            <ListItem>
+                                <Body>
+                                    <Text
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.patient}</Text>
+                                    <Text
+                                        style={[{flex: 1}, commonStyles.formItemText]}>{task.patient?.fullName}</Text>
                                 </Body>
                             </ListItem>
 
@@ -205,16 +216,13 @@ export default class TaskScreen extends AppScreen {
                                 </Body>
                             </ListItem>
 
-                            {
-                                task.notes &&
-                                <ListItem>
-                                    <Body>
-                                        <Text
-                                            style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.notes}</Text>
-                                        <Text style={[{flex: 1}, commonStyles.formItemText]}>{task.notes}</Text>
-                                    </Body>
-                                </ListItem>
-                            }
+                            <ListItem>
+                                <Body>
+                                    <Text
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.notes}</Text>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{task.notes}</Text>
+                                </Body>
+                            </ListItem>
                         </List>
                         <View style={{alignItems: 'flex-end', marginTop: 10,}}>
                             <Image source={require('../../assets/icons/tasks/care.png')}/>
