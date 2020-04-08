@@ -122,14 +122,16 @@ export default class PatientsScreen extends AppScreen {
 
     renderItem = ({item}) => {
 
+        const patient: Patient = item;
+
         let patientGenderAndAge = [];
-        if (item.gender)
-            patientGenderAndAge.push(item.gender.charAt(0).toUpperCase());
-        if (item.age)
-            patientGenderAndAge.push(item.age + ' ' + strings.Patients.yo);
+        if (patient.gender)
+            patientGenderAndAge.push(patient.gender.charAt(0).toUpperCase());
+        if (patient.age)
+            patientGenderAndAge.push(patient.age + ' ' + strings.Patients.yo);
         patientGenderAndAge = patientGenderAndAge.join(", ");
 
-        const userAvatar = require('../../assets/icons/patients/user.png');
+        const userAvatar = patient.avatar || require('../../assets/icons/patients/user.png');
 
         return (
             <TouchableOpacity
@@ -139,7 +141,7 @@ export default class PatientsScreen extends AppScreen {
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Image source={userAvatar} />
                         <View style={{flex: 1, marginLeft: 15,}}>
-                            <Text style={commonStyles.titleText}>{item.fullName}</Text>
+                            <Text style={commonStyles.titleText}>{patient.fullName}</Text>
                             {
                                 !patientGenderAndAge.isEmpty() &&
                                 <Text style={[commonStyles.smallInfoText, {marginTop: 5, marginLeft: 0}]}>{patientGenderAndAge}</Text>

@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, Platform, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
+import {View, Platform, ActivityIndicator, Text, TouchableOpacity, Easing} from 'react-native';
 import { I18nManager } from 'react-native';
 import {Icon} from "native-base";
 import {TransitionPresets} from 'react-navigation-stack';
+import {TransitionIOSSpec} from 'react-navigation-stack/src/vendor/TransitionConfigs/TransitionSpecs';
 
 export const appColors = {
     mainColor: '#6E78F7',
@@ -246,7 +247,6 @@ export const commonStyles = {
         padding: 10,
         paddingTop: 0,
     },
-
     tabItem: {
         flex: 1,
         alignItems: 'center',
@@ -266,6 +266,34 @@ export const commonStyles = {
     },
     tabItemTextSelected: {
         color: '#FFFFFF',
+    },
+
+
+    whiteTabBar: {
+        backgroundColor: appColors.secondColor,
+        flexDirection: 'row',
+        padding: 10,
+        paddingTop: 0,
+    },
+    whiteTabItem: {
+        flex: 1,
+        alignItems: 'center',
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#707070',
+    },
+    whiteTabItemText: {
+        fontSize: 16,
+        textTransform: 'uppercase',
+        color: appColors.mainColor,
+    },
+    whiteTabItemSelected: {
+        borderBottomWidth: 2,
+        borderBottomColor: appColors.mainColor,
+    },
+    whiteTabItemTextSelected: {
+        color: appColors.mainColor,
+        ...medium(),
     },
 
 
@@ -362,6 +390,26 @@ export const renderDisclosureIndicator = () => {
     );
 };
 
+export const renderWhiteTabBar = (props, selectedIndex, onIndexChange) => {
+    return (
+        <View style={[commonStyles.whiteTabBar]}>
+            {
+                props.navigationState.routes.map((route, i) => {
+                    return (
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            key={route.key}
+                            style={[commonStyles.whiteTabItem, selectedIndex === i ? commonStyles.whiteTabItemSelected : {}]}
+                            onPress={() => onIndexChange && onIndexChange(i)}>
+                            <Text numberOfLines={1} style={[commonStyles.whiteTabItemText, selectedIndex === i ? commonStyles.whiteTabItemTextSelected : {}]}>{route.title}</Text>
+                        </TouchableOpacity>
+                    );
+                })
+            }
+        </View>
+    );
+};
+
 export const renderTabBar = (props, selectedIndex, onIndexChange) => {
     return (
         <View style={commonStyles.tabBar}>
@@ -429,5 +477,14 @@ export const popupNavigationOptions = {
     },
     headerTintColor: 'black',
     ...TransitionPresets.ModalSlideFromBottomIOS,
+    transitionSpec: {
+        open: TransitionIOSSpec,
+        close: {
+            animation: 'timing',
+            config: {
+                duration: 0,
+            },
+        },
+    },
 };
 

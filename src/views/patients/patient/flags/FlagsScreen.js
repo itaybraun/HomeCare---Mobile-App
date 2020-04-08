@@ -25,6 +25,7 @@ import {
 import { SwipeListView } from 'react-native-swipe-list-view';
 import moment from 'moment';
 import {Flag} from '../../../../models/Flag';
+import FlagRenderer from './FlagRenderer';
 
 export default class FlagsScreen extends AppScreen {
 
@@ -44,6 +45,7 @@ export default class FlagsScreen extends AppScreen {
     state = {
         loading: false,
         flags: [],
+        patient: this.props.navigation.getParam('patient', null),
     };
 
     componentDidMount(): void {
@@ -74,16 +76,23 @@ export default class FlagsScreen extends AppScreen {
     };
 
     addFlag = async () => {
-        const patient: Patient = this.props.navigation.getParam('patient', null);
-        if (patient) {
+        if (this.state.patient) {
             this.navigateTo('Flag', {
-                patient: patient,
+                patient: this.state.patient,
                 flag: null,
                 refresh: this.getData,
             });
         }
         this.closeRow();
     };
+
+    selectFlag = async (item, rowMap) => {
+        this.navigateTo('Flag', {
+            patient: item.patient,
+            flag: item,
+            refresh: this.getData,
+        });
+    }
 
     editFlag = async (item, rowMap) => {
         const patient: Patient = this.props.navigation.getParam('patient', null);
@@ -144,19 +153,7 @@ export default class FlagsScreen extends AppScreen {
         const flag: Flag = item;
 
         return (
-            <TouchableHighlight
-                style={commonStyles.listItemContainer}
-                underlayColor='#FFFFFFFF'
-                activeOpacity={0.3}
-                onPress={() => this.editFlag(item, rowMap)}>
-                <Card style={[commonStyles.cardStyle, {backgroundColor: item.internal ? '#E8E16C' : '#FFFFFF'}]}>
-                    <View style={styles.flagInfoContainer}>
-                        <Text style={commonStyles.smallInfoText}>{flag.startDate ? moment(flag.startDate).format("MMM Do YYYY") : ''}</Text>
-                        <Text style={commonStyles.smallInfoText}>{flag.category}</Text>
-                    </View>
-                    <Text style={[commonStyles.contentText, {marginTop: 10}]}>{flag.text}</Text>
-                </Card>
-            </TouchableHighlight>
+            <FlagRenderer flag={flag} selectFlag={() => this.selectFlag(flag, rowMap)} />
         )
     };
 
@@ -212,14 +209,14 @@ export default class FlagsScreen extends AppScreen {
                     closeOnRowBeginSwipe
                     recalculateHiddenLayout
                 />
-                <View style={{position: 'absolute', right: 10, bottom: 10}}>
-                    <TouchableOpacity
-                        style={commonStyles.blackButtonContainer}
-                        onPress={this.addFlag}
-                    >
-                        <Icon type="Feather" name="plus" style={commonStyles.plusText}/>
-                    </TouchableOpacity>
-                </View>
+                {/*<View style={{position: 'absolute', right: 10, bottom: 10}}>*/}
+                {/*    <TouchableOpacity*/}
+                {/*        style={commonStyles.blackButtonContainer}*/}
+                {/*        onPress={this.addFlag}*/}
+                {/*    >*/}
+                {/*        <Icon type="Feather" name="plus" style={commonStyles.plusText}/>*/}
+                {/*    </TouchableOpacity>*/}
+                {/*</View>*/}
                 {renderLoading(this.state.loading)}
             </View>
         );

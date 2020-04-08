@@ -34,32 +34,24 @@ export const en = {
         yo: 'Y/O'
     },
     Patient: {
-        title: 'Patient',
-        profile: 'Profile',
-        carePlans: 'Care Plans',
-        tasks: 'Tasks',
-        general: 'General',
-        flags: 'Flags',
-        vital: 'Vital Signs',
-        mental: 'Cognitive & Mental',
-        body: 'Body Sites',
-        quickActions: 'Quick Actions',
-        conditions: 'Conditions',
-        timeline: 'Timeline',
+        title: 'Patient Profile',
+        openTasks: 'Open Tasks',
         completedTasks: 'Completed Tasks',
-        created: 'Created {0}',
-        executeTask: 'Execute Task',
-        relatedPeople: 'Related People'
+        general: 'General',
+        flags: 'Alerts',
+        vital: 'Vital Signs',
+        conditions: 'Conditions',
+        cognitive: 'Cognitive',
     },
     Flags: {
-        title: 'Flags',
-        userTitle: '{0} Flags',
-        addFlag: 'Add flag',
-        newFlag: 'New Flag',
+        title: 'Alerts',
+        userTitle: '{0} Alerts',
+        addFlag: 'Add Alert',
+        newFlag: 'New Alert',
         details: 'Alert Details',
-        editFlag: 'Edit Flag',
+        editFlag: 'Edit Alert',
         noFlags: 'No data to display',
-        deleteFlag: 'You are about to delete a flag. Are you sure?',
+        deleteFlag: 'You are about to delete the alert. Are you sure?',
         category: 'Category',
         text: 'Text',
         internal: 'Internal',
@@ -214,9 +206,11 @@ export const en = {
         submitText: 'You are about to submit the form',
     },
 
-    CompletedTasks: {
-        completedTasks: 'Completed Tasks',
-        noData: 'No completed tasks',
+    PatientTasks: {
+        title: 'Patient\'s Tasks',
+        open: 'Open',
+        completed: 'Completed',
+        noData: 'No data to display',
         executionDate: 'Execution Date',
         sorting: 'Sort task',
         sortByName: 'By Name',
@@ -227,5 +221,15 @@ export const en = {
     QuestionnaireResponse: {
         completedTask: 'Completed Task',
         responseNotFound: 'Response has not been found!'
+    },
+
+    General: {
+        title: 'Patient - General',
+        patientId: 'Patient ID',
+        age: 'Age',
+        gender: 'Gender',
+        identifier: 'Identifier',
+        address: 'Address',
+        relatedPersons: 'Related Persons',
     },
 };

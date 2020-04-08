@@ -228,10 +228,6 @@ export default class WorkScreen extends AppScreen {
         });
     };
 
-    handleTabIndexChange = index => {
-        this.setState({ index });
-    };
-
     filterTasks = (text) => {
         this.setState({
             taskFilterInputText: text.isEmpty() ? null : text,
@@ -251,10 +247,6 @@ export default class WorkScreen extends AppScreen {
     //------------------------------------------------------------
 
     // Tabs
-
-    renderTabBar = (props) => {
-        return renderTabBar(props, this.state.index, (index) => this.setState({index: index}));
-    };
 
     renderScene = ({ route }) => {
         switch (route.key) {
@@ -477,9 +469,10 @@ export default class WorkScreen extends AppScreen {
             <View style={commonStyles.screenContainer}>
                 <TabView
                     navigationState={this.state}
-                    onIndexChange={this.handleTabIndexChange}
+                    onIndexChange={(index) => this.setState({ index })}
                     renderScene={this.renderScene}
-                    renderTabBar={this.renderTabBar}
+                    renderTabBar={(props) =>
+                        renderTabBar(props, this.state.index, (index) => this.setState({index: index}))}
                 />
                 {renderLoading(this.state.loading)}
             </View>

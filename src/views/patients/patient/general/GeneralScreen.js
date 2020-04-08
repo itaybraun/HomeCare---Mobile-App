@@ -8,13 +8,13 @@ import {
     Keyboard,
     ScrollView,
     Linking,
-    SectionList,
+    SectionList, Image,
 } from 'react-native';
 import AppScreen from '../../../../support/AppScreen';
 import {appColors, commonStyles, renderLoading, renderSeparator} from '../../../../support/CommonStyles';
 import {Patient} from '../../../../models/Patient';
 import {strings} from '../../../../localization/strings';
-import {Card, Form, Icon, Text} from 'native-base';
+import {Body, Card, Container, Content, Form, Icon, List, ListItem, Right, Text} from 'native-base';
 import {APIRequest} from '../../../../api/API';
 import {Relative} from '../../../../models/Relative';
 
@@ -25,18 +25,15 @@ export default class GeneralScreen extends AppScreen {
     //------------------------------------------------------------
 
     static navigationOptions = ({navigation}) => {
-        const patient: Patient = navigation.getParam('patient', null);
-        const title = patient?.fullName;
-
         return {
-            title: title,
+            title: strings.General.title,
             headerBackTitle: ' ',
         }
     };
 
     state = {
         loading: false,
-        patient: null,
+        patient: this.props.navigation.getParam('patient', null),
         relatives: [],
     };
 
@@ -47,7 +44,7 @@ export default class GeneralScreen extends AppScreen {
     componentDidMount(): void {
         super.componentDidMount();
 
-        this.getData();
+        //this.getData();
     }
 
     //------------------------------------------------------------
@@ -59,7 +56,6 @@ export default class GeneralScreen extends AppScreen {
 
         const patient: Patient = this.props.navigation.getParam('patient', null);
         const relatives = await this.getRelatives(patient?.id);
-        console.log(relatives)
 
         this.setState({
             patient: patient,
@@ -81,131 +77,119 @@ export default class GeneralScreen extends AppScreen {
     // Methods
     //------------------------------------------------------------
 
+    showRelatedPersons = () => {
 
+    };
 
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
 
-    renderListHeader = () => {
+    render = () => {
 
         const patient: Patient = this.state.patient;
         if (!patient) {
             return <View />;
         }
 
-        let patientGenderAndAge = [];
-        if (patient.gender)
-            patientGenderAndAge.push(patient.gender.charAt(0).toUpperCase());
-        if (patient.age)
-            patientGenderAndAge.push(patient.age + ' ' + strings.Patients.yo);
-        patientGenderAndAge = patientGenderAndAge.join(", ");
+        const userAvatar = patient.avatar || require('../../../../assets/icons/patients/user.png');
 
         return (
-            <View style={{margin: 10, marginBottom: 0}}>
-                <Form>
-                    <Card style={{padding: 15, marginBottom: 15,}}>
-                        <Text style={[commonStyles.titleText]}>{patient.fullName}</Text>
-                        {
-                            !patientGenderAndAge.isEmpty() &&
-                            <Text style={[commonStyles.contentText, {marginTop: 5,}]}>
-                                {patientGenderAndAge}
-                            </Text>
-                        }
+            <Container style={commonStyles.screenContainer}>
+                <Content bounces={false}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', padding: 20,}}>
+                        <Image source={userAvatar}/>
+                        <View style={{flex: 1, marginLeft: 15,}}>
+                            <Text style={commonStyles.mainColorTitle}>{patient.fullName}</Text>
+                        </View>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 20}}>
                         {
                             patient.phone &&
                             <TouchableOpacity
-                                style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}
+                                style={{flexDirection: 'row', alignItems: 'center', marginLeft: 20}}
                                 onPress={() => Linking.openURL(`tel:${patient.phone}`) }
                             >
-                                <Icon type="Feather" name="phone" style={{fontSize: 24, color: appColors.textColor}}/>
-                                <Text style={[{flex: 1, marginLeft: 10,}, commonStyles.contentText]}>{patient.phone}</Text>
+                                <Icon type="Feather" name="phone" style={{fontSize: 28, color: appColors.textColor}}/>
                             </TouchableOpacity>
                         }
                         {
                             patient.address &&
-                            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-                                <Icon type="Feather" name="map" style={{fontSize: 24, color: appColors.textColor}}/>
-                                <Text style={[{flex: 1, marginLeft: 10,}, commonStyles.contentText]}>{patient.simpleAddress}</Text>
-                            </View>
-                        }
-                    </Card>
-                </Form>
-            </View>
-        );
-    };
-
-    renderRelative = ({item}) => {
-        const relative: Relative = item;
-
-        return (
-            <TouchableOpacity
-                disabled={true}
-                style={commonStyles.listItemContainer}>
-                <Card style={commonStyles.cardStyle}>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{flex: 1}}>
-                            <Text style={commonStyles.titleText}>{relative.fullName}</Text>
-                            <Text style={[commonStyles.smallInfoText, {marginTop: 10}]}>{relative.relationship}</Text>
-                        </View>
-                        {
-                            relative.phone &&
                             <TouchableOpacity
                                 style={{flexDirection: 'row', alignItems: 'center', marginLeft: 20}}
-                                onPress={() => Linking.openURL(`tel:${relative.phone}`) }
                             >
-                                <Icon type="Feather" name="phone" style={{fontSize: 24, color: appColors.textColor}}/>
+                                <Icon type="Feather" name="map" style={{fontSize: 28, color: appColors.textColor}}/>
                             </TouchableOpacity>
                         }
                         {
-                            relative.email &&
+                            patient.email &&
                             <TouchableOpacity style={{marginRight: 0, marginLeft: 20}}
-                                              onPress={() => Linking.openURL(`mailto:${relative.email}`)}>
+                                              onPress={() => Linking.openURL(`mailto:${patient.email}`)}>
                                 <Icon type="Feather" name="mail"
-                                      style={{fontSize: 30, color: appColors.textColor}}/>
+                                      style={{fontSize: 28, color: appColors.textColor}}/>
                             </TouchableOpacity>
                         }
                     </View>
-                </Card>
-            </TouchableOpacity>
-        )
-    }
+                    <List>
+                        <ListItem>
+                            <Body>
+                                <Text
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.General.patientId}</Text>
+                                <Text
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{patient.id}</Text>
+                            </Body>
+                        </ListItem>
 
-    renderListFooter = () => {
-        return <View/>
-    };
+                        <ListItem>
+                            <Body>
+                                <Text
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.General.age}</Text>
+                                <Text
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{patient.age}</Text>
+                            </Body>
+                        </ListItem>
 
-    render() {
+                        <ListItem>
+                            <Body>
+                                <Text
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.General.gender}</Text>
+                                <Text
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{patient.gender?.capitalize()}</Text>
+                            </Body>
+                        </ListItem>
 
-        let data = [];
+                        <ListItem>
+                            <Body>
+                                <Text
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.General.identifier}</Text>
+                                <Text
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{}</Text>
+                            </Body>
+                        </ListItem>
 
-        if (this.state.relatives && this.state.relatives.length > 0) {
-            data.push({
-                title:  strings.Patient.relatedPeople,
-                data: this.state.relatives,
-            })
-        }
+                        <ListItem>
+                            <Body>
+                                <Text
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.General.address}</Text>
+                                <Text
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{patient.simpleAddress}</Text>
+                            </Body>
+                        </ListItem>
 
-        return (
-            <View style={commonStyles.screenContainer} onPress={Keyboard.dismiss}>
-                <SectionList contentContainerStyle={{flexGrow: 1}}
-                             sections={data}
-                             bounces={false}
-                             renderItem={this.renderRelative}
-                             ListHeaderComponent={this.renderListHeader}
-                             ListFooterComponent={this.renderListFooter}
-                             keyExtractor={item => item.id}
-                             ItemSeparatorComponent={() => renderSeparator()}
-                             renderSectionHeader={({section: {title}}) => (
-                                 <View>
-                                     <Text style={[commonStyles.yellowText, {marginLeft: 10, marginBottom: 5}]}>{title}</Text>
-                                 </View>
-                             )}
-                />
-                {renderLoading(this.state.loading)}
-            </View>
+                        <ListItem onPress={this.showRelatedPersons}>
+                            <Body>
+                                <Text
+                                    style={[{flex: 1, marginVertical: 10}, commonStyles.formItemText]}>{strings.General.relatedPersons}</Text>
+                            </Body>
+                            <Right>
+                                <Icon name="arrow-forward"/>
+                            </Right>
+                        </ListItem>
+                    </List>
+                </Content>
+            </Container>
         );
-    }
+    };
 }
 
 const styles = StyleSheet.create({

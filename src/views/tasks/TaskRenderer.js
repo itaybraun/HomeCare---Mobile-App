@@ -6,7 +6,7 @@ import {strings} from '../../localization/strings';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
 import PropTypes from 'prop-types';
-import {Task} from '../../models/Task';
+import {Status, Task} from '../../models/Task';
 
 export default class TaskRenderer extends Component {
 
@@ -44,6 +44,8 @@ export default class TaskRenderer extends Component {
     render () {
 
         const task: Task = this.props.task;
+
+        const dateFontStyle = task.status === Status.ACTIVE ? commonStyles.bold : {};
 
         return (
             <TouchableHighlight style={commonStyles.listItemContainer}
@@ -91,17 +93,17 @@ export default class TaskRenderer extends Component {
                             task.visit && task.visit.start && task.visit.end ?
                                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10,}}>
                                     <View>
-                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, commonStyles.bold, {marginRight: 5,}]}>
+                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, dateFontStyle, {marginRight: 5,}]}>
                                             {moment(task.visit.start).format('ddd')}
                                         </Text>
                                     </View>
                                     <View>
-                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, commonStyles.bold, {marginRight: 5,}]}>
+                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, dateFontStyle, {marginRight: 5,}]}>
                                             {moment(task.visit.start).format('MMM-DD-YYYY')}
                                         </Text>
                                     </View>
                                     <View>
-                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, commonStyles.bold]}>
+                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, dateFontStyle,]}>
                                             {moment(task.visit.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}
                                             &nbsp;-&nbsp;
                                             {moment(task.visit.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}
@@ -109,7 +111,7 @@ export default class TaskRenderer extends Component {
                                     </View>
                                 </View>
                                 :
-                                <Text style={[commonStyles.smallContentText, commonStyles.bold, {textAlign: 'center', flex: 1, color: '#FF0000'}]}>
+                                <Text style={[commonStyles.smallContentText, dateFontStyle, {textAlign: 'center', flex: 1, color: '#FF0000'}]}>
                                     {strings.Tasks.noSchedule?.toUpperCase()}
                                 </Text>
                         }

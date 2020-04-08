@@ -40,7 +40,7 @@ import NewTaskScreen from './src/views/tasks/NewTaskScreen';
 import SelectActivityScreen from './src/views/tasks/SelectActivityScreen';
 import GeneralScreen from './src/views/patients/patient/general/GeneralScreen';
 import ImageQualityScreen from './src/views/settings/ImageQualityScreen';
-import CompletedTasksScreen from './src/views/tasks/CompletedTasksScreen';
+import PatientsTasksScreen from './src/views/tasks/PatientsTasksScreen';
 import QuestionnaireResponseScreen from './src/views/tasks/QuestionnaireResponseScreen';
 import EditTaskScreen from './src/views/tasks/edit/EditTaskScreen';
 import SelectPriorityScreen from './src/views/tasks/edit/SelectPriorityScreen';
@@ -108,12 +108,17 @@ const PatientsStack = createStackNavigator({
     Patients: PatientsScreen,
     Patient: PatientScreen,
     Flags: FlagsScreen,
-    Flag: EditFlagScreen,
+    Flag: FlagScreen,
+    EditFlag: EditFlagScreen,
     Questionnaire: QuestionnaireScreen,
-    CompletedTasks: CompletedTasksScreen,
+    PatientsTasks: PatientsTasksScreen,
+    Task: TaskScreen,
+    EditTask: EditTaskScreen,
     NewTask: NewTaskScreen,
     SelectActivity: SelectActivityScreen,
     SelectVisit: SelectVisitScreen,
+    SelectPriority: SelectPriorityScreen,
+    SelectPerformer: SelectPerformerScreen,
     General: GeneralScreen,
     QuestionnaireResponse: QuestionnaireResponseScreen,
 }, {
