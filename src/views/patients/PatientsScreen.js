@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {View, FlatList, StyleSheet, TouchableOpacity, TextInput, Image} from 'react-native';
 import AppScreen from '../../support/AppScreen';
 import {Patient} from '../../models/Patient';
 import MenuButton from '../menu/MenuButton';
@@ -129,17 +129,20 @@ export default class PatientsScreen extends AppScreen {
             patientGenderAndAge.push(item.age + ' ' + strings.Patients.yo);
         patientGenderAndAge = patientGenderAndAge.join(", ");
 
+        const userAvatar = require('../../assets/icons/patients/user.png');
+
         return (
             <TouchableOpacity
                 style={commonStyles.listItemContainer}
                 onPress={() => this.selectPatient(item)}>
                 <Card style={commonStyles.cardStyle}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{flex: 1}}>
+                        <Image source={userAvatar} />
+                        <View style={{flex: 1, marginLeft: 15,}}>
                             <Text style={commonStyles.titleText}>{item.fullName}</Text>
                             {
                                 !patientGenderAndAge.isEmpty() &&
-                                <Text style={[commonStyles.smallInfoText, {marginTop: 5, marginLeft: 10}]}>{patientGenderAndAge}</Text>
+                                <Text style={[commonStyles.smallInfoText, {marginTop: 5, marginLeft: 0}]}>{patientGenderAndAge}</Text>
                             }
                         </View>
                     </View>
