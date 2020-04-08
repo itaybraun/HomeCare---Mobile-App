@@ -117,10 +117,39 @@ export default class SelectPerformerScreen extends AppScreen {
 
     render() {
 
+        const me = this.state.performers.find(performer => performer.id === this.api.user.id);
+
         return (
             <View style={[commonStyles.screenContainer, {padding: 20}]} onPress={Keyboard.dismiss}>
+
                 {
-                    this.state.performers.map(performer=> {
+                    me &&
+                    <View>
+                        <TouchableOpacity
+                            key={me.id}
+                            onPress={() => this.setState({
+                                selectedPerformer: me,
+                            })}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                {renderRadioButton(this.state.selectedPerformer?.id === me.id)}
+                                <Text style={[commonStyles.contentText, {
+                                    flex: 1,
+                                    marginLeft: 10
+                                }]}>{strings.Task.me}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <View style={[commonStyles.line, {marginVertical: 20}]}/>
+                    </View>
+                }
+
+
+                {
+                    this.state.performers.map(performer => {
+
+                        if (performer.id === this.api.user?.id) {
+                            return null;
+                        }
+
                         return(
                             <TouchableOpacity
                                 key={performer.id}

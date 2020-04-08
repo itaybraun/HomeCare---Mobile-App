@@ -85,8 +85,8 @@ export function getTaskFromJson(json) {
     task.patient = json.subject ? getPatientFromJson(json.subject) : null;
     task.requesterId = json.requester?.id || null;
     task.requester = json.requester ? getPractitionerFromJSON(json.requester) : null;
-    task.performerId = json.performer?.id || null;
-    task.performer = json.performer ? getPractitionerFromJSON(json.performer) : null;
+    task.performerId = json.performer?.[0]?.id || null;
+    task.performer = json.performer?.[0] ? getPractitionerFromJSON(json.performer[0]) : null;
     task.visitId = json.encounter?.id || null;
     task.visit = json.encounter ? getVisitFromJson(json.encounter) : null;
     //task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
