@@ -18,6 +18,7 @@ export default class CurrentUserScreen extends AppScreen {
     static navigationOptions = ({navigation}) => {
         return {
             title: strings.Settings.currentUser,
+            headerBackTitle: ' ',
         }
     };
 
@@ -52,7 +53,7 @@ export default class CurrentUserScreen extends AppScreen {
                             <Body>
                                 <Text style={commonStyles.contentText}>{strings.Settings.authentication}</Text>
                             </Body>
-                            <Right>
+                            <Right style={{minWidth: 60, justifyContent: 'flex-end'}}>
                                 {
                                     this.api.token ?
                                         <Text style={commonStyles.infoText}>{strings.Settings.azureAD}</Text> :
@@ -97,7 +98,7 @@ export default class CurrentUserScreen extends AppScreen {
                                 </ListItem> :
                                 <ListItem>
                                     <Body></Body>
-                                    <Right style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <Right style={{flexDirection: 'row', alignItems: 'center', minWidth: 60, justifyContent: 'flex-end',}}>
 
                                         <Button small bordered onPress={() => this.logout(false)} style={{borderColor: appColors.mainColor}}>
                                             <Text style={[commonStyles.medium, {color: appColors.mainColor}]}>{strings.Settings.logout?.toUpperCase()}</Text>
