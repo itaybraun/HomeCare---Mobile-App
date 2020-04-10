@@ -97,32 +97,6 @@ export default class PatientScreen extends AppScreen {
     // Methods
     //------------------------------------------------------------
 
-    addTask = () => {
-        this.navigateTo('NewTask', {patient: this.state.patient, refresh: () => {
-                this.getData();
-                this.eventEmitter.emit('reloadTasks');
-            }
-        });
-    };
-
-    selectTask = async (task: Task) => {
-        if (task.status === Status.ACTIVE && task.activity?.questionnaireId) {
-            this.navigateTo('Questionnaire', {
-                task: task, refresh: () => {
-                    this.getData();
-                    this.eventEmitter.emit('reloadTasks');
-                }
-            });
-        }
-        else {
-            // task.status = Status.ACTIVE;
-            // const request: APIRequest = await this.api.updateTask(task);
-            // if (request.success) {
-            //     this.getData();
-            // }
-        }
-    };
-
     deleteTask = async (task: Task) => {
 
         this.showAlert(strings.Task.deleteTask, null, [
@@ -193,37 +167,6 @@ export default class PatientScreen extends AppScreen {
                 </Body>
             </ListItem>
         );
-    };
-
-    renderScene = ({ route }) => {
-        switch (route.key) {
-            case 'tasks':
-                return(
-                    <View style={{flex: 1}}>
-                        {
-                            this.state.qaMode &&
-                                <Text style={{textAlign: 'center', marginTop: 10}}>
-                                    QA Mode enabled. Showing all tasks
-                                </Text>
-                        }
-                        <PatientTasks patient={this.patient}
-                                      tasks={this.state.tasks}
-                                      selectTask={this.selectTask}
-                                      deleteTask={this.deleteTask}
-                        />
-                        <View style={{position: 'absolute', right: 10, bottom: 10}}>
-                            <TouchableOpacity
-                                style={commonStyles.blackButtonContainer}
-                                onPress={this.addTask}
-                            >
-                                <Icon type="Feather" name="plus" style={commonStyles.plusText}/>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                );
-            default:
-                return null;
-        }
     };
 
     render() {

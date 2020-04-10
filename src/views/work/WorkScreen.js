@@ -21,7 +21,7 @@ import {
     renderSeparator,
     renderTabBar,
 } from '../../support/CommonStyles';
-import {Card, Icon, Button, Text as NativeText, Container} from 'native-base';
+import {Card, Icon, ActionSheet, Text as NativeText, Container} from 'native-base';
 import moment from 'moment';
 import {TabView} from 'react-native-tab-view';
 import CalendarView from './calendar/CalendarView';
@@ -42,9 +42,14 @@ export default class WorkScreen extends AppScreen {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings.Work.title,
-            // headerLeft: () =>
-            //     <MenuButton />
-            // ,
+            headerRight: () => {
+                return (
+                    <TouchableOpacity style={{padding: 12}} onPress={navigation.getParam('showMenu')}>
+                        <Icon type="Entypo" name="dots-three-horizontal"
+                              style={{fontSize: 22, color: appColors.headerFontColor}}/>
+                    </TouchableOpacity>
+                )
+            }
         }
     };
 
@@ -80,6 +85,10 @@ export default class WorkScreen extends AppScreen {
         StatusBar.setBarStyle('light-content');
         if (Platform.OS === 'android')
             StatusBar.setBackgroundColor(appColors.mainColor);
+
+        this.props.navigation.setParams({
+            showMenu: this.showMenu,
+        });
 
         this.eventEmitter.on('reloadTasks', async () => {
             const tasks = await this.getTasks();
@@ -192,6 +201,33 @@ export default class WorkScreen extends AppScreen {
     //------------------------------------------------------------
     // Methods
     //------------------------------------------------------------
+
+    showMenu = () => {
+        let options = [
+            strings.Task.menuCreate,
+            strings.Common.cancelButton
+        ];
+
+        ActionSheet.show({
+                options: options,
+                cancelButtonIndex: options.length - 1,
+            },
+            (buttonIndex) => {
+                switch (buttonIndex) {
+                    case 0:
+                        this.createTask();
+                        break;
+                }
+            });
+    };
+
+    createTask = () => {
+        this.navigateTo('NewTask', {patient: null, refresh: () => {
+                this.getData();
+                this.eventEmitter.emit('reloadTasks');
+            }
+        });
+    };
 
     selectTask = (task) => {
         this.navigateTo('Task', {

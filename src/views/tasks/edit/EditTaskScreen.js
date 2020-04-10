@@ -19,7 +19,6 @@ import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
 import {APIRequest} from '../../../api/API';
 import {Visit} from '../../../models/Visit';
-import ActionSheet from 'react-native-simple-action-sheet';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../../support/Consts';
 import TaskRenderer from '../TaskRenderer';
@@ -98,57 +97,6 @@ export default class EditTaskScreen extends AppScreen {
     // Methods
     //------------------------------------------------------------
 
-    cancel = () => {
-        this.pop();
-    };
-
-
-
-    selectPriority = () => {
-        this.navigateTo('SelectPriority', {
-            selectedPriority: this.state.task.priority,
-            updatePriority: this.updatePriority,
-        });
-    };
-
-    selectVisit = () => {
-        this.navigateTo('SelectVisit', {
-            task: this.state.task,
-            selectedVisit: this.state.visit,
-            submitVisit: this.updateVisit,
-        });
-    };
-
-    selectPerformer = () => {
-        this.navigateTo('SelectPerformer', {
-            selectedPerformer: this.state.task.performer,
-            updatePerformer: this.updatePerformer,
-        });
-    };
-
-
-
-    updatePriority = async (value) => {
-        let task: Task = this.state.task;
-        task.priority = value;
-
-        await this.setState({task: task,});
-    };
-
-    updateVisit = async (visit) => {
-        await this.setState({visit: visit,});
-    };
-
-    updatePerformer = async (value: Practitioner) => {
-        let task: Task = this.state.task;
-        task.performer = value;
-        task.performerId = value?.id;
-
-        await this.setState({task: task,});
-    };
-
-
-
     submit = async () => {
 
         this.setState({loading: true,});
@@ -211,6 +159,44 @@ export default class EditTaskScreen extends AppScreen {
             this.setState({loading: false,});
             this.showError(result.data);
         }
+    };
+
+    cancel = () => {
+        this.pop();
+    };
+
+
+    selectPriority = () => {
+        this.navigateTo('SelectPriority', {
+            selectedPriority: this.state.task.priority,
+            updatePriority: async (priority) => {
+                let task: Task = this.state.task;
+                task.priority = priority;
+                await this.setState({task: task,});
+            },
+        });
+    };
+
+    selectVisit = () => {
+        this.navigateTo('SelectVisit', {
+            patient: this.state.task.patient,
+            selectedVisit: this.state.visit,
+            submitVisit: async (visit: Visit) => {
+                await this.setState({visit: visit,});
+            },
+        });
+    };
+
+    selectPerformer = () => {
+        this.navigateTo('SelectPerformer', {
+            selectedPerformer: this.state.task.performer,
+            updatePerformer: async (performer: Practitioner) => {
+                let task: Task = this.state.task;
+                task.performer = performer;
+                task.performerId = performer?.id;
+                await this.setState({task: task,})
+            },
+        });
     };
 
     //------------------------------------------------------------

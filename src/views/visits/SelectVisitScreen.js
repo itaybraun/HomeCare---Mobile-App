@@ -19,7 +19,6 @@ import {
 import {strings} from '../../localization/strings';
 import {Button, Form, Icon, Text, Textarea} from 'native-base';
 import FormItemContainer from '../other/FormItemContainer';
-import {Task} from '../../models/Task';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
@@ -27,6 +26,7 @@ import {APIRequest} from '../../api/API';
 import {Visit} from '../../models/Visit';
 import {Request} from '../../support/Utils';
 import {TransitionPresets} from 'react-navigation-stack';
+import {Patient} from '../../models/Patient';
 
 export default class SelectVisitScreen extends AppScreen {
 
@@ -59,13 +59,12 @@ export default class SelectVisitScreen extends AppScreen {
 
     state = {
         loading: false,
-        task: null,
+        patient: null,
         visits: [],
         selectedVisitIndex: 0,
         showingVisitDatePicker: false,
         showingVisitStartTimePicker: false,
         showingVisitEndTimePicker: false,
-
 
         start: null,
         end: null,
@@ -94,13 +93,13 @@ export default class SelectVisitScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         this.setState({loading: true});
-        const task: Task = this.props.navigation.getParam('task', null);
-        const visits = task && task.patient ? await this.getVisits(task.patient.id) : null;
-        const selectedVisit = this.getSelectedVisit(visits.visits, task);
+        const patient: Patient = this.props.navigation.getParam('patient', null);
+        const visits = patient ? await this.getVisits(patient.id) : {visits: []};
+        const selectedVisit = this.getSelectedVisit(visits.visits);
         this.setState({
             ...visits,
             ...selectedVisit,
-            task: task,
+            patient: patient,
             loading: false,
         });
     };
@@ -119,7 +118,7 @@ export default class SelectVisitScreen extends AppScreen {
         }
     };
 
-    getSelectedVisit = (visits, task: Task) => {
+    getSelectedVisit = (visits) => {
         let selectedVisitIndex = 0;
         let start: Date = null;
         let end: Date = null;
@@ -156,8 +155,8 @@ export default class SelectVisitScreen extends AppScreen {
         let visit = new Visit();
         let errors = {};
 
-        visit.patientId = this.state.task?.patientId;
-        visit.patient = this.state.task?.patient;
+        visit.patientId = this.state.patient?.id;
+        visit.patient = this.state.patient;
 
         if (this.state.start)
             visit.start = this.state.start;

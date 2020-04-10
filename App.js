@@ -36,17 +36,18 @@ import './src/api/REST/RESTAPI+Questionnaire';
 import './src/api/REST/RESTAPI+Relatives';
 import QuestionnaireScreen from './src/views/patients/patient/questionnaire/QuestionnaireScreen';
 import {API} from './src/api/API';
-import NewTaskScreen from './src/views/tasks/NewTaskScreen';
-import SelectActivityScreen from './src/views/tasks/SelectActivityScreen';
+import NewTaskScreen from './src/views/tasks/edit/NewTaskScreen';
+import SelectActivityScreen from './src/views/tasks/edit/SelectActivityScreen';
 import GeneralScreen from './src/views/patients/patient/general/GeneralScreen';
 import ImageQualityScreen from './src/views/settings/ImageQualityScreen';
-import PatientsTasksScreen from './src/views/tasks/PatientsTasksScreen';
+import PatientsTasksScreen from './src/views/patients/patient/PatientsTasksScreen';
 import QuestionnaireResponseScreen from './src/views/tasks/QuestionnaireResponseScreen';
 import EditTaskScreen from './src/views/tasks/edit/EditTaskScreen';
 import SelectPriorityScreen from './src/views/tasks/edit/SelectPriorityScreen';
 import SelectPerformerScreen from './src/views/tasks/edit/SelectPerformerScreen';
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import CurrentUserScreen from './src/views/settings/CurrentUserScreen';
+import SelectPatientScreen from './src/views/tasks/edit/SelectPatientScreen';
 
 export default class App extends React.Component {
 
@@ -107,33 +108,45 @@ const tabBarLabel = (focused, title) => {
 const PatientsStack = createStackNavigator({
     Patients: PatientsScreen,
     Patient: PatientScreen,
+
+    General: GeneralScreen,
+
     Flags: FlagsScreen,
     Flag: FlagScreen,
     EditFlag: EditFlagScreen,
+
     Questionnaire: QuestionnaireScreen,
+    QuestionnaireResponse: QuestionnaireResponseScreen,
+
     PatientsTasks: PatientsTasksScreen,
     Task: TaskScreen,
-    EditTask: EditTaskScreen,
     NewTask: NewTaskScreen,
+    EditTask: EditTaskScreen,
+
+    SelectPatient: SelectPatientScreen,
     SelectActivity: SelectActivityScreen,
     SelectVisit: SelectVisitScreen,
     SelectPriority: SelectPriorityScreen,
     SelectPerformer: SelectPerformerScreen,
-    General: GeneralScreen,
-    QuestionnaireResponse: QuestionnaireResponseScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });
 const WorkStack = createStackNavigator({
     Work: WorkScreen,
+
     Task: TaskScreen,
+    NewTask: NewTaskScreen,
     EditTask: EditTaskScreen,
-    Flag: FlagScreen,
-    EditFlag: EditFlagScreen,
+
+    SelectPatient: SelectPatientScreen,
+    SelectActivity: SelectActivityScreen,
     SelectVisit: SelectVisitScreen,
     SelectPriority: SelectPriorityScreen,
     SelectPerformer: SelectPerformerScreen,
-    NewTask: NewTaskScreen,
+
+    Flag: FlagScreen,
+    EditFlag: EditFlagScreen,
+
     Visit: VisitScreen
 }, {
     defaultNavigationOptions: defaultNavigationOptions

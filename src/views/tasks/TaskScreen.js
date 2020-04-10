@@ -12,14 +12,13 @@ import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import {Status, Task} from '../../models/Task';
 import {appColors, commonStyles, renderLoading} from '../../support/CommonStyles';
-import {Button, Form, Icon, Card, Container, Content, List, ListItem, Left, Body, Right, Text} from 'native-base';
+import {Button, Form, Icon, ActionSheet, Container, Content, List, ListItem, Left, Body, Right, Text} from 'native-base';
 import FormItemContainer from '../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
 import {APIRequest} from '../../api/API';
 import {Visit} from '../../models/Visit';
-import ActionSheet from 'react-native-simple-action-sheet';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../support/Consts';
 import TaskRenderer from './TaskRenderer';
@@ -76,11 +75,10 @@ export default class TaskScreen extends AppScreen {
             strings.Task.menuEdit,
             strings.Task.menuExecute,
             strings.Task.menuCancel,
+            strings.Common.cancelButton
         ];
-        if (Platform.OS === 'ios')
-            options.push(strings.Common.cancelButton);
 
-        ActionSheet.showActionSheetWithOptions({
+        ActionSheet.show({
                 options: options,
                 cancelButtonIndex: options.length - 1,
             },

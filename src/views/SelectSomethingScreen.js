@@ -26,7 +26,7 @@ import {uses24HourClock} from "react-native-localize";
 import {TransitionPresets} from 'react-navigation-stack';
 import {APIRequest} from '../../../api/API';
 
-export default class SelectPerformerScreen extends AppScreen {
+export default class SelectSomethingScreen extends AppScreen {
 
     //------------------------------------------------------------
     // Properties
@@ -34,7 +34,7 @@ export default class SelectPerformerScreen extends AppScreen {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: strings.Task.assignTo,
+            title: '', //strings.Task.patient,
             headerBackTitle: ' ',
             ...popupNavigationOptions,
             ...TransitionPresets.SlideFromRightIOS,
@@ -57,8 +57,8 @@ export default class SelectPerformerScreen extends AppScreen {
 
     state = {
         loading: false,
-        performers: [],
-        selectedPerformer: this.props.navigation.getParam('selectedPerformer', null),
+        somethings: [],
+        selectedSomething: this.props.navigation.getParam('selectedSomething', null),
     };
 
     //------------------------------------------------------------
@@ -83,18 +83,19 @@ export default class SelectPerformerScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         this.setState({loading: true});
-        const performers = await this.getPerformers();
-        this.setState({...performers, loading: false});
+        const somethings = await this.getSomethings();
+        this.setState({...somethings, loading: false});
     };
 
-    getPerformers = async () => {
-        let result: APIRequest = await this.api.getPractitioners();
-        if (result.success) {
-            return {performers: result.data};
-        } else {
-            this.showError(result.data);
-            return {performers: []};
-        }
+    getSomethings = async () => {
+
+        // let result: APIRequest = await this.api.getPatients();
+        // if (result.success) {
+        //     return {somethings: result.data};
+        // } else {
+        //     this.showError(result.data);
+        //     return {somethings: []};
+        // }
     };
 
     //------------------------------------------------------------
@@ -102,8 +103,8 @@ export default class SelectPerformerScreen extends AppScreen {
     //------------------------------------------------------------
 
     submit = async () => {
-        const updatePerformer = this.props.navigation.getParam('updatePerformer', null);
-        updatePerformer && updatePerformer(this.state.selectedPerformer);
+        const updateSomething = this.props.navigation.getParam('updateSomething', null);
+        updateSomething && updateSomething(this.state.selectedSomething);
         this.pop();
     };
 
@@ -117,48 +118,20 @@ export default class SelectPerformerScreen extends AppScreen {
 
     render() {
 
-        const me = this.state.performers.find(performer => performer.id === this.api.user.id);
-
         return (
             <View style={[commonStyles.screenContainer, {padding: 20}]} onPress={Keyboard.dismiss}>
-
                 {
-                    me &&
-                    <View>
-                        <TouchableOpacity
-                            key={me.id}
-                            onPress={() => this.setState({
-                                selectedPerformer: me,
-                            })}>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                {renderRadioButton(this.state.selectedPerformer?.id === me.id)}
-                                <Text style={[commonStyles.contentText, {
-                                    flex: 1,
-                                    marginLeft: 10
-                                }]}>{strings.Task.me}</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={[commonStyles.line, {marginVertical: 20}]}/>
-                    </View>
-                }
-
-
-                {
-                    this.state.performers.map(performer => {
-
-                        if (performer.id === this.api.user?.id) {
-                            return null;
-                        }
+                    this.state.somethings.map((something, index) => {
 
                         return(
                             <TouchableOpacity
-                                key={performer.id}
+                                key={index}
                                 onPress={() => this.setState({
-                                    selectedPerformer: performer,
+                                    selectedSomething: something,
                                 })}>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    {renderRadioButton(this.state.selectedPerformer?.id === performer.id)}
-                                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>{performer.fullName}</Text>
+                                    {renderRadioButton(this.state.selectedSomething === something)}
+                                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>{something}</Text>
                                 </View>
                                 {renderSeparator()}
                             </TouchableOpacity>

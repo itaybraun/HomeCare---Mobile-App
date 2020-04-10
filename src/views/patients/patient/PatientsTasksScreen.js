@@ -10,7 +10,7 @@ import {
     TouchableHighlight,
     SectionList,
 } from 'react-native';
-import AppScreen from '../../support/AppScreen';
+import AppScreen from '../../../support/AppScreen';
 import {
     appColors,
     commonStyles,
@@ -18,20 +18,20 @@ import {
     renderSeparator,
     renderTabBar,
     renderWhiteTabBar,
-} from '../../support/CommonStyles';
-import {strings} from '../../localization/strings';
-import {APIRequest} from '../../api/API';
-import {Status, Task} from '../../models/Task';
-import {Patient} from '../../models/Patient';
+} from '../../../support/CommonStyles';
+import {strings} from '../../../localization/strings';
+import {APIRequest} from '../../../api/API';
+import {Status, Task} from '../../../models/Task';
+import {Patient} from '../../../models/Patient';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {Card, Icon} from 'native-base';
+import {ActionSheet, Icon} from 'native-base';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
-import ActionSheet from 'react-native-simple-action-sheet';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AsyncStorageConsts} from '../../support/Consts';
-import TaskRenderer from './TaskRenderer';
+import {AsyncStorageConsts} from '../../../support/Consts';
+import TaskRenderer from '../../tasks/TaskRenderer';
 import {TabView} from 'react-native-tab-view';
+
 
 export default class PatientsTasksScreen extends AppScreen {
 
@@ -43,6 +43,14 @@ export default class PatientsTasksScreen extends AppScreen {
         return {
             title: strings.PatientTasks.title,
             headerBackTitle: ' ',
+            headerRight: () => {
+                return (
+                    <TouchableOpacity style={{padding: 12}} onPress={navigation.getParam('showMenu')}>
+                        <Icon type="Entypo" name="dots-three-horizontal"
+                              style={{fontSize: 22, color: appColors.headerFontColor}}/>
+                    </TouchableOpacity>
+                )
+            }
         }
     };
 
@@ -66,6 +74,10 @@ export default class PatientsTasksScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
+        this.props.navigation.setParams({
+            showMenu: this.showMenu,
+        });
     }
 
     //------------------------------------------------------------
@@ -109,6 +121,33 @@ export default class PatientsTasksScreen extends AppScreen {
     // Methods
     //------------------------------------------------------------
 
+    showMenu = () => {
+        let options = [
+            strings.Task.menuCreate,
+            strings.Common.cancelButton
+        ];
+
+        ActionSheet.show({
+                options: options,
+                cancelButtonIndex: options.length - 1,
+            },
+            (buttonIndex) => {
+                switch (buttonIndex) {
+                    case 0:
+                        this.createTask();
+                        break;
+                }
+            });
+    };
+
+    createTask = () => {
+        this.navigateTo('NewTask', {patient: this.state.patient, refresh: () => {
+                this.getData();
+                this.eventEmitter.emit('reloadTasks');
+            }
+        });
+    };
+
     selectTask = (task: Task) => {
 
         if (task.status === Status.COMPLETED) {
@@ -125,10 +164,6 @@ export default class PatientsTasksScreen extends AppScreen {
                 }
             });
         }
-    };
-
-    selectCompletedTask = (task: Task) => {
-
     };
 
     //------------------------------------------------------------

@@ -13,7 +13,6 @@ import {Card, Icon} from 'native-base';
 import {Task} from '../../../models/Task';
 import { Tooltip } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import PatientTasks from '../../patients/patient/PatientTasks';
 
 export default class CalendarView extends Component {
 
