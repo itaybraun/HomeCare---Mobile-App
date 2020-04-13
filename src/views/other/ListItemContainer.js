@@ -45,7 +45,7 @@ export default class ListItemContainer extends React.Component<NativeBase.ListIt
                 {...this.props.style},
                 {transform: [{translateX: this.shakeAnimation}]}
             ]}>
-                <ListItem {...this.props} style={{marginBottom: 20,}}>
+                <ListItem {...this.props} style={{marginBottom: 0,}}>
 
                         {this.props.children}
 

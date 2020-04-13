@@ -136,6 +136,7 @@ export function getQuestionnaireResponseFromJson(json) {
     response.taskId = json.basedOn?.[0]?.reference?.replace('ServiceRequest/', '') || null;
     if (json.item) {
         response.items = json.item.map(json => getResponseItemFromJson(json));
+        response.items = response.items.filter(i => i);
     }
 
     return response;
@@ -143,11 +144,15 @@ export function getQuestionnaireResponseFromJson(json) {
 
 function getResponseItemFromJson(json) {
     let item = new QuestionnaireItem();
-    if (json.item)
+    if (json.item) {
+        item.type = 'group';
         item.items = json.item.map(json => getResponseItemFromJson(json));
+        item.items = item.items.filter(i => i);
+    }
+
     item.link = json.linkId;
     item.text = json.text;
-    item.type = 'group';
+
     if (json.answer) {
         item.answers = json.answer.map(answer => {
             if (answer.hasOwnProperty('valueCoding')) {
@@ -173,10 +178,13 @@ function getResponseItemFromJson(json) {
         });
     }
 
+    if (!item.type)
+        return null;
+
     return item;
 }
 
-function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, taskId: String) {
+export function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, taskId: String) {
     let data = {
         resourceType: "QuestionnaireResponse",
         questionnaire: "Questionnaire/" + questionnaire.id,
@@ -202,27 +210,32 @@ function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, taskI
 
                 const answer: QuestionnaireChoiceOption = answers[item.link];
 
-                object.answer = [{
-                    valueCoding: {
-                        system: answer.system,
-                        code: answer.id,
-                        display: answer.text,
-                    }
-                }];
+                if (answer) {
+
+                    object.answer = [{
+                        valueCoding: {
+                            system: answer.system,
+                            code: answer.id,
+                            display: answer.text,
+                        }
+                    }];
+                } else {
+                    object.answer = null;
+                }
                 break;
             case 'boolean':
                 object.answer = [{
-                    valueBoolean: answers[item.link]
+                    valueBoolean: answers[item.link] || null
                 }];
                 break;
             case 'decimal':
                 object.answer = [{
-                    valueDecimal: answers[item.link]
+                    valueDecimal: answers[item.link] || null
                 }];
                 break;
             case 'string':
                 object.answer = [{
-                    valueString: answers[item.link]
+                    valueString: answers[item.link] || null
                 }];
                 break;
             case 'url':

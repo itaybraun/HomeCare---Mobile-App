@@ -8,14 +8,16 @@ import {TransitionIOSSpec} from 'react-navigation-stack/src/vendor/TransitionCon
 export const appColors = {
     mainColor: '#6E78F7',
     secondColor: '#FFFFFF',
+    questionnaireColor: '#EB6F94',
     textColor: '#0D0D0D',
     linkColor: '#5C00EC',
     lineColor: '#CCCCCC',
+    infoColor: '#605E5E',
     yellowColor: '#FEC260',
     headerBackground: '#E9BD08',
     headerFontColor: '#FFFFFF',
     backgroundYellowColor: '#DEBB4A',
-    pinkColor: '#F1A5BD',
+
 };
 
 function commonTextProperties() {
@@ -95,13 +97,13 @@ export const commonStyles = {
     },
     smallInfoText: {
         fontSize: 16,
-        color: '#888888',
+        color: appColors.infoColor,
         ...commonTextProperties()
     },
 
     infoText: {
         fontSize: 18,
-        color: '#888888',
+        color: appColors.infoColor,
         ...commonTextProperties()
     },
 
@@ -129,6 +131,12 @@ export const commonStyles = {
         fontSize: 20,
         color: appColors.mainColor,
         ...commonTextProperties()
+    },
+
+    questionnaireTitle: {
+        fontSize: 20,
+        color: appColors.questionnaireColor,
+        ...commonTextProperties(),
     },
 
     yellowTitleText: {
@@ -323,22 +331,6 @@ export const commonStyles = {
         width: 14,
         backgroundColor: '#0F7152',
         borderRadius: 7,
-    },
-
-
-
-    pinkHeader:{
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        backgroundColor: appColors.pinkColor,
-        marginBottom: 5,
-    },
-
-    pinkHeaderText: {
-        color: '#FFFFFF',
-        fontSize: 20,
-        fontWeight: 'bold',
-        ...commonTextProperties()
     },
 
 

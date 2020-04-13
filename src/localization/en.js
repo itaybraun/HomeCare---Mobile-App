@@ -201,6 +201,7 @@ export const en = {
     },
 
     Questionnaire: {
+        title: 'Execute Task',
         general: 'General',
         basedOnTask: 'Based on Task',
         patient: 'Patient',
@@ -208,7 +209,7 @@ export const en = {
         fillDate: 'Fill Date',
         upTo3Images: 'Up to 3 images',
         submit: 'Submit',
-        submitText: 'You are about to submit the form',
+        submitText: 'You are about to submit the Task. Are you sure?',
     },
 
     PatientTasks: {

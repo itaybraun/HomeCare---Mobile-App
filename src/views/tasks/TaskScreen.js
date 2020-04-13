@@ -23,6 +23,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../support/Consts';
 import TaskRenderer from './TaskRenderer';
 import FlagRenderer from '../patients/patient/flags/FlagRenderer';
+import ListItemContainer from '../other/ListItemContainer';
 
 export default class TaskScreen extends AppScreen {
 
@@ -87,12 +88,22 @@ export default class TaskScreen extends AppScreen {
                     case 0:
                         this.editTask();
                         break;
+                    case 1:
+                        this.showQuestionnaire();
+                        break;
                 }
             });
     };
 
     editTask = () => {
         this.navigateTo('EditTask', {
+            task: this.props.navigation.getParam('task', null),
+            updateTask: this.updateTask,
+        });
+    };
+
+    showQuestionnaire = () => {
+        this.navigateTo('Questionnaire', {
             task: this.props.navigation.getParam('task', null),
             updateTask: this.updateTask,
         });
@@ -127,15 +138,15 @@ export default class TaskScreen extends AppScreen {
                                   numberOfLines={3}>{task.text}</Text>
                         </View>
                         <List>
-                            <ListItem>
+                            <ListItemContainer>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.taskId}</Text>
                                     <Text style={[{flex: 1}, commonStyles.formItemText]}>{task.id}</Text>
                                 </Body>
-                            </ListItem>
+                            </ListItemContainer>
 
-                            <ListItem>
+                            <ListItemContainer>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.created}</Text>
@@ -150,36 +161,36 @@ export default class TaskScreen extends AppScreen {
                                         }
                                     </Text>
                                 </Body>
-                            </ListItem>
+                            </ListItemContainer>
 
-                            <ListItem>
+                            <ListItemContainer>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.requester}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{task.requester?.fullName}</Text>
                                 </Body>
-                            </ListItem>
+                            </ListItemContainer>
 
-                            <ListItem>
+                            <ListItemContainer>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.patient}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{task.patient?.fullName}</Text>
                                 </Body>
-                            </ListItem>
+                            </ListItemContainer>
 
-                            <ListItem>
+                            <ListItemContainer>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.priority}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{strings.Priorities[task.priority]}</Text>
                                 </Body>
-                            </ListItem>
+                            </ListItemContainer>
 
-                            <ListItem>
+                            <ListItemContainer>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.schedule}</Text>
@@ -203,24 +214,24 @@ export default class TaskScreen extends AppScreen {
                                             </Text>
                                     }
                                 </Body>
-                            </ListItem>
+                            </ListItemContainer>
 
-                            <ListItem>
+                            <ListItemContainer>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.performer}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{task.performer?.fullName}</Text>
                                 </Body>
-                            </ListItem>
+                            </ListItemContainer>
 
-                            <ListItem>
+                            <ListItemContainer>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.notes}</Text>
                                     <Text style={[{flex: 1}, commonStyles.formItemText]}>{task.notes}</Text>
                                 </Body>
-                            </ListItem>
+                            </ListItemContainer>
                         </List>
                         <View style={{alignItems: 'flex-end', marginTop: 10,}}>
                             <Image source={require('../../assets/icons/tasks/care.png')}/>

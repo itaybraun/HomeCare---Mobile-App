@@ -34,20 +34,21 @@ import './src/api/REST/RESTAPI+Practitioners';
 import './src/api/REST/RESTAPI+Visits';
 import './src/api/REST/RESTAPI+Questionnaire';
 import './src/api/REST/RESTAPI+Relatives';
-import QuestionnaireScreen from './src/views/patients/patient/questionnaire/QuestionnaireScreen';
+import QuestionnaireScreen from './src/views/tasks/questionnaire/QuestionnaireScreen';
 import {API} from './src/api/API';
 import NewTaskScreen from './src/views/tasks/edit/NewTaskScreen';
 import SelectActivityScreen from './src/views/tasks/edit/SelectActivityScreen';
 import GeneralScreen from './src/views/patients/patient/general/GeneralScreen';
 import ImageQualityScreen from './src/views/settings/ImageQualityScreen';
 import PatientsTasksScreen from './src/views/patients/patient/PatientsTasksScreen';
-import QuestionnaireResponseScreen from './src/views/tasks/QuestionnaireResponseScreen';
+import QuestionnaireResponseScreen from './src/views/tasks/questionnaire/QuestionnaireResponseScreen';
 import EditTaskScreen from './src/views/tasks/edit/EditTaskScreen';
 import SelectPriorityScreen from './src/views/tasks/edit/SelectPriorityScreen';
 import SelectPerformerScreen from './src/views/tasks/edit/SelectPerformerScreen';
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import CurrentUserScreen from './src/views/settings/CurrentUserScreen';
 import SelectPatientScreen from './src/views/tasks/edit/SelectPatientScreen';
+import QuestionnaireItemScreen from './src/views/tasks/questionnaire/QuestionnaireItemScreen';
 
 export default class App extends React.Component {
 
@@ -116,6 +117,7 @@ const PatientsStack = createStackNavigator({
     EditFlag: EditFlagScreen,
 
     Questionnaire: QuestionnaireScreen,
+    QuestionnaireItem: QuestionnaireItemScreen,
     QuestionnaireResponse: QuestionnaireResponseScreen,
 
     PatientsTasks: PatientsTasksScreen,
@@ -146,6 +148,9 @@ const WorkStack = createStackNavigator({
 
     Flag: FlagScreen,
     EditFlag: EditFlagScreen,
+
+    Questionnaire: QuestionnaireScreen,
+    QuestionnaireItem: QuestionnaireItemScreen,
 
     Visit: VisitScreen
 }, {
