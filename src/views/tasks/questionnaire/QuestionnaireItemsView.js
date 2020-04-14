@@ -182,9 +182,6 @@ export default class QuestionnaireItemsView extends Component {
                         </View>
                     </Body>
                 }
-                <Right>
-                    <Icon name="arrow-forward"/>
-                </Right>
             </ListItemContainer>
         );
     };

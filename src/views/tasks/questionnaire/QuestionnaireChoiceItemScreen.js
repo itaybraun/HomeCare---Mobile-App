@@ -28,7 +28,7 @@ import {APIRequest} from '../../../api/API';
 import {QuestionnaireItem} from '../../../models/Questionnaire';
 import ListItemContainer from '../../other/ListItemContainer';
 
-export default class QuestionnaireItemScreen extends AppScreen {
+export default class QuestionnaireChoiceItemScreen extends AppScreen {
 
     //------------------------------------------------------------
     // Properties
@@ -40,18 +40,17 @@ export default class QuestionnaireItemScreen extends AppScreen {
             headerBackTitle: ' ',
             ...popupNavigationOptions,
             ...TransitionPresets.SlideFromRightIOS,
-            headerRight: () => {
+            headerLeft: () => {
                 return (
-                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('done')}>
-                        <Text style={[commonStyles.questionnaireTitle, commonStyles.medium]}>{strings.Common.doneButton}</Text>
+                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('cancel')}>
+                        <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{strings.Common.cancelButton}</Text>
                     </TouchableOpacity>
                 )
-            }
+            },
         }
     };
 
     state = {
-        loading: false,
         item: this.props.navigation.getParam('item', null),
         value: this.props.navigation.getParam('value', null),
     };
@@ -64,7 +63,7 @@ export default class QuestionnaireItemScreen extends AppScreen {
         super.componentDidMount();
 
         this.props.navigation.setParams({
-            done: this.submit,
+            cancel: this.cancel,
             hideTabBar: true,
         });
     }
@@ -83,6 +82,11 @@ export default class QuestionnaireItemScreen extends AppScreen {
         this.pop();
     };
 
+    select = async (value) => {
+        await this.setState({value: value});
+        this.submit();
+    };
+
     cancel = () => {
         this.pop();
     };
@@ -90,45 +94,6 @@ export default class QuestionnaireItemScreen extends AppScreen {
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
-
-    renderItem = () => {
-        const item: QuestionnaireItem = this.state.item;
-
-        if (!item) {
-            return null;
-        }
-
-        switch(item.type) {
-            case 'choice':
-                return this.renderChoice(item);
-            case 'integer':
-                return this.renderInteger(item);
-            case 'decimal':
-                return this.renderDecimal(item);
-            case 'string':
-                return this.renderString(item);
-        }
-    };
-
-    renderChoice = (item: QuestionnaireItem) => {
-        return (
-            <View>
-                {
-                    item.options && item.options.map(option => {
-                        return (
-                            <TouchableOpacity key={option.id} onPress={() => this.setState({value: option})}>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    {renderRadioButton(this.state.value === option)}
-                                    <Text style={[commonStyles.formItemText, {marginLeft: 10}]}>{option.text}</Text>
-                                </View>
-                                {renderSeparator()}
-                            </TouchableOpacity>
-                        )
-                    })
-                }
-            </View>
-        );
-    };
 
     renderInteger = (item: QuestionnaireItem) => {
         return (
@@ -184,9 +149,22 @@ export default class QuestionnaireItemScreen extends AppScreen {
             <View style={[commonStyles.screenContainer, {padding: 20}]} onPress={Keyboard.dismiss}>
                 <Text style={commonStyles.titleText}>{item.text}</Text>
                 <View style={{marginTop: 20}}>
-                    {this.renderItem()}
+                    <View>
+                        {
+                            item.options && item.options.map(option => {
+                                return (
+                                    <TouchableOpacity key={option.id} onPress={() => this.select(option)}>
+                                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                            {renderRadioButton(this.state.value === option)}
+                                            <Text style={[commonStyles.formItemText, {marginLeft: 10}]}>{option.text}</Text>
+                                        </View>
+                                        {renderSeparator()}
+                                    </TouchableOpacity>
+                                )
+                            })
+                        }
+                    </View>
                 </View>
-                {renderLoading(this.state.loading)}
             </View>
         );
     }

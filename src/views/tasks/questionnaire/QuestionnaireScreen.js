@@ -131,20 +131,35 @@ export default class QuestionnaireScreen extends AppScreen {
     };
 
     selectItem = (item: QuestionnaireItem) => {
-        this.navigateTo('QuestionnaireItem', {
-            item: item,
-            value: this.state.values[item.link],
-            updateValue: (value) => {
-                let errors = this.state.errors;
-                errors[item.link] = false;
-                let values = this.state.values;
-                values[item.link] = value;
-                this.setState({
-                    values: values,
-                    errors: errors,
-                })
-            }
-        })
+
+        if (!item) {
+            return null;
+        }
+
+        switch(item.type) {
+            case 'choice':
+                this.navigateTo('QuestionnaireChoiceItem', {
+                    item: item,
+                    value: this.state.values[item.link],
+                    updateValue: (value) => {
+                        let errors = this.state.errors;
+                        errors[item.link] = false;
+                        let values = this.state.values;
+                        values[item.link] = value;
+                        this.setState({
+                            values: values,
+                            errors: errors,
+                        })
+                    }
+                });
+                break;
+            case 'integer':
+                break;
+            case 'decimal':
+                break;
+            case 'string':
+                break;
+        }
     };
 
     validate = () => {
