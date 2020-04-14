@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, TouchableOpacity, TextInput, Text, Image, ActivityIndicator} from 'react-native';
+import {View, FlatList, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator} from 'react-native';
 import AppScreen from '../../../support/AppScreen';
 import {appColors, commonStyles, renderLoading, renderRadioButton} from '../../../support/CommonStyles';
 import {strings} from '../../../localization/strings';
 import {Task} from '../../../models/Task';
 import {Questionnaire, QuestionnaireItem, QuestionnaireResponse} from '../../../models/Questionnaire';
 import {APIRequest} from '../../../api/API';
-import {Content, Icon, Body} from 'native-base';
+import {Content, List, Body, Text} from 'native-base';
 import moment from 'moment';
 import FormItemContainer from '../../other/FormItemContainer';
 import ImageView from 'react-native-image-view';
@@ -95,14 +95,16 @@ export default class QuestionnaireResponseScreen extends AppScreen {
     renderGroup = (item: QuestionnaireItem) => {
         return (
             <View key={item.link}>
-                <View style={{padding: 10}}>
-                    <Text style={commonStyles.titleText}>{item.text}</Text>
-                </View>
+                <Text style={[commonStyles.boldTitleText, {paddingLeft: 20}]}>
+                    {item.text}
+                </Text>
+                <List style={{paddingBottom: 20}}>
                 {item.items && item.items.length > 0 &&
-                    <View style={{paddingBottom: 10}}>
+                    <View>
                         {item.items.map(item => this.renderResponseItem(item))}
                     </View>
                 }
+                </List>
             </View>
         )
     };
@@ -112,7 +114,6 @@ export default class QuestionnaireResponseScreen extends AppScreen {
             <ListItemContainer key={item.link}>
                 <Body>
                     <View style={{minHeight: 45, justifyContent: 'center'}}>
-
                         <Text style={[commonStyles.smallInfoText]}>{item.text}</Text>
                         {
                             item.answers?.map((text, index) => {
@@ -156,7 +157,8 @@ export default class QuestionnaireResponseScreen extends AppScreen {
                             onClose={() => this.setState({isImageViewVisible: false})}
                         />
 
-                        <Content horizontal style={{flexDirection: 'row', padding: 0,}}
+
+                        <Content horizontal style={{flexDirection: 'row', padding: 0, marginHorizontal: 10}}
                                  bounces={false}>
                             {
                                 item.answers.map((url, index) => {
@@ -188,7 +190,6 @@ export default class QuestionnaireResponseScreen extends AppScreen {
         return (
             <View style={commonStyles.screenContainer}>
                 <Content innerRef={ref => this.scrollView = ref}
-                         enableResetScrollToCoords={false}
                          bounces={false}>
                     <View style={{flex: 1, padding: 10, flexDirection: 'row', alignItems:'center'}}>
                         <Image source={require('../../../assets/icons/tasks/completed_task.png')} style={{width: 48, height: 48}} />
@@ -210,7 +211,9 @@ export default class QuestionnaireResponseScreen extends AppScreen {
                             }
                         </View>
                     </View>
-                    {response.items.map(item => this.renderResponseItem(item))}
+                    <View>
+                        {response.items.map(item => this.renderResponseItem(item))}
+                    </View>
                 </Content>
                 {renderLoading(this.state.loading)}
             </View>

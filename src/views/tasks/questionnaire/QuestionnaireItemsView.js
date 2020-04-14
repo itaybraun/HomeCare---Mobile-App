@@ -116,11 +116,8 @@ export default class QuestionnaireItemsView extends Component {
             case 'group':
                 return this.renderGroup(item);
             case 'choice':
-                return this.renderItem(item);
             case 'integer':
-                return this.renderItem(item);
             case 'decimal':
-                return this.renderItem(item);
             case 'string':
                 return this.renderItem(item);
             case 'boolean':
@@ -134,12 +131,12 @@ export default class QuestionnaireItemsView extends Component {
         return (
             <View key={item.link}
                   onLayout={({nativeEvent}) => this.items[item.link] = nativeEvent.layout}>
-                <View style={{paddingHorizontal: 10, paddingVertical: 10,}}>
-                    <Text style={commonStyles.questionnaireTitle}>{item.text}</Text>
-                </View>
-                <List>
+                <Text style={[commonStyles.boldTitleText, {paddingLeft: 20}]}>
+                    {item.text}
+                </Text>
+                <List style={{paddingBottom: 20}}>
                 {item.items && item.items.length > 0 &&
-                    <View style={{paddingBottom: 10}}>
+                    <View>
                         {item.items.map(item => this.renderQuestionnaireItem(item))}
                     </View>
                 }
@@ -182,6 +179,9 @@ export default class QuestionnaireItemsView extends Component {
                         </View>
                     </Body>
                 }
+                <Right>
+                    <Icon name="arrow-forward"/>
+                </Right>
             </ListItemContainer>
         );
     };
@@ -231,10 +231,9 @@ export default class QuestionnaireItemsView extends Component {
             <ListItemContainer key={item.link}>
                 <Body>
 
-                    <Text style={commonStyles.infoText}>{item.text}</Text>
+                    <Text style={commonStyles.smallInfoText}>{item.text}</Text>
 
-                    <View style={{margin: 10}}>
-                        <Content horizontal style={{flexDirection: 'row', padding: 0,}}
+                        <Content horizontal style={{flexDirection: 'row', padding: 0, marginHorizontal: 10}}
                                  bounces={false}
                         >
                             {
@@ -296,7 +295,6 @@ export default class QuestionnaireItemsView extends Component {
                                 })
                             }
                         </Content>
-                    </View>
                 </Body>
             </ListItemContainer>
         );
@@ -311,10 +309,8 @@ export default class QuestionnaireItemsView extends Component {
         }
 
         return (
-            <View innerRef={ref => this.scrollView = ref}
-                     enableResetScrollToCoords={false}
-                     bounces={false}>
-                    {items.map(item => this.renderQuestionnaireItem(item))}
+            <View innerRef={ref => this.scrollView = ref}>
+                {items.map(item => this.renderQuestionnaireItem(item))}
             </View>
         );
     }

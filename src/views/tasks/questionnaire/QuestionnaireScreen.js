@@ -310,15 +310,15 @@ export default class QuestionnaireScreen extends AppScreen {
         return (
             <View style={commonStyles.screenContainer} >
                 {questionnaire &&
-                    <Content style={{flex: 1}}>
-                        <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 5}}>
-                            <View style={{}}>
-                                <Image source={require('../../../assets/icons/questionnaires/questionnaire.png')}/>
-                            </View>
-                            <Text style={[{
-                                flex: 1,
-                                textAlign: 'center'
-                            }, commonStyles.questionnaireTitle]}>{questionnaire.name}</Text>
+                    <Content style={{flex: 1}} bounces={false}>
+                        <View style={{
+                            flex: 1, margin: 10,
+                            paddingBottom: 10, alignItems: 'center',
+                            flexDirection: 'row', borderBottomWidth: 1
+                        }}>
+                            <Image source={require('../../../assets/icons/questionnaires/questionnaire.png')} style={{width: 48, height: 48}} />
+                            <Text style={[commonStyles.questionnaireTitle, {marginHorizontal: 10, flex: 1}]}
+                                  numberOfLines={2}>{questionnaire.name}</Text>
                         </View>
                         <QuestionnaireItemsView
                             items={questionnaire.items}
