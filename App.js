@@ -51,6 +51,7 @@ import SelectPatientScreen from './src/views/tasks/edit/SelectPatientScreen';
 import QuestionnaireChoiceItemScreen from './src/views/tasks/questionnaire/QuestionnaireChoiceItemScreen';
 import QuestionnaireInputItemScreen from './src/views/tasks/questionnaire/QuestionnaireInputItemScreen';
 import TaskSendMailScreen from './src/views/tasks/TaskSendMailScreen';
+import EmailAddressScreen from './src/views/settings/EmailAddressScreen';
 
 export default class App extends React.Component {
 
@@ -172,6 +173,7 @@ const SettingsStack = createStackNavigator({
     Settings: SettingsScreen,
     ImageQuality: ImageQualityScreen,
     CurrentUser: CurrentUserScreen,
+    EmailAddress: EmailAddressScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });

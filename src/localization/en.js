@@ -95,6 +95,7 @@ export const en = {
         addTask: 'New Task',
         taskDetails: 'Task Details',
         task: 'Task',
+        taskName: 'Task Name',
         editTask: 'Task - Edit',
         taskId: 'Task ID',
         created: 'Created',
@@ -138,6 +139,7 @@ export const en = {
         sendInfo: 'To change the email address go to Settings',
         mailSent: 'Mail sent',
         noEmailToSend: 'Please go to Settings and set email first',
+        executionDetails: 'Task Execution Details',
     },
 
     Visit: {
@@ -248,6 +250,12 @@ export const en = {
         age: 'Age',
         gender: 'Gender',
         identifier: 'Identifier',
+        firstName: 'First Name',
+        lastName: 'Last Name',
+        fullName: 'Full Name',
+        license: 'License',
+        role: 'Role',
+        identity: 'Identity',
         address: 'Address',
         relatedPersons: 'Related Persons',
     },

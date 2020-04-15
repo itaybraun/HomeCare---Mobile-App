@@ -48,6 +48,8 @@ export function getPatientFromJson(json) {
     const official = json.name?.find(name => name.use === 'official');
     const firstName = official?.given?.join(' ') || '';
     const lastName = official?.family || '';
+    patient.firstName = firstName;
+    patient.lastName = lastName;
     patient.fullName = `${firstName} ${lastName}`;
 
     const home = json.address?.find(address => address.use === 'home');

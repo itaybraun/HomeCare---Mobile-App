@@ -39,6 +39,8 @@ export function getRelativeFromJson(json) {
     const name = json.name?.[0];
     const firstName = name?.given?.join(' ') || '';
     const lastName = name?.family || '';
+    relative.firstName = firstName;
+    relative.lastName = lastName;
     relative.fullName = `${firstName} ${lastName}`;
 
     // TODO: make it localizable

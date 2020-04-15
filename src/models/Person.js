@@ -10,6 +10,8 @@ export class Person extends BaseModel {
 
     id: String;
     avatar: Object;
+    firstName: String;
+    lastName: String;
     fullName: String;
     dateOfBirth: Date;
     gender: String;
