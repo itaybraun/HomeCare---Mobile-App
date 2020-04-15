@@ -50,6 +50,7 @@ import CurrentUserScreen from './src/views/settings/CurrentUserScreen';
 import SelectPatientScreen from './src/views/tasks/edit/SelectPatientScreen';
 import QuestionnaireChoiceItemScreen from './src/views/tasks/questionnaire/QuestionnaireChoiceItemScreen';
 import QuestionnaireInputItemScreen from './src/views/tasks/questionnaire/QuestionnaireInputItemScreen';
+import TaskSendMailScreen from './src/views/tasks/TaskSendMailScreen';
 
 export default class App extends React.Component {
 
@@ -121,6 +122,7 @@ const PatientsStack = createStackNavigator({
     QuestionnaireChoiceItem: QuestionnaireChoiceItemScreen,
     QuestionnaireInputItem: QuestionnaireInputItemScreen,
     QuestionnaireResponse: QuestionnaireResponseScreen,
+    TaskSendMail: TaskSendMailScreen,
 
     PatientsTasks: PatientsTasksScreen,
     Task: TaskScreen,

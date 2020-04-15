@@ -7,4 +7,5 @@ export class Settings extends BaseModel {
     }
     qaMode: boolean = false;
     imageQuality: String = 'medium';
+    email: String = 'user@company.com';
 }

@@ -6,7 +6,7 @@ import {strings} from '../../../localization/strings';
 import {Task} from '../../../models/Task';
 import {Questionnaire, QuestionnaireItem, QuestionnaireResponse} from '../../../models/Questionnaire';
 import {APIRequest} from '../../../api/API';
-import {Content, List, Body, Text} from 'native-base';
+import {Content, List, Body, Text, Icon, ActionSheet} from 'native-base';
 import moment from 'moment';
 import FormItemContainer from '../../other/FormItemContainer';
 import ImageView from 'react-native-image-view';
@@ -23,6 +23,14 @@ export default class QuestionnaireResponseScreen extends AppScreen {
         return {
             title: strings.QuestionnaireResponse.completedTask,
             headerBackTitle: ' ',
+            headerRight: () => {
+                return (
+                    <TouchableOpacity style={{padding: 12}} onPress={navigation.getParam('showMenu')}>
+                        <Icon type="Entypo" name="dots-three-horizontal"
+                              style={{fontSize: 22, color: appColors.headerFontColor}}/>
+                    </TouchableOpacity>
+                )
+            }
         }
     };
 
@@ -42,6 +50,10 @@ export default class QuestionnaireResponseScreen extends AppScreen {
         super.componentDidMount();
 
         this.getData();
+
+        this.props.navigation.setParams({
+            showMenu: this.showMenu,
+        });
     }
 
     //------------------------------------------------------------
@@ -65,6 +77,28 @@ export default class QuestionnaireResponseScreen extends AppScreen {
     //------------------------------------------------------------
     // Methods
     //------------------------------------------------------------
+
+    showMenu = () => {
+        let options = [
+            strings.Task.menuSendMail,
+            strings.Common.cancelButton
+        ];
+
+        ActionSheet.show({
+                options: options,
+                cancelButtonIndex: options.length - 1,
+            },
+            (buttonIndex) => {
+                switch (buttonIndex) {
+                    case 0:
+                        this.navigateTo('TaskSendMail', {
+                            task: this.state.task,
+                            response: this.state.response,
+                        })
+                        break;
+                }
+            });
+    };
 
     showImage = (url, index) => {
         this.setState({

@@ -8,6 +8,7 @@ export const en = {
         yesButton: 'Yes',
         okButton: 'OK',
         doneButton: 'Done',
+        sendButton: 'Send',
     },
     Login: {
         appName: 'Hestia',
@@ -126,6 +127,15 @@ export const en = {
         menuCreate: 'Create Task',
         menuExecute: 'Execute',
         menuCancel: 'Cancel Task',
+        menuSendMail: 'Send mail',
+        sendText: 'You are about to send the following details of the completed task: \n\n' +
+            '- Task Name\n' +
+            '- All questions and their answers\n' +
+            '- All Images\n' +
+            '- Patient\'s main details\n' +
+            '- Practitioner\'s name and license\n\n' +
+            'The email will be sent to',
+        sendInfo: 'To change the email address go to Settings',
     },
 
     Visit: {
