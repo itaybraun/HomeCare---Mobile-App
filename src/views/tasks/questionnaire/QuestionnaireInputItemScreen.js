@@ -28,7 +28,7 @@ import {APIRequest} from '../../../api/API';
 import {QuestionnaireItem} from '../../../models/Questionnaire';
 import ListItemContainer from '../../other/ListItemContainer';
 
-export default class QuestionnaireChoiceItemScreen extends AppScreen {
+export default class QuestionnaireItemScreen extends AppScreen {
 
     //------------------------------------------------------------
     // Properties
@@ -40,17 +40,18 @@ export default class QuestionnaireChoiceItemScreen extends AppScreen {
             headerBackTitle: ' ',
             ...popupNavigationOptions,
             ...TransitionPresets.SlideFromRightIOS,
-            headerLeft: () => {
+            headerRight: () => {
                 return (
-                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('cancel')}>
-                        <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{strings.Common.cancelButton}</Text>
+                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('done')}>
+                        <Text style={[commonStyles.questionnaireTitle, commonStyles.medium]}>{strings.Common.doneButton}</Text>
                     </TouchableOpacity>
                 )
-            },
+            }
         }
     };
 
     state = {
+        loading: false,
         item: this.props.navigation.getParam('item', null),
         value: this.props.navigation.getParam('value', null),
     };
@@ -63,9 +64,11 @@ export default class QuestionnaireChoiceItemScreen extends AppScreen {
         super.componentDidMount();
 
         this.props.navigation.setParams({
-            cancel: this.cancel,
+            done: this.submit,
             hideTabBar: true,
         });
+
+        this.textInput && this.textInput.focus();
     }
 
     //------------------------------------------------------------
@@ -82,11 +85,6 @@ export default class QuestionnaireChoiceItemScreen extends AppScreen {
         this.pop();
     };
 
-    select = async (value) => {
-        await this.setState({value: value});
-        this.submit();
-    };
-
     cancel = () => {
         this.pop();
     };
@@ -94,6 +92,74 @@ export default class QuestionnaireChoiceItemScreen extends AppScreen {
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
+
+    renderItem = () => {
+        const item: QuestionnaireItem = this.state.item;
+
+        if (!item) {
+            return null;
+        }
+
+        switch(item.type) {
+            case 'integer':
+                return this.renderInteger(item);
+            case 'decimal':
+                return this.renderDecimal(item);
+            case 'string':
+                return this.renderString(item);
+        }
+    };
+
+    renderInteger = (item: QuestionnaireItem) => {
+        return (
+            <TextInput
+                ref={ref => this.textInput = ref}
+                style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
+                keyboardType='numeric'
+                onSubmitEditing={this.submit}
+                returnKeyType='done'
+                value={this.state.value}
+                onChangeText={text => {
+                    text = text.isEmpty() ? null : text;
+                    this.setState({value: text});
+                }}
+            />
+        )
+    };
+
+    renderDecimal = (item: QuestionnaireItem) => {
+        return (
+            <TextInput
+                ref={ref => this.textInput = ref}
+                style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
+                keyboardType='numeric'
+                returnKeyType='done'
+                onSubmitEditing={this.submit}
+                value={this.state.value}
+                onChangeText={text => {
+                    text = text.isEmpty() ? null : text;
+                    this.setState({value: text});
+                }}
+            />
+        )
+    };
+
+    renderString = (item: QuestionnaireItem) => {
+        return (
+            <TextInput
+                ref={ref => this.textInput = ref}
+                style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
+                autoCorrect={false}
+                returnKeyType='done'
+                onSubmitEditing={this.submit}
+                value={this.state.value}
+                onChangeText={text => {
+                    text = text.isEmpty() ? null : text;
+                    this.setState({value: text});
+                }}
+            />
+        )
+    };
 
     render() {
 
@@ -108,22 +174,9 @@ export default class QuestionnaireChoiceItemScreen extends AppScreen {
             <View style={[commonStyles.screenContainer, {padding: 20}]} onPress={Keyboard.dismiss}>
                 <Text style={commonStyles.titleText}>{item.text}</Text>
                 <View style={{marginTop: 20}}>
-                    <View>
-                        {
-                            item.options && item.options.map(option => {
-                                return (
-                                    <TouchableOpacity key={option.id} onPress={() => this.select(option)}>
-                                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                            {renderRadioButton(this.state.value === option)}
-                                            <Text style={[commonStyles.formItemText, {marginLeft: 10}]}>{option.text}</Text>
-                                        </View>
-                                        {renderSeparator()}
-                                    </TouchableOpacity>
-                                )
-                            })
-                        }
-                    </View>
+                    {this.renderItem()}
                 </View>
+                {renderLoading(this.state.loading)}
             </View>
         );
     }

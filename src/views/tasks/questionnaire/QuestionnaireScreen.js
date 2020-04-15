@@ -6,8 +6,7 @@ import {
     TouchableOpacity,
     Text,
     ScrollView,
-    KeyboardAvoidingView,
-    Keyboard, TouchableWithoutFeedback, Alert, Platform, Image,
+    Keyboard, TouchableWithoutFeedback, Alert, Platform, Image, TextInput,
 } from 'react-native';
 import AppScreen from '../../../support/AppScreen';
 import {
@@ -136,30 +135,35 @@ export default class QuestionnaireScreen extends AppScreen {
             return null;
         }
 
+        let navigationName = null;
+
         switch(item.type) {
             case 'choice':
-                this.navigateTo('QuestionnaireChoiceItem', {
-                    item: item,
-                    value: this.state.values[item.link],
-                    updateValue: (value) => {
-                        let errors = this.state.errors;
-                        errors[item.link] = false;
-                        let values = this.state.values;
-                        values[item.link] = value;
-                        this.setState({
-                            values: values,
-                            errors: errors,
-                        })
-                    }
-                });
+                navigationName = 'QuestionnaireChoiceItem';
                 break;
             case 'integer':
-                break;
             case 'decimal':
-                break;
             case 'string':
+                navigationName = 'QuestionnaireInputItem';
                 break;
         }
+
+
+
+        navigationName && this.navigateTo(navigationName, {
+            item: item,
+            value: this.state.values[item.link],
+            updateValue: (value) => {
+                let errors = this.state.errors;
+                errors[item.link] = false;
+                let values = this.state.values;
+                values[item.link] = value;
+                this.setState({
+                    values: values,
+                    errors: errors,
+                })
+            }
+        });
     };
 
     validate = () => {
@@ -294,8 +298,6 @@ export default class QuestionnaireScreen extends AppScreen {
             await this.setState({
                 values: values
             });
-
-            console.log(this.state.values);
         }
     };
 
@@ -310,7 +312,7 @@ export default class QuestionnaireScreen extends AppScreen {
         return (
             <View style={commonStyles.screenContainer} >
                 {questionnaire &&
-                    <Content style={{flex: 1}} bounces={false}>
+                    <ScrollView style={{flex: 1}} bounces={false}>
                         <View style={{
                             flex: 1, margin: 10,
                             paddingBottom: 10, alignItems: 'center',
@@ -329,7 +331,7 @@ export default class QuestionnaireScreen extends AppScreen {
                                 values: values,
                             })}
                         />
-                    </Content>
+                    </ScrollView>
                 }
                 {renderLoading(this.state.loading)}
             </View>

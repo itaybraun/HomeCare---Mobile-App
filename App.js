@@ -49,6 +49,7 @@ import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import CurrentUserScreen from './src/views/settings/CurrentUserScreen';
 import SelectPatientScreen from './src/views/tasks/edit/SelectPatientScreen';
 import QuestionnaireChoiceItemScreen from './src/views/tasks/questionnaire/QuestionnaireChoiceItemScreen';
+import QuestionnaireInputItemScreen from './src/views/tasks/questionnaire/QuestionnaireInputItemScreen';
 
 export default class App extends React.Component {
 
@@ -118,6 +119,7 @@ const PatientsStack = createStackNavigator({
 
     Questionnaire: QuestionnaireScreen,
     QuestionnaireChoiceItem: QuestionnaireChoiceItemScreen,
+    QuestionnaireInputItem: QuestionnaireInputItemScreen,
     QuestionnaireResponse: QuestionnaireResponseScreen,
 
     PatientsTasks: PatientsTasksScreen,
@@ -151,6 +153,7 @@ const WorkStack = createStackNavigator({
 
     Questionnaire: QuestionnaireScreen,
     QuestionnaireChoiceItem: QuestionnaireChoiceItemScreen,
+    QuestionnaireInputItem: QuestionnaireInputItemScreen,
 
     Visit: VisitScreen
 }, {
