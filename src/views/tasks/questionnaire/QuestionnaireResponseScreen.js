@@ -91,10 +91,14 @@ export default class QuestionnaireResponseScreen extends AppScreen {
             (buttonIndex) => {
                 switch (buttonIndex) {
                     case 0:
-                        this.navigateTo('TaskSendMail', {
-                            task: this.state.task,
-                            response: this.state.response,
-                        })
+                        if (this.settings.email) {
+                            this.navigateTo('TaskSendMail', {
+                                task: this.state.task,
+                                response: this.state.response,
+                            });
+                        } else {
+                            this.showAlert(strings.Task.noEmailToSend);
+                        }
                         break;
                 }
             });

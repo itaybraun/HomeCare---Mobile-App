@@ -51,7 +51,9 @@ export default class CurrentUserScreen extends AppScreen {
                     <Content bounces={false}>
                         <ListItem>
                             <Body>
-                                <Text style={commonStyles.contentText}>{strings.Settings.authentication}</Text>
+                                <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                    <Text style={commonStyles.contentText}>{strings.Settings.authentication}</Text>
+                                </View>
                             </Body>
                             <Right style={{minWidth: 60, justifyContent: 'flex-end'}}>
                                 {
@@ -66,21 +68,29 @@ export default class CurrentUserScreen extends AppScreen {
                             this.api.upn &&
                             <ListItem>
                                 <Body>
-                                    <Text style={commonStyles.smallInfoText}>{strings.Settings.upn}</Text>
-                                    <Text style={[{flex: 1}, commonStyles.contentText]}>
-                                        {this.api.upn}
-                                    </Text>
+                                    <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                        <Text style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>
+                                            {strings.Settings.upn}
+                                        </Text>
+                                        <Text style={[commonStyles.formItemText]}>
+                                            {this.api.upn}
+                                        </Text>
+                                    </View>
                                 </Body>
                             </ListItem>
                         }
                         {
                             this.api.user &&
                             <ListItem>
-                            <Body>
-                            <Text style={commonStyles.smallInfoText}>{strings.Settings.practitionerId}</Text>
-                                    <Text style={[{flex: 1}, commonStyles.contentText]}>
-                                        {this.api.user.id}
-                                    </Text>
+                                <Body>
+                                    <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                        <Text style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>
+                                            {strings.Settings.practitionerId}
+                                        </Text>
+                                        <Text style={[commonStyles.formItemText]}>
+                                            {this.api.user.id}
+                                        </Text>
+                                    </View>
                                 </Body>
                             </ListItem>
                         }
@@ -88,7 +98,9 @@ export default class CurrentUserScreen extends AppScreen {
                             this.api.token ?
                                 <ListItem>
                                     <Body>
-                                        <Text style={commonStyles.contentText}>{strings.Settings.accessToken}</Text>
+                                        <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                            <Text style={commonStyles.contentText}>{strings.Settings.accessToken}</Text>
+                                        </View>
                                     </Body>
                                     <Right style={{flexDirection: 'row', alignItems: 'center'}}>
                                         <Button small bordered onPress={() => this.logout(true)} style={{borderColor: appColors.mainColor}}>
@@ -97,7 +109,7 @@ export default class CurrentUserScreen extends AppScreen {
                                     </Right>
                                 </ListItem> :
                                 <ListItem>
-                                    <Body></Body>
+                                    <Body><View style={{minHeight: 45, justifyContent: 'center'}} /></Body>
                                     <Right style={{flexDirection: 'row', alignItems: 'center', minWidth: 60, justifyContent: 'flex-end',}}>
 
                                         <Button small bordered onPress={() => this.logout(false)} style={{borderColor: appColors.mainColor}}>

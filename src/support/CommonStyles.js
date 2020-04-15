@@ -133,6 +133,12 @@ export const commonStyles = {
         ...commonTextProperties()
     },
 
+    secondColorTitle: {
+        fontSize: 20,
+        color: appColors.secondColor,
+        ...commonTextProperties()
+    },
+
     questionnaireTitle: {
         fontSize: 20,
         color: appColors.questionnaireColor,

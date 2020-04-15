@@ -8,6 +8,7 @@ import {commonStyles} from '../../support/CommonStyles';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from './../../support/Consts';
 import CookieManager from '@react-native-community/cookies';
+import ListItemContainer from '../other/ListItemContainer';
 
 export default class SettingsScreen extends AppScreen {
 
@@ -49,10 +50,20 @@ export default class SettingsScreen extends AppScreen {
         this.navigateTo('ImageQuality', {
             value: this.settings.imageQuality,
             update: (value) => {
-                this.updateSettings('imageQuality', value)
+                this.updateSettings('imageQuality', value);
                 this.forceUpdate();
             },
         });
+    };
+
+    changeEmail = () => {
+        this.navigateTo('EmailAddress', {
+            email: this.settings.email,
+            update: (value) => {
+                this.updateSettings('email', value);
+                this.forceUpdate();
+            }
+        })
     };
 
     showUser = async () => {
@@ -67,10 +78,12 @@ export default class SettingsScreen extends AppScreen {
         return (
             <View style={{flex: 1}}>
                 <Container>
-                    <Content bounces={false}>
+                    <Content bounces={false} contentContainerStyle={{flexGrow: 1}}>
                         <ListItem>
                             <Body>
-                                <Text style={commonStyles.contentText}>{strings.Settings.qa}</Text>
+                                <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                    <Text style={commonStyles.contentText}>{strings.Settings.qa}</Text>
+                                </View>
                             </Body>
                             <Right>
                                 <Switch value={this.settings.qaMode} onValueChange={(value) => {
@@ -78,31 +91,68 @@ export default class SettingsScreen extends AppScreen {
                                 }}/>
                             </Right>
                         </ListItem>
+
                         <ListItem onPress={this.changeImageQuality}>
                             <Body>
-                                <Text style={commonStyles.contentText}>{strings.Settings.imageQuality}</Text>
+                                <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                    <Text style={commonStyles.contentText}>{strings.Settings.imageQuality}</Text>
+                                </View>
                             </Body>
                             <Right style={{minWidth: 60, justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center'}}>
                                     <Text style={commonStyles.infoText}>{strings.Settings[this.settings.imageQuality]}</Text>
                                     <Icon style={{marginLeft: 10}} name="arrow-forward"/>
                             </Right>
                         </ListItem>
+
+                        <ListItem onPress={this.changeEmail}>
+
+                            {this.settings.email != null ?
+                                <Body>
+                                    <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                        <Text style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>
+                                            {strings.Settings.emailAddress}
+                                        </Text>
+                                        <Text style={[commonStyles.formItemText]}>
+                                            {this.settings.email}
+                                        </Text>
+                                    </View>
+                                </Body> :
+
+                                <Body>
+                                    <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                        <Text style={commonStyles.infoText}>
+                                            {strings.Settings.emailAddress}
+                                        </Text>
+                                    </View>
+                                </Body>
+                            }
+                            <Right>
+                                <Icon name="arrow-forward"/>
+                            </Right>
+                        </ListItem>
+
                         <ListItem onPress={this.showUser}>
                             <Body>
-                                <Text style={commonStyles.smallInfoText}>{strings.Settings.currentUser}</Text>
-                                <Text style={[{flex: 1}, commonStyles.smallContentText]}>
-                                    {this.api.user?.id}
-                                </Text>
+                                <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                    <Text style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>
+                                        {strings.Settings.currentUser}
+                                    </Text>
+                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>
+                                        {this.api.user?.id}
+                                    </Text>
+                                </View>
                             </Body>
                             <Right style={{flex: 0}}>
                                 <Icon style={{marginLeft: 10}} name="arrow-forward"/>
                             </Right>
                         </ListItem>
-
+                        <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                            <View style={{alignSelf: 'flex-end', marginTop: 10,}}>
+                                <Image source={require('../../assets/icons/settings/settings.png')}/>
+                            </View>
+                        </View>
                     </Content>
-                    <View style={{alignItems: 'flex-end', marginTop: 10,}}>
-                        <Image source={require('../../assets/icons/settings/settings.png')}/>
-                    </View>
+
                 </Container>
             </View>
         );

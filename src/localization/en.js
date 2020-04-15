@@ -136,6 +136,8 @@ export const en = {
             '- Practitioner\'s name and license\n\n' +
             'The email will be sent to',
         sendInfo: 'To change the email address go to Settings',
+        mailSent: 'Mail sent',
+        noEmailToSend: 'Please go to Settings and set email first',
     },
 
     Visit: {
@@ -175,6 +177,7 @@ export const en = {
         accessToken: 'Access Token',
         deleteToken: 'Delete',
         logout: 'Logout',
+        emailAddress: 'Email',
     },
 
     Priorities: {

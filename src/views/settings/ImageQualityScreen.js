@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {View, FlatList, StyleSheet, TouchableOpacity, TextInput, Image} from 'react-native';
 import AppScreen from '../../support/AppScreen';
 import {commonStyles} from '../../support/CommonStyles';
 import {strings} from '../../localization/strings';
 import {Container, Header, Content, List, ListItem, Text, Icon, Left, Body, Right, Switch, Button} from 'native-base';
 
-export default class PickerScreen extends AppScreen {
+export default class ImageQualityScreen extends AppScreen {
 
     //------------------------------------------------------------
     // Properties
@@ -52,6 +52,7 @@ export default class PickerScreen extends AppScreen {
         this.setState({selectedValue: value});
         const update = this.props.navigation.getParam('update', null);
         update && update(value);
+        this.pop();
     };
 
     //------------------------------------------------------------
@@ -62,7 +63,7 @@ export default class PickerScreen extends AppScreen {
         return (
             <View style={commonStyles.screenContainer}>
                 <Container>
-                    <Content>
+                    <Content bounces={false} contentContainerStyle={{flexGrow: 1}}>
                         <List>
                             <ListItem icon onPress={() => this.setSelectedValue('original')}>
                                 <Body>
@@ -100,6 +101,11 @@ export default class PickerScreen extends AppScreen {
                                 }
                             </ListItem>
                         </List>
+                        <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                            <View style={{alignSelf: 'flex-end', marginTop: 10,}}>
+                                <Image source={require('../../assets/icons/settings/settings.png')}/>
+                            </View>
+                        </View>
                     </Content>
                 </Container>
             </View>

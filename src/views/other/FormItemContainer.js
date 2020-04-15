@@ -76,7 +76,7 @@ FormItemContainer.propTypes = {
 const styles = StyleSheet.create({
     container: {
         borderRadius: 4,
-        borderWidth: 2,
+        borderWidth: 1,
         overflow: 'visible',
     },
 
