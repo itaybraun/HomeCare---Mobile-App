@@ -143,7 +143,7 @@ ${item.items.map(item => getItemText(item)).join('')}`;
                 duration: 2000,
                 text: strings.Task.mailSent,
                 textStyle: {flex: 1, textAlign: 'center'},
-                //onClose: () => this.pop(),
+                onClose: () => this.pop(),
             });
 
         } catch (error) {
