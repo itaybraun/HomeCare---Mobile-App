@@ -133,7 +133,7 @@ android {
         applicationId "net.boganov.hestia2"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
+        versionCode 9
         versionName "0.0.1"
     }
     splits {
