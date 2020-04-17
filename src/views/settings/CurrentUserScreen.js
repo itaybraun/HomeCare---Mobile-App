@@ -8,6 +8,9 @@ import {appColors, commonStyles} from '../../support/CommonStyles';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from './../../support/Consts';
 import CookieManager from '@react-native-community/cookies';
+import {Utils} from '../../support/Utils';
+import moment from 'moment';
+import {uses24HourClock} from "react-native-localize";
 
 export default class CurrentUserScreen extends AppScreen {
 
@@ -45,6 +48,9 @@ export default class CurrentUserScreen extends AppScreen {
     //------------------------------------------------------------
 
     render() {
+
+        const decodedToken = this.api.token ? Utils.parseJwt(this.api.token) : null;
+
         return (
             <View style={{flex: 1}}>
                 <Container>
@@ -93,6 +99,36 @@ export default class CurrentUserScreen extends AppScreen {
                                     </View>
                                 </Body>
                             </ListItem>
+                        }
+                        {
+                            decodedToken &&
+                                <View>
+                                    <ListItem>
+                                        <Body>
+                                            <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                                <Text style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>
+                                                    Token issued at
+                                                </Text>
+                                                <Text style={commonStyles.formItemText}>
+                                                    {moment(decodedToken.iat * 1000).format(uses24HourClock() ? 'ddd, MMM DD YYYY, HH:mm:ss' : 'ddd, MMM-DD-YYYY, hh:mm:ss A')}
+                                                </Text>
+                                            </View>
+                                        </Body>
+                                    </ListItem>
+
+                                    <ListItem>
+                                        <Body>
+                                            <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                                <Text style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>
+                                                    Token expires at
+                                                </Text>
+                                                <Text style={commonStyles.formItemText}>
+                                                    {moment(decodedToken.exp * 1000).format(uses24HourClock() ? 'ddd, MMM DD YYYY, HH:mm:ss' : 'ddd, MMM-DD-YYYY, hh:mm:ss A')}
+                                                </Text>
+                                            </View>
+                                        </Body>
+                                    </ListItem>
+                                </View>
                         }
                         {
                             this.api.token ?

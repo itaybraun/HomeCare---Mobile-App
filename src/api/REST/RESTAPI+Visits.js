@@ -25,7 +25,7 @@ RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
         fhirOptions.pageLimit = 0;
         fhirOptions.flat = true;
         fhirOptions.resolveReferences = ["subject", "basedOn"];
-        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getVisits', result);
         let visits = result.map(json => getVisitFromJson(json)) || [];
         return new APIRequest(true, visits);
@@ -40,7 +40,7 @@ RESTAPI.prototype.getVisit = async function getVisit(visitId): APIRequest {
         let url = 'Encounter/'+visitId;
         let params = {};
         params.resolveReferences = ["subject", "basedOn"];
-        const result = await this.server.request(this.createUrl(url), params);
+        const result = await this.callServer(this.createUrl(url), params);
         console.log('getVisit', result);
         const visit = getVisitFromJson(result);
         return new APIRequest(true, visit);

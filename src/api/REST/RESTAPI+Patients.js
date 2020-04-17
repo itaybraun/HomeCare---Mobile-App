@@ -14,7 +14,7 @@ RESTAPI.prototype.getPatients = async function getPatients(): APIRequest {
         let params = {};
         params.pageLimit = 0;
         params.flat = true;
-        const result = await this.server.request(this.createUrl(url), params);
+        const result = await this.callServer(this.createUrl(url), params);
         console.log('getPatients', result);
         const patients = result.map(json => getPatientFromJson((json))) || [];
         return new APIRequest(true, patients);
@@ -30,7 +30,7 @@ RESTAPI.prototype.getPatient = async function getPatient(patientId: String): API
         }
 
         let url = 'Patient/'+patientId;
-        const result = await this.server.request(this.createUrl(url));
+        const result = await this.callServer(this.createUrl(url));
         console.log(result);
         const patient = getPatientFromJson(result);
         return new APIRequest(true, patient);

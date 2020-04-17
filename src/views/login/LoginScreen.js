@@ -11,12 +11,13 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
 import {strings} from '../../localization/strings';
 import {API, APIRequest} from '../../api/API';
 import DeviceInfo from 'react-native-device-info';
-import {AzureInstance, AzureLoginView} from 'react-native-azure-ad-2';
 import RESTAPI from '../../api/REST/RESTAPI';
 import {jwtDecode} from 'fhirclient/lib/lib';
 import {Utils} from '../../support/Utils';
 import { SafeAreaView } from 'react-navigation';
 import FHIR from 'fhirclient/lib/entry/browser';
+import AzureLoginView from '../../api/Azure/AzureLoginView';
+import AzureInstance from '../../api/Azure/AzureInstance';
 
 const options = {
     client_id: '6b1d9c3b-df12-4a15-9a66-0e299f9a9bd2',
@@ -35,7 +36,7 @@ export default class LoginScreen extends AppScreen {
         production: null,
     };
 
-    instance = new AzureInstance(options);
+    azureADInstance;
 
     componentDidMount(): void {
         super.componentDidMount();
@@ -66,10 +67,13 @@ export default class LoginScreen extends AppScreen {
         this.props.screenProps.api = api;
 
         this.setState({loading: true});
-        await this.api.setCurrentUser('user1@itaybraunhotmail.onmicrosoft.com');
+        let result: APIRequest = await this.api.setCurrentUser('user1@itaybraunhotmail.onmicrosoft.com');
         this.setState({loading: false});
 
-        this.navigateTo('Tabs');
+        if (result.success)
+            this.navigateTo('Tabs');
+        else
+            this.showError(result.data);
     };
 
     onEvgenyPress = async () => {
@@ -78,25 +82,38 @@ export default class LoginScreen extends AppScreen {
         this.props.screenProps.api = api;
 
         this.setState({loading: true});
-        await this.api.setCurrentUser('user4@itaybraunhotmail.onmicrosoft.com');
+        let result: APIRequest = await this.api.setCurrentUser('user4@itaybraunhotmail.onmicrosoft.com');
         this.setState({loading: false});
 
-        this.navigateTo('Tabs');
+        if (result.success)
+            this.navigateTo('Tabs');
+        else
+            this.showError(result.data);
     };
 
     onSalHealthPress = async () => {
-        this.setState({loading: true});
         let api = new RESTAPI('https://cs004.azurewebsites.net');
         api.token = null;
         this.props.screenProps.api = api;
 
-        await this.api.setCurrentUser('user1');
+        this.setState({loading: true});
+        let result: APIRequest = await this.api.setCurrentUser('user1');
         this.setState({loading: false});
 
-        this.navigateTo('Tabs');
+        if (result.success)
+            this.navigateTo('Tabs');
+        else
+            this.showError(result.data);
     };
 
-    onProdPress = () => {
+    onProdPress = async () => {
+        // this.setState({loading: true});
+        // let api = new RESTAPI('https://cs2.azurewebsites.net');
+        // this.props.screenProps.api = api;
+        // await this.api.login();
+        // this.setState({loading: false});
+
+        this.azureADInstance = new AzureInstance(options);
         this.setState({
             production: true
         });
@@ -105,24 +122,23 @@ export default class LoginScreen extends AppScreen {
     _onLoginSuccess = async (event) => {
         this.setState({loading: true, production: false});
 
-        let api = new RESTAPI('https://cs2.azurewebsites.net');
-
-        const token = this.instance.getToken().accessToken;
-        console.log(token);
-
-        const decodedToken = Utils.parseJwt(token);
-
-        api.token = token;
+        let api = new RESTAPI('https://cs2.azurewebsites.net', this.azureADInstance);
         this.props.screenProps.api = api;
 
-        await this.api.setCurrentUser(decodedToken.unique_name);
+        let result: APIRequest = await this.api.setCurrentUser();
         this.setState({loading: false});
 
-        this.navigateTo('Tabs');
+        if (result.success)
+            this.navigateTo('Tabs');
+        else
+            this.showError(result.data);
     };
 
     _onLoginCancel = (event) => {
         console.log(event);
+        this.setState({
+            production: false
+        });
     };
 
 
@@ -135,7 +151,7 @@ export default class LoginScreen extends AppScreen {
                     this.state.production === true &&
                         <View style={{flex: 1}}>
                             <AzureLoginView
-                                azureInstance={this.instance}
+                                azureInstance={this.azureADInstance}
                                 loadingMessage=" "
                                 loadingView={renderLoading(true)}
                                 onSuccess={this._onLoginSuccess}

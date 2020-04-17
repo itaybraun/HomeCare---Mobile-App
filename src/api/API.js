@@ -32,6 +32,10 @@ export class APIRequest extends Request {
     }
 }
 
+API.prototype.login = async function login(): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
 API.prototype.setCurrentUser = async function setCurrentUser(identifier: String): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };

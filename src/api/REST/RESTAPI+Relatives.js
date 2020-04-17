@@ -22,7 +22,7 @@ RESTAPI.prototype.getPatientRelatives = async function getPatientRelatives(patie
         let fhirOptions = {};
         fhirOptions.pageLimit = 0;
         fhirOptions.flat = true;
-        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         const relatives = result.map(json => getRelativeFromJson((json))) || [];
         return new APIRequest(true, relatives);
     } catch (error) {

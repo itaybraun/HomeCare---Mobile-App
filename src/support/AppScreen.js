@@ -3,6 +3,7 @@ import {Alert} from 'react-native';
 import API from '../api/API';
 import {Settings} from '../models/Settings';
 import EventEmitter from 'eventemitter3';
+import {strings} from '../localization/strings';
 
 export default class AppScreen extends React.Component {
 
@@ -61,6 +62,18 @@ export default class AppScreen extends React.Component {
 
     showError = (error) => {
         console.log(error);
+        if (error.message === 'relog') {
+            this.showAlert(strings.System.sessionExpired, null, [
+                {
+                    text: strings.Common.okButton,
+                    style: 'cancel',
+                    onPress: () => {
+                        this.navigateTo('Login');
+                    }
+                },
+            ]);
+            return;
+        }
         this.showAlert(error.message);
     };
 

@@ -17,7 +17,7 @@ RESTAPI.prototype.getPractitioners = async function getPractitioners(): APIReque
         let fhirOptions = {};
         fhirOptions.pageLimit = 0;
         fhirOptions.flat = true;
-        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getPractitioners', result);
         const practitioners = result.map(json => getPractitionerFromJSON((json))) || [];
         return new APIRequest(true, practitioners);
@@ -36,7 +36,7 @@ RESTAPI.prototype.getPractitioner = async function getPractitioner(practitionerI
         let url = 'Practitioner/'+practitionerId;
         params.flat = true;
 
-        const result = await this.server.request(this.createUrl(url), params);
+        const result = await this.callServer(this.createUrl(url), params);
         console.log('getPractitioner', result);
         let practitioner = getPractitionerFromJSON(result);
         return new APIRequest(true, practitioner);
@@ -55,7 +55,7 @@ RESTAPI.prototype.getPractitionerByIdentifier = async function getPractitionerBy
         let url = 'Practitioner?identifier='+identifier;
         params.flat = true;
 
-        const result = await this.server.request(this.createUrl(url), params);
+        const result = await this.callServer(this.createUrl(url), params);
         console.log('getPractitionerByIdentifier', result);
         let practitioner = getPractitionerFromJSON(result[0]);
         return new APIRequest(true, practitioner);

@@ -25,17 +25,7 @@ import SelectVisitScreen from './src/views/visits/SelectVisitScreen';
 import {setCustomText} from 'react-native-global-props/src/CustomFunctions/setCustomText';
 import {setCustomTextInput} from 'react-native-global-props/src/CustomFunctions/setCustomTextInput';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-// TODO: find a way to move this to RESTAPI
-import './src/api/REST/RESTAPI+Tasks';
-import './src/api/REST/RESTAPI+Flags';
-import './src/api/REST/RESTAPI+Patients';
-import './src/api/REST/RESTAPI+Practitioners';
-import './src/api/REST/RESTAPI+Visits';
-import './src/api/REST/RESTAPI+Questionnaire';
-import './src/api/REST/RESTAPI+Relatives';
 import QuestionnaireScreen from './src/views/tasks/questionnaire/QuestionnaireScreen';
-import {API} from './src/api/API';
 import NewTaskScreen from './src/views/tasks/edit/NewTaskScreen';
 import SelectActivityScreen from './src/views/tasks/edit/SelectActivityScreen';
 import GeneralScreen from './src/views/patients/patient/general/GeneralScreen';
@@ -52,6 +42,16 @@ import QuestionnaireChoiceItemScreen from './src/views/tasks/questionnaire/Quest
 import QuestionnaireInputItemScreen from './src/views/tasks/questionnaire/QuestionnaireInputItemScreen';
 import TaskSendMailScreen from './src/views/tasks/TaskSendMailScreen';
 import EmailAddressScreen from './src/views/settings/EmailAddressScreen';
+
+// TODO: find a way to move this to RESTAPI
+import './src/api/REST/RESTAPI+Tasks';
+import './src/api/REST/RESTAPI+Flags';
+import './src/api/REST/RESTAPI+Patients';
+import './src/api/REST/RESTAPI+Practitioners';
+import './src/api/REST/RESTAPI+Visits';
+import './src/api/REST/RESTAPI+Questionnaire';
+import './src/api/REST/RESTAPI+Relatives';
+
 
 export default class App extends React.Component {
 

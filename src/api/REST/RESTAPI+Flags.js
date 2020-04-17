@@ -26,7 +26,7 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
         fhirOptions.flat = true;
         fhirOptions.resolveReferences = ["subject"];
 
-        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getFlags', result);
         let flags = result.map(json => getFlagFromJson(json)) || [];
         return new APIRequest(true, flags);
@@ -41,7 +41,7 @@ RESTAPI.prototype.getFlag = async function getFlag(flagId): APIRequest {
         let url = 'Flag/'+flagId;
         let fhirOptions = {};
         fhirOptions.resolveReferences = ["subject"];
-        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getFlag', result);
         const flag = getFlagFromJson(result);
         return new APIRequest(true, flag);

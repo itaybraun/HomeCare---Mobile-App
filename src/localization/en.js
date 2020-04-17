@@ -10,6 +10,9 @@ export const en = {
         doneButton: 'Done',
         sendButton: 'Send',
     },
+    System: {
+        sessionExpired: 'Session has expired. Please login again.',
+    },
     Login: {
         appName: 'Hestia',
         homecarePlatform: 'A Homecare Platform',

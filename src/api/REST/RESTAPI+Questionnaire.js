@@ -20,7 +20,7 @@ RESTAPI.prototype.getQuestionnaire = async function getQuestionnaire(id: String)
         let url = 'Questionnaire/'+id;
         params.flat = true;
         params.resolveReferences = [];
-        const result = await this.server.request(this.createUrl(url), params);
+        const result = await this.callServer(this.createUrl(url), params);
         console.log('getQuestionnaire', result);
         const questionnaire = getQuestionnaireFromJson(result);
 
@@ -50,7 +50,7 @@ RESTAPI.prototype.getActivities = async function getActivities(): APIRequest {
         let url = 'ActivityDefinition';
         let fhirOptions = {};
         fhirOptions.flat = true;
-        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getActivities', result);
         let activities = result.map(json => getActivityFromJson(json)) || [];
 
@@ -73,7 +73,7 @@ RESTAPI.prototype.getQuestionnaireResponses = async function getQuestionnaireRes
         let fhirOptions = {};
         fhirOptions.pageLimit = 0;
         fhirOptions.flat = true;
-        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log(result);
         let responses = result.map(json => getQuestionnaireResponseFromJson(json));
         console.log('getQuestionnaireResponses', responses);
@@ -90,7 +90,7 @@ RESTAPI.prototype.getQuestionnaireResponse = async function getQuestionnaireResp
         let url = 'QuestionnaireResponse/3539bb23-2f4d-45a1-80c8-5b6515e060c3';
         let fhirOptions = {};
         fhirOptions.flat = true;
-        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         let response = getQuestionnaireResponseFromJson(result);
         console.log('getQuestionnaireResponse', response);
         return new APIRequest(true, response);

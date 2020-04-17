@@ -131,6 +131,7 @@ android {
 
     defaultConfig {
         applicationId "net.boganov.hestia2"
+        multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9

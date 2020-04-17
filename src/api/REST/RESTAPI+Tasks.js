@@ -29,7 +29,7 @@ RESTAPI.prototype.getTasks = async function getTasks(patientId, statuses: [Statu
         fhirOptions.flat = true;
         fhirOptions.resolveReferences = ["subject", "requester", "performer.0", "encounter", "basedOn.0"];
 
-        const result = await this.server.request(this.createUrl(url, params), fhirOptions);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getTasks', result);
         let tasks = result.map(json => getTaskFromJson(json)) || [];
 
@@ -45,7 +45,7 @@ RESTAPI.prototype.getTask = async function getTask(taskId): APIRequest {
         let url = 'ServiceRequest/'+taskId;
         params.flat = true;
         params.resolveReferences = ["subject", "requester", "performer.0", "encounter", "basedOn.0"];
-        const result = await this.server.request(this.createUrl(url), params);
+        const result = await this.callServer(this.createUrl(url), params);
         console.log('getTask', result);
         const task = getTaskFromJson(result);
 

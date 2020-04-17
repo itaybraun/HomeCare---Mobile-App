@@ -17,15 +17,16 @@
     "@react-native-community/masked-view": "^0.1.6",
     "axios": "^0.19.2",
     "base-64": "^0.1.0",
+    "buffer": "^5.0.0",
     "eventemitter3": "^4.0.0",
     "fhirclient": "^2.3.1",
     "lodash.clonedeep": "^4.5.0",
     "moment": "^2.24.0",
     "native-base": "^2.13.8",
     "prop-types": "^15.7.2",
+    "query-string": "^4.2.3",
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-azure-ad-2": "^1.0.5",
     "react-native-azure-blob-storage": "^1.2.1",
     "react-native-calendars": "^1.264.0",
     "react-native-device-info": "^5.5.1",
@@ -54,7 +55,8 @@
     "react-navigation-stack": "^2.1.0",
     "react-navigation-tabs": "^2.7.0",
     "react-navigation-transitions": "^1.0.12",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "uuid": "^2.0.3"
   },
   "devDependencies": {
     "@babel/core": "7.8.4",
