@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     borderEraser: {
         backgroundColor: '#FFFFFF',
         position: 'absolute',
-        height: 3,
+        height: 10,
         left: 0,
         right: 0,
     }

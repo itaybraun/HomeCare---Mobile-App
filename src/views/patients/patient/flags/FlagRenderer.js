@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     priorityContainer: {
         marginLeft: -12,
         paddingHorizontal: 12,
-        minWidth: 120,
+        minWidth: 90,
         height: 24,
         justifyContent: 'center',
         alignItems: 'center',

@@ -452,13 +452,15 @@ export const defaultNavigationOptions = {
         backgroundColor: appColors.mainColor,
         borderBottomWidth: 0,
         elevation: 0,
-        shadowOpacity: 0
+        shadowOpacity: 0,
     },
     headerTitleStyle: {
         fontSize: 20,
         color: appColors.headerFontColor,
+        textAlign: "center",
     },
     headerTintColor: appColors.headerFontColor,
+    headerTitleAlign: 'center',
     ...TransitionPresets.SlideFromRightIOS,
 };
 
@@ -472,8 +474,10 @@ export const popupNavigationOptions = {
     headerTitleStyle: {
         fontSize: 20,
         color: 'black',
+        textAlign: "center",
     },
     headerTintColor: 'black',
+    headerTitleAlign: 'center',
     ...TransitionPresets.ModalSlideFromBottomIOS,
     transitionSpec: {
         open: TransitionIOSSpec,

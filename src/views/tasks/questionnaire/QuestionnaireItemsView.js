@@ -239,11 +239,11 @@ export default class QuestionnaireItemsView extends Component {
                             {
                                 images.map((image, index) => {
                                     return (
-                                        <View key={index}>
                                             <TouchableOpacity
-
+                                                key={index}
                                                 style={styles.imageContainer}
                                                 onPress={() => image ? this.removeImage(item, index) : this.addImage(item, index)}>
+                                                <View style={styles.imageInnerContainer}>
                                                 {
                                                     image ?
                                                         <View style={{overflow: 'visible',}}>
@@ -271,7 +271,7 @@ export default class QuestionnaireItemsView extends Component {
                                                             <Icon type="Feather" name="plus" style={{
                                                                 fontSize: 24,
                                                                 color: appColors.questionnaireColor,
-                                                                paddingTop: 4
+                                                                paddingTop: Platform.OS === 'ios' ? 4 : 0
                                                             }}/>
                                                         </View>
                                                 }
@@ -288,9 +288,9 @@ export default class QuestionnaireItemsView extends Component {
 
 
                                                 }
+                                                </View>
                                             </TouchableOpacity>
 
-                                        </View>
                                     )
                                 })
                             }
@@ -325,6 +325,11 @@ QuestionnaireItemsView.propTypes = {
 
 const styles = StyleSheet.create({
     imageContainer: {
+        paddingTop: 10,
+        paddingRight: 10,
+    },
+
+    imageInnerContainer: {
         height: 64,
         width: 64,
         marginTop: 10,
@@ -332,7 +337,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderWidth: 1,
         overflow: 'visible',
-        marginRight: 10,
         borderColor: appColors.infoColor,
     },
 });

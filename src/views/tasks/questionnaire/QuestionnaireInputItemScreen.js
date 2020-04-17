@@ -51,7 +51,6 @@ export default class QuestionnaireItemScreen extends AppScreen {
     };
 
     state = {
-        loading: false,
         item: this.props.navigation.getParam('item', null),
         value: this.props.navigation.getParam('value', null),
     };
@@ -114,7 +113,7 @@ export default class QuestionnaireItemScreen extends AppScreen {
         return (
             <TextInput
                 ref={ref => this.textInput = ref}
-                style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
+                style={{fontSize: 18, minHeight: 50, paddingHorizontal: 5,}}
                 keyboardType='numeric'
                 onSubmitEditing={this.submit}
                 returnKeyType='done'
@@ -131,7 +130,7 @@ export default class QuestionnaireItemScreen extends AppScreen {
         return (
             <TextInput
                 ref={ref => this.textInput = ref}
-                style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
+                style={{fontSize: 18, minHeight: 50, paddingHorizontal: 5,}}
                 keyboardType='numeric'
                 returnKeyType='done'
                 onSubmitEditing={this.submit}
@@ -148,7 +147,7 @@ export default class QuestionnaireItemScreen extends AppScreen {
         return (
             <TextInput
                 ref={ref => this.textInput = ref}
-                style={{borderWidth: 1, fontSize: 18, height: 40, paddingHorizontal: 5,}}
+                style={{fontSize: 18, minHeight: 50, paddingHorizontal: 5,}}
                 autoCorrect={false}
                 returnKeyType='done'
                 onSubmitEditing={this.submit}
@@ -173,10 +172,9 @@ export default class QuestionnaireItemScreen extends AppScreen {
         return (
             <View style={[commonStyles.screenContainer, {padding: 20}]} onPress={Keyboard.dismiss}>
                 <Text style={commonStyles.titleText}>{item.text}</Text>
-                <View style={{marginTop: 20}}>
+                <FormItemContainer style={{marginTop: 20}} error={this.state.error}>
                     {this.renderItem()}
-                </View>
-                {renderLoading(this.state.loading)}
+                </FormItemContainer>
             </View>
         );
     }

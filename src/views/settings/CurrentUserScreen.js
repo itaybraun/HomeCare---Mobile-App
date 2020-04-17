@@ -54,7 +54,7 @@ export default class CurrentUserScreen extends AppScreen {
         return (
             <View style={{flex: 1}}>
                 <Container>
-                    <Content bounces={false}>
+                    <Content bounces={false} contentContainerStyle={{flexGrow: 1}}>
                         <ListItem>
                             <Body>
                                 <View style={{minHeight: 45, justifyContent: 'center'}}>
@@ -154,11 +154,13 @@ export default class CurrentUserScreen extends AppScreen {
                                     </Right>
                                 </ListItem>
                         }
-
+                        <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                            <View style={{alignSelf: 'flex-end', marginTop: 10,}}>
+                                <Image source={require('../../assets/icons/settings/settings.png')}/>
+                            </View>
+                        </View>
                     </Content>
-                    <View style={{alignItems: 'flex-end', marginTop: 10,}}>
-                        <Image source={require('../../assets/icons/settings/settings.png')}/>
-                    </View>
+
                 </Container>
             </View>
         );

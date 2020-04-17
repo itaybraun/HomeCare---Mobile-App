@@ -81,7 +81,7 @@ export default class EmailAddressScreen extends AppScreen {
                     <Content contentContainerStyle={{flexGrow: 1}}>
                         <FormItemContainer style={{margin: 20}} title={strings.Settings.emailAddress} error={this.state.error}>
                             <TextInput
-                                style={[{fontSize: 18, height: 40, paddingHorizontal: 10,}, this.state.error && {color: '#FF0000'}]}
+                                style={[{fontSize: 18, minHeight: 50, paddingHorizontal: 10,}, this.state.error && {color: '#FF0000'}]}
                                 value={this.state.email}
                                 autoCapitalize='none'
                                 autoCorrect={false}
