@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-navigation';
 import FHIR from 'fhirclient/lib/entry/browser';
 import AzureLoginView from '../../api/Azure/AzureLoginView';
 import AzureInstance from '../../api/Azure/AzureInstance';
+import {Content} from 'native-base';
 
 const options = {
     client_id: '6b1d9c3b-df12-4a15-9a66-0e299f9a9bd2',
@@ -103,6 +104,20 @@ export default class LoginScreen extends AppScreen {
             this.showError(result.data);
     };
 
+    onProd2Press = async () => {
+        let api = new RESTAPI('https://cs005.azurewebsites.net');
+        this.props.screenProps.api = api;
+
+        this.setState({loading: true});
+        let result: APIRequest = await this.api.setCurrentUser('user1');
+        this.setState({loading: false});
+
+        if (result.success)
+            this.navigateTo('Tabs');
+        else
+            this.showError(result.data);
+    };
+
     onProdPress = async () => {
         // this.setState({loading: true});
         // let api = new RESTAPI('https://cs2.azurewebsites.net');
@@ -143,10 +158,84 @@ export default class LoginScreen extends AppScreen {
 
         return (
             <SafeAreaView style={styles.container}>
+                <View style={{flex: 1}}>
+                    <Content contentContainerStyle={{flexGrow: 1}} bounces={false}>
+                        {
+                            this.state.production === null &&
+                                <Form style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                    <View style={{alignItems: 'center'}}>
+                                        <Text
+                                            style={[commonStyles.h1, {color: appColors.mainColor}]}>{strings.Login.appName}</Text>
+                                        <View style={styles.imageContainer}>
+                                            <Image style={styles.image}
+                                                   source={require('../../assets/images/login.png')}/>
+                                        </View>
+                                        <Text
+                                            style={[commonStyles.h2, {color: appColors.mainColor}]}>{strings.Login.homecarePlatform}</Text>
+                                    </View>
+                                    {
+                                        __DEV__ &&
+                                        <Button style={{
+                                            backgroundColor: appColors.mainColor,
+                                            width: 230,
+                                            marginTop: 20,
+                                            justifyContent: 'center'
+                                        }} onPress={this.onEvgenyPress}>
+                                            <Text style={commonStyles.buttonText}>EVGENY</Text>
+                                        </Button>
+                                    }
+                                    <Button style={{
+                                        backgroundColor: appColors.mainColor,
+                                        width: 230,
+                                        marginTop: 20,
+                                        justifyContent: 'center'
+                                    }} onPress={this.onDevelopPress}>
+                                        <Text
+                                            style={commonStyles.buttonText}>{strings.Login.develop.toUpperCase()}</Text>
+                                    </Button>
+                                    <Button style={{
+                                        backgroundColor: appColors.mainColor,
+                                        width: 230,
+                                        marginTop: 20,
+                                        justifyContent: 'center'
+                                    }} onPress={this.onProdPress}>
+                                        <Text
+                                            style={commonStyles.buttonText}>{strings.Login.production.toUpperCase()}</Text>
+                                    </Button>
+                                    <Button style={{
+                                        backgroundColor: appColors.mainColor,
+                                        width: 230,
+                                        marginTop: 20,
+                                        justifyContent: 'center'
+                                    }} onPress={this.onSalHealthPress}>
+                                        <Text style={commonStyles.buttonText}>{'SAL HEALTH'}</Text>
+                                    </Button>
+                                    <Button style={{
+                                        backgroundColor: appColors.mainColor,
+                                        width: 230,
+                                        marginTop: 20,
+                                        justifyContent: 'center'
+                                    }} onPress={this.onProd2Press}>
+                                        <Text style={commonStyles.buttonText}>{'PROD 2'}</Text>
+                                    </Button>
 
-                {
-                    this.state.production === true &&
-                        <View style={{flex: 1}}>
+                                </Form>
+
+                        }
+                        <View style={{
+                            flexDirection: 'row',
+                            marginHorizontal: 10,
+                            alignItems: 'flex-end',
+                        }}>
+                            <Image style={styles.bottomLogo} source={require('../../assets/images/logo.png')}/>
+                            <View style={{flex: 1,}} />
+                            <Text style={commonStyles.smallInfoText}>{this.state.appVersion}</Text>
+                        </View>
+                    </Content>
+                    {renderLoading(this.state.loading)}
+                    {
+                        this.state.production === true &&
+                        <View style={{position: 'absolute', flex: 1, top: 0, bottom: 0, left: 0, right: 0}}>
                             <AzureLoginView
                                 azureInstance={this.azureADInstance}
                                 loadingMessage=" "
@@ -159,43 +248,8 @@ export default class LoginScreen extends AppScreen {
                                 <Icon type="AntDesign" name="close" style={{fontSize: 22, color: appColors.textColor}}/>
                             </TouchableOpacity>
                         </View>
-                }
-                {
-                    this.state.production === null &&
-                        <View style={{flex: 1}}>
-                            <Form style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
-                                <View style={{alignItems: 'center'}}>
-                                    <Text style={[commonStyles.h1, {color: appColors.mainColor}]}>{strings.Login.appName}</Text>
-                                    <View style={styles.imageContainer}>
-                                        <Image style={styles.image} source={require('../../assets/images/login.png')}/>
-                                    </View>
-                                    <Text style={[commonStyles.h2, {color: appColors.mainColor}]}>{strings.Login.homecarePlatform}</Text>
-                                </View>
-                                {
-                                    __DEV__ &&
-                                    <Button style={{backgroundColor: appColors.mainColor, width: 230, justifyContent: 'center'}} onPress={this.onEvgenyPress}>
-                                        <Text style={commonStyles.buttonText}>EVGENY</Text>
-                                    </Button>
-                                }
-                                <Button style={{backgroundColor: appColors.mainColor, width: 230, justifyContent: 'center'}} onPress={this.onDevelopPress}>
-                                    <Text style={commonStyles.buttonText}>{strings.Login.develop.toUpperCase()}</Text>
-                                </Button>
-                                <Button style={{backgroundColor: appColors.mainColor, width: 230, justifyContent: 'center'}} onPress={this.onProdPress}>
-                                    <Text style={commonStyles.buttonText}>{strings.Login.production.toUpperCase()}</Text>
-                                </Button>
-                                <Button style={{backgroundColor: appColors.mainColor, width: 230, justifyContent: 'center'}} onPress={this.onSalHealthPress}>
-                                    <Text style={commonStyles.buttonText}>{'SAL HEALTH'}</Text>
-                                </Button>
-                            </Form>
-
-                            <View style={{flexDirection: 'row', marginHorizontal: 10, alignItems: 'flex-end', justifyContent:'space-between' }}>
-                                <Image style={styles.bottomLogo} source={require('../../assets/images/logo.png')} />
-                                <Text style={commonStyles.smallInfoText}>{this.state.appVersion}</Text>
-                            </View>
-
-                        </View>
-                }
-                {renderLoading(this.state.loading)}
+                    }
+                </View>
             </SafeAreaView>
         );
     }

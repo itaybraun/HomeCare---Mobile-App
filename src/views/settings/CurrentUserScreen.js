@@ -131,7 +131,7 @@ export default class CurrentUserScreen extends AppScreen {
                                 </View>
                         }
                         {
-                            this.api.token ?
+                            this.api.getToken() ?
                                 <ListItem>
                                     <Body>
                                         <View style={{minHeight: 45, justifyContent: 'center'}}>
