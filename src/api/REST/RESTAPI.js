@@ -13,9 +13,17 @@ export default class RESTAPI extends API {
 
         this.azure = azure;
         if (this.azure) {
-            this.token = this.azure.getToken().accessToken;
-            this.server.setToken(this.token);
+            this.setToken(this.azure.getToken().accessToken);
         }
+    }
+
+    setToken(token: String) {
+        super.setToken(token);
+        this.server.setToken(token);
+    }
+
+    removeToken = () => {
+        this.server.setToken('asd');
     }
 
     refreshToken = async (): APIRequest => {
@@ -24,10 +32,12 @@ export default class RESTAPI extends API {
         }
         try {
             const refreshToken = this.azure.getToken().refreshToken;
+            console.log(refreshToken)
             if (refreshToken) {
-                await this.azure.getTokenFromRefreshToken();
-                this.token = this.azure.getToken().accessToken;
-                this.server.setToken(this.token);
+                console.log('Refreshing token...');
+                await this.azure.getTokenFromRefreshToken(refreshToken);
+                console.log('Refreshed');
+                this.setToken(this.azure.getToken().accessToken);
                 return new APIRequest(true);
             }
 
@@ -56,8 +66,8 @@ export default class RESTAPI extends API {
             }
         };
 
-        if (this.token) {
-            result.headers.Authorization = `Bearer ${API.token}`;
+        if (this.getToken()) {
+            result.headers.Authorization = `Bearer ${this.getToken()}`;
         }
 
         console.log(result);
@@ -73,7 +83,7 @@ export default class RESTAPI extends API {
             if (error.message === "401") {
                 let refreshResult: APIRequest = await this.refreshToken();
                 if (refreshResult.success) {
-                    this.callServer(url, fhirOptions);
+                    return this.callServer(url, fhirOptions);
                 } else {
                     throw refreshResult.data;
                 }
@@ -101,5 +111,7 @@ export default class RESTAPI extends API {
 
         return APIRequest(false);
     };
+
+
 };
 

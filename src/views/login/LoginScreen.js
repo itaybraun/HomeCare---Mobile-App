@@ -63,7 +63,6 @@ export default class LoginScreen extends AppScreen {
 
     onDevelopPress = async () => {
         let api = new RESTAPI('https://fhir1.azurewebsites.net');
-        api.token = null;
         this.props.screenProps.api = api;
 
         this.setState({loading: true});
@@ -78,7 +77,6 @@ export default class LoginScreen extends AppScreen {
 
     onEvgenyPress = async () => {
         let api = new RESTAPI('https://fhir1.azurewebsites.net');
-        api.token = null;
         this.props.screenProps.api = api;
 
         this.setState({loading: true});
@@ -93,7 +91,6 @@ export default class LoginScreen extends AppScreen {
 
     onSalHealthPress = async () => {
         let api = new RESTAPI('https://cs004.azurewebsites.net');
-        api.token = null;
         this.props.screenProps.api = api;
 
         this.setState({loading: true});

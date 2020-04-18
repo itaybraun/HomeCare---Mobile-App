@@ -19,7 +19,14 @@ export class API {
     }
 
     upn: String;
-    token: String;
+
+    _token: String = null;
+    getToken(): String {
+        return this._token;
+    }
+    setToken(token: String) {
+        this._token = token;
+    }
 }
 
 export class APIRequest extends Request {
