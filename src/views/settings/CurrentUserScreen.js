@@ -49,7 +49,7 @@ export default class CurrentUserScreen extends AppScreen {
 
     render() {
 
-        const decodedToken = this.api.token ? Utils.parseJwt(this.api.token) : null;
+        const decodedToken = this.api.getToken() ? Utils.parseJwt(this.api.getToken()) : null;
 
         return (
             <View style={{flex: 1}}>
@@ -63,7 +63,7 @@ export default class CurrentUserScreen extends AppScreen {
                             </Body>
                             <Right style={{minWidth: 60, justifyContent: 'flex-end'}}>
                                 {
-                                    this.api.token ?
+                                    this.api.getToken() ?
                                         <Text style={commonStyles.infoText}>{strings.Settings.azureAD}</Text> :
                                         <Text style={commonStyles.infoText}>{strings.Settings.noAuth}</Text>
                                 }

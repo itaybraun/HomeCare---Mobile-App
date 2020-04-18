@@ -222,15 +222,19 @@ export default class LoginScreen extends AppScreen {
                                 </Form>
 
                         }
-                        <View style={{
-                            flexDirection: 'row',
-                            marginHorizontal: 10,
-                            alignItems: 'flex-end',
-                        }}>
-                            <Image style={styles.bottomLogo} source={require('../../assets/images/logo.png')}/>
-                            <View style={{flex: 1,}} />
-                            <Text style={commonStyles.smallInfoText}>{this.state.appVersion}</Text>
-                        </View>
+                        {
+                            this.state.production === null &&
+                            <View style={{
+                                flexDirection: 'row',
+                                marginHorizontal: 10,
+                                alignItems: 'flex-end',
+                            }}>
+                                <Image style={styles.bottomLogo} source={require('../../assets/images/logo.png')}/>
+                                <View style={{flex: 1,}}/>
+                                <Text style={commonStyles.smallInfoText}>{this.state.appVersion}</Text>
+                            </View>
+                        }
+
                     </Content>
                     {renderLoading(this.state.loading)}
                     {

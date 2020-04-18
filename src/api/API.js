@@ -19,6 +19,7 @@ export class API {
     }
 
     upn: String;
+    serverUrl: String;
 
     _token: String = null;
     getToken(): String {

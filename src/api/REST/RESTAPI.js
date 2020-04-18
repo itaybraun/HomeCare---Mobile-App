@@ -7,6 +7,8 @@ export default class RESTAPI extends API {
     constructor(server, azure: AzureInstance = null) {
         super();
 
+        this.serverUrl = server;
+
         this.server = FHIR.client({
             serverUrl: server,
         });

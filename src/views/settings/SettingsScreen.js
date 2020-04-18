@@ -131,6 +131,19 @@ export default class SettingsScreen extends AppScreen {
                             </Right>
                         </ListItem>
 
+                        <ListItem>
+                            <Body>
+                                <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                    <Text style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>
+                                        {strings.Settings.servername}
+                                    </Text>
+                                    <Text style={[commonStyles.formItemText]}>
+                                        {this.api.serverUrl}
+                                    </Text>
+                                </View>
+                            </Body>
+                        </ListItem>
+
                         <ListItem onPress={this.showUser}>
                             <Body>
                                 <View style={{minHeight: 45, justifyContent: 'center'}}>

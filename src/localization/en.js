@@ -183,6 +183,7 @@ export const en = {
         deleteToken: 'Delete',
         logout: 'Logout',
         emailAddress: 'Email',
+        servername: 'Servername',
     },
 
     Priorities: {
