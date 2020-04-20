@@ -124,7 +124,9 @@ export default class FlagScreen extends AppScreen {
                 onPress: async () => {
                     let flag: Flag = this.state.flag;
                     flag.status = 'inactive';
+                    this.setState({loading: true});
                     const result = await this.api.editFlag(flag);
+                    this.setState({loading: false});
                     if (!result.success) {
                         this.showError(result.data);
                     } else {

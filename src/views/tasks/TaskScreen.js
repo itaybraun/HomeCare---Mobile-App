@@ -81,6 +81,7 @@ export default class TaskScreen extends AppScreen {
 
         ActionSheet.show({
                 options: options,
+                destructiveButtonIndex: options.length - 2,
                 cancelButtonIndex: options.length - 1,
             },
             (buttonIndex) => {
@@ -90,6 +91,9 @@ export default class TaskScreen extends AppScreen {
                         break;
                     case 1:
                         this.showQuestionnaire();
+                        break;
+                    case 2:
+                        this.cancelTask();
                         break;
                 }
             });
@@ -117,6 +121,51 @@ export default class TaskScreen extends AppScreen {
         const refresh = this.props.navigation.getParam('refresh', null);
         refresh && refresh();
     };
+
+    deleteTask = async () => {
+        let task: Task = this.state.task;
+        task.status = Status.REVOKED;
+        this.setState({loading: true});
+        const request: APIRequest = await this.api.updateTask(task);
+        this.setState({loading: false});
+        if (request.success) {
+            const refresh = this.props.navigation.getParam('refresh', null);
+            refresh && refresh();
+            this.pop();
+        } else {
+            this.showError(result.data);
+        }
+    }
+
+    cancelTask = () => {
+        this.showAlert(strings.Task.deleteTask, null, [
+            {
+                text: strings.Common.noButton,
+                style: 'cancel',
+                onPress: () => {
+
+                }
+            },
+            {
+                text: strings.Common.yesButton,
+                style: 'destructive',
+                onPress: async () => {
+                    let task: Task = this.state.task;
+                    task.status = Status.REVOKED;
+                    this.setState({loading: true});
+                    const request: APIRequest = await this.api.updateTask(task);
+                    this.setState({loading: false});
+                    if (request.success) {
+                        const refresh = this.props.navigation.getParam('refresh', null);
+                        refresh && refresh();
+                        this.pop();
+                    } else {
+                        this.showError(result.data);
+                    }
+                },
+            }
+        ]);
+    }
 
     //------------------------------------------------------------
     // Render
