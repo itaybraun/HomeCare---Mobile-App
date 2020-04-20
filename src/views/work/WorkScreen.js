@@ -203,28 +203,38 @@ export default class WorkScreen extends AppScreen {
     //------------------------------------------------------------
 
     showMenu = () => {
-        let options = [
-            strings.Task.menuCreate,
-            strings.Common.cancelButton
-        ];
+
+        let options = [];
+
+        if (this.state.index === 2) {
+            options.push(strings.Flag.menuCreate)
+        } else {
+            options.push(strings.Task.menuCreate)
+        }
+
+        options.push(strings.Common.cancelButton)
 
         ActionSheet.show({
                 options: options,
                 cancelButtonIndex: options.length - 1,
             },
             (buttonIndex) => {
-                switch (buttonIndex) {
-                    case 0:
+                let button = options[buttonIndex];
+                switch (button) {
+                    case strings.Task.menuCreate:
                         this.createTask();
                         break;
+                    case strings.Flag.menuCreate:
+                        this.createFlag();
+                        break;
                 }
+
             });
     };
 
     createTask = () => {
         this.navigateTo('NewTask', {patient: null, refresh: () => {
                 this.getData();
-                this.eventEmitter.emit('reloadTasks');
             }
         });
     };
@@ -243,12 +253,14 @@ export default class WorkScreen extends AppScreen {
         });
     };
 
-    addTask = () => {
-
-    };
-
-    addFlag = async () => {
-        // TODO
+    createFlag = () => {
+        this.navigateTo('NewFlag', {
+            patient: null,
+            refresh: async () => {
+                let flags = await this.getFlags();
+                this.setState({...flags});
+            }
+        });
     };
 
     selectFlag = (flag: Flag) => {

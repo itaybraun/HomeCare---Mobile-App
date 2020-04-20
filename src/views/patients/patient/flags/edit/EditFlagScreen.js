@@ -12,7 +12,7 @@ import AppScreen from '../../../../../support/AppScreen';
 import {strings} from '../../../../../localization/strings';
 import {appColors, commonStyles, popupNavigationOptions, renderLoading} from '../../../../../support/CommonStyles';
 import FormItemContainer from '../../../../other/FormItemContainer';
-import {Button, Content, Form, Icon, Text, Textarea} from 'native-base';
+import {List, Content, ListItem, Icon, Text, Textarea, Left, Body, Right} from 'native-base';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import ActionSheet from 'react-native-simple-action-sheet';
 import moment from 'moment';
@@ -20,6 +20,8 @@ import {Flag} from '../../../../../models/Flag';
 import {Request} from '../../../../../support/Utils';
 import {APIRequest} from '../../../../../api/API';
 import cloneDeep from 'lodash.clonedeep';
+import {Task} from '../../../../../models/Task';
+import ListItemContainer from '../../../../other/ListItemContainer';
 
 export default class EditFlagScreen extends AppScreen {
 
@@ -50,7 +52,6 @@ export default class EditFlagScreen extends AppScreen {
         loading: false,
         flag: null,
         category: null,
-        text: '',
         startDate: null,
         endDate: null,
 
@@ -59,16 +60,6 @@ export default class EditFlagScreen extends AppScreen {
 
         errors: {}
     };
-
-    categories = [
-        {key: 'Admin', label: strings.Categories.admin,},
-        {key: 'Behavioral', label: strings.Categories.behavioral,},
-        {key: 'Clinical', label: strings.Categories.clinical,},
-        {key: 'Contact', label: strings.Categories.contact,},
-        {key: 'Drug', label: strings.Categories.drug,},
-        {key: 'Lab', label: strings.Categories.lab,},
-        {key: 'Safety', label: strings.Categories.safety,},
-    ];
 
     componentDidMount(): void {
         super.componentDidMount();
@@ -92,28 +83,37 @@ export default class EditFlagScreen extends AppScreen {
         }
     };
 
-    showCategoryPicker = () => {
-
-        let options = this.categories.map(option => option.label);
-        if (Platform.OS === 'ios')
-            options.push(strings.Common.cancelButton);
-
-        ActionSheet.showActionSheetWithOptions({
-                options: options,
-                cancelButtonIndex: options.length - 1,
+    changeText = () => {
+        this.navigateTo('SelectText', {
+            title: strings.Flags.text,
+            text: this.state.flag.text,
+            updateText: async (text) => {
+                let errors = this.state.errors;
+                errors.text = false;
+                let flag: Flag = this.state.flag;
+                flag.text = text;
+                this.setState({
+                    flag: flag,
+                    errors: errors,
+                })
             },
-            (buttonIndex) => {
-                if (buttonIndex < this.categories.length) {
-                    let errors = this.state.errors;
-                    errors.category = false;
-                    let flag: Flag = this.state.flag;
-                    flag.category = this.categories[buttonIndex]?.key;
-                    this.setState({
-                        flag: flag,
-                        errors: errors,
-                    })
-                }
-            });
+        });
+    };
+
+    selectCategory = () => {
+        this.navigateTo('SelectCategory', {
+            selectedCategory: this.state.flag.category,
+            updateCategory: async (category) => {
+                let errors = this.state.errors;
+                errors.category = false;
+                let flag: Flag = this.state.flag;
+                flag.category = category;
+                this.setState({
+                    flag: flag,
+                    errors: errors,
+                })
+            },
+        });
     };
 
     validate = () => {
@@ -151,7 +151,6 @@ export default class EditFlagScreen extends AppScreen {
         if (validationResult.success) {
             this.setState({loading: true,});
             let result: APIRequest = await this.api.editFlag(this.state.flag);
-            console.log(result);
 
             if (result.success) {
                 const updateFlag = this.props.navigation.getParam('updateFlag', null);
@@ -180,82 +179,61 @@ export default class EditFlagScreen extends AppScreen {
         return (
             <View style={commonStyles.screenContainer}>
                 {flag &&
-                    <Content
-                        style={{flex: 1}}
-                        contentContainerStyle={{padding: 20, paddingBottom: 0, flexGrow: 1,}}
-                        bounces={false}
-                        automaticallyAdjustContentInsets={false}>
-                        <Form style={{flex: 1,}}>
+                <Content bounces={false} contentContainerStyle={{flexGrow: 1}}>
+                    <List>
+                        <ListItemContainer onPress={this.changeText} error={this.state.errors.text}>
+                            <Body>
+                                <Text
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.text && {color: '#FF0000'}]}>{strings.Flags.text}</Text>
+                                <Text
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{this.state.flag.text}</Text>
+                            </Body>
+                            <Right>
+                                <Icon name="arrow-forward"/>
+                            </Right>
+                        </ListItemContainer>
+                        <ListItemContainer onPress={this.selectCategory}>
+                            <Body>
+                                <Text
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Flags.category}</Text>
+                                <Text
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{strings.Categories[flag.category?.toLowerCase()] || ''}</Text>
+                            </Body>
+                            <Right>
+                                <Icon name="arrow-forward"/>
+                            </Right>
+                        </ListItemContainer>
 
-                            <FormItemContainer
-                                style={{paddingVertical: 8,}}
-                                title={strings.Flags.text}
-                                error={this.state.errors.text}>
-                                <Textarea
-                                    rowSpan={4}
-                                    style={[commonStyles.formItem, commonStyles.formItemText]}
-                                    selectionColor={appColors.linkColor}
-                                    autoCorrect={false}
-                                    value={flag.text}
-                                    onChangeText={value => {
-                                        let errors = this.state.errors;
-                                        errors.text = false;
-                                        flag.text = value;
-                                        this.setState({
-                                            flag: flag,
-                                            errors: errors,
-                                        })
-                                    }}
-                                />
-                            </FormItemContainer>
+                        <ListItemContainer onPress={() => this.setState({showingStartDatePicker: true})}>
+                            <Body>
+                                <Text
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Flags.startDate}</Text>
+                                <Text
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{flag.startDate ? moment(flag.startDate).format('YYYY-MM-DD') : ''}</Text>
+                            </Body>
+                            <Right>
+                                <Icon type='Octicons' name='calendar' style={{fontSize: 30, color: '#000000'}}/>
+                            </Right>
+                        </ListItemContainer>
 
-                            <FormItemContainer
-                                title={strings.Flags.category}
-                                error={this.state.errors.category}>
-                                <TouchableOpacity
-                                    style={{flexDirection: 'row', padding: 11, alignItems: 'center'}}
-                                    onPress={this.showCategoryPicker}>
-                                    <Text
-                                        style={[{flex: 1}, commonStyles.formItemText]}>{strings.Categories[flag.category?.toLowerCase()] || ''}</Text>
-                                    <Icon name="ios-arrow-down"/>
-                                </TouchableOpacity>
-                            </FormItemContainer>
-
-                            <FormItemContainer
-                                style={{padding: 11,}}
-                                title={strings.Flags.startDate}
-                                error={this.state.errors.startDate}>
-                                <TouchableOpacity
-                                    onPress={() => this.setState({showingStartDatePicker: true})}>
-                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                        <Text
-                                            style={[{flex: 1}, commonStyles.formItemText]}>{flag.startDate ? moment(flag.startDate).format('YYYY-MM-DD') : ''}</Text>
-                                        <Icon type="Octicons" name="calendar"/>
-                                    </View>
-                                </TouchableOpacity>
-                            </FormItemContainer>
-
-                            <FormItemContainer
-                                style={{padding: 11,}}
-                                title={strings.Flags.endDate}
-                                error={this.state.errors.endDate}
-                            >
-                                <TouchableOpacity
-                                    onPress={() => this.setState({showingEndDatePicker: true})}>
-                                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                        <Text
-                                            style={[{flex: 1}, commonStyles.formItemText]}>{flag.endDate ? moment(flag.endDate).format('YYYY-MM-DD') : ''}</Text>
-                                        <Icon type="Octicons" name="calendar"/>
-                                    </View>
-                                </TouchableOpacity>
-                            </FormItemContainer>
-
-
-                        </Form>
+                        <ListItemContainer onPress={() => this.setState({showingEndDatePicker: true})}>
+                            <Body>
+                                <Text
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Flags.endDate}</Text>
+                                <Text
+                                    style={[{flex: 1}, commonStyles.formItemText]}>{flag.endDate ? moment(flag.endDate).format('YYYY-MM-DD') : ''}</Text>
+                            </Body>
+                            <Right>
+                                <Icon type='Octicons' name='calendar' style={{fontSize: 30, color: '#000000'}}/>
+                            </Right>
+                        </ListItemContainer>
+                    </List>
+                    <View style={{flex: 1, justifyContent: 'flex-end'}}>
                         <View style={{alignItems: 'flex-end', marginTop: 10,}}>
                             <Image source={require('../../../../../assets/icons/flags/alert.png')}/>
                         </View>
-                    </Content>
+                    </View>
+                </Content>
                 }
                 {renderLoading(this.state.loading)}
 

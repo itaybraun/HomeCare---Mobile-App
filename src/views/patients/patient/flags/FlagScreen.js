@@ -12,9 +12,8 @@ import AppScreen from '../../../../support/AppScreen';
 import {strings} from '../../../../localization/strings';
 import {appColors, commonStyles, renderLoading} from '../../../../support/CommonStyles';
 import FormItemContainer from '../../../other/FormItemContainer';
-import {Body, Button, Container, Content, Form, Icon, Left, List, ListItem, Text, Textarea} from 'native-base';
+import {Body, Button, Container, Content, ActionSheet, Icon, Left, List, ListItem, Text, Textarea} from 'native-base';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import ActionSheet from 'react-native-simple-action-sheet';
 import moment from 'moment';
 import {Flag} from '../../../../models/Flag';
 import {Request} from '../../../../support/Utils';
@@ -74,11 +73,9 @@ export default class FlagScreen extends AppScreen {
     showMenu = () => {
         let options = [
             strings.Flag.menuEdit,
+            strings.Common.cancelButton,
         ];
-        if (Platform.OS === 'ios')
-            options.push(strings.Common.cancelButton);
-
-        ActionSheet.showActionSheetWithOptions({
+        ActionSheet.show({
                 options: options,
                 cancelButtonIndex: options.length - 1,
             },

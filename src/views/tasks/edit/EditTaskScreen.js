@@ -261,9 +261,9 @@ export default class EditTaskScreen extends AppScreen {
                                             </Text>
                                     }
                                 </Body>
-                                <Body style={{flex: 0}}>
-                                    <Icon type='Octicons' name='calendar' />
-                                </Body>
+                                <Right>
+                                    <Icon type='Octicons' name='calendar' style={{fontSize: 30, color: '#000000'}} />
+                                </Right>
                             </ListItem>
 
                             <ListItem onPress={this.selectPerformer}>
