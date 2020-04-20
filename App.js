@@ -51,6 +51,9 @@ import './src/api/REST/RESTAPI+Practitioners';
 import './src/api/REST/RESTAPI+Visits';
 import './src/api/REST/RESTAPI+Questionnaire';
 import './src/api/REST/RESTAPI+Relatives';
+import NewFlagScreen from './src/views/patients/patient/flags/edit/NewFlagScreen';
+import SelectCategoryScreen from './src/views/patients/patient/flags/edit/SelectCategoryScreen';
+import SelectTextScreen from './src/views/other/SelectTextScreen';
 
 
 export default class App extends React.Component {
@@ -118,6 +121,9 @@ const PatientsStack = createStackNavigator({
     Flags: FlagsScreen,
     Flag: FlagScreen,
     EditFlag: EditFlagScreen,
+    NewFlag: NewFlagScreen,
+    SelectText: SelectTextScreen,
+    SelectCategory: SelectCategoryScreen,
 
     Questionnaire: QuestionnaireScreen,
     QuestionnaireChoiceItem: QuestionnaireChoiceItemScreen,
@@ -129,7 +135,6 @@ const PatientsStack = createStackNavigator({
     Task: TaskScreen,
     NewTask: NewTaskScreen,
     EditTask: EditTaskScreen,
-
     SelectPatient: SelectPatientScreen,
     SelectActivity: SelectActivityScreen,
     SelectVisit: SelectVisitScreen,
@@ -144,7 +149,6 @@ const WorkStack = createStackNavigator({
     Task: TaskScreen,
     NewTask: NewTaskScreen,
     EditTask: EditTaskScreen,
-
     SelectPatient: SelectPatientScreen,
     SelectActivity: SelectActivityScreen,
     SelectVisit: SelectVisitScreen,
@@ -153,6 +157,9 @@ const WorkStack = createStackNavigator({
 
     Flag: FlagScreen,
     EditFlag: EditFlagScreen,
+    NewFlag: NewFlagScreen,
+    SelectText: SelectTextScreen,
+    SelectCategory: SelectCategoryScreen,
 
     Questionnaire: QuestionnaireScreen,
     QuestionnaireChoiceItem: QuestionnaireChoiceItemScreen,
