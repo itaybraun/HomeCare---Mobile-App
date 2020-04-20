@@ -15,6 +15,7 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
     try {
 
         let params = {};
+        params.status = 'active';
         let url = 'Flag';
         if (patientId) {
             params.subject = patientId;
@@ -102,7 +103,7 @@ function getFlagFromJson(json) {
 function getJsonFromFlag(flag: Flag) {
     const data = {
         resourceType: 'Flag',
-        status: 'active',
+        status: flag.status,
         category: [
             {
                 coding: [

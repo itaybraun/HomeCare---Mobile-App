@@ -95,7 +95,7 @@ export default class RESTAPI extends API {
     };
 
     setCurrentUser = async (identifier: String = null): APIRequest => {
-        if (!identifier) {
+        if (!identifier && this.azure) {
             const accessToken = this.azure.getToken().accessToken;
             const decodedToken = Utils.parseJwt(accessToken);
             identifier = decodedToken.unique_name;

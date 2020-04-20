@@ -73,16 +73,21 @@ export default class FlagScreen extends AppScreen {
     showMenu = () => {
         let options = [
             strings.Flag.menuEdit,
+            strings.Flag.menuDelete,
             strings.Common.cancelButton,
         ];
         ActionSheet.show({
                 options: options,
+                destructiveButtonIndex: options.length - 2,
                 cancelButtonIndex: options.length - 1,
             },
             (buttonIndex) => {
                 switch (buttonIndex) {
                     case 0:
                         this.editFlag();
+                        break;
+                    case 1:
+                        this.deleteFlag();
                         break;
                 }
             });
@@ -102,6 +107,34 @@ export default class FlagScreen extends AppScreen {
 
         const refresh = this.props.navigation.getParam('refresh', null);
         refresh && refresh();
+    };
+
+    deleteFlag = () => {
+        this.showAlert(strings.Flags.deleteFlag, null, [
+            {
+                text: strings.Common.noButton,
+                style: 'cancel',
+                onPress: () => {
+
+                }
+            },
+            {
+                text: strings.Common.yesButton,
+                style: 'destructive',
+                onPress: async () => {
+                    let flag: Flag = this.state.flag;
+                    flag.status = 'inactive';
+                    const result = await this.api.editFlag(flag);
+                    if (!result.success) {
+                        this.showError(result.data);
+                    } else {
+                        const refresh = this.props.navigation.getParam('refresh', null);
+                        refresh && refresh();
+                        this.pop();
+                    }
+                },
+            }
+        ]);
     };
 
     //------------------------------------------------------------

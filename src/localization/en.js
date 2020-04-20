@@ -66,6 +66,7 @@ export const en = {
 
     Flag: {
         menuEdit: 'Edit',
+        menuDelete: 'Delete',
         menuCreate: 'Create Alert',
         status: 'Status',
         lastUpdate: 'Last Update',

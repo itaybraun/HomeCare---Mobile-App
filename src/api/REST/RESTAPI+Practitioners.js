@@ -57,8 +57,12 @@ RESTAPI.prototype.getPractitionerByIdentifier = async function getPractitionerBy
 
         const result = await this.callServer(this.createUrl(url), params);
         console.log('getPractitionerByIdentifier', result);
-        let practitioner = getPractitionerFromJSON(result[0]);
-        return new APIRequest(true, practitioner);
+        if (result && result.length > 0) {
+            let practitioner = getPractitionerFromJSON(result[0]);
+            return new APIRequest(true, practitioner);
+        } else {
+            return new APIRequest(false, new Error('No practitioner with identifier='+identifier+' was found'));
+        }
     } catch (error) {
         return new APIRequest(false, error);
     }
