@@ -204,15 +204,12 @@ export default class WorkScreen extends AppScreen {
 
     showMenu = () => {
 
-        let options = [];
-
-        if (this.state.index === 2) {
-            options.push(strings.Flag.menuCreate)
-        } else {
-            options.push(strings.Task.menuCreate)
-        }
-
-        options.push(strings.Common.cancelButton)
+        let options = [
+            ... this.state.index === 2 ?
+                [strings.Flag.menuCreate] :
+                [strings.Task.menuCreate],
+            strings.Common.cancelButton
+        ];
 
         ActionSheet.show({
                 options: options,

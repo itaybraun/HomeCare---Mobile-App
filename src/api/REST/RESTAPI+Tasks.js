@@ -6,6 +6,7 @@ import {getPatientFromJson} from './RESTAPI+Patients';
 import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
 import {getVisitFromJson} from './RESTAPI+Visits';
 import {getActivityFromJson} from './RESTAPI+Questionnaire';
+import {Flag} from '../../models/Flag';
 
 //------------------------------------------------------------
 // Tasks
@@ -74,6 +75,16 @@ RESTAPI.prototype.updateTask = async function updateTask(task: Task): APIRequest
         const result = await this.server.update(data);
         task = getTaskFromJson(result);
         return new APIRequest(true, task);
+    } catch (error) {
+        return new APIRequest(false, error);
+    }
+};
+
+RESTAPI.prototype.deleteTask = async function deleteTask(task: Task): APIRequest {
+    try {
+        const result = await this.server.delete('ServiceRequest/' + task.id);
+        console.log('deleteTask', result);
+        return new APIRequest(true);
     } catch (error) {
         return new APIRequest(false, error);
     }

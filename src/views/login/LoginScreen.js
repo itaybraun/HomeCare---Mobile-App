@@ -20,11 +20,19 @@ import AzureLoginView from '../../api/Azure/AzureLoginView';
 import AzureInstance from '../../api/Azure/AzureInstance';
 import {Content} from 'native-base';
 
-const options = {
+const options1 = {
     client_id: '6b1d9c3b-df12-4a15-9a66-0e299f9a9bd2',
     client_secret: '[v3NLm?k?1YqxJ7Gcvz6_F:]:?12s/z4',
     redirect_uri: 'https://www.getpostman.com/oauth2/callback',
     scope: 'https://cs2.azurewebsites.net/user_impersonation'
+};
+
+const options2 = {
+    tenant: '2a6d8fcb-df56-47e6-a117-e5f8dab16dbe',
+    client_id: '066da47a-2ad5-489d-83ac-31836963b39a',
+    client_secret: 'apFH8[Qu2zqF=p4=sXyJNbkfB8-p346B',
+    redirect_uri: 'https://www.getpostman.com/oauth2/callback',
+    scope: 'https://cs005.azurewebsites.net/user_impersonation'
 };
 
 export default class LoginScreen extends AppScreen {
@@ -34,10 +42,12 @@ export default class LoginScreen extends AppScreen {
         username: 'user1@itaybraunhotmail.onmicrosoft.com',
         password: 'Kuju0746987',
         appVersion: null,
-        production: null,
+        production1: null,
+        production2: null,
     };
 
-    azureADInstance;
+    azureADInstance1;
+    azureADInstance2;
 
     componentDidMount(): void {
         super.componentDidMount();
@@ -104,37 +114,17 @@ export default class LoginScreen extends AppScreen {
             this.showError(result.data);
     };
 
-    onProd2Press = async () => {
-        let api = new RESTAPI('https://cs005.azurewebsites.net');
-        this.props.screenProps.api = api;
-
-        this.setState({loading: true});
-        let result: APIRequest = await this.api.setCurrentUser('user1');
-        this.setState({loading: false});
-
-        if (result.success)
-            this.navigateTo('Tabs');
-        else
-            this.showError(result.data);
-    };
-
-    onProdPress = async () => {
-        // this.setState({loading: true});
-        // let api = new RESTAPI('https://cs2.azurewebsites.net');
-        // this.props.screenProps.api = api;
-        // await this.api.login();
-        // this.setState({loading: false});
-
-        this.azureADInstance = new AzureInstance(options);
+    onProd1Press = async () => {
+        this.azureADInstance1 = new AzureInstance(options1);
         this.setState({
-            production: true
+            production1: true
         });
     };
 
-    _onLoginSuccess = async (event) => {
-        this.setState({loading: true, production: false});
+    _onLogin1Success = async (event) => {
+        this.setState({loading: true, production1: false});
 
-        let api = new RESTAPI('https://cs2.azurewebsites.net', this.azureADInstance);
+        let api = new RESTAPI('https://cs2.azurewebsites.net', this.azureADInstance1);
         this.props.screenProps.api = api;
 
         let result: APIRequest = await this.api.setCurrentUser();
@@ -142,14 +132,48 @@ export default class LoginScreen extends AppScreen {
 
         if (result.success)
             this.navigateTo('Tabs');
-        else
+        else {
+            this.setState({production1: null});
             this.showError(result.data);
+        }
     };
 
-    _onLoginCancel = (event) => {
+    _onLogin1Cancel = (event) => {
         console.log(event);
         this.setState({
-            production: false
+            production1: null
+        });
+    };
+
+
+    onProd2Press = async () => {
+        this.azureADInstance2 = new AzureInstance(options2);
+        this.setState({
+            production2: true
+        });
+    };
+
+    _onLogin2Success = async (event) => {
+        this.setState({loading: true, production2: false});
+
+        let api = new RESTAPI('https://cs005.azurewebsites.net', this.azureADInstance2);
+        this.props.screenProps.api = api;
+
+        let result: APIRequest = await this.api.setCurrentUser();
+        this.setState({loading: false});
+
+        if (result.success)
+            this.navigateTo('Tabs');
+        else {
+            this.setState({production2: null});
+            this.showError(result.data);
+        }
+    };
+
+    _onLogin2Cancel = (event) => {
+        console.log(event);
+        this.setState({
+            production2: null
         });
     };
 
@@ -161,7 +185,7 @@ export default class LoginScreen extends AppScreen {
                 <View style={{flex: 1}}>
                     <Content contentContainerStyle={{flexGrow: 1}} bounces={false}>
                         {
-                            this.state.production === null &&
+                            this.state.production1 === null && this.state.production2 === null &&
                                 <Form style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                                     <View style={{alignItems: 'center'}}>
                                         <Text
@@ -198,7 +222,7 @@ export default class LoginScreen extends AppScreen {
                                         width: 230,
                                         marginTop: 20,
                                         justifyContent: 'center'
-                                    }} onPress={this.onProdPress}>
+                                    }} onPress={this.onProd1Press}>
                                         <Text
                                             style={commonStyles.buttonText}>{strings.Login.production.toUpperCase()}</Text>
                                     </Button>
@@ -223,7 +247,7 @@ export default class LoginScreen extends AppScreen {
 
                         }
                         {
-                            this.state.production === null &&
+                            this.state.production1 === null && this.state.production2 === null &&
                             <View style={{
                                 flexDirection: 'row',
                                 marginHorizontal: 10,
@@ -238,17 +262,33 @@ export default class LoginScreen extends AppScreen {
                     </Content>
                     {renderLoading(this.state.loading)}
                     {
-                        this.state.production === true &&
+                        this.state.production1 === true &&
                         <View style={{position: 'absolute', flex: 1, top: 0, bottom: 0, left: 0, right: 0}}>
                             <AzureLoginView
-                                azureInstance={this.azureADInstance}
+                                azureInstance={this.azureADInstance1}
                                 loadingMessage=" "
                                 loadingView={renderLoading(true)}
-                                onSuccess={this._onLoginSuccess}
-                                onCancel={this._onLoginCancel}
+                                onSuccess={this._onLogin1Success}
+                                onCancel={this._onLogin1Cancel}
                             />
                             <TouchableOpacity style={{position: 'absolute', padding: 12, right: 5, top: 5,}}
-                                              onPress={() => this.setState({production: null})}>
+                                              onPress={() => this.setState({production1: null})}>
+                                <Icon type="AntDesign" name="close" style={{fontSize: 22, color: appColors.textColor}}/>
+                            </TouchableOpacity>
+                        </View>
+                    }
+                    {
+                        this.state.production2 === true &&
+                        <View style={{position: 'absolute', flex: 1, top: 0, bottom: 0, left: 0, right: 0}}>
+                            <AzureLoginView
+                                azureInstance={this.azureADInstance2}
+                                loadingMessage=" "
+                                loadingView={renderLoading(true)}
+                                onSuccess={this._onLogin2Success}
+                                onCancel={this._onLogin2Cancel}
+                            />
+                            <TouchableOpacity style={{position: 'absolute', padding: 12, right: 5, top: 5,}}
+                                              onPress={() => this.setState({production2: null})}>
                                 <Icon type="AntDesign" name="close" style={{fontSize: 22, color: appColors.textColor}}/>
                             </TouchableOpacity>
                         </View>

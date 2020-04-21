@@ -5,7 +5,7 @@ import {Buffer} from 'buffer';
 
 export default class AzureInstance {
     constructor(credentials) {
-        this.authority = 'https://login.microsoftonline.com/common';
+        this.authority = 'https://login.microsoftonline.com/'+(credentials.tenant || 'common');
         this.authorize_endpoint = '/oauth2/v2.0/authorize';
         this.redirect_uri = credentials.redirect_uri;
         this.token_endpoint ='/oauth2/v2.0/token';
@@ -29,7 +29,7 @@ export default class AzureInstance {
     };
 
     getAuthUrl = () => {
-        return this.authority + this.authorize_endpoint +
+        const url = this.authority + this.authorize_endpoint +
             '?client_id=' + this.client_id +
             '&response_type=code' +
             '&redirect_uri=' + this.redirect_uri +
@@ -37,6 +37,8 @@ export default class AzureInstance {
             '&response_mode=query' +
             '&nonce=' + uuid.v4() +
             '&state=abcd';
+        console.log(url);
+        return url;
     }
 
     getToken = () => {
