@@ -84,22 +84,6 @@ RESTAPI.prototype.getQuestionnaireResponses = async function getQuestionnaireRes
     }
 };
 
-RESTAPI.prototype.getQuestionnaireResponse = async function getQuestionnaireResponse(taskId: String): APIRequest {
-    try {
-        let params = {};
-        let url = 'QuestionnaireResponse/3539bb23-2f4d-45a1-80c8-5b6515e060c3';
-        let fhirOptions = {};
-        fhirOptions.flat = true;
-        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
-        let response = getQuestionnaireResponseFromJson(result);
-        console.log('getQuestionnaireResponse', response);
-        return new APIRequest(true, response);
-
-    } catch (error) {
-        return new APIRequest(false, error);
-    }
-};
-
 export function getQuestionnaireFromJson(json) {
     let questionnaire = new Questionnaire();
     questionnaire.id = json.id;

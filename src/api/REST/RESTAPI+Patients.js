@@ -12,9 +12,13 @@ RESTAPI.prototype.getPatients = async function getPatients(): APIRequest {
     try {
         let url = 'Patient';
         let params = {};
-        params.pageLimit = 0;
-        params.flat = true;
-        const result = await this.callServer(this.createUrl(url), params);
+        params._id = this.user.patientsIds?.join(',');
+
+        let fhirOptions = {};
+        fhirOptions.pageLimit = 0;
+        fhirOptions.flat = true;
+
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getPatients', result);
         const patients = result.map(json => getPatientFromJson((json))) || [];
         return new APIRequest(true, patients);

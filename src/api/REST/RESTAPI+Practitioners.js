@@ -50,12 +50,13 @@ RESTAPI.prototype.getPractitionerByIdentifier = async function getPractitionerBy
         if (!identifier) {
             return new APIRequest(true, null);
         }
-
         let params = {};
         let url = 'Practitioner?identifier='+identifier;
-        params.flat = true;
+        let fhirOptions = {};
+        fhirOptions.pageLimit = 0;
+        fhirOptions.flat = true;
 
-        const result = await this.callServer(this.createUrl(url), params);
+        const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getPractitionerByIdentifier', result);
         if (result && result.length > 0) {
             let practitioner = getPractitionerFromJSON(result[0]);
@@ -76,6 +77,7 @@ export function getPractitionerFromJSON(json) {
 
     const usual = json.name?.find(name => name.use === 'usual');
     practitioner.fullName = usual?.text;
+    practitioner.patientsIds = json.contained?.[0]?.entry.map(object => object.item?.reference.replace('Patient/', '')) || [];
 
     practitioner.phone = json.telecom?.find(t => t.system ==='phone')?.value;
     practitioner.email = json.telecom?.find(t => t.system === 'email')?.value;
