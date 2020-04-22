@@ -17,11 +17,10 @@ RESTAPI.prototype.getTasks = async function getTasks(patientId, statuses: [Statu
 
         let params = {};
         let url = 'ServiceRequest';
-        params.performer = this.user.id;
         if (patientId) {
             params.subject = patientId;
         } else if (this.user) {
-
+            params.subject = this.user.patientsIds?.join(',');
         }
         if (Array.isArray(statuses) && statuses.length > 0)
             params.status = statuses.join();

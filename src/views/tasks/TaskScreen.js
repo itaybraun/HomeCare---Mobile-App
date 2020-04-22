@@ -129,7 +129,7 @@ export default class TaskScreen extends AppScreen {
 
     cancelTask = async () => {
         let task: Task = this.state.task;
-        task.status = Status.ACTIVE;
+        task.status = Status.REVOKED;
         this.setState({loading: true});
         const request: APIRequest = await this.api.updateTask(task);
         this.setState({loading: false});
