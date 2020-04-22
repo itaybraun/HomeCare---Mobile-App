@@ -76,7 +76,8 @@ export default class TaskScreen extends AppScreen {
             strings.Task.menuEdit,
             strings.Task.menuExecute,
             strings.Task.menuCancel,
-            strings.Common.cancelButton
+            //... this.settings.qaMode ? [strings.Task.menuDelete] : [],
+            strings.Common.cancelButton,
         ];
 
         ActionSheet.show({
@@ -85,15 +86,19 @@ export default class TaskScreen extends AppScreen {
                 cancelButtonIndex: options.length - 1,
             },
             (buttonIndex) => {
-                switch (buttonIndex) {
-                    case 0:
+                let button = options[buttonIndex];
+                switch (button) {
+                    case strings.Task.menuEdit:
                         this.editTask();
                         break;
-                    case 1:
+                    case strings.Task.menuExecute:
                         this.showQuestionnaire();
                         break;
-                    case 2:
+                    case strings.Task.menuCancel:
                         this.cancelTask();
+                        break;
+                    case strings.Task.menuDelete:
+                        this.deleteTask();
                         break;
                 }
             });
@@ -122,9 +127,9 @@ export default class TaskScreen extends AppScreen {
         refresh && refresh();
     };
 
-    deleteTask = async () => {
+    cancelTask = async () => {
         let task: Task = this.state.task;
-        task.status = Status.REVOKED;
+        task.status = Status.ACTIVE;
         this.setState({loading: true});
         const request: APIRequest = await this.api.updateTask(task);
         this.setState({loading: false});
@@ -135,9 +140,9 @@ export default class TaskScreen extends AppScreen {
         } else {
             this.showError(result.data);
         }
-    }
+    };
 
-    cancelTask = () => {
+    deleteTask = () => {
         this.showAlert(strings.Task.deleteTask, null, [
             {
                 text: strings.Common.noButton,
@@ -151,9 +156,8 @@ export default class TaskScreen extends AppScreen {
                 style: 'destructive',
                 onPress: async () => {
                     let task: Task = this.state.task;
-                    task.status = Status.REVOKED;
                     this.setState({loading: true});
-                    const request: APIRequest = await this.api.updateTask(task);
+                    const request: APIRequest = await this.api.deleteTask(task);
                     this.setState({loading: false});
                     if (request.success) {
                         const refresh = this.props.navigation.getParam('refresh', null);
@@ -165,7 +169,7 @@ export default class TaskScreen extends AppScreen {
                 },
             }
         ]);
-    }
+    };
 
     //------------------------------------------------------------
     // Render

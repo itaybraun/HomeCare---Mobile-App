@@ -14,7 +14,7 @@ export class API {
     get user(): Practitioner {
         return API.user;
     }
-    set user(user) {
+    set user(user: Practitioner) {
         API.user = user;
     }
 
@@ -107,6 +107,10 @@ API.prototype.updateTask = async function updateTask(task: Task): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 
+API.prototype.deleteTask = async function deleteTask(task: Task): APIRequest {
+    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
+};
+
 API.prototype.getActivities = async function getActivities(): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
@@ -136,10 +140,6 @@ API.prototype.getQuestionnaire = async function getQuestionnaire(id: String): AP
 };
 
 API.prototype.submitQuestionnaire = async function submitQuestionnaire(answers: Object, questionnaire: Questionnaire, taskId: String): APIRequest {
-    return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
-};
-
-API.prototype.getQuestionnaireResponse = async function getQuestionnaireResponse(taskId: String): APIRequest {
     return new APIRequest(false, new Error(arguments.callee.name + ' not implemented!'));
 };
 

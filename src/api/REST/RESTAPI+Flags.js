@@ -20,7 +20,7 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
         if (patientId) {
             params.subject = patientId;
         } else if (API.user) {
-            //params.Practitioner = API.user.id;
+            params.subject = this.user.patientsIds?.join(',');
         }
         let fhirOptions = {};
         fhirOptions.pageLimit = 0;
@@ -54,6 +54,7 @@ RESTAPI.prototype.getFlag = async function getFlag(flagId): APIRequest {
 RESTAPI.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
     try {
         const data = getJsonFromFlag(flag);
+        console.log(data);
         const result = await this.server.create(data);
         console.log('addFlag', result);
         flag = getFlagFromJson(result);

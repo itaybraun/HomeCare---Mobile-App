@@ -135,6 +135,7 @@ export const en = {
         menuCreate: 'Create Task',
         menuExecute: 'Execute',
         menuCancel: 'Cancel Task',
+        menuDelete: 'Delete Task',
         menuSendMail: 'Send mail',
         sendText: 'You are about to send the following details of the completed task: \n\n' +
             '- Task Name\n' +

@@ -19,7 +19,7 @@ RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
         if (patientId) {
             params.subject = patientId;
         } else {
-
+            params.subject = this.user.patientsIds?.join(',');
         }
         let fhirOptions = {};
         fhirOptions.pageLimit = 0;
