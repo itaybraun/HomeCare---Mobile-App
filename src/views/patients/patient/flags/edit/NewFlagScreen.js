@@ -159,6 +159,8 @@ export default class NewFlagScreen extends AppScreen {
             errors.endDate = true;
         }
 
+        flag.status = 'active';
+
         const success = Object.keys(errors).length === 0;
 
         return new Request(
