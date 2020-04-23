@@ -68,7 +68,9 @@ export default class FlagsScreen extends AppScreen {
         if (patient) {
             let result: APIRequest = await this.api.getFlags(patient.id);
             if (result.success) {
-                return {flags: result.data};
+                let flags = result.data;
+                //flags = flags.filter(flag => flag.status === 'active');
+                return {flags:flags};
             } else {
                 this.showError(result.data);
             }

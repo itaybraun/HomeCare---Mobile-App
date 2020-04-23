@@ -142,7 +142,9 @@ export default class WorkScreen extends AppScreen {
     getFlags = async (refresh = true) => {
         let result: APIRequest = await this.api.getFlags();
         if (result.success) {
-            let flags = result.data.sort((a: Task, b: Task) => {
+            let flags = result.data;
+            //flags = flags.filter(flag => flag.status === 'active');
+            flags = flags.sort((a: Task, b: Task) => {
                 return ('' + a.patient.fullName).localeCompare(b.patient.fullName);
             });
             let sortedFlags = this.getSortedTasks(flags);
