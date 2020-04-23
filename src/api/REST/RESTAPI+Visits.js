@@ -13,6 +13,9 @@ import {getTaskFromJson} from './RESTAPI+Tasks';
 
 
 RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
+
+    await this.updateCurrentUser();
+
     try {
         let params = {};
         let url = 'Encounter';

@@ -13,6 +13,9 @@ import {Flag} from '../../models/Flag';
 //------------------------------------------------------------
 
 RESTAPI.prototype.getTasks = async function getTasks(patientId, statuses: [Status] = null): APIRequest {
+
+    await this.updateCurrentUser();
+
     try {
 
         let params = {};

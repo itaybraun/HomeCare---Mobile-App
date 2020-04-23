@@ -111,8 +111,21 @@ export default class RESTAPI extends API {
             return result;
         }
 
-        return APIRequest(false);
+        return new APIRequest(false);
     };
+
+    updateCurrentUser = async (): APIRequest => {
+
+        if (this.user && this.user.id) {
+            let result: APIRequest = await this.getPractitioner(this.user.id);
+            if (result.success) {
+                this.user = result.data;
+                return new APIRequest(true);
+            }
+        }
+
+        return new APIRequest(false);
+    }
 
 
 };

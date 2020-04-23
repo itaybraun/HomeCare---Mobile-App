@@ -12,6 +12,9 @@ import {getVisitFromJson} from './RESTAPI+Visits';
 //------------------------------------------------------------
 
 RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
+
+    await this.updateCurrentUser();
+
     try {
 
         let params = {};

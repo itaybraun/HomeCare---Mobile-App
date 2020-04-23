@@ -9,6 +9,9 @@ import {Address, Person} from '../../models/Person';
 //------------------------------------------------------------
 
 RESTAPI.prototype.getPatients = async function getPatients(): APIRequest {
+
+    await this.updateCurrentUser();
+
     try {
         let url = 'Patient';
         let params = {};

@@ -10,7 +10,7 @@ import {uses24HourClock} from "react-native-localize";
 import moment from 'moment';
 import {Visit} from '../../../models/Visit';
 import {Card, Icon} from 'native-base';
-import {Task} from '../../../models/Task';
+import {Status, Task} from '../../../models/Task';
 import { Tooltip } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
