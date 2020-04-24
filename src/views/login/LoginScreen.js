@@ -240,7 +240,7 @@ export default class LoginScreen extends AppScreen {
                                         marginTop: 20,
                                         justifyContent: 'center'
                                     }} onPress={this.onProd2Press}>
-                                        <Text style={commonStyles.buttonText}>{'PROD 2'}</Text>
+                                        <Text style={commonStyles.buttonText}>{'SAL - SECURED'}</Text>
                                     </Button>
 
                                 </Form>
