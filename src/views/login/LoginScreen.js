@@ -100,20 +100,6 @@ export default class LoginScreen extends AppScreen {
             this.showError(result.data);
     };
 
-    onSalHealthPress = async () => {
-        let api = new RESTAPI('https://cs004.azurewebsites.net');
-        this.props.screenProps.api = api;
-
-        this.setState({loading: true});
-        let result: APIRequest = await this.api.setCurrentUser('user1');
-        this.setState({loading: false});
-
-        if (result.success)
-            this.navigateTo('Tabs');
-        else
-            this.showError(result.data);
-    };
-
     onProd1Press = async () => {
         this.azureADInstance1 = new AzureInstance(options1);
         this.setState({
@@ -225,14 +211,6 @@ export default class LoginScreen extends AppScreen {
                                     }} onPress={this.onProd1Press}>
                                         <Text
                                             style={commonStyles.buttonText}>{strings.Login.production.toUpperCase()}</Text>
-                                    </Button>
-                                    <Button style={{
-                                        backgroundColor: appColors.mainColor,
-                                        width: 230,
-                                        marginTop: 20,
-                                        justifyContent: 'center'
-                                    }} onPress={this.onSalHealthPress}>
-                                        <Text style={commonStyles.buttonText}>{'SAL HEALTH'}</Text>
                                     </Button>
                                     <Button style={{
                                         backgroundColor: appColors.mainColor,
