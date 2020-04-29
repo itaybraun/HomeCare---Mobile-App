@@ -19,6 +19,7 @@ RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
     try {
         let params = {};
         let url = 'Encounter';
+        params.participant = this.user.id;
         if (patientId) {
             params.subject = patientId;
         } else {
@@ -128,7 +129,7 @@ function getJsonFromVisit(visit: Visit) {
         participant: [
             {
                 individual:{
-                    reference: "Practitioner/8cba6c16-4f07-42de-9b06-b5af4f05f23c"
+                    reference: "Practitioner/" + API.user.id,
                 }
             }
         ],
