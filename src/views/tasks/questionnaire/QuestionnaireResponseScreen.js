@@ -237,16 +237,26 @@ export default class QuestionnaireResponseScreen extends AppScreen {
                                 numberOfLines={2}>
                                 {task.text}
                             </Text>
-                            {
-                                task.executionDate &&
-                                <Text style={[commonStyles.smallInfoText, {marginTop: 5}]}>
-                                    {
-                                        task.executionDate &&
-                                        moment(task.executionDate).format(
-                                            uses24HourClock() ? 'ddd, MMM DD YYYY, HH:mm' : 'ddd, MMM-DD-YYYY, hh:mm A')
-                                    }
-                                </Text>
-                            }
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-end', flex: 1, marginTop: 5}}>
+                                {
+                                    response.author &&
+                                    <Text style={[commonStyles.smallInfoText, {flex: 1, marginRight: 10,}]} numberOfLines={1}>
+                                        {
+                                            response.author.fullName
+                                        } 
+                                    </Text>
+                                }
+                                {
+                                    task.executionDate &&
+                                    <Text style={[commonStyles.smallInfoText, {textAlign: 'right'}]}>
+                                        {
+                                            task.executionDate &&
+                                            moment(task.executionDate).format(
+                                                uses24HourClock() ? 'MMM DD YYYY, HH:mm' : 'MMM-DD-YYYY, hh:mm A')
+                                        }
+                                    </Text>
+                                }
+                            </View>
                         </View>
                     </View>
                     <View>

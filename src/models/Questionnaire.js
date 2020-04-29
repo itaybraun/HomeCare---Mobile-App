@@ -1,5 +1,6 @@
 import {BaseModel} from './BaseModel';
 import {Patient} from './Patient';
+import {Practitioner} from './Practitioner';
 
 export class Questionnaire extends BaseModel {
     id: String;
@@ -33,6 +34,8 @@ export class QuestionnaireItem extends BaseModel {
 export class QuestionnaireResponse extends BaseModel {
     id: String;
     taskId: String;
+    authorId: String;
+    author: Practitioner;
     items: [QuestionnaireItem];
 }
 

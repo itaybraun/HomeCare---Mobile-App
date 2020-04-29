@@ -8,6 +8,7 @@ import {
 } from '../../models/Questionnaire';
 import {Activity} from '../../models/Activity';
 import moment from 'moment';
+import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
 
 //------------------------------------------------------------
 // Login
@@ -73,6 +74,7 @@ RESTAPI.prototype.getQuestionnaireResponses = async function getQuestionnaireRes
         let fhirOptions = {};
         fhirOptions.pageLimit = 0;
         fhirOptions.flat = true;
+        fhirOptions.resolveReferences = ["author"];
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log(result);
         let responses = result.map(json => getQuestionnaireResponseFromJson(json));
@@ -118,6 +120,8 @@ export function getQuestionnaireResponseFromJson(json) {
     let response = new QuestionnaireResponse();
     response.id = json.id;
     response.taskId = json.basedOn?.[0]?.reference?.replace('ServiceRequest/', '') || null;
+    response.authorId = json.author?.id || null;
+    response.author = json.author ? getPractitionerFromJSON(json.author) : null;
     if (json.item) {
         response.items = json.item.map(json => getResponseItemFromJson(json));
         response.items = response.items.filter(i => i);
