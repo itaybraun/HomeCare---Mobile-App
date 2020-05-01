@@ -147,10 +147,10 @@ export default class QuestionnaireItemScreen extends AppScreen {
         return (
             <TextInput
                 ref={ref => this.textInput = ref}
-                style={{fontSize: 18, minHeight: 50, paddingHorizontal: 5,}}
+                style={{fontSize: 18, minHeight: 50, paddingHorizontal: 5, maxHeight: 200}}
                 autoCorrect={false}
+                multiline={true}
                 returnKeyType='done'
-                onSubmitEditing={this.submit}
                 value={this.state.value}
                 onChangeText={text => {
                     text = text.isEmpty() ? null : text;
