@@ -50,6 +50,7 @@ RESTAPI.prototype.getActivities = async function getActivities(): APIRequest {
         let params = {};
         let url = 'ActivityDefinition';
         let fhirOptions = {};
+        fhirOptions.pageLimit = 0;
         fhirOptions.flat = true;
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getActivities', result);
