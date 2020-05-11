@@ -115,6 +115,8 @@ export default class NewTaskScreen extends AppScreen {
 
         task.status = Status.ACTIVE;
 
+        task.authoredOn = moment().toISOString();
+
         if (this.state.patient) {
             task.patientId = this.state.patient?.id;
             task.patient = this.state.patient;
