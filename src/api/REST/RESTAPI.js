@@ -34,7 +34,6 @@ export default class RESTAPI extends API {
         }
         try {
             const refreshToken = this.azure.getToken().refreshToken;
-            console.log(refreshToken)
             if (refreshToken) {
                 console.log('Refreshing token...');
                 await this.azure.getTokenFromRefreshToken(refreshToken);
@@ -82,7 +81,8 @@ export default class RESTAPI extends API {
             let result = await this.server.request(url, fhirOptions);
             return result;
         } catch (error) {
-            if (error.message === "401") {
+            console.log(error)
+            if (error.message === "unauthorized") {
                 let refreshResult: APIRequest = await this.refreshToken();
                 if (refreshResult.success) {
                     return this.callServer(url, fhirOptions);

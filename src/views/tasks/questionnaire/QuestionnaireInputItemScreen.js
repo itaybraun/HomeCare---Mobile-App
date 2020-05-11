@@ -132,7 +132,6 @@ export default class QuestionnaireItemScreen extends AppScreen {
                 ref={ref => this.textInput = ref}
                 style={{fontSize: 18, minHeight: 50, paddingHorizontal: 5,}}
                 keyboardType='numeric'
-                returnKeyType='done'
                 onSubmitEditing={this.submit}
                 value={this.state.value}
                 onChangeText={text => {
