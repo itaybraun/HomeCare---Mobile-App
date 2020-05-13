@@ -17,13 +17,13 @@ import FormItemContainer from '../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
-import {APIRequest} from '../../api/API';
 import {Visit} from '../../models/Visit';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../support/Consts';
 import TaskRenderer from './TaskRenderer';
 import FlagRenderer from '../patients/patient/flags/FlagRenderer';
 import ListItemContainer from '../other/ListItemContainer';
+import {APIRequest} from '../../models/APIRequest';
 
 export default class TaskScreen extends AppScreen {
 

@@ -15,6 +15,8 @@
     "@react-native-community/cookies": "^2.0.7",
     "@react-native-community/datetimepicker": "^2.2.1",
     "@react-native-community/masked-view": "^0.1.6",
+    "@react-native-firebase/app": "^6.7.1",
+    "@react-native-firebase/messaging": "^6.7.1",
     "axios": "^0.19.2",
     "base-64": "^0.1.0",
     "buffer": "^5.0.0",

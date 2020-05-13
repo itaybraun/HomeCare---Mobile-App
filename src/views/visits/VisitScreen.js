@@ -22,7 +22,7 @@ import FormItemContainer from '../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
-import {APIRequest} from '../../api/API';
+import APIRequest from '../../models/APIRequest';
 import {Visit} from '../../models/Visit';
 import {TransitionPresets} from 'react-navigation-stack';
 

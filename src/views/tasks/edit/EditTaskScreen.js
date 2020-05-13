@@ -17,7 +17,6 @@ import FormItemContainer from '../../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
-import {APIRequest} from '../../../api/API';
 import {Visit} from '../../../models/Visit';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../../support/Consts';

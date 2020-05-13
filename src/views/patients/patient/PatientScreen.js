@@ -4,7 +4,6 @@ import AppScreen from '../../../support/AppScreen';
 import { TabView, TabBar } from 'react-native-tab-view';
 import {Patient} from '../../../models/Patient';
 import Loading from '../../../support/Loading';
-import {APIRequest} from '../../../api/API';
 import {strings} from '../../../localization/strings';
 import {Card, Container, Content, ListItem, Thumbnail, Left, Right, Body, Icon, List, Text} from 'native-base';
 import {appColors, commonStyles, renderLoading, renderSeparator, renderTabBar} from '../../../support/CommonStyles';
@@ -14,6 +13,7 @@ import ActionSheet from 'react-native-simple-action-sheet';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../../support/Consts';
 import TaskRenderer from '../../tasks/TaskRenderer';
+import APIRequest from '../../../models/APIRequest';
 
 
 export default class PatientScreen extends AppScreen {

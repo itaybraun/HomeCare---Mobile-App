@@ -18,13 +18,7 @@ import {
 } from '../../../support/CommonStyles';
 import {strings} from '../../../localization/strings';
 import {Button, Form, Icon, Text, Textarea} from 'native-base';
-import FormItemContainer from '../../other/FormItemContainer';
-import {Priority, Task} from '../../../models/Task';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import moment from 'moment';
-import {uses24HourClock} from "react-native-localize";
 import {TransitionPresets} from 'react-navigation-stack';
-import {APIRequest} from '../../../api/API';
 
 export default class SelectSomethingScreen extends AppScreen {
 

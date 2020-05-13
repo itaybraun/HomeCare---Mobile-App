@@ -1,4 +1,3 @@
-import {API, APIRequest} from '../API';
 import RESTAPI from './RESTAPI';
 import {
     Questionnaire,
@@ -9,6 +8,7 @@ import {
 import {Activity} from '../../models/Activity';
 import moment from 'moment';
 import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
+import APIRequest from '../../models/APIRequest';
 
 //------------------------------------------------------------
 // Login
@@ -69,7 +69,7 @@ RESTAPI.prototype.getQuestionnaireResponses = async function getQuestionnaireRes
         let url = 'QuestionnaireResponse';
         if (patientId) {
             params.subject = patientId;
-        } else if (API.user) {
+        } else if (this.user) {
             //url += '?performer=' + API.user.id;
         }
         let fhirOptions = {};
@@ -242,7 +242,7 @@ export function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire
     }
 
     data.item = questionnaire.items.map(item => getItemAnswer(item));
-    data.author = API.user ? {reference: "Practitioner/"+API.user.id} : null;
+    data.author = RESTAPI.user ? {reference: "Practitioner/"+RESTAPI.user.id} : null;
     data.basedOn = taskId ? {reference: "ServiceRequest/" + taskId} : null;
 
     return data;

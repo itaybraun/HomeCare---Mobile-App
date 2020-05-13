@@ -1,9 +1,9 @@
 import React from 'react';
 import {Alert} from 'react-native';
-import API from '../api/API';
 import {Settings} from '../models/Settings';
 import EventEmitter from 'eventemitter3';
 import {strings} from '../localization/strings';
+import RESTAPI from '../api/REST/RESTAPI';
 
 export default class AppScreen extends React.Component {
 
@@ -11,7 +11,7 @@ export default class AppScreen extends React.Component {
     // Properties
     //------------------------------------------------------------
 
-    get api(): API {
+    get api(): RESTAPI {
         return this.props.screenProps.api;
     }
 

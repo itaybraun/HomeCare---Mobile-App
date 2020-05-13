@@ -16,7 +16,7 @@ import {
     renderLoading,
     renderTabBar,
 } from '../../../support/CommonStyles';
-import {APIRequest} from '../../../api/API';
+import APIRequest from '../../../models/APIRequest';
 import {Questionnaire, QuestionnaireItem} from '../../../models/Questionnaire';
 import {Status, Task} from '../../../models/Task';
 import {strings} from '../../../localization/strings';

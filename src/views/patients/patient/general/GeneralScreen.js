@@ -15,7 +15,7 @@ import {appColors, commonStyles, renderLoading, renderSeparator} from '../../../
 import {Patient} from '../../../../models/Patient';
 import {strings} from '../../../../localization/strings';
 import {Body, Card, Container, Content, Form, Icon, List, ListItem, Right, Text} from 'native-base';
-import {APIRequest} from '../../../../api/API';
+import APIRequest from '../../../../models/APIRequest';
 import {Relative} from '../../../../models/Relative';
 
 export default class GeneralScreen extends AppScreen {

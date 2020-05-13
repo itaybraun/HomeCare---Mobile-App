@@ -1,12 +1,13 @@
-import {API, APIRequest} from '../API';
 import FHIR from 'fhirclient';
 import AzureInstance from '../Azure/AzureInstance';
-import {Utils, Request} from '../../support/Utils';
+import {Utils} from '../../support/Utils';
+import {Practitioner} from '../../models/Practitioner';
+import APIRequest from '../../models/APIRequest';
 
-export default class RESTAPI extends API {
+const axios = require('axios');
+
+export default class RESTAPI {
     constructor(server, azure: AzureInstance = null) {
-        super();
-
         this.serverUrl = server;
 
         this.server = FHIR.client({
@@ -19,14 +20,28 @@ export default class RESTAPI extends API {
         }
     }
 
-    setToken(token: String) {
-        super.setToken(token);
-        this.server.setToken(token);
+    static user: Practitioner;
+    get user(): Practitioner {
+        return RESTAPI.user;
+    }
+    set user(user: Practitioner) {
+        RESTAPI.user = user;
     }
 
-    removeToken = () => {
-        this.server.setToken('asd');
+    upn: String;
+    serverUrl: String;
+
+    _token: String = null;
+    getToken(): String {
+        return this._token;
     }
+    setToken(token: String) {
+        this._token = token;
+        this.server.setToken(token);
+    };
+    removeToken = () => {
+        this.server.setToken('');
+    };
 
     refreshToken = async (): APIRequest => {
         if (!this.azure) {
@@ -115,7 +130,6 @@ export default class RESTAPI extends API {
     };
 
     updateCurrentUser = async (): APIRequest => {
-
         if (this.user && this.user.id) {
             let result: APIRequest = await this.getPractitioner(this.user.id);
             if (result.success) {
@@ -127,6 +141,52 @@ export default class RESTAPI extends API {
         return new APIRequest(false);
     }
 
+    setPushNotificationsToken = async (newToken, oldToken): APIRequest => {
+        console.group ('%csetPushNotificationsToken', 'color: gold');
+        const baseURL = 'https://fhir1imagestore.table.core.windows.net/PractitionerPushNotificationTokens';
+        const params = 'sp=raud&st=2020-05-09T14:31:07Z&se=2020-12-31T09:31:00Z&sv=2019-10-10&sig=SF4JdVrbRrVGDn7MS3bzXsja89LfWdqNHg6l82BGRjA%3D&tn=PractitionerPushNotificationTokens';
+        const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        };
 
+        if (oldToken) {
+            try {
+                let result = await axios.get(`${baseURL}?${params}&$filter=PNUT%20eq%20'${oldToken}'`, {headers: headers});
+                if (result.data.value.length > 0) {
+                    const data = result.data.value[0];
+                    const PartitionKey = data.PartitionKey;
+                    const RowKey = data.RowKey;
+
+                    const select = encodeURIComponent(`PartitionKey='${PartitionKey}', RowKey='${RowKey}'`);
+                    let url = `${baseURL}(${select})?${params}`;
+
+                    let deleteResult = await axios.delete(url,  {
+                        headers: {
+                            ...headers,
+                            "If-Match": "*"
+                        },
+                    });
+
+                    console.log(deleteResult);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        if (newToken) {
+            let result = await axios.post(`${baseURL}?${params}`, {
+                PartitionKey: "1",
+                RowKey: Math.random().toString(36).substr(2, 9),
+                PractitionerID: this.user.id,
+                PNUT: newToken
+            }, {headers: headers});
+        }
+
+        return new APIRequest(true);
+
+        console.groupEnd();
+    }
 };
 

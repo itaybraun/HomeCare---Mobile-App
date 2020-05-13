@@ -38,6 +38,11 @@ export default class CurrentUserScreen extends AppScreen {
     //------------------------------------------------------------
 
     logout = async (deleteCookies = true) => {
+        const savedToken = await AsyncStorage.getItem(AsyncStorageConsts.FCM_TOKEN);
+        if (savedToken)
+            await this.api.setPushNotificationsToken(null, savedToken);
+        await AsyncStorage.multiRemove(AsyncStorageConsts.removeOnLogoutConsts());
+
         if (deleteCookies)
             await CookieManager.clearAll(true)
         this.navigateTo('Login');

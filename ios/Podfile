@@ -36,7 +36,8 @@ target 'Hestia2' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-
+  pod 'Firebase/Core', '~> 6.13.0'
+  pod 'Firebase/Messaging', '~> 6.13.0'
 
 
 

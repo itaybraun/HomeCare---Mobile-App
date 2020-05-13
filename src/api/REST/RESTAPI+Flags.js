@@ -1,11 +1,8 @@
-import {API, APIRequest} from '../API';
 import RESTAPI from './RESTAPI';
 import {Flag} from '../../models/Flag';
 import moment from 'moment';
-import {Patient} from '../../models/Patient';
-import {getTaskFromJson} from './RESTAPI+Tasks';
 import {getPatientFromJson} from './RESTAPI+Patients';
-import {getVisitFromJson} from './RESTAPI+Visits';
+import APIRequest from '../../models/APIRequest';
 
 //------------------------------------------------------------
 // Flags
@@ -22,7 +19,7 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
         let url = 'Flag';
         if (patientId) {
             params.subject = patientId;
-        } else if (API.user) {
+        } else if (this.user) {
             params.subject = this.user.patientsIds?.join(',');
         }
         let fhirOptions = {};

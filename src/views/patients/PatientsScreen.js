@@ -4,10 +4,10 @@ import AppScreen from '../../support/AppScreen';
 import {Patient} from '../../models/Patient';
 import MenuButton from '../menu/MenuButton';
 import Loading from '../../support/Loading';
-import {APIRequest} from '../../api/API';
 import {strings} from '../../localization/strings';
 import { Card, Icon, Text } from 'native-base';
 import {commonStyles, renderDisclosureIndicator, renderLoading, renderSeparator} from '../../support/CommonStyles';
+import APIRequest from '../../models/APIRequest';
 
 export default class PatientsScreen extends AppScreen {
 

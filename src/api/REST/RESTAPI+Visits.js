@@ -1,10 +1,9 @@
-import {API, APIRequest} from '../API';
 import RESTAPI from './RESTAPI';
 import {Patient} from '../../models/Patient';
 import {Visit} from '../../models/Visit';
 import moment from 'moment';
 import {getPatientFromJson} from './RESTAPI+Patients';
-import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
+import APIRequest from '../../models/APIRequest';
 import {getTaskFromJson} from './RESTAPI+Tasks';
 
 //------------------------------------------------------------

@@ -20,7 +20,8 @@ import {
     renderWhiteTabBar,
 } from '../../../support/CommonStyles';
 import {strings} from '../../../localization/strings';
-import {APIRequest} from '../../../api/API';
+
+import APIRequest from '../../../models/APIRequest';
 import {Status, Task} from '../../../models/Task';
 import {Patient} from '../../../models/Patient';
 import {SwipeListView} from 'react-native-swipe-list-view';

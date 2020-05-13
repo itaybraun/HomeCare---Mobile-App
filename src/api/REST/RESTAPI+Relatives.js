@@ -1,10 +1,7 @@
-import {API, APIRequest} from '../API';
 import RESTAPI from './RESTAPI';
-import {Patient} from '../../models/Patient';
 import moment from 'moment';
-import {Address, Person} from '../../models/Person';
 import {Relative} from '../../models/Relative';
-import {getPersonFromJson} from './RESTAPI+Patients';
+import APIRequest from '../../models/APIRequest';
 
 //------------------------------------------------------------
 // Relatives

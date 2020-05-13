@@ -55,6 +55,16 @@ import NewFlagScreen from './src/views/patients/patient/flags/edit/NewFlagScreen
 import SelectCategoryScreen from './src/views/patients/patient/flags/edit/SelectCategoryScreen';
 import SelectTextScreen from './src/views/other/SelectTextScreen';
 
+const axios = require('axios');
+axios.interceptors.request.use(request => {
+    console.log('Starting Request', request)
+    return request
+})
+
+axios.interceptors.response.use(response => {
+    console.log('Response:', response)
+    return response
+})
 
 export default class App extends React.Component {
 

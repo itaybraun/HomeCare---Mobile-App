@@ -18,10 +18,10 @@ import ActionSheet from 'react-native-simple-action-sheet';
 import moment from 'moment';
 import {Flag} from '../../../../../models/Flag';
 import {Request} from '../../../../../support/Utils';
-import {APIRequest} from '../../../../../api/API';
 import cloneDeep from 'lodash.clonedeep';
 import {Task} from '../../../../../models/Task';
 import ListItemContainer from '../../../../other/ListItemContainer';
+import {APIRequest} from '../../../../../models/APIRequest';
 
 export default class EditFlagScreen extends AppScreen {
 

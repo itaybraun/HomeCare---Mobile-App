@@ -12,7 +12,6 @@ import {
 import AppScreen from '../../support/AppScreen';
 import {strings} from '../../localization/strings';
 import MenuButton from '../menu/MenuButton';
-import {APIRequest} from '../../api/API';
 import {
     appColors,
     commonStyles,
@@ -32,6 +31,10 @@ import {Flag} from '../../models/Flag';
 import {Patient} from '../../models/Patient';
 import {Visit} from '../../models/Visit';
 import FlagRenderer from '../patients/patient/flags/FlagRenderer';
+import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-community/async-storage';
+import {AsyncStorageConsts} from '../../support/Consts';
+import {APIRequest} from '../../models/APIRequest';
 
 export default class WorkScreen extends AppScreen {
 
@@ -77,8 +80,10 @@ export default class WorkScreen extends AppScreen {
     // Overrides
     //------------------------------------------------------------
 
-    componentDidMount(): void {
+    async componentDidMount(): void {
         super.componentDidMount();
+
+        await this.setUpNotifications();
 
         this.getData();
 
@@ -198,6 +203,38 @@ export default class WorkScreen extends AppScreen {
         text = text.toLowerCase();
         const filteredFlags = flags.filter(flag => flag.text.toLowerCase().indexOf(text) > -1);
         return this.getSortedFlags(filteredFlags);
+    };
+
+    //------------------------------------------------------------
+    // Notifications
+    //------------------------------------------------------------
+
+    setUpNotifications = async () => {
+        await messaging().requestPermission({
+            announcement: true,
+        });
+
+        const enabled = await messaging().hasPermission();
+        if (enabled) {
+
+            this.setState({loading: true});
+
+            let savedToken = await AsyncStorage.getItem(AsyncStorageConsts.FCM_TOKEN);
+            const firebaseToken = await messaging().getToken();
+
+            if (firebaseToken) {
+                if (!savedToken) {
+                    await this.api.setPushNotificationsToken(firebaseToken, null);
+                    await AsyncStorage.setItem(AsyncStorageConsts.FCM_TOKEN, firebaseToken);
+                } else if (savedToken !== firebaseToken) {
+                    await this.api.setPushNotificationsToken(firebaseToken, savedToken);
+                    await AsyncStorage.setItem(AsyncStorageConsts.FCM_TOKEN, firebaseToken);
+                }
+            }
+            this.setState({loading: false});
+        } else {
+            console.log('Notifications disabled');
+        }
     };
 
     //------------------------------------------------------------

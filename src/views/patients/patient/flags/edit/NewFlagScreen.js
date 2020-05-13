@@ -18,7 +18,7 @@ import ActionSheet from 'react-native-simple-action-sheet';
 import moment from 'moment';
 import {Flag} from '../../../../../models/Flag';
 import {Request} from '../../../../../support/Utils';
-import {APIRequest} from '../../../../../api/API';
+import APIRequest from '../../../../../models/APIRequest';
 import cloneDeep from 'lodash.clonedeep';
 import {Priority, Task} from '../../../../../models/Task';
 import ListItemContainer from '../../../../other/ListItemContainer';

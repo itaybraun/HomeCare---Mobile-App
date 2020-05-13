@@ -5,7 +5,6 @@ import {commonStyles, renderLoading, renderSeparator} from '../../../support/Com
 import {strings} from '../../../localization/strings';
 import {Calendar} from 'react-native-calendars';
 import {Utils} from '../../../support/Utils';
-import {APIRequest} from '../../../api/API';
 import {uses24HourClock} from "react-native-localize";
 import moment from 'moment';
 import {Visit} from '../../../models/Visit';

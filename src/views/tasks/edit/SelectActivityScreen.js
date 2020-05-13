@@ -24,7 +24,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
 import {TransitionPresets} from 'react-navigation-stack';
-import {APIRequest} from '../../../api/API';
+import APIRequest from '../../../models/APIRequest';
 
 export default class SelectActivityScreen extends AppScreen {
 

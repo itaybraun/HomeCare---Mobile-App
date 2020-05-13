@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>332522549778-o43r5m69ppq5fibcjgdapt3d9r7lshv4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.332522549778-o43r5m69ppq5fibcjgdapt3d9r7lshv4</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAf0-vjja85xKxLLrk4UvPVKfK0e9sm64s</string>
+	<key>GCM_SENDER_ID</key>
+	<string>332522549778</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>net.boganov.hestia2</string>
+	<key>PROJECT_ID</key>
+	<string>hestia-3d4c8</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hestia-3d4c8.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:332522549778:ios:9e377726ea01331d021ecb</string>
+	<key>DATABASE_URL</key>
+	<string>https://hestia-3d4c8.firebaseio.com</string>
+</dict>
+</plist>

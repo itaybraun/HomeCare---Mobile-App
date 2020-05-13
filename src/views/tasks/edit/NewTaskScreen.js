@@ -24,7 +24,6 @@ import FormItemContainer from '../../other/FormItemContainer';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
-import {APIRequest} from '../../../api/API';
 import {Visit} from '../../../models/Visit';
 import ActionSheet from 'react-native-simple-action-sheet';
 import {Request} from '../../../support/Utils';
@@ -32,6 +31,7 @@ import {Practitioner} from '../../../models/Practitioner';
 import {string} from 'prop-types';
 import {Activity} from '../../../models/Activity';
 import {Patient} from '../../../models/Patient';
+import APIRequest from '../../../models/APIRequest';
 import ListItemContainer from '../../other/ListItemContainer';
 
 export default class NewTaskScreen extends AppScreen {

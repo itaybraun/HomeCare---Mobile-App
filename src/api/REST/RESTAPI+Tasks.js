@@ -1,4 +1,3 @@
-import {APIRequest, API} from '../API';
 import moment from 'moment';
 import {Priority, Status, Task} from '../../models/Task';
 import RESTAPI from './RESTAPI';
@@ -6,7 +5,8 @@ import {getPatientFromJson} from './RESTAPI+Patients';
 import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
 import {getVisitFromJson} from './RESTAPI+Visits';
 import {getActivityFromJson} from './RESTAPI+Questionnaire';
-import {Flag} from '../../models/Flag';
+import APIRequest from '../../models/APIRequest';
+
 
 //------------------------------------------------------------
 // Tasks

@@ -1,9 +1,8 @@
-import {API, APIRequest} from '../API';
 import RESTAPI from './RESTAPI';
 import {Practitioner} from '../../models/Practitioner';
 import moment from 'moment';
 import {Address} from '../../models/Person';
-
+import APIRequest from '../../models/APIRequest';
 
 //------------------------------------------------------------
 // Practitioners

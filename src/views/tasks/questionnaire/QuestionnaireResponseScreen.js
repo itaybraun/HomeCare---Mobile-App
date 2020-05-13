@@ -5,7 +5,6 @@ import {appColors, commonStyles, renderLoading, renderRadioButton} from '../../.
 import {strings} from '../../../localization/strings';
 import {Task} from '../../../models/Task';
 import {Questionnaire, QuestionnaireItem, QuestionnaireResponse} from '../../../models/Questionnaire';
-import {APIRequest} from '../../../api/API';
 import {Content, List, Body, Text, Icon, ActionSheet} from 'native-base';
 import moment from 'moment';
 import FormItemContainer from '../../other/FormItemContainer';
@@ -243,7 +242,7 @@ export default class QuestionnaireResponseScreen extends AppScreen {
                                     <Text style={[commonStyles.smallInfoText, {flex: 1, marginRight: 10,}]} numberOfLines={1}>
                                         {
                                             response.author.fullName
-                                        } 
+                                        }
                                     </Text>
                                 }
                                 {

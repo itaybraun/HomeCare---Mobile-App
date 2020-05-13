@@ -17,7 +17,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment';
 import {Flag} from '../../../../models/Flag';
 import {Request} from '../../../../support/Utils';
-import {APIRequest} from '../../../../api/API';
+import APIRequest from '../../../../models/APIRequest';
 import {Patient} from '../../../../models/Patient';
 import {Task} from '../../../../models/Task';
 import TaskRenderer from '../../../tasks/TaskRenderer';
