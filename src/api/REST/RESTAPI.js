@@ -184,9 +184,9 @@ export default class RESTAPI {
             }, {headers: headers});
         }
 
-        return new APIRequest(true);
-
         console.groupEnd();
+
+        return new APIRequest(true);
     }
 };
 
