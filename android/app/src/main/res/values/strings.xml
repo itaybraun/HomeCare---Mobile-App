@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Hestia2</string>
+    <color name="push_color">#6E78F7</color>
 </resources>

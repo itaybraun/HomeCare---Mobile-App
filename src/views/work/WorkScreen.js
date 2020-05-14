@@ -83,10 +83,6 @@ export default class WorkScreen extends AppScreen {
     async componentDidMount(): void {
         super.componentDidMount();
 
-        await this.setUpNotifications();
-
-        this.getData();
-
         StatusBar.setBarStyle('light-content');
         if (Platform.OS === 'android')
             StatusBar.setBackgroundColor(appColors.mainColor);
@@ -99,6 +95,10 @@ export default class WorkScreen extends AppScreen {
             const tasks = await this.getTasks();
             this.setState({...tasks});
         });
+
+        await this.getData();
+
+        await this.setUpNotifications();
     }
 
     componentWillUnmount(): void {
@@ -234,6 +234,32 @@ export default class WorkScreen extends AppScreen {
             this.setState({loading: false});
         } else {
             console.log('Notifications disabled');
+        }
+
+        messaging().onMessage(this.onMessageReceived);
+        messaging().onNotificationOpenedApp(async (message) => {
+            this.setState({loading: true})
+            const tasks = await this.getTasks();
+            await this.setState({...tasks, loading: false});
+            this.restoreFromNotification(message);
+        });
+        const initialNotification = await messaging().getInitialNotification();
+        if (initialNotification) {
+            this.restoreFromNotification(initialNotification);
+        }
+    };
+
+
+    onMessageReceived = async (message) => {
+        const tasks = await this.getTasks();
+        await this.setState({...tasks});
+    };
+
+    restoreFromNotification = (message) => {
+        if (message.data?.taskId) {
+            let task = this.state.tasks.find(task => task.id === message.data?.taskId);
+            if (task)
+                this.selectTask(task);
         }
     };
 
