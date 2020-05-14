@@ -123,7 +123,7 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -134,7 +134,7 @@ android {
         multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20
+        versionCode 21
         versionName "0.0.1"
     }
     splits {
@@ -195,6 +195,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
     implementation 'com.facebook.fresco:animated-gif:2.0.0'
+    implementation 'com.google.firebase:firebase-messaging:+'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
