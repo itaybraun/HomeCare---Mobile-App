@@ -10,6 +10,8 @@ export default class RESTAPI {
     constructor(server, azure: AzureInstance = null) {
         this.serverUrl = server;
 
+        log.info('Server url: ' + this.serverUrl);
+
         this.server = FHIR.client({
             serverUrl: server,
         });
@@ -27,6 +29,8 @@ export default class RESTAPI {
     set user(user: Practitioner) {
         RESTAPI.user = user;
     }
+
+    numberOfCalls = 0;
 
     upn: String;
     serverUrl: String;
@@ -92,11 +96,16 @@ export default class RESTAPI {
     };
 
     callServer = async (url, fhirOptions) => {
+        this.numberOfCalls++;
         try {
+            if (url.url)
+                log.debug(`[${this.numberOfCalls}] Starting server call: ` + url.url);
             let result = await this.server.request(url, fhirOptions);
+            if (url.url)
+                log.debug(`[${this.numberOfCalls}] finished`);
             return result;
         } catch (error) {
-            console.log(error)
+            log.error(error);
             if (error.message === "unauthorized") {
                 let refreshResult: APIRequest = await this.refreshToken();
                 if (refreshResult.success) {
@@ -110,6 +119,7 @@ export default class RESTAPI {
     };
 
     setCurrentUser = async (identifier: String = null): APIRequest => {
+
         if (!identifier && this.azure) {
             const accessToken = this.azure.getToken().accessToken;
             const decodedToken = Utils.parseJwt(accessToken);
@@ -117,9 +127,11 @@ export default class RESTAPI {
         }
 
         if (identifier) {
+            log.info('Setting current user with identifier ' + identifier);
             this.upn = identifier;
             let result: APIRequest = await this.getPractitionerByIdentifier(identifier);
             if (result.success) {
+                log.info('Found user with id ' + result.data.id);
                 this.user = result.data;
             }
 

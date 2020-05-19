@@ -5,11 +5,14 @@ import {Buffer} from 'buffer';
 
 export default class AzureInstance {
     constructor(credentials) {
+        log.debug('Creating azure instance...');
         this.authority = 'https://login.microsoftonline.com/'+(credentials.tenant || 'common');
+        log.debug('Tenant: ' + this.authority);
         this.authorize_endpoint = '/oauth2/v2.0/authorize';
         this.redirect_uri = credentials.redirect_uri;
         this.token_endpoint ='/oauth2/v2.0/token';
         this.client_id = credentials.client_id;
+        log.debug('Client id: ' + this.client_id);
         this.client_secret = credentials.client_secret;
         this.scope = credentials.scope;
 
@@ -28,6 +31,8 @@ export default class AzureInstance {
         }
     };
 
+
+    _url = null;
     getAuthUrl = () => {
         const url = this.authority + this.authorize_endpoint +
             '?client_id=' + this.client_id +
@@ -37,8 +42,13 @@ export default class AzureInstance {
             '&response_mode=query' +
             '&nonce=' + uuid.v4() +
             '&state=abcd';
-        console.log(url);
-        return url;
+
+        if (this._url !== url) {
+            this._url = url;
+            log.debug('Auth url: ' + url);
+        }
+
+        return this._url;
     }
 
     getToken = () => {
@@ -88,6 +98,8 @@ export default class AzureInstance {
         const payload = Object.assign({
             body: post_data
         }, options);
+
+        log.debug('Azure instance request: ' + JSON.stringify(endpoint));
 
         // request token
         return fetch(endpoint, payload)

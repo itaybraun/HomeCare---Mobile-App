@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StatusBar, Platform, Text, Image, View} from 'react-native';
+import {StatusBar, Platform, Text, Image, View, AppState} from 'react-native';
 import LoginScreen from './src/views/login/LoginScreen';
 import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
@@ -54,6 +54,9 @@ import './src/api/REST/RESTAPI+Relatives';
 import NewFlagScreen from './src/views/patients/patient/flags/edit/NewFlagScreen';
 import SelectCategoryScreen from './src/views/patients/patient/flags/edit/SelectCategoryScreen';
 import SelectTextScreen from './src/views/other/SelectTextScreen';
+import LogsScreen from './src/views/settings/LogsScreen';
+import {Logger} from './src/support/Logger';
+import DeviceInfo from 'react-native-device-info';
 
 const axios = require('axios');
 axios.interceptors.request.use(request => {
@@ -77,7 +80,15 @@ export default class App extends React.Component {
     };
 
     componentDidMount(): void {
+        Logger.init();
+        log.raw('-------------------------------');
+        log.info('App started. Welcome!');
+        AppState.addEventListener('change', this.handleAppStateChange);
         this.getData();
+    }
+
+    componentWillUnmount(): void {
+        AppState.removeEventListener('change', this.handleAppStateChange);
     }
 
     getData = async () => {
@@ -86,17 +97,34 @@ export default class App extends React.Component {
         setCustomTextInput({style: commonStyles.text});
         Utils.initialize();
         this.eventEmitter = new EventEmitter();
+        try {
+            let deviceFeatures = [
+                {'getModel': DeviceInfo.getModel()},
+                {'getSystemName': DeviceInfo.getSystemName()},
+                {'getSystemVersion': DeviceInfo.getSystemVersion()},
+            ];
+            log.info('Device info: ' + JSON.stringify(deviceFeatures));
+        } catch (error) {
+            log.error('Error getting device info: ' + error.message);
+        }
 
         let settings = new Settings();
         try {
             const savedSettings = await AsyncStorage.getItem(AsyncStorageConsts.STORAGE_SETTINGS);
             if (savedSettings) {
+                log.info('Saved settings: ' + savedSettings);
                 settings = new Settings(JSON.parse(savedSettings));
+            } else {
+                log.info('No saved settings. Applying defaults')
             }
-        } catch (error) {console.log(error)}
+        } catch (error) {log.error(error)}
         this.settings = settings;
 
         this.setState({loading: false});
+    };
+
+    handleAppStateChange = (nextAppState) => {
+        log.debug('App state changed to ' + nextAppState);
     };
 
     render() {
@@ -121,6 +149,13 @@ export default class App extends React.Component {
 const tabBarLabel = (focused, title) => {
     return <Text style={[{textAlign: 'center'}, focused && commonStyles.bold]}>{title}</Text>
 };
+
+const LoginStack = createStackNavigator({
+    Login: LoginScreen,
+    Logs: LogsScreen,
+}, {
+    defaultNavigationOptions: defaultNavigationOptions
+});
 
 const PatientsStack = createStackNavigator({
     Patients: PatientsScreen,
@@ -191,6 +226,7 @@ const SettingsStack = createStackNavigator({
     ImageQuality: ImageQualityScreen,
     CurrentUser: CurrentUserScreen,
     EmailAddress: EmailAddressScreen,
+    Logs: LogsScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });
@@ -212,14 +248,6 @@ const Tabs = createBottomTabNavigator({
             }
         },
     },
-    // Messages: {
-    //     screen: MessagesStack,
-    //     navigationOptions: {
-    //         tabBarLabel: ({focused}) => {
-    //             return tabBarLabel(focused, strings.Tabs.messages)
-    //         }
-    //     },
-    // },
     Settings: {
         screen: SettingsStack,
         navigationOptions: {
@@ -284,11 +312,7 @@ PatientsStack.navigationOptions = ({ navigation }) => {
 
 const AppNavigator = createAppContainer(
     createSwitchNavigator({
-        Login: {
-            screen: LoginScreen,
-        },
-        Tabs: {
-            screen: Tabs,
-        }
+        Login: LoginStack,
+        Tabs: Tabs,
     })
 );

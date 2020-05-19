@@ -70,6 +70,10 @@ export default class SettingsScreen extends AppScreen {
         this.navigateTo('CurrentUser', {});
     };
 
+    showLogs = () => {
+        this.navigateTo('Logs');
+    };
+
     //------------------------------------------------------------
     // Render
     //------------------------------------------------------------
@@ -157,6 +161,18 @@ export default class SettingsScreen extends AppScreen {
                             </Body>
                             <Right style={{flex: 0}}>
                                 <Icon style={{marginLeft: 10}} name="arrow-forward"/>
+                            </Right>
+                        </ListItem>
+                        <ListItem onPress={this.showLogs}>
+                            <Body>
+                                <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                    <Text style={commonStyles.contentText}>
+                                        {strings.Logs.showLogs}
+                                    </Text>
+                                </View>
+                            </Body>
+                            <Right>
+                                <Icon name="arrow-forward"/>
                             </Right>
                         </ListItem>
                         <View style={{flex: 1, justifyContent: 'flex-end'}}>

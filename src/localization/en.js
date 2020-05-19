@@ -268,4 +268,10 @@ export const en = {
         address: 'Address',
         relatedPersons: 'Related Persons',
     },
+
+    Logs: {
+        title: 'Logs',
+        showLogs: 'Show applications logs',
+        noLogs: 'No logs to display',
+    }
 };

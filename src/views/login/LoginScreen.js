@@ -62,6 +62,10 @@ export const environments = {
 
 export default class LoginScreen extends AppScreen {
 
+    static navigationOptions = {
+        headerShown: false,
+    };
+
     state = {
         ready: false,
         loading: false,
@@ -69,6 +73,9 @@ export default class LoginScreen extends AppScreen {
         selectedEnvironmentKey: null,
         azureADInstance: null,
     };
+
+    lastTapTime = 0;
+    taps = 0;
 
     componentDidMount(): void {
         super.componentDidMount();
@@ -102,8 +109,7 @@ export default class LoginScreen extends AppScreen {
         await this.setState({
             selectedEnvironmentKey: environmentKey,
         });
-
-        console.log('Logging to ' + environment.title);
+        log.info('Trying to log in to ' + environment.title);
         if (environment.securedOptions) {
             this.setState({
                 azureADInstance: new AzureInstance(environment.securedOptions)
@@ -114,6 +120,7 @@ export default class LoginScreen extends AppScreen {
     };
 
     onLoginSuccess = async () => {
+        log.info('Logged in successfully');
         const environment = environments[this.state.selectedEnvironmentKey];
         if (environment) {
             await AsyncStorage.setItem(AsyncStorageConsts.SAVED_ENVIRONMENT, this.state.selectedEnvironmentKey);
@@ -140,6 +147,21 @@ export default class LoginScreen extends AppScreen {
         });
     };
 
+    countTaps = () => {
+        let time = new Date().getTime();
+        if (time - this.lastTapTime > 500) {
+            this.taps = 0;
+        }
+
+        this.taps++;
+        if (this.taps >= 10) {
+            this.taps = 0;
+            this.navigateTo('Logs');
+        }
+
+        this.lastTapTime = time;
+    };
+
     render() {
 
         if (this.state.loading) {
@@ -147,7 +169,8 @@ export default class LoginScreen extends AppScreen {
         }
 
         return (
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.container}
+                          onStartShouldSetResponder={this.countTaps}>
                 <View style={{flex: 1}}>
                     {
                         this.state.ready && !this.state.azureADInstance &&

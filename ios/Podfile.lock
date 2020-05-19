@@ -318,7 +318,7 @@ PODS:
     - React
   - RNDateTimePicker (2.2.1):
     - React
-  - RNDeviceInfo (5.5.1):
+  - RNDeviceInfo (5.5.8):
     - React
   - RNFBApp (6.7.1):
     - Firebase/Core (~> 6.13.0)
@@ -328,6 +328,8 @@ PODS:
     - Firebase/Messaging (~> 6.13.0)
     - React
     - RNFBApp
+  - RNFS (2.16.6):
+    - React
   - RNGestureHandler (1.5.5):
     - React
   - RNKeychain (4.0.5):
@@ -337,6 +339,8 @@ PODS:
   - RNReanimated (1.7.0):
     - React
   - RNScreens (2.0.0-alpha.33):
+    - React
+  - RNShare (3.3.2):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -385,11 +389,13 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNShare (from `../node_modules/react-native-share`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -487,6 +493,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNKeychain:
@@ -497,6 +505,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -553,14 +563,16 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 455b48eb552543bad4e3099e180e1700700771f3
   RNCMaskedView: e5b99bc191945f157adeede68da9d424462de177
   RNDateTimePicker: 1e20e91177ab5e885aa645666c5490ad99e9a839
-  RNDeviceInfo: 6812ed7e578d4344bf4e77102f014b5adf0b5c28
+  RNDeviceInfo: 0d49fb8dd9fec5a239253ec374a07ef0efa9f875
   RNFBApp: 7b539bb25520fa73d6a240f5c6ea569e27683645
   RNFBMessaging: 0d9f1fff6359f97fac479aeae62ba79d2f069178
+  RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: d2270608171c868581b840cfc692f2962c05cd17
   RNKeychain: 840f8e6f13be0576202aefcdffd26a4f54bfe7b5
   RNLocalize: 7ea191e47e1755d2ad48614a2e9d07d290abc58e
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNScreens: 1c7fd499b915c77c21e8e6c327890c5af9b4cf7e
+  RNShare: bd6518701db274b8ba282b33620885f2225a5bcf
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
