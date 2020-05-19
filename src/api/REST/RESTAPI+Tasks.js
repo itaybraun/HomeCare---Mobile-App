@@ -23,7 +23,8 @@ RESTAPI.prototype.getTasks = async function getTasks(patientId, statuses: [Statu
         if (patientId) {
             params.subject = patientId;
         } else if (this.user) {
-            params.subject = this.user.patientsIds?.join(',');
+            //params.subject = this.user.patientsIds?.join(',');
+            params.performer = this.user.id;
         }
         if (Array.isArray(statuses) && statuses.length > 0)
             params.status = statuses.join();
