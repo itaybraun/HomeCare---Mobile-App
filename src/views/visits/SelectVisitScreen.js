@@ -361,7 +361,6 @@ export default class SelectVisitScreen extends AppScreen {
                     isVisible={this.state.showingVisitDatePicker}
                     date={this.state.start || new Date()}
                     mode="date"
-                    minimumDate={new Date()}
                     onConfirm={(date) => {
                         let errors = this.state.errors;
                         errors.start = false;
@@ -380,7 +379,6 @@ export default class SelectVisitScreen extends AppScreen {
                     isVisible={this.state.showingVisitStartTimePicker}
                     headerTextIOS={strings.Visit.pickStartTime}
                     date={this.state.start ?? new Date()}
-                    minimumDate={new Date()}
                     mode="time"
                     is24Hour={uses24HourClock()}
                     onConfirm={(date) => {
@@ -402,7 +400,6 @@ export default class SelectVisitScreen extends AppScreen {
                     headerTextIOS={strings.Visit.pickEndTime}
                     date={this.state.end ?? new Date()}
                     mode="time"
-                    minimumDate={new Date()}
                     is24Hour={uses24HourClock()}
                     onConfirm={(date) => {
                         if (this.state.start) {
