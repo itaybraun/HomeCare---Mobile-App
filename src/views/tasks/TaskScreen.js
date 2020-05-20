@@ -106,14 +106,14 @@ export default class TaskScreen extends AppScreen {
 
     editTask = () => {
         this.navigateTo('EditTask', {
-            task: this.props.navigation.getParam('task', null),
+            task: this.state.task,
             updateTask: this.updateTask,
         });
     };
 
     showQuestionnaire = () => {
         this.navigateTo('Questionnaire', {
-            task: this.props.navigation.getParam('task', null),
+            task: this.state.task,
             updateTask: this.updateTask,
         });
     };

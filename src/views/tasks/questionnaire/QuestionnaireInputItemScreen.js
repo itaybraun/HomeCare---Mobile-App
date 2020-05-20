@@ -149,7 +149,6 @@ export default class QuestionnaireItemScreen extends AppScreen {
                 style={{fontSize: 18, minHeight: 50, paddingHorizontal: 5, maxHeight: 200}}
                 autoCorrect={false}
                 multiline={true}
-                returnKeyType='done'
                 value={this.state.value}
                 onChangeText={text => {
                     text = text.isEmpty() ? null : text;

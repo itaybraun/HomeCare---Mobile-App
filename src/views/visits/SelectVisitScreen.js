@@ -111,6 +111,13 @@ export default class SelectVisitScreen extends AppScreen {
             visits = visits.sort((a: Visit, b: Visit) => {
                 return a.start - b.start;
             });
+
+            visits = visits.filter((v: Visit) => {
+                let selectedVisit = this.props.navigation.getParam('selectedVisit', null);
+                if (v.id === selectedVisit?.id || moment(v.start).startOf('day') >= moment().startOf('day'))
+                    return v;
+            });
+
             return {visits: visits};
         } else {
             this.showError(result.data);
@@ -224,7 +231,7 @@ export default class SelectVisitScreen extends AppScreen {
                     onPress={() => this.selectVisit(newIndex)}>
                     <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
                         {renderRadioButton(this.state.selectedVisitIndex === newIndex)}
-                        <View style={{flex: 1, marginLeft: 20, marginRight: 10}}>
+                        <View style={{flex: 1, marginTop: 2, marginLeft: 20, marginRight: 10}}>
                             <Text style={[commonStyles.contentText, {flex: 1}]}>{strings.Visit.newVisit}</Text>
                             <Form style={{marginTop: 20}}>
                                 <FormItemContainer
@@ -290,9 +297,11 @@ export default class SelectVisitScreen extends AppScreen {
 
                 <View style={[commonStyles.line, {marginVertical: 20}]} />
 
-                <Text style={[commonStyles.contentText, commonStyles.medium, {marginLeft: 44}]}>
-                    {strings.Visit.addToExisting}
-                </Text>
+                { this.state.visits.length > 0 &&
+                    <Text style={[commonStyles.contentText, commonStyles.medium, {marginLeft: 44}]}>
+                        {strings.Visit.addToExisting}
+                    </Text>
+                }
             </View>
         );
     };

@@ -96,13 +96,13 @@ export const commonStyles = {
         ...medium(),
     },
     smallInfoText: {
-        fontSize: 16,
+        fontSize: 15,
         color: appColors.infoColor,
         ...commonTextProperties()
     },
 
     infoText: {
-        fontSize: 18,
+        fontSize: 16,
         color: appColors.infoColor,
         ...commonTextProperties()
     },
@@ -114,13 +114,13 @@ export const commonStyles = {
     },
 
     titleText: {
-        fontSize: 20,
+        fontSize: 18,
         color: appColors.textColor,
-        ...commonTextProperties()
+        ...commonTextProperties(),
     },
 
     boldTitleText: {
-        fontSize: 20,
+        fontSize: 18,
         color: appColors.textColor,
         ...commonTextProperties(),
         ...bold(),
@@ -128,43 +128,43 @@ export const commonStyles = {
     },
 
     mainColorTitle: {
-        fontSize: 20,
+        fontSize: 18,
         color: appColors.mainColor,
         ...commonTextProperties()
     },
 
     secondColorTitle: {
-        fontSize: 20,
+        fontSize: 18,
         color: appColors.secondColor,
         ...commonTextProperties()
     },
 
     questionnaireTitle: {
-        fontSize: 20,
+        fontSize: 18,
         color: appColors.questionnaireColor,
         ...commonTextProperties(),
     },
 
     yellowTitleText: {
-        fontSize: 22,
+        fontSize: 18,
         color: appColors.yellowColor,
         ...commonTextProperties()
     },
 
     yellowText: {
-        fontSize: 20,
+        fontSize: 16,
         color: appColors.yellowColor,
         ...commonTextProperties()
     },
 
     contentText: {
-        fontSize: 18,
+        fontSize: 16,
         color: appColors.textColor,
         ...commonTextProperties()
     },
 
     smallContentText: {
-        fontSize: 16,
+        fontSize: 15,
         color: appColors.textColor,
         ...commonTextProperties()
     },
@@ -176,7 +176,7 @@ export const commonStyles = {
     },
 
     purpleTitleText: {
-        fontSize: 22,
+        fontSize: 18,
         color: appColors.linkColor,
         ...commonTextProperties()
     },
@@ -249,7 +249,7 @@ export const commonStyles = {
     },
 
     formItemText: {
-        fontSize: 18,
+        fontSize: 16,
         color: appColors.textColor,
         ...commonTextProperties()
     },

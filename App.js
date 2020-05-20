@@ -132,6 +132,19 @@ export default class App extends React.Component {
         log.debug('App state changed to ' + nextAppState);
     };
 
+    // gets the current screen from navigation state
+    getActiveRouteName = (navigationState) => {
+        if (!navigationState) {
+            return null;
+        }
+        const route = navigationState.routes[navigationState.index];
+        // dive into nested navigators
+        if (route.routes) {
+            return this.getActiveRouteName(route);
+        }
+        return route.routeName;
+    }
+
     render() {
 
         if (this.state.loading) {
@@ -144,6 +157,14 @@ export default class App extends React.Component {
                     screenProps={{
                         settings: this.settings,
                         eventEmitter: this.eventEmitter,
+                    }}
+                    onNavigationStateChange={(prevState, currentState, action) => {
+                        const currentRouteName = this.getActiveRouteName(currentState);
+                        const previousRouteName = this.getActiveRouteName(prevState);
+
+                        if (previousRouteName !== currentRouteName) {
+                            log.info('Showing ' + currentRouteName);
+                        }
                     }}
                 />
             </SafeAreaProvider>

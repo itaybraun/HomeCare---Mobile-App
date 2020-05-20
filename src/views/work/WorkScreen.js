@@ -523,7 +523,7 @@ export default class WorkScreen extends AppScreen {
                                          backgroundColor: '#FFFFFF',
                                          padding: 10,
                                      }}>
-                                         <Text style={[commonStyles.medium, {fontSize: 18, color: appColors.mainColor}]}>{title}</Text>
+                                         <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{title}</Text>
                                      </View>
                                  )}
                                  renderSectionFooter={() => renderSeparator({height: 12})}
@@ -566,7 +566,7 @@ export default class WorkScreen extends AppScreen {
                                          backgroundColor: '#FFFFFF',
                                          padding: 10,
                                      }}>
-                                         <Text style={[commonStyles.medium, {fontSize: 18, color: appColors.mainColor}]}>{title}</Text>
+                                         <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{title}</Text>
                                      </View>
                                  )}
                                  renderSectionFooter={() => renderSeparator({height: 12})}

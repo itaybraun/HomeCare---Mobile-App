@@ -128,7 +128,7 @@ function getJsonFromVisit(visit: Visit) {
         participant: [
             {
                 individual:{
-                    reference: "Practitioner/" + API.user.id,
+                    reference: "Practitioner/" + RESTAPI.user.id,
                 }
             }
         ],

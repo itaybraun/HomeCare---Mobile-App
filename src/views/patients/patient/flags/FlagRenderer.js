@@ -51,7 +51,7 @@ export default class FlagRenderer extends Component {
                     <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-start'}}>
                         <Image source={FlagRenderer.categoryImage[categoryString]} style={{width: 48, height: 48}}/>
                         <Text
-                            style={[commonStyles.contentText, {
+                            style={[commonStyles.titleText, {
                                 flex: 1,
                                 marginLeft: 10
                             }]}>

@@ -200,7 +200,7 @@ export default class QuestionnaireItemsView extends Component {
                                style={{borderWidth: 0}}>
                 <Body>
                     <View style={{minHeight: 48, justifyContent: 'center'}}>
-                        <Text style={[commonStyles.infoText]}>
+                        <Text style={[commonStyles.formItemText]}>
                             {item.text}
                         </Text>
                     </View>

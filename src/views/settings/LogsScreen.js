@@ -128,6 +128,7 @@ export default class LogsScreen extends AppScreen {
         return (
             <SafeAreaView style={commonStyles.screenContainer}>
                 <FlatList data={logs}
+                          contentContainerStyle={{flexGrow: 1}}
                           renderItem={this.renderTextItem}
                           ListEmptyComponent={this.renderListEmpty}
                           onRefresh={this.getData}
