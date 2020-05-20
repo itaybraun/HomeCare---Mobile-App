@@ -130,6 +130,7 @@ export const en = {
         closed: 'Closed',
         filterTasks: 'Filter Tasks',
         selectActivity: 'Select Activity',
+        cancelTask: 'You are about to cancel this task. Are you sure?',
         deleteTask: 'You are about to delete this task. Are you sure?',
         menuEdit: 'Edit',
         menuCreate: 'Create Task',
