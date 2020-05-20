@@ -113,6 +113,7 @@ export function getTaskFromJson(json) {
     task.activityId = json.basedOn?.[0]?.id;
     task.activity = json.basedOn?.[0] ? getActivityFromJson(json.basedOn?.[0]) : null;
     task.status = json.status ? Status.getByString(json.status) || Status.UNKNOWN : Status.UNKNOWN;
+    task.notes = json.note?.[0]?.text;
     return task;
 }
 

@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
+    Dimensions,
     TouchableWithoutFeedback,
     Keyboard, ScrollView, Linking
 } from 'react-native';
@@ -23,7 +24,8 @@ import {AsyncStorageConsts} from '../../support/Consts';
 import TaskRenderer from './TaskRenderer';
 import FlagRenderer from '../patients/patient/flags/FlagRenderer';
 import ListItemContainer from '../other/ListItemContainer';
-import {APIRequest} from '../../models/APIRequest';
+import APIRequest from '../../models/APIRequest';
+import Modal, { ModalContent, ModalTitle } from 'react-native-modals';
 
 export default class TaskScreen extends AppScreen {
 
@@ -49,6 +51,7 @@ export default class TaskScreen extends AppScreen {
     state = {
         loading: false,
         task: this.props.navigation.getParam('task', null),
+        showFullNote: false,
     };
 
     //------------------------------------------------------------
@@ -191,9 +194,7 @@ export default class TaskScreen extends AppScreen {
     //------------------------------------------------------------
 
     render() {
-
         const task: Task = this.state.task;
-
         return (
 
             <View style={commonStyles.screenContainer} onPress={Keyboard.dismiss}>
@@ -293,13 +294,48 @@ export default class TaskScreen extends AppScreen {
                                 </Body>
                             </ListItemContainer>
 
-                            <ListItemContainer>
+                            <ListItemContainer disabled={!task.notes || task.notes.isEmpty()} onPress={() => {
+                                this.setState({showFullNote: true})
+                            }}>
                                 <Body>
                                     <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.notes}</Text>
-                                    <Text style={[{flex: 1}, commonStyles.formItemText]}>{task.notes}</Text>
+                                        <Text>{task.notes && task.notes.length >= 80 ? `${task.notes.substring(0, 77)}...` : task.notes}</Text>
                                 </Body>
+                                <Modal
+                                    visible={this.state.showFullNote}
+                                    rounded={false}
+                                    onHardwareBackPress={ () => {
+                                        this.setState({ showFullNote: false });
+                                        return true;
+                                    }}
+                                    onTouchOutside={() => {
+                                        this.setState({ showFullNote: false });
+                                    }}
+                                    modalTitle={
+                                        <ModalTitle
+                                            style={{borderBottomWidth: 0, backgroundColor: '#FFFFFF'}}
+                                            textStyle={commonStyles.mainColorTitle}
+                                            title={strings.Task.notes}
+                                        />
+                                    }
+                                >
+                                    <ModalContent>
+                                        <View style={{
+                                            marginTop: 10,
+                                            width: Dimensions.get('window').width * 0.7,
+                                            height: Dimensions.get('window').height * 0.5,
+                                        }}>
+                                            <ScrollView style={{flex: 1}}>
+                                                <TouchableWithoutFeedback>
+                                                    <Text>{task.notes}</Text>
+                                                </TouchableWithoutFeedback>
+                                            </ScrollView>
+                                        </View>
+                                    </ModalContent>
+                                </Modal>
                             </ListItemContainer>
+
                         </List>
                         <View style={{alignItems: 'flex-end', marginTop: 10,}}>
                             <Image source={require('../../assets/icons/tasks/care.png')}/>
