@@ -210,52 +210,56 @@ export default class WorkScreen extends AppScreen {
     //------------------------------------------------------------
 
     setUpNotifications = async () => {
+
+        log.info('Checking notifications...');
+
         await messaging().requestPermission({
             announcement: true,
         });
 
         const enabled = await messaging().hasPermission();
         if (enabled) {
-
+            log.info('Notifications enabled');
             this.setState({loading: true});
 
             let savedToken = await AsyncStorage.getItem(AsyncStorageConsts.FCM_TOKEN);
             const firebaseToken = await messaging().getToken();
 
+            log.info('Device token: ' + firebaseToken);
+
             if (firebaseToken) {
-                if (!savedToken) {
-                    await this.api.setPushNotificationsToken(firebaseToken, null);
-                    await AsyncStorage.setItem(AsyncStorageConsts.FCM_TOKEN, firebaseToken);
-                } else if (savedToken !== firebaseToken) {
-                    await this.api.setPushNotificationsToken(firebaseToken, savedToken);
-                    await AsyncStorage.setItem(AsyncStorageConsts.FCM_TOKEN, firebaseToken);
-                }
+                await this.api.setPushNotificationsToken(firebaseToken, savedToken);
+                await AsyncStorage.setItem(AsyncStorageConsts.FCM_TOKEN, firebaseToken);
             }
             this.setState({loading: false});
-        } else {
-            console.log('Notifications disabled');
-        }
 
-        messaging().onMessage(this.onMessageReceived);
-        messaging().onNotificationOpenedApp(async (message) => {
-            this.setState({loading: true})
-            const tasks = await this.getTasks();
-            await this.setState({...tasks, loading: false});
-            this.restoreFromNotification(message);
-        });
-        const initialNotification = await messaging().getInitialNotification();
-        if (initialNotification) {
-            this.restoreFromNotification(initialNotification);
+            messaging().onMessage(this.onMessageReceived);
+            messaging().onNotificationOpenedApp(async (message) => {
+                this.setState({loading: true})
+                const tasks = await this.getTasks();
+                await this.setState({...tasks, loading: false});
+                this.restoreFromNotification(message);
+            });
+            const initialNotification = await messaging().getInitialNotification();
+            if (initialNotification) {
+                this.restoreFromNotification(initialNotification);
+            }
+        } else {
+            log.info('Notifications disabled');
         }
     };
 
 
     onMessageReceived = async (message) => {
+
+        log.info('Got push notification: ' + JSON.stringify(message));
+
         const tasks = await this.getTasks();
         await this.setState({...tasks});
     };
 
     restoreFromNotification = (message) => {
+        log.info('Open app from notification: ' + JSON.stringify(message));
         if (message.data?.taskId) {
             let task = this.state.tasks.find(task => task.id === message.data?.taskId);
             if (task)

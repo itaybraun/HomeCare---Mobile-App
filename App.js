@@ -60,14 +60,14 @@ import DeviceInfo from 'react-native-device-info';
 
 const axios = require('axios');
 axios.interceptors.request.use(request => {
-    console.log('Starting Request', request)
+    log.debug('Starting Request: ' + request.url);
     return request
-})
+});
 
 axios.interceptors.response.use(response => {
-    console.log('Response:', response)
-    return response
-})
+    log.debug('Response: ' + response.status);
+    return response;
+});
 
 export default class App extends React.Component {
 
@@ -98,7 +98,12 @@ export default class App extends React.Component {
         Utils.initialize();
         this.eventEmitter = new EventEmitter();
         try {
+
+            const deviceName = await DeviceInfo.getDeviceName();
+
             let deviceFeatures = [
+                {'getVersion': DeviceInfo.getVersion() + "." + DeviceInfo.getBuildNumber()},
+                {'getDeviceName': deviceName},
                 {'getModel': DeviceInfo.getModel()},
                 {'getSystemName': DeviceInfo.getSystemName()},
                 {'getSystemVersion': DeviceInfo.getSystemVersion()},

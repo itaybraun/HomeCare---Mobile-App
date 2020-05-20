@@ -3,6 +3,7 @@ import AzureInstance from '../Azure/AzureInstance';
 import {Utils} from '../../support/Utils';
 import {Practitioner} from '../../models/Practitioner';
 import APIRequest from '../../models/APIRequest';
+import DeviceInfo from 'react-native-device-info';
 
 const axios = require('axios');
 
@@ -154,7 +155,6 @@ export default class RESTAPI {
     }
 
     setPushNotificationsToken = async (newToken, oldToken): APIRequest => {
-        console.group ('%csetPushNotificationsToken', 'color: gold');
         const baseURL = 'https://fhir1imagestore.table.core.windows.net/PractitionerPushNotificationTokens';
         const params = 'sp=raud&st=2020-05-09T14:31:07Z&se=2020-12-31T09:31:00Z&sv=2019-10-10&sig=SF4JdVrbRrVGDn7MS3bzXsja89LfWdqNHg6l82BGRjA%3D&tn=PractitionerPushNotificationTokens';
         const headers = {
@@ -179,24 +179,30 @@ export default class RESTAPI {
                             "If-Match": "*"
                         },
                     });
-
-                    console.log(deleteResult);
                 }
             } catch (error) {
-                console.log(error);
+                log.error(error);
             }
         }
 
         if (newToken) {
-            let result = await axios.post(`${baseURL}?${params}`, {
-                PartitionKey: "1",
-                RowKey: Math.random().toString(36).substr(2, 9),
-                PractitionerID: this.user.id,
-                PNUT: newToken
-            }, {headers: headers});
-        }
 
-        console.groupEnd();
+            const deviceName = await DeviceInfo.getDeviceName();
+
+            try {
+                let result = await axios.post(`${baseURL}?${params}`, {
+                    PartitionKey: "1",
+                    RowKey: Math.random().toString(36).substr(2, 9),
+                    PractitionerID: this.user.id,
+                    PNUT: newToken,
+                    Device: DeviceInfo.getModel() + ": " + deviceName,
+                    OS: DeviceInfo.getSystemName() + " " + DeviceInfo.getSystemVersion(),
+                    app: DeviceInfo.getVersion() + "." + DeviceInfo.getBuildNumber()
+                }, {headers: headers});
+            } catch (error) {
+                log.error(error);
+            }
+        }
 
         return new APIRequest(true);
     }
