@@ -61,7 +61,7 @@ export default class AppScreen extends React.Component {
     //------------------------------------------------------------
 
     showError = (error) => {
-        console.log(error);
+        log.error(error);
         if (error.message === 'relog') {
             this.showAlert(strings.System.sessionExpired, null, [
                 {
@@ -78,15 +78,17 @@ export default class AppScreen extends React.Component {
     };
 
     showAlert = (message, title = null, buttons = null) => {
-        console.log(message);
+        log.info('Showing message: ' + message);
         Alert.alert(title, message, buttons);
     };
 
     navigateTo = (view, params) => {
+        log.info('Navigate to ' + view);
         this.props.navigation.navigate(view, params);
     };
 
     pop = () => {
+        log.info('Navigation pop');
         this.props.navigation.pop();
     };
 }

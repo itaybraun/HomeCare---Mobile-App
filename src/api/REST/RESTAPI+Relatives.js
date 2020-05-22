@@ -27,7 +27,7 @@ RESTAPI.prototype.getPatientRelatives = async function getPatientRelatives(patie
     }
 };
 
-export function getRelativeFromJson(json) {
+RESTAPI.prototype.getRelativeFromJson =  function getRelativeFromJson(json): Relative {
     let relative = new Relative();
     relative.id = json.id;
     relative.gender = json.gender;
@@ -47,4 +47,4 @@ export function getRelativeFromJson(json) {
     relative.email = json.telecom?.find(t => t.system === 'email')?.value;
 
     return relative;
-}
+};

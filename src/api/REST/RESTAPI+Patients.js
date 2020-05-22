@@ -23,7 +23,7 @@ RESTAPI.prototype.getPatients = async function getPatients(): APIRequest {
 
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getPatients', result);
-        const patients = result.map(json => getPatientFromJson((json))) || [];
+        const patients = result.map(json => this.getPatientFromJson((json))) || [];
         return new APIRequest(true, patients);
     } catch (error) {
         return new APIRequest(false, error);
@@ -39,14 +39,14 @@ RESTAPI.prototype.getPatient = async function getPatient(patientId: String): API
         let url = 'Patient/'+patientId;
         const result = await this.callServer(this.createUrl(url));
         console.log(result);
-        const patient = getPatientFromJson(result);
+        const patient = this.getPatientFromJson(result);
         return new APIRequest(true, patient);
     } catch (error) {
         return new APIRequest(false, error);
     }
 };
 
-export function getPatientFromJson(json) {
+RESTAPI.prototype.getPatientFromJson = function getPatientFromJson(json): Patient {
     let patient = new Patient();
     patient.id = json.id;
     patient.gender = json.gender;
@@ -71,4 +71,4 @@ export function getPatientFromJson(json) {
     patient.identifier = json.identifier?.[0]?.value;
 
     return patient;
-}
+};

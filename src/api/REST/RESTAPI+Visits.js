@@ -1,10 +1,7 @@
 import RESTAPI from './RESTAPI';
-import {Patient} from '../../models/Patient';
 import {Visit} from '../../models/Visit';
 import moment from 'moment';
-import {getPatientFromJson} from './RESTAPI+Patients';
 import APIRequest from '../../models/APIRequest';
-import {getTaskFromJson} from './RESTAPI+Tasks';
 
 //------------------------------------------------------------
 // Visits
@@ -30,7 +27,7 @@ RESTAPI.prototype.getVisits = async function getVisits(patientId): APIRequest {
         fhirOptions.resolveReferences = ["subject", "basedOn"];
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getVisits', result);
-        let visits = result.map(json => getVisitFromJson(json)) || [];
+        let visits = result.map(json => this.getVisitFromJson(json)) || [];
         return new APIRequest(true, visits);
     } catch (error) {
         console.log(error);
@@ -45,7 +42,7 @@ RESTAPI.prototype.getVisit = async function getVisit(visitId): APIRequest {
         params.resolveReferences = ["subject", "basedOn"];
         const result = await this.callServer(this.createUrl(url), params);
         console.log('getVisit', result);
-        const visit = getVisitFromJson(result);
+        const visit = this.getVisitFromJson(result);
         return new APIRequest(true, visit);
     } catch (error) {
         return new APIRequest(false, error);
@@ -54,10 +51,10 @@ RESTAPI.prototype.getVisit = async function getVisit(visitId): APIRequest {
 
 RESTAPI.prototype.addVisit = async function addVisit(visit: Visit): APIRequest {
     try {
-        const data = getJsonFromVisit(visit);
+        const data = this.getJsonFromVisit(visit);
         const result = await this.server.create(data);
         console.log('addVisit', result);
-        visit = getVisitFromJson(result);
+        visit = this.getVisitFromJson(result);
         // HACK!
         return await this.getVisit(visit.id);
     } catch (error) {
@@ -67,10 +64,10 @@ RESTAPI.prototype.addVisit = async function addVisit(visit: Visit): APIRequest {
 
 RESTAPI.prototype.updateVisit = async function updateVisit(visit: Visit): APIRequest {
     try {
-        const data = getJsonFromVisit(visit);
+        const data = this.getJsonFromVisit(visit);
         const result = await this.server.update(data);
         console.log('updateVisit', result);
-        visit = getVisitFromJson(result);
+        visit = this.getVisitFromJson(result);
         // HACK!
         return await this.getVisit(visit.id);
     } catch (error) {
@@ -78,22 +75,22 @@ RESTAPI.prototype.updateVisit = async function updateVisit(visit: Visit): APIReq
     }
 };
 
-export function getVisitFromJson(json) {
+RESTAPI.prototype.getVisitFromJson = function getVisitFromJson(json) {
     let visit = new Visit();
     visit.id = json.id;
     visit.patientId = json.subject?.id || null;
-    visit.patient = json.subject ? getPatientFromJson(json.subject) : null;
+    visit.patient = json.subject ? this.getPatientFromJson(json.subject) : null;
     visit.reason = json.reasonCode?.text;
     visit.taskIds = json.basedOn?.map(task => task.id);
-    visit.tasks = json.basedOn?.map(task => getTaskFromJson(task));
+    visit.tasks = json.basedOn?.map(task => this.getTaskFromJson(task));
     if (json.period) {
         visit.start = json.period.start ? moment(json.period.start).toDate() : null;
         visit.end = json.period.end ? moment(json.period.end).toDate() : null;
     }
     return visit;
-}
+};
 
-function getJsonFromVisit(visit: Visit) {
+RESTAPI.prototype.getJsonFromVisit = function getJsonFromVisit(visit: Visit) {
     const data = {
         resourceType: "Encounter",
         status: "planned",

@@ -18,7 +18,7 @@ RESTAPI.prototype.getPractitioners = async function getPractitioners(): APIReque
         fhirOptions.flat = true;
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getPractitioners', result);
-        const practitioners = result.map(json => getPractitionerFromJSON((json))) || [];
+        const practitioners = result.map(json => this.getPractitionerFromJSON((json))) || [];
         return new APIRequest(true, practitioners);
     } catch (error) {
         return new APIRequest(false, error);
@@ -37,7 +37,7 @@ RESTAPI.prototype.getPractitioner = async function getPractitioner(practitionerI
 
         const result = await this.callServer(this.createUrl(url), params);
         console.log('getPractitioner', result);
-        let practitioner = getPractitionerFromJSON(result);
+        let practitioner = this.getPractitionerFromJSON(result);
         return new APIRequest(true, practitioner);
     } catch (error) {
         return new APIRequest(false, error);
@@ -58,7 +58,7 @@ RESTAPI.prototype.getPractitionerByIdentifier = async function getPractitionerBy
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getPractitionerByIdentifier', result);
         if (result && result.length > 0) {
-            let practitioner = getPractitionerFromJSON(result[0]);
+            let practitioner = this.getPractitionerFromJSON(result[0]);
             return new APIRequest(true, practitioner);
         } else {
             return new APIRequest(false, new Error('No practitioner with identifier='+identifier+' was found'));
@@ -68,7 +68,7 @@ RESTAPI.prototype.getPractitionerByIdentifier = async function getPractitionerBy
     }
 };
 
-export function getPractitionerFromJSON(json) {
+RESTAPI.prototype.getPractitionerFromJSON = function getPractitionerFromJSON(json): Practitioner {
     let practitioner = new Practitioner();
     practitioner.id = json.id;
     practitioner.gender = json.gender;

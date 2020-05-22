@@ -1,7 +1,6 @@
 import RESTAPI from './RESTAPI';
 import {Flag} from '../../models/Flag';
 import moment from 'moment';
-import {getPatientFromJson} from './RESTAPI+Patients';
 import APIRequest from '../../models/APIRequest';
 
 //------------------------------------------------------------
@@ -29,7 +28,7 @@ RESTAPI.prototype.getFlags = async function getFlags(patientId): APIRequest {
 
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getFlags', result);
-        let flags = result.map(json => getFlagFromJson(json)) || [];
+        let flags = result.map(json => this.getFlagFromJson(json)) || [];
         return new APIRequest(true, flags);
     } catch (error) {
         return new APIRequest(false, error);
@@ -44,7 +43,7 @@ RESTAPI.prototype.getFlag = async function getFlag(flagId): APIRequest {
         fhirOptions.resolveReferences = ["subject"];
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getFlag', result);
-        const flag = getFlagFromJson(result);
+        const flag = this.getFlagFromJson(result);
         return new APIRequest(true, flag);
     } catch (error) {
         return new APIRequest(false, error);
@@ -53,11 +52,11 @@ RESTAPI.prototype.getFlag = async function getFlag(flagId): APIRequest {
 
 RESTAPI.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
     try {
-        const data = getJsonFromFlag(flag);
+        const data = this.getJsonFromFlag(flag);
         console.log(data);
         const result = await this.server.create(data);
         console.log('addFlag', result);
-        flag = getFlagFromJson(result);
+        flag = this.getFlagFromJson(result);
         return new APIRequest(true, flag);
     } catch (error) {
         return new APIRequest(false, error);
@@ -66,10 +65,10 @@ RESTAPI.prototype.addFlag = async function addFlag(flag: Flag): APIRequest {
 
 RESTAPI.prototype.editFlag = async function editFlag(flag: Flag): APIRequest {
     try {
-        const data = getJsonFromFlag(flag);
+        const data = this.getJsonFromFlag(flag);
         const result = await this.server.update(data);
         console.log('editFlag', result);
-        flag = getFlagFromJson(result);
+        flag = this.getFlagFromJson(result);
         return await this.getFlag(flag.id);
     } catch (error) {
         return new APIRequest(false, error);
@@ -86,7 +85,7 @@ RESTAPI.prototype.deleteFlag = async function deleteFlag(flag: Flag): APIRequest
     }
 };
 
-function getFlagFromJson(json) {
+RESTAPI.prototype.getFlagFromJson = function getFlagFromJson(json): Flag {
     let flag = new Flag();
     flag.id = json.id;
     flag.status = json.status;
@@ -96,12 +95,12 @@ function getFlagFromJson(json) {
     flag.startDate = moment(json.period?.start).toDate();
     flag.endDate = moment(json.period?.end).toDate();
     flag.patientId = json.subject?.id || null;
-    flag.patient = json.subject ? getPatientFromJson(json.subject) : null;
+    flag.patient = json.subject ? this.getPatientFromJson(json.subject) : null;
     flag.internal = json.code.coding?.find(coding => coding.system === 'http://copper-serpent.com/valueset/flag-internal')?.code === '1' || false;
     return flag;
 }
 
-function getJsonFromFlag(flag: Flag) {
+RESTAPI.prototype.getJsonFromFlag = function getJsonFromFlag(flag: Flag) {
     const data = {
         resourceType: 'Flag',
         status: flag.status,

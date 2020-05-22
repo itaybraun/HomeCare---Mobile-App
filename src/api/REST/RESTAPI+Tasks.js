@@ -1,12 +1,7 @@
 import moment from 'moment';
 import {Priority, Status, Task} from '../../models/Task';
 import RESTAPI from './RESTAPI';
-import {getPatientFromJson} from './RESTAPI+Patients';
-import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
-import {getVisitFromJson} from './RESTAPI+Visits';
-import {getActivityFromJson} from './RESTAPI+Questionnaire';
 import APIRequest from '../../models/APIRequest';
-
 
 //------------------------------------------------------------
 // Tasks
@@ -35,7 +30,7 @@ RESTAPI.prototype.getTasks = async function getTasks(patientId, statuses: [Statu
 
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getTasks', result);
-        let tasks = result.map(json => getTaskFromJson(json)) || [];
+        let tasks = result.map(json => this.getTaskFromJson(json)) || [];
 
         return new APIRequest(true, tasks);
     } catch (error) {
@@ -51,7 +46,7 @@ RESTAPI.prototype.getTask = async function getTask(taskId): APIRequest {
         params.resolveReferences = ["subject", "requester", "performer.0", "encounter", "basedOn.0"];
         const result = await this.callServer(this.createUrl(url), params);
         console.log('getTask', result);
-        const task = getTaskFromJson(result);
+        const task = this.getTaskFromJson(result);
 
         return new APIRequest(true, task);
     } catch (error) {
@@ -61,10 +56,10 @@ RESTAPI.prototype.getTask = async function getTask(taskId): APIRequest {
 
 RESTAPI.prototype.addTask = async function addTask(task: Task): APIRequest {
     try {
-        const data = getJsonFromTask(task);
+        const data = this.getJsonFromTask(task);
         const result = await this.server.create(data);
         console.log('addTask', result);
-        task = getTaskFromJson(result);
+        task = this.getTaskFromJson(result);
         return new APIRequest(true, task);
     } catch (error) {
         return new APIRequest(false, error);
@@ -73,10 +68,10 @@ RESTAPI.prototype.addTask = async function addTask(task: Task): APIRequest {
 
 RESTAPI.prototype.updateTask = async function updateTask(task: Task): APIRequest {
     try {
-        const data = getJsonFromTask(task);
+        const data = this.getJsonFromTask(task);
         console.log(data);
         const result = await this.server.update(data);
-        task = getTaskFromJson(result);
+        task = this.getTaskFromJson(result);
         return new APIRequest(true, task);
     } catch (error) {
         return new APIRequest(false, error);
@@ -93,17 +88,17 @@ RESTAPI.prototype.deleteTask = async function deleteTask(task: Task): APIRequest
     }
 };
 
-export function getTaskFromJson(json) {
+RESTAPI.prototype.getTaskFromJson = function getTaskFromJson(json): Task {
     let task = new Task();
     task.id = json.id;
     task.patientId = json.subject?.id || null;
-    task.patient = json.subject ? getPatientFromJson(json.subject) : null;
+    task.patient = json.subject ? this.getPatientFromJson(json.subject) : null;
     task.requesterId = json.requester?.id || null;
-    task.requester = json.requester ? getPractitionerFromJSON(json.requester) : null;
+    task.requester = json.requester ? this.getPractitionerFromJSON(json.requester) : null;
     task.performerId = json.performer?.[0]?.id || null;
-    task.performer = json.performer?.[0] ? getPractitionerFromJSON(json.performer[0]) : null;
+    task.performer = json.performer?.[0] ? this.getPractitionerFromJSON(json.performer[0]) : null;
     task.visitId = json.encounter?.id || null;
-    task.visit = json.encounter ? getVisitFromJson(json.encounter) : null;
+    task.visit = json.encounter ? this.getVisitFromJson(json.encounter) : null;
     //task.openDate = json.occurrenceDateTime ? moment(json.occurrenceDateTime).toDate() : null;
     task.openDate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;
     task.executionDate = json.meta?.lastUpdated ? moment(json.meta?.lastUpdated).toDate() : null;
@@ -111,13 +106,13 @@ export function getTaskFromJson(json) {
     // TODO: I don't like this priority thing...
     task.priority = json.priority ? Priority.getByString(json.priority) || Priority.ROUTINE : Priority.ROUTINE;
     task.activityId = json.basedOn?.[0]?.id;
-    task.activity = json.basedOn?.[0] ? getActivityFromJson(json.basedOn?.[0]) : null;
+    task.activity = json.basedOn?.[0] ? this.getActivityFromJson(json.basedOn?.[0]) : null;
     task.status = json.status ? Status.getByString(json.status) || Status.UNKNOWN : Status.UNKNOWN;
     task.notes = json.note?.[0]?.text;
     return task;
-}
+};
 
-export function getJsonFromTask(task: Task) {
+RESTAPI.prototype.getJsonFromTask = function getJsonFromTask(task: Task) {
     const data = {
         resourceType: "ServiceRequest",
         id: task.id,
@@ -159,4 +154,4 @@ export function getJsonFromTask(task: Task) {
     }
 
     return data;
-}
+};

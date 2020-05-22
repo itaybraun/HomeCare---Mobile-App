@@ -7,7 +7,6 @@ import {
 } from '../../models/Questionnaire';
 import {Activity} from '../../models/Activity';
 import moment from 'moment';
-import {getPractitionerFromJSON} from './RESTAPI+Practitioners';
 import APIRequest from '../../models/APIRequest';
 
 //------------------------------------------------------------
@@ -23,7 +22,7 @@ RESTAPI.prototype.getQuestionnaire = async function getQuestionnaire(id: String)
         params.resolveReferences = [];
         const result = await this.callServer(this.createUrl(url), params);
         console.log('getQuestionnaire', result);
-        const questionnaire = getQuestionnaireFromJson(result);
+        const questionnaire = this.getQuestionnaireFromJson(result);
 
         console.log(questionnaire);
         return new APIRequest(true, questionnaire);
@@ -54,7 +53,7 @@ RESTAPI.prototype.getActivities = async function getActivities(): APIRequest {
         fhirOptions.flat = true;
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log('getActivities', result);
-        let activities = result.map(json => getActivityFromJson(json)) || [];
+        let activities = result.map(json => this.getActivityFromJson(json)) || [];
 
         return new APIRequest(true, activities);
     } catch (error) {
@@ -78,7 +77,7 @@ RESTAPI.prototype.getQuestionnaireResponses = async function getQuestionnaireRes
         fhirOptions.resolveReferences = ["author"];
         const result = await this.callServer(this.createUrl(url, params), fhirOptions);
         console.log(result);
-        let responses = result.map(json => getQuestionnaireResponseFromJson(json));
+        let responses = result.map(json => this.getQuestionnaireResponseFromJson(json));
         console.log('getQuestionnaireResponses', responses);
         return new APIRequest(true, responses);
 
@@ -87,21 +86,21 @@ RESTAPI.prototype.getQuestionnaireResponses = async function getQuestionnaireRes
     }
 };
 
-export function getQuestionnaireFromJson(json) {
+RESTAPI.prototype.getQuestionnaireFromJson = function getQuestionnaireFromJson(json): Questionnaire {
     let questionnaire = new Questionnaire();
     questionnaire.id = json.id;
     questionnaire.name = json.title;
 
     if (json.item)
-        questionnaire.items = json.item.map(json => getItemFromJson(json));
+        questionnaire.items = json.item.map(json => this.getItemFromJson(json));
 
     return questionnaire;
-}
+};
 
-function getItemFromJson(json) {
+RESTAPI.prototype.getItemFromJson = function getItemFromJson(json): QuestionnaireItem {
     let item = new QuestionnaireItem();
     if (json.item)
-        item.items = json.item.map(json => getItemFromJson(json));
+        item.items = json.item.map(json => this.getItemFromJson(json));
     item.link = json.linkId;
     item.type = json.type;
     item.text = json.text;
@@ -115,27 +114,27 @@ function getItemFromJson(json) {
         );
 
     return item;
-}
+};
 
-export function getQuestionnaireResponseFromJson(json) {
+RESTAPI.prototype.getQuestionnaireResponseFromJson = function getQuestionnaireResponseFromJson(json): QuestionnaireResponse {
     let response = new QuestionnaireResponse();
     response.id = json.id;
     response.taskId = json.basedOn?.[0]?.reference?.replace('ServiceRequest/', '') || null;
     response.authorId = json.author?.id || null;
-    response.author = json.author ? getPractitionerFromJSON(json.author) : null;
+    response.author = json.author ? this.getPractitionerFromJSON(json.author) : null;
     if (json.item) {
-        response.items = json.item.map(json => getResponseItemFromJson(json));
+        response.items = json.item.map(json => this.getResponseItemFromJson(json));
         response.items = response.items.filter(i => i);
     }
 
     return response;
-}
+};
 
-function getResponseItemFromJson(json) {
+RESTAPI.prototype.getResponseItemFromJson = function getResponseItemFromJson(json): QuestionnaireItem {
     let item = new QuestionnaireItem();
     if (json.item) {
         item.type = 'group';
-        item.items = json.item.map(json => getResponseItemFromJson(json));
+        item.items = json.item.map(json => this.getResponseItemFromJson(json));
         item.items = item.items.filter(i => i);
     }
 
@@ -171,9 +170,20 @@ function getResponseItemFromJson(json) {
         return null;
 
     return item;
-}
+};
 
-export function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, taskId: String) {
+RESTAPI.prototype.getActivityFromJson = function getActivityFromJson(json): Activity {
+    let activity = new Activity();
+
+    activity.id = json.id;
+    activity.text = json.description;
+    activity.questionnaireId = json.relatedArtifact?.[0]?.resource?.replace('Questionnaire/', '') || null;
+
+    return activity;
+};
+
+
+RESTAPI.prototype.getJsonFromAnswers = function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire, taskId: String) {
     let data = {
         resourceType: "QuestionnaireResponse",
         questionnaire: "Questionnaire/" + questionnaire.id,
@@ -246,14 +256,4 @@ export function getJsonFromAnswers(answers: Object, questionnaire: Questionnaire
     data.basedOn = taskId ? {reference: "ServiceRequest/" + taskId} : null;
 
     return data;
-}
-
-export function getActivityFromJson(json) {
-    let activity = new Activity();
-
-    activity.id = json.id;
-    activity.text = json.description;
-    activity.questionnaireId = json.relatedArtifact?.[0]?.resource?.replace('Questionnaire/', '') || null;
-
-    return activity;
-}
+};
