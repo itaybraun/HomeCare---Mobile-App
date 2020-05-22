@@ -190,6 +190,7 @@ export const en = {
         logout: 'Logout',
         emailAddress: 'Email',
         servername: 'Servername',
+        version: 'Version',
     },
 
     Priorities: {

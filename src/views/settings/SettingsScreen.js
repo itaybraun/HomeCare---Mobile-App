@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from './../../support/Consts';
 import CookieManager from '@react-native-community/cookies';
 import ListItemContainer from '../other/ListItemContainer';
+import DeviceInfo from 'react-native-device-info';
 
 export default class SettingsScreen extends AppScreen {
 
@@ -173,6 +174,20 @@ export default class SettingsScreen extends AppScreen {
                             </Body>
                             <Right>
                                 <Icon name="arrow-forward"/>
+                            </Right>
+                        </ListItem>
+                        <ListItem>
+                            <Body>
+                                <View style={{minHeight: 45, justifyContent: 'center'}}>
+                                    <Text style={commonStyles.contentText}>
+                                        {strings.Settings.version}
+                                    </Text>
+                                </View>
+                            </Body>
+                            <Right style={{minWidth: 60, justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center'}}>
+                                <Text style={commonStyles.infoText}>
+                                    {DeviceInfo.getVersion()}.{DeviceInfo.getBuildNumber()}
+                                </Text>
                             </Right>
                         </ListItem>
                         <View style={{flex: 1, justifyContent: 'flex-end'}}>
