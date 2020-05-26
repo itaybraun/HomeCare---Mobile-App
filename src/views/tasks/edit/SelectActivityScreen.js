@@ -25,6 +25,7 @@ import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
 import {TransitionPresets} from 'react-navigation-stack';
 import APIRequest from '../../../models/APIRequest';
+import {Activity} from '../../../models/Activity';
 
 export default class SelectActivityScreen extends AppScreen {
 
@@ -90,7 +91,10 @@ export default class SelectActivityScreen extends AppScreen {
     getActivities = async () => {
         let result: APIRequest = await this.api.getActivities();
         if (result.success) {
-            return {activities: result.data};
+            const activities = result.data.sort((a: Activity, b: Activity) => {
+                return ('' + a.text).localeCompare(b.text);
+            });
+            return {activities: activities};
         } else {
             this.showError(result.data);
             return {activities: []};
