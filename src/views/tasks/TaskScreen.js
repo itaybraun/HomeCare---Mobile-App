@@ -1,7 +1,6 @@
 import React from 'react';
 import {
     View,
-    Image,
     StyleSheet,
     TouchableOpacity,
     TextInput,
@@ -26,6 +25,8 @@ import FlagRenderer from '../patients/patient/flags/FlagRenderer';
 import ListItemContainer from '../other/ListItemContainer';
 import APIRequest from '../../models/APIRequest';
 import Modal, { ModalContent, ModalTitle } from 'react-native-modals';
+import ImageView from 'react-native-image-view';
+import Image from 'react-native-scalable-image';
 
 export default class TaskScreen extends AppScreen {
 
@@ -52,6 +53,8 @@ export default class TaskScreen extends AppScreen {
         loading: false,
         task: this.props.navigation.getParam('task', null),
         showFullNote: false,
+        isSupportingInfoViewVisible: false,
+        selectedSupportingInfoIndex: 0,
     };
 
     //------------------------------------------------------------
@@ -195,6 +198,15 @@ export default class TaskScreen extends AppScreen {
 
     render() {
         const task: Task = this.state.task;
+
+        let supportingInfo = task.supportingInfo?.map(uri => {
+            return {
+                source: {
+                    uri: uri
+                }
+            }
+        });
+
         return (
 
             <View style={commonStyles.screenContainer} onPress={Keyboard.dismiss}>
@@ -253,6 +265,15 @@ export default class TaskScreen extends AppScreen {
                             <ListItemContainer>
                                 <Body>
                                     <Text
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.status}</Text>
+                                    <Text
+                                        style={[{flex: 1}, commonStyles.formItemText]}>{strings.Statuses[task.status]}</Text>
+                                </Body>
+                            </ListItemContainer>
+
+                            <ListItemContainer>
+                                <Body>
+                                    <Text
                                         style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.priority}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{strings.Priorities[task.priority]}</Text>
@@ -293,6 +314,40 @@ export default class TaskScreen extends AppScreen {
                                         style={[{flex: 1}, commonStyles.formItemText]}>{task.performer?.fullName}</Text>
                                 </Body>
                             </ListItemContainer>
+
+                            {supportingInfo && supportingInfo.length > 0 &&
+                                <ListItemContainer>
+                                    <Body>
+                                        <Text
+                                            style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.supportingInfo}</Text>
+                                        <ImageView
+                                            images={supportingInfo}
+                                            imageIndex={this.state.selectedSupportingInfoIndex}
+                                            isVisible={this.state.isSupportingInfoViewVisible}
+                                            onClose={() => this.setState({isSupportingInfoViewVisible: false})}
+                                        />
+                                        <Content horizontal style={{flexDirection: 'row', padding: 0, marginHorizontal: 10}}
+                                                 bounces={false}>
+                                            {
+                                                task.supportingInfo.map((url, index) => {
+                                                    return(
+                                                        <TouchableOpacity key={index} style={{marginRight: 10,}} onPress={() => {
+                                                            this.setState({
+                                                                isSupportingInfoViewVisible: true,
+                                                                selectedSupportingInfoIndex: index,
+                                                            })
+                                                        }}>
+                                                            <Image height={100} style={{marginTop: 10,}}
+                                                                   source={{uri: url}}
+                                                                   resizeMode="contain"
+                                                            />
+                                                        </TouchableOpacity>
+                                                    );
+                                                })}
+                                        </Content>
+                                    </Body>
+                                </ListItemContainer>
+                            }
 
                             <ListItemContainer disabled={!task.notes || task.notes.isEmpty()} onPress={() => {
                                 this.setState({showFullNote: true})

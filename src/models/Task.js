@@ -29,6 +29,8 @@ export class Task extends BaseModel {
 
     status: Status;
 
+    supportingInfo: [];
+
     notes: String;
 
     get isPriorityImportant(): Boolean {
