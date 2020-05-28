@@ -33,6 +33,8 @@ export class Task extends BaseModel {
 
     notes: String;
 
+    patientInstruction: String;
+
     get isPriorityImportant(): Boolean {
         return [
             Priority.ASAP,

@@ -121,6 +121,7 @@ export const en = {
         assignTo: 'Assign to',
         supportingInfo: 'Supporting Info',
         notes: 'Notes',
+        patientInstruction: 'Patient Instructions',
         plan: 'Plan',
         me: 'Me',
         selectPractitioner: 'Select Practitioner',

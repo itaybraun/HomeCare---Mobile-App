@@ -391,6 +391,15 @@ export default class TaskScreen extends AppScreen {
                                 </Modal>
                             </ListItemContainer>
 
+                            <ListItemContainer>
+                                <Body>
+                                    <Text
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.patientInstruction}</Text>
+                                    <Text
+                                        style={[{flex: 1}, commonStyles.formItemText]}>{task.patientInstruction}</Text>
+                                </Body>
+                            </ListItemContainer>
+
                         </List>
                         <View style={{alignItems: 'flex-end', marginTop: 10,}}>
                             <Image source={require('../../assets/icons/tasks/care.png')}/>
