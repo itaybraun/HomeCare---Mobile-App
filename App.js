@@ -287,19 +287,19 @@ const Tabs = createBottomTabNavigator({
             let tabStyle = {tintColor: tintColor};
             if (routeName === 'Patients') {
                 return (
-                <View style={{marginTop: 6}}>
+                <View>
                     <Image source={require('./src/assets/icons/tabs/patients.png')} style={tabStyle}/>
                 </View>
                 );
             } else if (routeName === 'Work') {
                 return (
-                    <View style={{marginTop: 6}}>
+                    <View>
                         <Image source={require('./src/assets/icons/tabs/work.png')} style={tabStyle}/>
                     </View>
                 );
             } else if (routeName === 'Settings') {
                 return (
-                    <View style={{marginTop: 6}}>
+                    <View>
                         <Image source={require('./src/assets/icons/tabs/settings.png')} style={tabStyle}/>
                     </View>
                 );
@@ -316,6 +316,8 @@ const Tabs = createBottomTabNavigator({
         },
         style: {
             backgroundColor: appColors.mainColor,
+            height: 54,
+            padding: 2
         }
     }
 });
