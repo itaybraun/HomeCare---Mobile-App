@@ -1,11 +1,21 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator} from 'react-native';
+import {
+    View,
+    FlatList,
+    StyleSheet,
+    TouchableOpacity,
+    Text,
+    Image,
+    ActivityIndicator,
+    TextInput,
+    Platform, TouchableWithoutFeedback,
+} from 'react-native';
 import AppScreen from '../../../support/AppScreen';
 import {appColors, commonStyles, renderLoading, renderRadioButton} from '../../../support/CommonStyles';
 import {strings} from '../../../localization/strings';
 import {Task} from '../../../models/Task';
 import {Questionnaire, QuestionnaireItem, QuestionnaireResponse} from '../../../models/Questionnaire';
-import {Content, List, Body, Text, Icon, ActionSheet} from 'native-base';
+import {Content, List, Body, Icon, ActionSheet} from 'native-base';
 import moment from 'moment';
 import FormItemContainer from '../../other/FormItemContainer';
 import ImageView from 'react-native-image-view';
@@ -156,7 +166,18 @@ export default class QuestionnaireResponseScreen extends AppScreen {
                             item.answers?.map((text, index) => {
                                 return(
                                     <View key={item.link+index} style={{paddingTop: 5}}>
-                                        <Text style={commonStyles.formItemText}>{text.toString()}</Text>
+                                        <TouchableWithoutFeedback onPress={() => {}}>
+                                            <TextInput
+                                                style={[commonStyles.formItemText, {padding: 0}]}
+                                                editable={false}
+                                                scrollEnabled={false}
+                                                multiline
+                                                selectTextOnFocus
+                                            >
+                                                <Text>{text.toString()}</Text>
+                                            </TextInput>
+                                        </TouchableWithoutFeedback>
+
                                     </View>
                                 );
                             })

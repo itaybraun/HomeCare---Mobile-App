@@ -105,19 +105,23 @@ export default class LogsScreen extends AppScreen {
 
     renderTextItem = ({item, index}) => {
 
-        let color = null;
+        let color = {color: '#000000'};
         if (item.indexOf('[Debug]') > -1)
             color = {color:'#1c4966'};
         else if (item.indexOf('[Error]') > -1)
             color = {color:'#FF0000'};
 
+        if (item.isEmpty())
+            return null;
 
         return (
-            <View key={index} style={{flex: 1, padding: 5, }}>
-                <Text style={[{fontFamily: 'Courier', fontSize: 12}, color]}
-                      selectable>
+            <View key={index} style={{flex: 1, padding: 5}}>
+                <TextInput editable={false}
+                           multiline
+                           style={[{fontFamily: 'Courier', padding: 0, fontSize: 12}, color]}
+                >
                     {item}
-                </Text>
+                </TextInput>
             </View>
         );
     };
