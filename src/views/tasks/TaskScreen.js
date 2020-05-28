@@ -212,12 +212,13 @@ export default class TaskScreen extends AppScreen {
             <View style={commonStyles.screenContainer} onPress={Keyboard.dismiss}>
                 {task &&
                 <Container>
+                    <View style={{margin: 10, alignItems: 'center', flexDirection: 'row'}}>
+                        <Image height={24} source={TaskRenderer.statusImage[task.status]}/>
+                        <Text style={[commonStyles.mainColorTitle, {marginHorizontal: 10, flex: 1}]}
+                              numberOfLines={3}>{task.text}</Text>
+                    </View>
                     <Content bounces={false}>
-                        <View style={{flex: 1, margin: 10, alignItems: 'center', flexDirection: 'row'}}>
-                            <Image source={TaskRenderer.statusImage[task.status]}/>
-                            <Text style={[commonStyles.mainColorTitle, {marginHorizontal: 10, flex: 1}]}
-                                  numberOfLines={3}>{task.text}</Text>
-                        </View>
+
                         <List>
                             <ListItemContainer>
                                 <Body>
@@ -401,10 +402,23 @@ export default class TaskScreen extends AppScreen {
                             </ListItemContainer>
 
                         </List>
-                        <View style={{alignItems: 'flex-end', marginTop: 10,}}>
-                            <Image source={require('../../assets/icons/tasks/care.png')}/>
-                        </View>
                     </Content>
+                    <View style={{flexDirection: 'row', padding: 5}}>
+                        <View style={{flex: 1, alignItems: 'center'}}>
+                            <Button
+                                style={{
+                                    backgroundColor: 'white',
+                                    width: 230,
+                                    borderColor: appColors.mainColor,
+                                    borderWidth: 1,
+                                    justifyContent: 'center'
+                                }} onPress={this.showQuestionnaire}>
+                                <Text
+                                    style={[commonStyles.buttonText, {color: appColors.mainColor}]}>{strings.Task.menuExecute?.toUpperCase()}</Text>
+                            </Button>
+                        </View>
+                        <Image height={50} source={require('../../assets/icons/tasks/care.png')}/>
+                    </View>
                 </Container>
                 }
                 {renderLoading(this.state.loading)}
