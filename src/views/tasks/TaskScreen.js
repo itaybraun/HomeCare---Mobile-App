@@ -401,6 +401,17 @@ export default class TaskScreen extends AppScreen {
                                 </Body>
                             </ListItemContainer>
 
+                            {task.details &&
+                                <ListItemContainer>
+                                    <Body>
+                                        <Text
+                                            style={[commonStyles.smallInfoText, {marginBottom: 5,}]}>{strings.Task.taskDetails}</Text>
+                                        <Text
+                                            style={[{flex: 1}, commonStyles.formItemText]}>{task.details}</Text>
+                                    </Body>
+                                </ListItemContainer>
+                            }
+
                         </List>
                     </Content>
                     <View style={{flexDirection: 'row', padding: 5}}>

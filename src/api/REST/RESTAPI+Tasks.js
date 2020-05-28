@@ -111,6 +111,7 @@ RESTAPI.prototype.getTaskFromJson = function getTaskFromJson(json): Task {
     task.supportingInfo = json.reasonReference?.map(reference => reference.reference);
     task.notes = json.note?.[0]?.text;
     task.patientInstruction = json.patientInstruction;
+    task.details = json.orderDetail?.[0]?.text;
     return task;
 };
 
