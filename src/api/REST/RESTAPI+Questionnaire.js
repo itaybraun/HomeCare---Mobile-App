@@ -33,7 +33,7 @@ RESTAPI.prototype.getQuestionnaire = async function getQuestionnaire(id: String)
 
 RESTAPI.prototype.submitQuestionnaire = async function submitQuestionnaire(answers: Object, questionnaire: Questionnaire, taskId: String): APIRequest {
     try {
-        const data = getJsonFromAnswers(answers, questionnaire, taskId);
+        const data = this.getJsonFromAnswers(answers, questionnaire, taskId);
         console.log(data);
         const result = await this.server.create(data);
         console.log('submitQuestionnaire', result);

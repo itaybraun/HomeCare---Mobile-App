@@ -26,7 +26,6 @@ import {Request} from '../../../support/Utils';
 import {TabView} from 'react-native-tab-view';
 import {EAzureBlobStorageImage} from 'react-native-azure-blob-storage';
 import ImageResizer from 'react-native-image-resizer';
-import {getJsonFromAnswers} from '../../../api/REST/RESTAPI+Questionnaire';
 
 export default class QuestionnaireScreen extends AppScreen {
 
