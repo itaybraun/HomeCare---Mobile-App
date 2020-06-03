@@ -1,5 +1,5 @@
 import RESTAPI from './RESTAPI';
-import {Practitioner} from '../../models/Practitioner';
+import {Organization, Practitioner} from '../../models/Practitioner';
 import moment from 'moment';
 import {Address} from '../../models/Person';
 import APIRequest from '../../models/APIRequest';
@@ -90,4 +90,15 @@ RESTAPI.prototype.getPractitionerFromJSON = function getPractitionerFromJSON(jso
     }) : null;
 
     return practitioner;
-}
+};
+
+RESTAPI.prototype.getOrganizationFromJSON = function getOrganizationFromJSON(json): Array {
+
+    let organization = new Organization();
+
+    organization.id = json.id;
+    organization.fullName = json.name;
+
+    return organization;
+
+};

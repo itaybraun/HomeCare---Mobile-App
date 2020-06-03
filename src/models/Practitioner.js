@@ -5,3 +5,8 @@ export class Practitioner extends Person {
     license: String = null;
     patientsIds: [String] = [];
 }
+
+export class Organization {
+    id: String;
+    fullName: String;
+}

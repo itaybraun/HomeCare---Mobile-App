@@ -94,7 +94,14 @@ RESTAPI.prototype.getTaskFromJson = function getTaskFromJson(json): Task {
     task.patientId = json.subject?.id || null;
     task.patient = json.subject ? this.getPatientFromJson(json.subject) : null;
     task.requesterId = json.requester?.id || null;
-    task.requester = json.requester ? this.getPractitionerFromJSON(json.requester) : null;
+    if (json.requester) {
+        if (json.requester.resourceType === 'Practitioner') {
+            task.requester = this.getPractitionerFromJSON(json.requester);
+        } else if (json.requester.resourceType === 'Organization') {
+            task.requester = this.getOrganizationFromJSON(json.requester);
+        }
+    }
+    //task.requester = json.requester ? this.getPractitionerFromJSON(json.requester) : null;
     task.performerId = json.performer?.[0]?.id || null;
     task.performer = json.performer?.[0] ? this.getPractitionerFromJSON(json.performer[0]) : null;
     task.visitId = json.encounter?.id || null;

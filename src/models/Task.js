@@ -16,7 +16,7 @@ export class Task extends BaseModel {
     patient: Patient;
 
     requesterId: String;
-    requester: Practitioner;
+    requester: Object;
 
     performerId: String;
     performer: Practitioner;
