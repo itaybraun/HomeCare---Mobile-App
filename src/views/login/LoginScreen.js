@@ -22,32 +22,20 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {AsyncStorageConsts} from '../../support/Consts';
 
 export const environments = {
-    evgeny: {
-        title: 'Evgeny',
-        server: 'https://fhir1.azurewebsites.net',
-        user: 'user4@itaybraunhotmail.onmicrosoft.com',
-        debug: true,
-        visibleByDefault: false,
-    },
-    develop: {
-        title: 'Development Server',
-        server: 'https://fhir1.azurewebsites.net',
-        user: 'user1@itaybraunhotmail.onmicrosoft.com',
-        visibleByDefault: false,
-    },
-    secured: {
-        title: 'Development Secured',
-        server: 'https://cs2.azurewebsites.net',
+    dev: {
+        title: 'Development',
+        server: 'https://cs006.azurewebsites.net',
         visibleByDefault: false,
         securedOptions: {
-            client_id: '6b1d9c3b-df12-4a15-9a66-0e299f9a9bd2',
-            client_secret: '[v3NLm?k?1YqxJ7Gcvz6_F:]:?12s/z4',
+            tenant: '2a6d8fcb-df56-47e6-a117-e5f8dab16dbe',
+            client_id: '066da47a-2ad5-489d-83ac-31836963b39a',
+            client_secret: 'apFH8[Qu2zqF=p4=sXyJNbkfB8-p346B',
             redirect_uri: 'https://www.getpostman.com/oauth2/callback',
-            scope: 'https://cs2.azurewebsites.net/user_impersonation'
+            scope: 'https://cs005.azurewebsites.net/user_impersonation'
         }
     },
     sal: {
-        title: 'Sal - Secured',
+        title: 'Production',
         server: 'https://cs005.azurewebsites.net',
         visibleByDefault: true,
         securedOptions: {
@@ -106,6 +94,10 @@ export default class LoginScreen extends AppScreen {
 
     onEnvironmentPress = async (environmentKey) => {
         const environment = environments[environmentKey];
+
+        if (!environment)
+            return;
+
         await this.setState({
             selectedEnvironmentKey: environmentKey,
         });
