@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Platform, ActivityIndicator, Text, TouchableOpacity, Easing} from 'react-native';
+import {View, Platform, ActivityIndicator, Text, TouchableOpacity, Easing, Image} from 'react-native';
 import { I18nManager } from 'react-native';
 import {Icon} from "native-base";
 import {TransitionPresets} from 'react-navigation-stack';
@@ -351,7 +351,7 @@ export const commonStyles = {
     itemMenuContainer: {
         marginHorizontal: 1,
         borderWidth: 1,
-        width: 100,
+        width: 70,
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: '#000000',
@@ -360,6 +360,21 @@ export const commonStyles = {
     menuIcon: {
         width: 30,
         height: 30,
+    },
+
+    roundedContainer: {
+        minWidth: 70,
+        height: 24,
+        borderRadius: 12,
+        backgroundColor: '#FF000',
+        paddingHorizontal: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    roundedContainerText: {
+        ...medium(),
+        fontSize: 14,
     },
 
     line: {
@@ -443,6 +458,23 @@ export const renderRadioButton = (selected) => {
             {
                 selected && <View style={commonStyles.radioButtonInner} />
             }
+        </View>
+    );
+};
+
+export const renderEditDeleteRowButtons = (editFunction = null, deleteFunction = null) => {
+    return (
+        <View style={commonStyles.menuContainer}>
+            <TouchableOpacity
+                style={[commonStyles.itemMenuContainer, {backgroundColor: '#8CE69B'}]}
+                onPress={() => editFunction()}>
+                <Icon type="Feather" name="edit"/>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[commonStyles.itemMenuContainer, {backgroundColor: '#DA8EA0'}]}
+                onPress={() => deleteFunction()}>
+                <Image style={commonStyles.menuIcon} source={require('../assets/icons/flags/delete.png')} />
+            </TouchableOpacity>
         </View>
     );
 };

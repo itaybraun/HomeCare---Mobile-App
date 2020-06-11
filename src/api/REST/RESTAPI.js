@@ -208,3 +208,12 @@ export default class RESTAPI {
     }
 };
 
+require('./RESTAPI+Tasks');
+require('./RESTAPI+Flags');
+require('./RESTAPI+Patients');
+require('./RESTAPI+Practitioners');
+require('./RESTAPI+Visits');
+require('./RESTAPI+Questionnaire');
+require('./RESTAPI+Relatives');
+require('./RESTAPI+Conditions');
+

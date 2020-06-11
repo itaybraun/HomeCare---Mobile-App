@@ -207,8 +207,6 @@ export default class TaskScreen extends AppScreen {
             }
         });
 
-        console.log(task);
-
         return (
 
             <View style={commonStyles.screenContainer} onPress={Keyboard.dismiss}>

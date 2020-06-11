@@ -42,21 +42,18 @@ import QuestionnaireChoiceItemScreen from './src/views/tasks/questionnaire/Quest
 import QuestionnaireInputItemScreen from './src/views/tasks/questionnaire/QuestionnaireInputItemScreen';
 import TaskSendMailScreen from './src/views/tasks/TaskSendMailScreen';
 import EmailAddressScreen from './src/views/settings/EmailAddressScreen';
-
-// TODO: find a way to move this to RESTAPI
-import './src/api/REST/RESTAPI+Tasks';
-import './src/api/REST/RESTAPI+Flags';
-import './src/api/REST/RESTAPI+Patients';
-import './src/api/REST/RESTAPI+Practitioners';
-import './src/api/REST/RESTAPI+Visits';
-import './src/api/REST/RESTAPI+Questionnaire';
-import './src/api/REST/RESTAPI+Relatives';
 import NewFlagScreen from './src/views/patients/patient/flags/edit/NewFlagScreen';
 import SelectCategoryScreen from './src/views/patients/patient/flags/edit/SelectCategoryScreen';
 import SelectTextScreen from './src/views/other/SelectTextScreen';
 import LogsScreen from './src/views/settings/LogsScreen';
 import {Logger} from './src/support/Logger';
 import DeviceInfo from 'react-native-device-info';
+import ConditionsScreen from './src/views/patients/patient/conditions/ConditionsScreen';
+import ConditionScreen from './src/views/patients/patient/conditions/ConditionScreen';
+import ConditionNotesScreen from './src/views/patients/patient/conditions/ConditionNotesScreen';
+import NewConditionScreen from './src/views/patients/patient/conditions/edit/NewConditionScreen';
+import SelectSeverityScreen from './src/views/patients/patient/conditions/edit/SelectSeverityScreen';
+import EditConditionScreen from './src/views/patients/patient/conditions/edit/EditConditionScreen';
 
 const axios = require('axios');
 axios.interceptors.request.use(request => {
@@ -209,6 +206,13 @@ const PatientsStack = createStackNavigator({
     SelectVisit: SelectVisitScreen,
     SelectPriority: SelectPriorityScreen,
     SelectPerformer: SelectPerformerScreen,
+
+    Conditions: ConditionsScreen,
+    Condition: ConditionScreen,
+    ConditionNotes: ConditionNotesScreen,
+    NewCondition: NewConditionScreen,
+    EditCondition: EditConditionScreen,
+    SelectSeverity: SelectSeverityScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });
@@ -235,12 +239,6 @@ const WorkStack = createStackNavigator({
     QuestionnaireInputItem: QuestionnaireInputItemScreen,
 
     Visit: VisitScreen
-}, {
-    defaultNavigationOptions: defaultNavigationOptions
-});
-
-const MessagesStack = createStackNavigator({
-    Messages: MessagesScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });

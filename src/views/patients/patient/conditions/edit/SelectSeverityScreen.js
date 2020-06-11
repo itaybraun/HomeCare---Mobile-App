@@ -5,22 +5,22 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
+    TouchableWithoutFeedback,
     Keyboard, ScrollView,
 } from 'react-native';
-import AppScreen from '../../support/AppScreen';
+import AppScreen from '../../../../../support/AppScreen';
 import {
     appColors,
     commonStyles, popupNavigationOptions,
     renderDisclosureIndicator,
     renderLoading, renderRadioButton,
     renderSeparator,
-} from '../../support/CommonStyles';
-import {strings} from '../../localization/strings';
-import FormItemContainer from './FormItemContainer';
+} from '../../../../../support/CommonStyles';
+import {strings} from '../../../../../localization/strings';
 import {Button, Form, Icon, Text, Textarea} from 'native-base';
 import {TransitionPresets} from 'react-navigation-stack';
 
-export default class SelectTextScreen extends AppScreen {
+export default class SelectSeverityScreen extends AppScreen {
 
     //------------------------------------------------------------
     // Properties
@@ -28,10 +28,17 @@ export default class SelectTextScreen extends AppScreen {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: navigation.getParam('title', null),
+            title: strings.Conditions.severity,
             headerBackTitle: ' ',
             ...popupNavigationOptions,
             ...TransitionPresets.SlideFromRightIOS,
+            headerLeft: () => {
+                return (
+                    <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('cancel')}>
+                        <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{strings.Common.cancelButton}</Text>
+                    </TouchableOpacity>
+                )
+            },
             headerRight: () => {
                 return (
                     <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('done')}>
@@ -42,8 +49,16 @@ export default class SelectTextScreen extends AppScreen {
         }
     };
 
+    severities = [
+        {key: 'Severe', label: strings.Severity.severe},
+        {key: 'Moderate', label: strings.Severity.moderate},
+        {key: 'Mild', label: strings.Severity.mild},
+    ];
+
     state = {
-        text: this.props.navigation.getParam('text', null),
+        loading: false,
+        severities: this.severities,
+        selectedSeverity: this.props.navigation.getParam('selectedSeverity', null),
     };
 
     //------------------------------------------------------------
@@ -55,12 +70,9 @@ export default class SelectTextScreen extends AppScreen {
 
         this.props.navigation.setParams({
             done: this.submit,
+            cancel: this.cancel,
             hideTabBar: true,
         });
-
-        setTimeout(() => {
-            this.textInput && this.textInput.focus();
-        }, 100);
     }
 
     //------------------------------------------------------------
@@ -72,9 +84,8 @@ export default class SelectTextScreen extends AppScreen {
     //------------------------------------------------------------
 
     submit = async () => {
-        const updateText = this.props.navigation.getParam('updateText', null);
-        const text = this.state.text?.trim();
-        updateText && updateText(text);
+        const updateSeverity = this.props.navigation.getParam('updateSeverity', null);
+        updateSeverity && updateSeverity(this.state.selectedSeverity);
         this.pop();
     };
 
@@ -88,21 +99,27 @@ export default class SelectTextScreen extends AppScreen {
 
     render() {
 
-
         return (
             <View style={[commonStyles.screenContainer, {padding: 20}]} onPress={Keyboard.dismiss}>
-                <FormItemContainer style={{marginTop: 20}} error={this.state.error}>
-                    <TextInput
-                        ref={ref => this.textInput = ref}
-                        style={{fontSize: 18, padding: 5,}}
-                        autoCorrect={false}
-                        returnKeyType='done'
-                        onSubmitEditing={this.submit}
-                        multiline={true}
-                        value={this.state.text}
-                        onChangeText={text => this.setState({text: text})}
-                    />
-                </FormItemContainer>
+                {
+                    this.state.severities.map((severity, index) => {
+
+                        return(
+                            <TouchableOpacity
+                                key={index}
+                                onPress={() => this.setState({
+                                    selectedSeverity: severity.key,
+                                })}>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    {renderRadioButton(this.state.selectedSeverity === severity.key)}
+                                    <Text style={[commonStyles.contentText, {flex: 1, marginLeft: 10}]}>{severity.label}</Text>
+                                </View>
+                                {renderSeparator()}
+                            </TouchableOpacity>
+                        );
+                    })
+                }
+                {renderLoading(this.state.loading)}
             </View>
         );
     }

@@ -15,101 +15,142 @@ import {Patient} from '../../../../models/Patient';
 import Loading from '../../../../support/Loading';
 import APIRequest from '../../../../models/APIRequest';
 import {strings} from '../../../../localization/strings';
-import { Card, Icon, Text } from 'native-base';
+import {ActionSheet, Card, Icon, Text} from 'native-base';
 import {
+    appColors,
     commonStyles,
-    renderDisclosureIndicator,
+    renderDisclosureIndicator, renderEditDeleteRowButtons,
     renderLoading,
     renderSeparator,
 } from '../../../../support/CommonStyles';
 import { SwipeListView } from 'react-native-swipe-list-view';
-import moment from 'moment';
-import {Flag} from '../../../../models/Flag';
-import FlagRenderer from './FlagRenderer';
+import ConditionRenderer from './ConditionRenderer';
+import {Condition} from '../../../../models/Condition';
 
-export default class FlagsScreen extends AppScreen {
+export default class ConditionsScreen extends AppScreen {
+
+    //------------------------------------------------------------
+    // Properties
+    //------------------------------------------------------------
 
     static navigationOptions = ({navigation}) => {
         const patient: Patient = navigation.getParam('patient', null);
-        let title = strings.Flags.title;
+        let title = strings.Conditions.title;
         if (patient) {
-            title = strings.formatString(strings.Flags.userTitle, patient.fullName)
+            title = strings.formatString(strings.Conditions.userTitle, patient.fullName)
         }
 
         return {
             title: title,
             headerBackTitle: ' ',
+            headerRight: () => {
+                return (
+                    <TouchableOpacity style={{padding: 12}} onPress={navigation.getParam('showMenu')}>
+                        <Icon type="Entypo" name="dots-three-horizontal"
+                              style={{fontSize: 22, color: appColors.headerFontColor}}/>
+                    </TouchableOpacity>
+                )
+            }
         }
     };
 
     state = {
         loading: false,
-        flags: [],
+        conditions: [],
         patient: this.props.navigation.getParam('patient', null),
     };
+
+    //------------------------------------------------------------
+    // Overrides
+    //------------------------------------------------------------
 
     componentDidMount(): void {
         super.componentDidMount();
         this.getData();
+        this.props.navigation.setParams({
+            showMenu: this.showMenu,
+        });
     }
 
     willFocus() {
         super.willFocus();
     }
 
+    //------------------------------------------------------------
+    // Data
+    //------------------------------------------------------------
+
     getData = async (refresh = true) => {
         this.setState({loading: true});
-        const flags = await this.getFlags(refresh);
-        this.setState({...flags, loading: false});
+        const conditions = await this.getConditions(refresh);
+        this.setState({...conditions, loading: false});
     };
 
-    getFlags = async (refresh = true) => {
+    getConditions = async (refresh = true) => {
         const patient: Patient = this.props.navigation.getParam('patient', null);
         if (patient) {
-            let result: APIRequest = await this.api.getFlags(patient.id);
+            let result: APIRequest = await this.api.getConditions(patient.id);
             if (result.success) {
-                let flags = result.data;
-                //flags = flags.filter(flag => flag.status === 'active');
-                return {flags:flags};
+                let conditions = result.data;
+                return {conditions:conditions};
             } else {
                 this.showError(result.data);
             }
         }
     };
 
-    addFlag = async () => {
+    //------------------------------------------------------------
+    // Methods
+    //------------------------------------------------------------
+
+    showMenu = () => {
+        let options = [
+            strings.Conditions.menuCreate,
+            strings.Common.cancelButton
+        ];
+
+        ActionSheet.show({
+                options: options,
+                cancelButtonIndex: options.length - 1,
+            },
+            (buttonIndex) => {
+                switch (buttonIndex) {
+                    case 0:
+                        this.addCondition();
+                        break;
+                }
+            });
+    };
+
+    addCondition = async () => {
         if (this.state.patient) {
-            this.navigateTo('Flag', {
+            this.navigateTo('NewCondition', {
                 patient: this.state.patient,
-                flag: null,
+                condition: null,
                 refresh: this.getData,
             });
         }
         this.closeRow();
     };
 
-    selectFlag = async (item, rowMap) => {
-        this.navigateTo('Flag', {
+    selectCondition = async (item, rowMap) => {
+        this.navigateTo('Condition', {
             patient: item.patient,
-            flag: item,
+            condition: item,
             refresh: this.getData,
         });
-    }
+    };
 
-    editFlag = async (item, rowMap) => {
-        const patient: Patient = this.props.navigation.getParam('patient', null);
-        if (patient) {
-            this.navigateTo('Flag', {
-                patient: patient,
-                flag: item,
-                refresh: this.getData,
-            });
-        }
+    editCondition = async (item, rowMap) => {
+        this.navigateTo('EditCondition', {
+            condition: item,
+            updateCondition: this.getData,
+        });
         this.closeRow();
     };
 
-    deleteFlag = async (item, rowMap) => {
-        this.showAlert(strings.Flags.deleteFlag, null, [
+    deleteCondition = async (item, rowMap) => {
+        this.showAlert(strings.Conditions.deleteCondition, null, [
             {
                 text: strings.Common.noButton,
                 style: 'cancel',
@@ -122,10 +163,10 @@ export default class FlagsScreen extends AppScreen {
                 style: 'destructive',
                 onPress: async () => {
                     this.setState({
-                        flags: this.state.flags.filter(flag => flag.id !== item.id)
+                        conditions: this.state.conditions.filter(condition => condition.id !== item.id)
                     });
 
-                    const result = await this.api.deleteFlag(item);
+                    const result = await this.api.deleteCondition(item);
                     if (!result.success) {
                         this.showError(result.data);
                     }
@@ -137,6 +178,10 @@ export default class FlagsScreen extends AppScreen {
     closeRow = () => {
         this.list.safeCloseOpenRow()
     };
+
+    //------------------------------------------------------------
+    // Render
+    //------------------------------------------------------------
 
     renderListHeader = () => {
         return (
@@ -152,41 +197,31 @@ export default class FlagsScreen extends AppScreen {
 
     renderItem = ({item}, rowMap) => {
 
-        const flag: Flag = item;
+        const condition: Condition = item;
 
         return (
-            <FlagRenderer flag={flag} selectFlag={() => this.selectFlag(flag, rowMap)} />
+            <ConditionRenderer condition={condition} selectCondition={(c) => this.selectCondition(c, rowMap)} />
         )
     };
 
     renderHiddenItem = ({item}, rowMap) => {
-        return (
-            <View style={commonStyles.menuContainer}>
-                <TouchableOpacity
-                    style={[commonStyles.itemMenuContainer, {backgroundColor: '#8CE69B'}]}
-                    onPress={() => this.editFlag(item, rowMap)}>
-                    <Icon type="Feather" name="edit"/>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[commonStyles.itemMenuContainer, {backgroundColor: '#DA8EA0'}]}
-                    onPress={() => this.deleteFlag(item, rowMap)}>
-                    <Image style={commonStyles.menuIcon} source={require('../../../../assets/icons/flags/delete.png')} />
-                </TouchableOpacity>
-            </View>
+        return renderEditDeleteRowButtons(
+            () => this.editCondition(item, rowMap),
+            () => this.deleteCondition(item, rowMap)
         );
     };
 
     renderListEmpty = () => {
         return (
             <View style={commonStyles.emptyScreen}>
-                <Text style={commonStyles.smallContentText}>{strings.Flags.noFlags}</Text>
+                <Text style={commonStyles.smallContentText}>{strings.Conditions.noConditions}</Text>
             </View>
         )
     };
 
     render() {
 
-        const flags = this.state.flags;
+        const conditions = this.state.conditions;
 
         return (
             <View style={commonStyles.screenContainer}>
@@ -196,7 +231,7 @@ export default class FlagsScreen extends AppScreen {
                     }}
                     style={styles.list}
                     contentContainerStyle={{ flexGrow: 1 }}
-                    data={flags}
+                    data={conditions}
                     keyExtractor={item => item.id}
                     renderItem={this.renderItem}
                     renderHiddenItem={this.renderHiddenItem}
@@ -206,8 +241,8 @@ export default class FlagsScreen extends AppScreen {
                     ListFooterComponent={this.renderListFooter}
                     onRefresh={this.getData}
                     refreshing={false}
-                    rightOpenValue={-103}
-                    leftOpenValue={103}
+                    rightOpenValue={-78}
+                    leftOpenValue={78}
                     closeOnRowBeginSwipe
                     recalculateHiddenLayout
                 />
@@ -220,10 +255,5 @@ export default class FlagsScreen extends AppScreen {
 const styles = StyleSheet.create({
     list: {
         flex: 1,
-    },
-
-    flagInfoContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
     },
 });

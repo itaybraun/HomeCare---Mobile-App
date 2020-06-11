@@ -134,8 +134,8 @@ RESTAPI.prototype.getJsonFromFlag = function getJsonFromFlag(flag: Flag) {
             end: moment(flag.endDate).format('YYYY-MM-DD'),
         },
         author: {
-            reference: 'Practitioner/8cba6c16-4f07-42de-9b06-b5af4f05f23c',
-            display: 'Florence Nightingale',
+            reference: 'Practitioner/' + this.user.id,
+            display: this.user.fullName,
         },
     };
 

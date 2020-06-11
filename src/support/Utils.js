@@ -1,5 +1,8 @@
 import { getCountry } from "react-native-localize";
 import {decode, encode} from 'base-64'
+import ImageResizer from "react-native-image-resizer";
+import {Platform} from 'react-native';
+import {EAzureBlobStorageImage} from 'react-native-azure-blob-storage';
 
 if (!global.btoa) {
     global.btoa = encode;
@@ -150,4 +153,44 @@ export class Request {
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export {delay};
+
+export async function uploadImages(images, quality, store, blob) {
+    if (typeof images === 'string' || images instanceof String)
+        images = [images];
+
+    EAzureBlobStorageImage.configure(
+        store,
+        "47+vv7jGM8gpHJGspmgveOwI8hNCQKC9uJ2Rynq7F6wdqnZvdivg5BJQuyZYk75gOnlPvFd9oVuuG2/eMRCscw==",
+        blob,
+    );
+
+    let uploadedFiles = [];
+    for (let file of images) {
+        if (file.indexOf('http') === -1) {
+            try {
+                // convert image
+                if (quality === 'medium') {
+                    let response = await ImageResizer.createResizedImage(file, 1024, 1024, 'JPEG', 80);
+                    file = Platform.OS === 'ios' ? response.uri.replace("file://", "") : "file://"+response.path;
+                }
+                if (quality === 'small') {
+                    let response = await ImageResizer.createResizedImage(file, 768, 768, 'JPEG', 50);
+                    file = Platform.OS === 'ios' ? response.uri.replace("file://", "") : "file://"+response.path;
+                }
+
+                // upload image
+                const name = await EAzureBlobStorageImage.uploadFile(file);
+                const link = `https://${store}.blob.core.windows.net/${blob}/` + name;
+                console.log(link);
+                uploadedFiles.push(link);
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            uploadedFiles.push(file);
+        }
+    }
+
+    return uploadedFiles;
+}
 
