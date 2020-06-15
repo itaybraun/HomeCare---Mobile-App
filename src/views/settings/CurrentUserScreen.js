@@ -143,7 +143,7 @@ export default class CurrentUserScreen extends AppScreen {
                                             <Text style={commonStyles.contentText}>{strings.Settings.accessToken}</Text>
                                         </View>
                                     </Body>
-                                    <Right style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <Right style={{minWidth: 60, justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center'}}>
                                         <Button small bordered onPress={() => this.logout(true)} style={{borderColor: appColors.mainColor}}>
                                             <Text style={[commonStyles.medium, {color: appColors.mainColor}]}>{strings.Settings.deleteToken?.toUpperCase()}</Text>
                                         </Button>

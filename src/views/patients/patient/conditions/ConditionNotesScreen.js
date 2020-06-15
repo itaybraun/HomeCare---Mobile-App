@@ -198,7 +198,7 @@ export default class ConditionNotesScreen extends AppScreen {
                                 <Text style={[{flex: 1}, commonStyles.smallInfoText]}>
                                     {moment(note.time).format('MMM DD YYYY | HH:mm:ss')}
                                 </Text>
-                                <Text style={[{flex: 1}, commonStyles.smallInfoText]}>
+                                <Text style={[{marginLeft: 15}, commonStyles.smallInfoText]}>
                                     {note.authorName}
                                 </Text>
                             </View>
