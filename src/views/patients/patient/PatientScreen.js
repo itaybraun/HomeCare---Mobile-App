@@ -73,6 +73,7 @@ export default class PatientScreen extends AppScreen {
         let options = [
             strings.Task.menuCreate,
             strings.Conditions.menuCreate,
+            strings.Activities.menuCreate,
             strings.Common.cancelButton
         ];
 
@@ -87,6 +88,9 @@ export default class PatientScreen extends AppScreen {
                         break;
                     case 1:
                         this.createCondition();
+                        break;
+                    case 2:
+                        this.createActivity();
                         break;
                 }
             });
@@ -104,6 +108,15 @@ export default class PatientScreen extends AppScreen {
 
     createCondition = () => {
         this.navigateTo('NewCondition', {
+            patient: this.state.patient,
+            refresh: () => {
+                this.getData();
+            }
+        });
+    };
+
+    createActivity = () => {
+        this.navigateTo('NewActivity', {
             patient: this.state.patient,
             refresh: () => {
                 this.getData();

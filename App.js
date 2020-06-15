@@ -54,6 +54,7 @@ import ConditionNotesScreen from './src/views/patients/patient/conditions/Condit
 import NewConditionScreen from './src/views/patients/patient/conditions/edit/NewConditionScreen';
 import SelectSeverityScreen from './src/views/patients/patient/conditions/edit/SelectSeverityScreen';
 import EditConditionScreen from './src/views/patients/patient/conditions/edit/EditConditionScreen';
+import NewActivityScreen from './src/views/patients/patient/activity/edit/NewActivityScreen';
 
 const axios = require('axios');
 axios.interceptors.request.use(request => {
@@ -213,6 +214,8 @@ const PatientsStack = createStackNavigator({
     NewCondition: NewConditionScreen,
     EditCondition: EditConditionScreen,
     SelectSeverity: SelectSeverityScreen,
+
+    NewActivity: NewActivityScreen,
 }, {
     defaultNavigationOptions: defaultNavigationOptions
 });

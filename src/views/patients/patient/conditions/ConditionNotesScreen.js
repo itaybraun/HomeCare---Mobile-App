@@ -254,7 +254,7 @@ export default class ConditionNotesScreen extends AppScreen {
                                     justifyContent: 'center'
                                 }} onPress={this.addNote}>
                                 <Text
-                                    style={[commonStyles.buttonText, {color: this.state.newNoteText ? appColors.mainColor : '#CCCCCC'}]}>{strings.Conditions.addNote?.toUpperCase()}</Text>
+                                    style={[commonStyles.buttonText, {color: this.state.newNoteText ? appColors.mainColor : appColors.disabledColor}]}>{strings.Conditions.addNote?.toUpperCase()}</Text>
                             </Button>
                         </View>
 

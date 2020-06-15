@@ -17,7 +17,7 @@ export const appColors = {
     headerBackground: '#E9BD08',
     headerFontColor: '#FFFFFF',
     backgroundYellowColor: '#DEBB4A',
-
+    disabledColor: '#CCCCCC',
 };
 
 function commonTextProperties() {

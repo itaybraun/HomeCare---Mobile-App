@@ -60,7 +60,7 @@ RESTAPI.prototype.addTask = async function addTask(task: Task): APIRequest {
         const result = await this.server.create(data);
         console.log('addTask', result);
         task = this.getTaskFromJson(result);
-        return new APIRequest(true, task);
+        return this.getTask(task.id);
     } catch (error) {
         return new APIRequest(false, error);
     }

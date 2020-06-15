@@ -88,7 +88,7 @@ export const en = {
         details: 'Condition Details',
         menuEdit: 'Edit',
         menuDelete: 'Delete',
-        menuCreate: 'Create Condition',
+        menuCreate: 'New Condition',
         patientName: 'Patient Name',
         notes: 'Notes',
         clinicalStatus: 'Clinical Status',
@@ -173,7 +173,7 @@ export const en = {
         cancelTask: 'You are about to cancel this task. Are you sure?',
         deleteTask: 'You are about to delete this task. Are you sure?',
         menuEdit: 'Edit',
-        menuCreate: 'Create Task',
+        menuCreate: 'New Task',
         menuExecute: 'Execute',
         menuCancel: 'Cancel Task',
         menuDelete: 'Delete Task',
@@ -264,6 +264,12 @@ export const en = {
         myCalendar: 'My Calendar',
         noVisits: 'No visits on {0}',
         noTask: 'No Task',
+    },
+
+    Activities: {
+        menuCreate: 'New Activity',
+        newActivity: 'New Activity',
+        start: 'Start',
     },
 
     Questionnaire: {

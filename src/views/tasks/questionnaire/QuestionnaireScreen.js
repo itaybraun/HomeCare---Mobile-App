@@ -26,6 +26,8 @@ import {Request} from '../../../support/Utils';
 import {TabView} from 'react-native-tab-view';
 import {EAzureBlobStorageImage} from 'react-native-azure-blob-storage';
 import ImageResizer from 'react-native-image-resizer';
+import {TransitionPresets} from 'react-navigation-stack';
+import moment from 'moment';
 
 export default class QuestionnaireScreen extends AppScreen {
 
@@ -34,10 +36,14 @@ export default class QuestionnaireScreen extends AppScreen {
     //------------------------------------------------------------
 
     static navigationOptions = ({ navigation }) => {
+
+        const transition = navigation.getParam('onCancel') ? TransitionPresets.SlideFromRightIOS : null;
+
         return {
             title: strings.Questionnaire.title,
             headerBackTitle: ' ',
             ...popupNavigationOptions,
+            ...transition,
             headerLeft: () => {
                 return (
                     <TouchableOpacity style={{paddingHorizontal: 12}} onPress={navigation.getParam('cancel')}>
@@ -96,6 +102,7 @@ export default class QuestionnaireScreen extends AppScreen {
 
     getData = async (refresh = true) => {
         const task: Task =  this.props.navigation.getParam('task', null);
+
         if (task && task.activity?.questionnaireId) {
             this.setState({loading: true});
             const questionnaire = await this.getQuestionnaire(task);
@@ -113,7 +120,7 @@ export default class QuestionnaireScreen extends AppScreen {
         if (result.success) {
             const questionnaire: Questionnaire = result.data;
             questionnaire.patient = task.patient;
-            this.props.navigation.setParams({title: questionnaire.name})
+            //this.props.navigation.setParams({title: questionnaire.name})
             return {questionnaire: questionnaire};
         } else {
             this.showError(result.data);
@@ -126,6 +133,8 @@ export default class QuestionnaireScreen extends AppScreen {
 
     cancel = () => {
         this.pop();
+        const onCancel = this.props.navigation.getParam('onCancel', null);
+        onCancel && onCancel();
     };
 
     selectItem = (item: QuestionnaireItem) => {
@@ -199,10 +208,26 @@ export default class QuestionnaireScreen extends AppScreen {
                     text: strings.Common.submitButton,
                     onPress: async () => {
                         this.setState({loading: true,});
+
                         await this.uploadImages();
-                        let result: APIRequest = await this.api.submitQuestionnaire(this.state.values, this.state.questionnaire, this.state.task.id);
+
+                        let task: Task = this.state.task;
+                        // if app shows this page from new activity then we need to add task
+                        if (!task.id) {
+                            //task.authoredOn = moment().toISOString();
+                            let result: APIRequest = await this.api.addTask(task);
+                            if (result.success)
+                                task = result.data;
+                            else {
+                                this.showError(result.data);
+                                this.setState({loading: false,});
+                                return;
+                            }
+                        }
+
+                        let result: APIRequest = await this.api.submitQuestionnaire(this.state.values, this.state.questionnaire, task.id);
                         if (result.success) {
-                            let task: Task = this.state.task;
+
                             task.status = Status.COMPLETED;
                             result = await this.api.updateTask(task);
                             if (result.success) {
