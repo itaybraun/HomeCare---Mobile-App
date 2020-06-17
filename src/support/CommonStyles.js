@@ -13,10 +13,10 @@ export const appColors = {
     linkColor: '#5C00EC',
     lineColor: '#CCCCCC',
     infoColor: '#605E5E',
-    yellowColor: '#FEC260',
+    warningColor: 'orange',
+    errorColor: 'red',
     headerBackground: '#E9BD08',
     headerFontColor: '#FFFFFF',
-    backgroundYellowColor: '#DEBB4A',
     disabledColor: '#CCCCCC',
 };
 
@@ -96,7 +96,7 @@ export const commonStyles = {
         ...medium(),
     },
     smallInfoText: {
-        fontSize: 15,
+        fontSize: 14,
         color: appColors.infoColor,
         ...commonTextProperties()
     },
@@ -143,18 +143,6 @@ export const commonStyles = {
         fontSize: 18,
         color: appColors.questionnaireColor,
         ...commonTextProperties(),
-    },
-
-    yellowTitleText: {
-        fontSize: 18,
-        color: appColors.yellowColor,
-        ...commonTextProperties()
-    },
-
-    yellowText: {
-        fontSize: 16,
-        color: appColors.yellowColor,
-        ...commonTextProperties()
     },
 
     contentText: {

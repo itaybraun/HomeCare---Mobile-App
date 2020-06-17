@@ -186,7 +186,7 @@ export default class ConditionNotesScreen extends AppScreen {
     renderNote = ({item, index}) => {
         let note: ConditionNote = item;
         return (
-            <TouchableHighlight style={commonStyles.listItemContainer}
+            <TouchableHighlight style={{paddingRight: 12}}
                                 underlayColor='#FFFFFFFF'
                                 activeOpacity={0.3}
                                 onPress={() => this.editNote(item)}
@@ -194,7 +194,7 @@ export default class ConditionNotesScreen extends AppScreen {
                 <View style={{backgroundColor: '#FFFFFF'}}>
                     <ListItem>
                         <Body>
-                            <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 5}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={[{flex: 1}, commonStyles.smallInfoText]}>
                                     {moment(note.time).format('MMM DD YYYY | HH:mm:ss')}
                                 </Text>
@@ -202,7 +202,7 @@ export default class ConditionNotesScreen extends AppScreen {
                                     {note.authorName}
                                 </Text>
                             </View>
-                            <Text style={[{flex: 1}, commonStyles.formItemText]}>
+                            <Text style={[{flex: 1, marginTop: 10}, commonStyles.formItemText]}>
                                 {note.text}
                             </Text>
                         </Body>

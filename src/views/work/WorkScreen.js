@@ -514,7 +514,7 @@ export default class WorkScreen extends AppScreen {
                                  sections={tasks}
                                  renderItem={this.renderTask}
                                  stickySectionHeadersEnabled={true}
-                                 ItemSeparatorComponent={() => renderSeparator()}
+                                 ItemSeparatorComponent={() => renderSeparator({height: 0})}
                                  ListEmptyComponent={this.renderListEmpty}
                                  ListHeaderComponent={this.renderTasksHeader}
                                  ListFooterComponent={this.renderListFooter}
@@ -522,8 +522,9 @@ export default class WorkScreen extends AppScreen {
                                      <View style={{
                                          backgroundColor: '#FFFFFF',
                                          padding: 10,
+                                         alignItems: 'center'
                                      }}>
-                                         <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{title}</Text>
+                                         <Text style={[commonStyles.mainColorTitle]}>{title}</Text>
                                      </View>
                                  )}
                                  renderSectionFooter={() => renderSeparator({height: 12})}
@@ -565,8 +566,9 @@ export default class WorkScreen extends AppScreen {
                                      <View style={{
                                          backgroundColor: '#FFFFFF',
                                          padding: 10,
+                                         alignItems: 'center'
                                      }}>
-                                         <Text style={[commonStyles.mainColorTitle, commonStyles.medium]}>{title}</Text>
+                                         <Text style={[commonStyles.mainColorTitle]}>{title}</Text>
                                      </View>
                                  )}
                                  renderSectionFooter={() => renderSeparator({height: 12})}

@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {commonStyles} from '../../support/CommonStyles';
-import {Card} from "native-base";
+import {appColors, commonStyles} from '../../support/CommonStyles';
+import {Body, Card, Icon, ListItem} from 'native-base';
 import {Image, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View} from 'react-native';
 import {strings} from '../../localization/strings';
 import moment from 'moment';
 import {uses24HourClock} from "react-native-localize";
 import PropTypes from 'prop-types';
-import {Status, Task} from '../../models/Task';
+import {Priority, Status, Task} from '../../models/Task';
+import ListItemContainer from '../other/ListItemContainer';
 
 export default class TaskRenderer extends Component {
 
@@ -41,83 +42,52 @@ export default class TaskRenderer extends Component {
         this.props.selectTask && this.props.selectTask(task);
     };
 
-    render () {
+    render() {
 
         const task: Task = this.props.task;
 
-        const dateFontStyle = task.status === Status.ACTIVE ? commonStyles.bold : {};
+        let schedule = strings.Tasks.noSchedule?.toUpperCase();
+        let scheduleStyle = {color: appColors.errorColor};
+
+        if (task.visit?.start && task.visit?.end) {
+            const start = moment(task.visit.start);
+            const end = moment(task.visit.end);
+
+            schedule = `${moment(task.visit.start).format('MMM DD YYYY')} | ${moment(task.visit.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')} - ${moment(task.visit.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}`;
+            scheduleStyle = {};
+
+            const twoDaysAgo = moment().subtract(2, 'days');
+
+            if (twoDaysAgo > end && task.status === Status.ACTIVE) {
+                scheduleStyle = {color: appColors.warningColor};
+            }
+        }
 
         return (
-            <TouchableHighlight style={commonStyles.listItemContainer}
-                                onPress={() => this.selectTask(task)}
-                                underlayColor='#FFFFFFFF'
-                                activeOpacity={0.3}
-                                {...this.props}
-
-            >
-                <Card style={commonStyles.cardStyle}>
-                    <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                        <Image source={TaskRenderer.statusImage[task.status]} style={{width: 48, height: 48}}/>
+            <ListItem style={{marginLeft: 12, marginRight: 12, paddingLeft: 12, paddingRight: 0}}
+                      onPress={() => this.selectTask(task)}>
+                <Body>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
                         <Text
                             style={[commonStyles.titleText, {
                                 flex: 1,
-                                marginLeft: 10
+                                ...commonStyles.bold,
                             }]}
                             numberOfLines={2}>
                             {task.text}
                         </Text>
-                    </View>
-                    <View style={{flex: 1, marginTop: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <View style={[styles.priorityContainer, {backgroundColor: TaskRenderer.priorityColor[task.priority] + '26'}]}>
-                            <Text numberOfLines={1} style={[
-                                commonStyles.text,
-                                {fontSize: 14,},
-                                commonStyles.medium,
-                                {color: TaskRenderer.priorityColor[task.priority]}
-                                ]}>
-                                {strings.Priorities[task.priority]?.toUpperCase()}
-                            </Text>
-                        </View>
-                        <View style={[styles.statusContainer, {backgroundColor: TaskRenderer.statusColor[task.status] + '26'}]}>
-                            <Text numberOfLines={1} style={[
-                                commonStyles.medium,
-                                {fontSize: 14,},
-                                {color: TaskRenderer.statusColor[task.status]}
-                                ]}>
-                                {strings.Statuses[task.status]?.toUpperCase()}
-                            </Text>
-                        </View>
-                    </View>
-                    <View style={{flex: 1, marginTop: 10, flexDirection: 'row',}}>
-                        {
-                            task.visit && task.visit.start && task.visit.end ?
-                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10,}}>
-                                    <View>
-                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, dateFontStyle, {marginRight: 5,}]}>
-                                            {moment(task.visit.start).format('ddd')}
-                                        </Text>
-                                    </View>
-                                    <View>
-                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, dateFontStyle, {marginRight: 5,}]}>
-                                            {moment(task.visit.start).format('MMM-DD-YYYY')}
-                                        </Text>
-                                    </View>
-                                    <View>
-                                        <Text numberOfLines={1} style={[commonStyles.smallContentText, dateFontStyle,]}>
-                                            {moment(task.visit.start).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}
-                                            &nbsp;-&nbsp;
-                                            {moment(task.visit.end).format(uses24HourClock() ? 'HH:mm' : 'hh:mm A')}
-                                        </Text>
-                                    </View>
-                                </View>
-                                :
-                                <Text style={[commonStyles.smallContentText, dateFontStyle, {textAlign: 'center', flex: 1, color: '#FF0000'}]}>
-                                    {strings.Tasks.noSchedule?.toUpperCase()}
-                                </Text>
+                        {task.priority !== Priority.ROUTINE &&
+                            <Icon type="Ionicons" name="md-arrow-round-up" style={{fontSize: 20}}/>
                         }
+
                     </View>
-                </Card>
-            </TouchableHighlight>
+                    <View style={{flex: 1, marginTop: 8}}>
+                        <Text style={[commonStyles.smallInfoText, scheduleStyle]}>
+                            {schedule}
+                        </Text>
+                    </View>
+                </Body>
+            </ListItem>
         );
     }
 }
