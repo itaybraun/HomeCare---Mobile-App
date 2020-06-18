@@ -416,17 +416,19 @@ export default class TaskScreen extends AppScreen {
                     </Content>
                     <View style={{flexDirection: 'row', padding: 5}}>
                         <View style={{flex: 1, alignItems: 'center'}}>
-                            <Button
-                                style={{
-                                    backgroundColor: 'white',
-                                    width: 230,
-                                    borderColor: appColors.mainColor,
-                                    borderWidth: 1,
-                                    justifyContent: 'center'
-                                }} onPress={this.showQuestionnaire}>
-                                <Text
-                                    style={[commonStyles.buttonText, {color: appColors.mainColor}]}>{strings.Task.menuExecute?.toUpperCase()}</Text>
-                            </Button>
+                            {task.status === Status.ACTIVE &&
+                                <Button
+                                    style={{
+                                        backgroundColor: 'white',
+                                        width: 230,
+                                        borderColor: appColors.mainColor,
+                                        borderWidth: 1,
+                                        justifyContent: 'center'
+                                    }} onPress={this.showQuestionnaire}>
+                                    <Text
+                                        style={[commonStyles.buttonText, {color: appColors.mainColor}]}>{strings.Task.menuExecute?.toUpperCase()}</Text>
+                                </Button>
+                            }
                         </View>
                         <Image height={50} source={require('../../assets/icons/tasks/care.png')}/>
                     </View>

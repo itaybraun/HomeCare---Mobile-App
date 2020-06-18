@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import {QuestionnaireItem, } from '../../../models/Questionnaire';
+import {QuestionnaireItem, } from '../../../../models/Questionnaire';
 import {ActivityIndicator, Image, Platform, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import {appColors, commonStyles, renderRadioButton, renderSeparator} from '../../../support/CommonStyles';
-import {strings} from '../../../localization/strings';
+import {appColors, commonStyles, renderRadioButton, renderSeparator} from '../../../../support/CommonStyles';
+import {strings} from '../../../../localization/strings';
 import PropTypes from 'prop-types';
-import FormItemContainer from '../../other/FormItemContainer';
 import {Content, List, Icon, Text, Switch, Body, Right} from 'native-base';
 import ImagePicker from 'react-native-image-picker';
-import ListItemContainer from '../../other/ListItemContainer';
-import {Utils} from '../../../support/Utils';
+import ListItemContainer from '../../../other/ListItemContainer';
+import {Utils} from '../../../../support/Utils';
+import QuestionnaireItemView from './QuestionnaireItemView';
 
 export default class QuestionnaireItemsView extends Component {
 
@@ -151,6 +151,23 @@ export default class QuestionnaireItemsView extends Component {
 
         if (value && item.type === 'choice') {
             value = value.text;
+        }
+
+        if (this.props.simplified) {
+
+            return (
+                <ListItemContainer key={item.link}
+                                   onLayout={({nativeEvent}) => this.items[item.link] = nativeEvent.layout}
+                                   error={this.state.errors[item.link]}>
+                    <Body>
+                        <QuestionnaireItemView
+                            value={this.state.values[item.link]}
+                            item={item}
+                            updateValue={value => this.updateValues(item.link, value)}
+                        />
+                    </Body>
+                </ListItemContainer>
+            )
         }
 
         return (
@@ -321,6 +338,7 @@ QuestionnaireItemsView.propTypes = {
     values: PropTypes.object,
     errors: PropTypes.object,
     valuesUpdate: PropTypes.func,
+    simplified: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({

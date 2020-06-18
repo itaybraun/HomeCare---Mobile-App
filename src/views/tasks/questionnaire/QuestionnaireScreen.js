@@ -20,7 +20,7 @@ import APIRequest from '../../../models/APIRequest';
 import {Questionnaire, QuestionnaireItem} from '../../../models/Questionnaire';
 import {Status, Task} from '../../../models/Task';
 import {strings} from '../../../localization/strings';
-import QuestionnaireItemsView from './QuestionnaireItemsView';
+import QuestionnaireItemsView from './items/QuestionnaireItemsView';
 import {Content, Button, Icon} from 'native-base';
 import {Request} from '../../../support/Utils';
 import {TabView} from 'react-native-tab-view';
@@ -354,6 +354,7 @@ export default class QuestionnaireScreen extends AppScreen {
                             valuesUpdate={(values) => this.setState({
                                 values: values,
                             })}
+                            simplified={this.getAllItems().filter(item => item.type !== 'group').length === 1}
                         />
                     </ScrollView>
                 }

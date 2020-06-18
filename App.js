@@ -38,8 +38,8 @@ import SelectPerformerScreen from './src/views/tasks/edit/SelectPerformerScreen'
 import FlagScreen from './src/views/patients/patient/flags/FlagScreen';
 import CurrentUserScreen from './src/views/settings/CurrentUserScreen';
 import SelectPatientScreen from './src/views/tasks/edit/SelectPatientScreen';
-import QuestionnaireChoiceItemScreen from './src/views/tasks/questionnaire/QuestionnaireChoiceItemScreen';
-import QuestionnaireInputItemScreen from './src/views/tasks/questionnaire/QuestionnaireInputItemScreen';
+import QuestionnaireChoiceItemScreen from './src/views/tasks/questionnaire/items/QuestionnaireChoiceItemScreen';
+import QuestionnaireInputItemScreen from './src/views/tasks/questionnaire/items/QuestionnaireInputItemScreen';
 import TaskSendMailScreen from './src/views/tasks/TaskSendMailScreen';
 import EmailAddressScreen from './src/views/settings/EmailAddressScreen';
 import NewFlagScreen from './src/views/patients/patient/flags/edit/NewFlagScreen';
