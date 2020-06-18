@@ -254,7 +254,7 @@ export default class EditTaskScreen extends AppScreen {
 
                                             : <Text style={[commonStyles.smallContentText, {
                                                 flex: 1,
-                                                color: '#FF0000'
+                                                color: appColors.errorColor
                                             }]}>
                                                 {strings.Tasks.noSchedule}
                                             </Text>

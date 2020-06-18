@@ -221,7 +221,7 @@ export default class NewFlagScreen extends AppScreen {
                                                 {this.state.patient.fullName}
                                             </Text> :
                                             <Text
-                                                style={[{flex: 1}, commonStyles.infoText, this.state.errors.patient && {color: '#FF0000'}]}>
+                                                style={[{flex: 1}, commonStyles.infoText, this.state.errors.patient && {color: appColors.errorColor}]}>
                                                 {strings.Task.selectAPatient}
                                             </Text>
                                     }
@@ -241,7 +241,7 @@ export default class NewFlagScreen extends AppScreen {
                             <ListItemContainer onPress={this.changeText} error={this.state.errors.text}>
                                 <Body>
                                     <Text
-                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.text && {color: '#FF0000'}]}>{strings.Flags.text}</Text>
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.text && {color: appColors.errorColor}]}>{strings.Flags.text}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{this.state.text}</Text>
                                 </Body>
@@ -253,7 +253,7 @@ export default class NewFlagScreen extends AppScreen {
                             <ListItemContainer onPress={this.selectCategory} error={this.state.errors.category}>
                                 <Body>
                                     <Text
-                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.category && {color: '#FF0000'}]}>{strings.Flags.category}</Text>
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.category && {color: appColors.errorColor}]}>{strings.Flags.category}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{strings.Categories[this.state.category?.toLowerCase()] || ''}</Text>
                                 </Body>
@@ -265,7 +265,7 @@ export default class NewFlagScreen extends AppScreen {
                             <ListItemContainer onPress={() => this.setState({showingStartDatePicker: true})}  error={this.state.errors.startDate}>
                                 <Body>
                                     <Text
-                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.startDate && {color: '#FF0000'}]}>{strings.Flags.startDate}</Text>
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.startDate && {color: appColors.errorColor}]}>{strings.Flags.startDate}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''}</Text>
                                 </Body>
@@ -277,7 +277,7 @@ export default class NewFlagScreen extends AppScreen {
                             <ListItemContainer onPress={() => this.setState({showingEndDatePicker: true})} error={this.state.errors.endDate}>
                                 <Body>
                                     <Text
-                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.endDate && {color: '#FF0000'}]}>{strings.Flags.endDate}</Text>
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.endDate && {color: appColors.errorColor}]}>{strings.Flags.endDate}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''}</Text>
                                 </Body>

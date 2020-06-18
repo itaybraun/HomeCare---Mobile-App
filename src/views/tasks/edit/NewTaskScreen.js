@@ -298,7 +298,7 @@ export default class NewTaskScreen extends AppScreen {
                                             <Text style={[{flex: 1}, commonStyles.formItemText]}>
                                                 {this.state.patient.fullName}
                                             </Text> :
-                                            <Text style={[{flex: 1}, commonStyles.infoText, this.state.errors?.patient && {color: '#FF0000'}]}>
+                                            <Text style={[{flex: 1}, commonStyles.infoText, this.state.errors?.patient && {color: appColors.errorColor}]}>
                                                 {strings.Task.selectAPatient}
                                             </Text>
                                     }
@@ -319,7 +319,7 @@ export default class NewTaskScreen extends AppScreen {
                             <ListItemContainer error={this.state.errors?.activity} onPress={this.selectActivity}>
                                 <Body>
                                     <Text
-                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors?.activity && {color: '#FF0000'}]}>{strings.Task.task}</Text>
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors?.activity && {color: appColors.errorColor}]}>{strings.Task.task}</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{this.state.activity?.text}</Text>
                                 </Body>

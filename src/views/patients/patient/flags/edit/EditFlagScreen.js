@@ -184,7 +184,7 @@ export default class EditFlagScreen extends AppScreen {
                         <ListItemContainer onPress={this.changeText} error={this.state.errors.text}>
                             <Body>
                                 <Text
-                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.text && {color: '#FF0000'}]}>{strings.Flags.text}</Text>
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.text && {color: appColors.errorColor}]}>{strings.Flags.text}</Text>
                                 <Text
                                     style={[{flex: 1}, commonStyles.formItemText]}>{this.state.flag.text}</Text>
                             </Body>

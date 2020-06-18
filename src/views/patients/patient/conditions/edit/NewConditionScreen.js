@@ -334,7 +334,7 @@ export default class NewConditionScreen extends AppScreen {
                                                 {this.state.patient.fullName}
                                             </Text> :
                                             <Text
-                                                style={[{flex: 1}, commonStyles.infoText, this.state.errors.patient && {color: '#FF0000'}]}>
+                                                style={[{flex: 1}, commonStyles.infoText, this.state.errors.patient && {color: appColors.errorColor}]}>
                                                 {strings.Task.selectAPatient}
                                             </Text>
                                     }
@@ -368,7 +368,7 @@ export default class NewConditionScreen extends AppScreen {
                                                error={this.state.errors.title}>
                                 <Body>
                                     <Text
-                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.title && {color: '#FF0000'}]}>{strings.Conditions.titleText} *</Text>
+                                        style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.title && {color: appColors.errorColor}]}>{strings.Conditions.titleText} *</Text>
                                     <Text
                                         style={[{flex: 1}, commonStyles.formItemText]}>{this.state.title}</Text>
                                 </Body>

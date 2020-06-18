@@ -173,7 +173,7 @@ export default class QuestionnaireItemsView extends Component {
                     <Body>
                         <View style={{minHeight: 45, justifyContent: 'center'}}>
                             <Text
-                                style={[commonStyles.infoText, this.state.errors[item.link] && {color: '#FF0000'}]}>
+                                style={[commonStyles.infoText, this.state.errors[item.link] && {color: appColors.errorColor}]}>
                                 {item.text}
                             </Text>
                         </View>

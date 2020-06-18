@@ -34,7 +34,7 @@ export default class FormItemContainer extends Component {
         this.shakeAnimation = new Animated.Value(0);
 
         if (this.props.error) {
-            color = '#FF0000';
+            color = appColors.errorColor;
         }
         if (this.props.disabled)
             color = appColors.textColor;

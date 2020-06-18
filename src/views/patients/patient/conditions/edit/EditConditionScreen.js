@@ -156,7 +156,7 @@ export default class EditConditionScreen extends AppScreen {
                                            error={this.state.errors.title}>
                             <Body>
                                 <Text
-                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.title && {color: '#FF0000'}]}>{strings.Conditions.titleText}</Text>
+                                    style={[commonStyles.smallInfoText, {marginBottom: 5,}, this.state.errors.title && {color: appColors.errorColor}]}>{strings.Conditions.titleText}</Text>
                                 <Text
                                     style={[{flex: 1}, commonStyles.formItemText]}>{this.state.title}</Text>
                             </Body>
