@@ -172,7 +172,10 @@ export default class QuestionnaireItemView extends React.Component {
 
         return (
             <View>
-                <Text style={commonStyles.titleText}>{item.text}</Text>
+                <Text
+                    style={[commonStyles.titleText, this.props.error && {color: appColors.errorColor}]}>
+                    {item.text}
+                </Text>
                 {this.renderItem()}
             </View>
         );

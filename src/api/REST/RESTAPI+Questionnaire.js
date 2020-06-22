@@ -155,6 +155,10 @@ RESTAPI.prototype.getResponseItemFromJson = function getResponseItemFromJson(jso
                 item.type = 'decimal';
                 return answer.valueDecimal;
             }
+            if (answer.hasOwnProperty('valueInteger')) {
+                item.type = 'integer';
+                return answer.valueInteger;
+            }
             if (answer.hasOwnProperty('valueString')) {
                 item.type = 'string';
                 return answer.valueString;
@@ -230,6 +234,11 @@ RESTAPI.prototype.getJsonFromAnswers = function getJsonFromAnswers(answers: Obje
             case 'decimal':
                 object.answer = [{
                     valueDecimal: answers[item.link] || null
+                }];
+                break;
+            case 'integer':
+                object.answer = [{
+                    valueInteger: answers[item.link] || null
                 }];
                 break;
             case 'string':

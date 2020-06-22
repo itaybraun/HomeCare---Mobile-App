@@ -164,6 +164,7 @@ export default class QuestionnaireItemsView extends Component {
                             value={this.state.values[item.link]}
                             item={item}
                             updateValue={value => this.updateValues(item.link, value)}
+                            error={this.state.errors[item.link]}
                         />
                     </Body>
                 </ListItemContainer>
