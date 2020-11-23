@@ -13,14 +13,15 @@ View open tasks associated with the Patient.
 Manage Settings 
 
 
-Basic Documentation
-https://app.gitbook.com/@itaybraun/s/hestia/ 
+[Basic Documentation:](https://app.gitbook.com/@itaybraun/s/hestia/) 
 
 
-![alt text](https://github.com/itaybraun/HomeCare---Mobile-App/blob/master/My%20Work%20%E2%80%93%20My%20Calendar.png?raw=true)
-![alt text](https://github.com/itaybraun/HomeCare---Mobile-App/blob/master/My%20Work%20-%20Tasks%20-%20Order%20by%20Date.png?raw=true)
-![alt text](https://github.com/itaybraun/HomeCare---Mobile-App/blob/master/Florence%20-%20Wound%20Assessemnt.png?raw=true)
-![alt text](https://github.com/itaybraun/HomeCare---Mobile-App/blob/master/Patient%20-%20Profile%20%E2%80%93%20Completed%20Task.png?raw=true)
+![alt text](https://github.com/itaybraun/HomeCare---Mobile-App/blob/master/My%20Work%20%E2%80%93%20My%20Calendar.png?raw=true)  
+![alt text](https://github.com/itaybraun/HomeCare---Mobile-App/blob/master/My%20Work%20-%20Tasks%20-%20Order%20by%20Date.png?raw=true)  
+![alt text](https://github.com/itaybraun/HomeCare---Mobile-App/blob/master/Florence%20-%20Wound%20Assessemnt.png?raw=true)  
+![alt text](https://github.com/itaybraun/HomeCare---Mobile-App/blob/master/Patient%20-%20Profile%20%E2%80%93%20Completed%20Task.png?raw=true)  
+
+[Short Video](https://drive.google.com/file/d/1AGvN7mBoa8bCNznPo5Y_x5OQWeIcEwac/view?usp=sharing)
 
 
 
